@@ -13,7 +13,7 @@ Hexohexo出自台湾大学生 tommy351 之手，是一个基于Node.js的静态�
 <meta property="og:site_name" content="翔妖除魔的个人博客">
 <meta property="og:description" content="现在越来越多的人愿意使用独立的技术博客.如果自己搭建Wordpress等,需要涉及到服务器的问题.所以,很多人选择了GitHub提供的Pages来搭建个人博客,我也赶一回潮流.在MacOS 上 使用Hexo来搭建GitHubPages博客.
 Hexohexo出自台湾大学生 tommy351 之手，是一个基于Node.js的静态博客程序，其编译上百篇文字只需要几秒。hexo生成的静态网页可以直接放到">
-<meta property="og:updated_time" content="2015-07-25T09:46:52.000Z">
+<meta property="og:updated_time" content="2015-07-25T10:01:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Macos 通过安装Hexo 来搭建 GitHub Pages 博客系统">
 <meta name="twitter:description" content="现在越来越多的人愿意使用独立的技术博客.如果自己搭建Wordpress等,需要涉及到服务器的问题.所以,很多人选择了GitHub提供的Pages来搭建个人博客,我也赶一回潮流.在MacOS 上 使用Hexo来搭建GitHubPages博客.
@@ -66,7 +66,7 @@ Hexohexo出自台湾大学生 tommy351 之手，是一个基于Node.js的静态�
         <section id="main"><article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/07/25/hello-world/" class="article-date">
-  <time datetime="2015-07-25T09:46:52.000Z" itemprop="datePublished">2015-07-25</time>
+  <time datetime="2015-07-25T10:01:49.000Z" itemprop="datePublished">2015-07-25</time>
 </a>
     
   </div>
@@ -105,17 +105,8 @@ Hexohexo出自台湾大学生 tommy351 之手，是一个基于Node.js的静态�
 <p>这个步骤比较慢.因为你懂的</p>
 </li>
 <li><p>这个时候可以验证一下是否安装好了.<br>在终端中输入:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    $ node -v</span><br><span class="line">	v0.<span class="number">12.7</span></span><br><span class="line">	$ npm -v</span><br><span class="line">    <span class="number">2.12</span>.<span class="number">1</span></span><br><span class="line">    $ hexo -v</span><br><span class="line">    hexo: <span class="number">3.1</span>.<span class="number">1</span></span><br><span class="line">os: Darwin <span class="number">14.4</span>.<span class="number">0</span> darwin x64</span><br><span class="line">http_parser: <span class="number">2.3</span></span><br><span class="line">node: <span class="number">0.12</span>.<span class="number">7</span></span><br><span class="line">v8: <span class="number">3.28</span>.<span class="number">71.19</span></span><br><span class="line">uv: <span class="number">1.6</span>.<span class="number">1</span></span><br><span class="line">zlib: <span class="number">1.2</span>.<span class="number">8</span></span><br><span class="line">modules: <span class="number">14</span></span><br><span class="line">openssl: <span class="number">1.0</span>.<span class="number">1</span>p</span><br></pre></td></tr></table></figure>
-<p>这样就说明安装完成了.<br>但是如果是显示的: <code>hexo: command not found</code>. 说明环境变量没有设置.我也不知道为什么.但是只要补上环境变量就可以了.</p>
-<blockquote>
-<p><strong>hexo环境变量的设置:</strong> 在<code>~/</code> 用户的根目录下创建一个目录:<code>.bash_profile</code>.其中的内容为:<code>export PATH=&quot;/usr/local/Cellar/node/0.12.7/libexec/npm/lib/node_modules/hexo/bi$</code>  其中的路径就是hexo的安装路径</p>
-</blockquote>
-</li>
-</ol>
-<h3 id="使用Hexo创建并部署">使用Hexo创建并部署</h3><p>当安装完成后,就可以开始创建博客了.</p>
-<ol>
-<li><p>在本地创建博客文件夹<br>这一步的目的是在你的本地创建一个博客的文件夹.以后博客的source以及编译后的静态文件都会在这个目录中.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/</span><br><span class="line">$ mkdir blog</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    $ node -v</span><br><span class="line">v0.<span class="number">12.7</span></span><br><span class="line">$ npm -v</span><br><span class="line">    <span class="number">2.12</span>.<span class="number">1</span></span><br><span class="line">    $ hexo -v</span><br><span class="line">    hexo: <span class="number">3.1</span>.<span class="number">1</span></span><br><span class="line">os: Darwin <span class="number">14.4</span>.<span class="number">0</span> darwin x64</span><br><span class="line">http_parser: <span class="number">2.3</span></span><br><span class="line">node: <span class="number">0.12</span>.<span class="number">7</span></span><br><span class="line">v8: <span class="number">3.28</span>.<span class="number">71.19</span></span><br><span class="line">uv: <span class="number">1.6</span>.<span class="number">1</span></span><br><span class="line">zlib: <span class="number">1.2</span>.<span class="number">8</span></span><br><span class="line">modules: <span class="number">14</span></span><br><span class="line">openssl: <span class="number">1.0</span>.<span class="number">1</span>p</span><br></pre></td></tr></table></figure>
+<p>这样就说明安装完成了.<br>但是如果是显示的: <figure class="highlight"><figcaption><span>command not found ```. 说明环境变量没有设置.我也不知道为什么.但是只要补上环境变量就可以了.</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">    &#62; **hexo&#29615;&#22659;&#21464;&#37327;&#30340;&#35774;&#32622;:** &#22312;`~/` &#29992;&#25143;&#30340;&#26681;&#30446;&#24405;&#19979;&#21019;&#24314;&#19968;&#20010;&#30446;&#24405;:`.bash_profile`.&#20854;&#20013;&#30340;&#20869;&#23481;&#20026;:`export PATH=&#34;/usr/local/Cellar/node/0.12.7/libexec/npm/lib/node_modules/hexo/bi$`  &#20854;&#20013;&#30340;&#36335;&#24452;&#23601;&#26159;hexo&#30340;&#23433;&#35013;&#36335;&#24452;&#10;&#10;### &#20351;&#29992;Hexo&#21019;&#24314;&#21338;&#23458;&#10;&#24403;&#23433;&#35013;&#23436;&#25104;&#21518;,&#23601;&#21487;&#20197;&#24320;&#22987;&#21019;&#24314;&#21338;&#23458;&#20102;.&#10;&#10; 1. &#22312;&#26412;&#22320;&#21019;&#24314;&#21338;&#23458;&#25991;&#20214;&#22841;&#10;    &#36825;&#19968;&#27493;&#30340;&#30446;&#30340;&#26159;&#22312;&#20320;&#30340;&#26412;&#22320;&#21019;&#24314;&#19968;&#20010;&#21338;&#23458;&#30340;&#25991;&#20214;&#22841;.&#20197;&#21518;&#21338;&#23458;&#30340;source&#20197;&#21450;&#32534;&#35793;&#21518;&#30340;&#38745;&#24577;&#25991;&#20214;&#37117;&#20250;&#22312;&#36825;&#20010;&#30446;&#24405;&#20013;.&#10;&#10;    ``` bash&#10;    $ cd ~/&#10;    $ mkdir blog</span><br></pre></td></tr></table></figure></p>
 </li>
 </ol>
 <ol>
@@ -130,11 +121,19 @@ Hexohexo出自台湾大学生 tommy351 之手，是一个基于Node.js的静态�
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"新博客的名字"</span></span><br></pre></td></tr></table></figure>
 <p>这样就在<code>_posts</code>文件夹里面新增加了一个<strong>md</strong>文件.直接对这一篇文档进行内容的编写就可以了.</p>
 <p>而后,就在命令行中执行 <code>$ hexo generate</code> 就可以生成新的静态文件.新生成的文件全部放在<code>public</code>文件夹中的.</p>
+<h3 id="使用Hexo部署博客到github">使用Hexo部署博客到github</h3><p>要使用github的pages功能的话,就需要创建一个 <code>xxxx.github.io</code>的<strong>repository</strong>. 其中<code>xxxx</code>表示的是你的github账号.这样github就会为你分配一个<code>xxxx.github.io</code>的地址.以后你的博客的访问地址也就是这个了.</p>
+<p>有了这个地址以后,就要开始使用hexo部署了.<br>修改博客文件夹下的<code>_config.yml</code></p>
+<p>主要是:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: https://github.com/xxxx/xxxx.github.io.git</span><br></pre></td></tr></table></figure></p>
+<p>这个部分.<br>而后就在命令行中输入:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>而后他就会自动的部署到你的github的pages中了.<br>如果报错说 未找到部署类型的话. 就需要安装<code>hexo-deployer-git</code></p>
+<p>同样是在博客的目录中执行:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://sunxiang0918.github.io/2015/07/25/hello-world/" data-id="cicivhhvi0000y6m4atq70jya" class="article-share-link">Share</a>
+      <a data-url="http://sunxiang0918.github.io/2015/07/25/hello-world/" data-id="ciciw0rcf00005gm427vxcy2s" class="article-share-link">Share</a>
       
       
     </footer>
