@@ -5,20 +5,12 @@
   
   <title>&lt;转&gt;G1垃圾收集器入门 | 翔妖除魔的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="G1垃圾收集器入门说明
-concurrent: 并发, 多个线程协同做同一件事情(有状态)
-parallel: 并行, 多个线程各做各的事情(互相间无共享状态)
-参考: What’s the difference between concurrency and parallelism
-概述目的本文介绍如何使用G1,及在 Hotspot JVM 中怎么使用G1垃圾收集器。 您将了解 G1 收集器的内">
+  <meta name="description" content="这篇文章非常详细的介绍了G1垃圾收集器的相关知识">
 <meta property="og:type" content="article">
 <meta property="og:title" content="<转>G1垃圾收集器入门">
 <meta property="og:url" content="http://sunxiang0918.github.io/2015/07/23/G1垃圾收集器入门/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
-<meta property="og:description" content="G1垃圾收集器入门说明
-concurrent: 并发, 多个线程协同做同一件事情(有状态)
-parallel: 并行, 多个线程各做各的事情(互相间无共享状态)
-参考: What’s the difference between concurrency and parallelism
-概述目的本文介绍如何使用G1,及在 Hotspot JVM 中怎么使用G1垃圾收集器。 您将了解 G1 收集器的内">
+<meta property="og:description" content="这篇文章非常详细的介绍了G1垃圾收集器的相关知识">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/01_1_JVM_Arch_CN.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/01_2_Key_Hotspot_Components_CN.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/02_1_HeapStructure_CN.png">
@@ -40,14 +32,10 @@ parallel: 并行, 多个线程各做各的事情(互相间无共享状态)
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/04_8_Remark_Phase_CN.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/04_9_Copying_Cleanup_Phase_CN.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/04_10_After_Copying_Cleanup_Phase_CN.png">
-<meta property="og:updated_time" content="2015-07-27T01:35:44.000Z">
+<meta property="og:updated_time" content="2015-07-27T02:45:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<转>G1垃圾收集器入门">
-<meta name="twitter:description" content="G1垃圾收集器入门说明
-concurrent: 并发, 多个线程协同做同一件事情(有状态)
-parallel: 并行, 多个线程各做各的事情(互相间无共享状态)
-参考: What’s the difference between concurrency and parallelism
-概述目的本文介绍如何使用G1,及在 Hotspot JVM 中怎么使用G1垃圾收集器。 您将了解 G1 收集器的内">
+<meta name="twitter:description" content="这篇文章非常详细的介绍了G1垃圾收集器的相关知识">
   
     <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
   

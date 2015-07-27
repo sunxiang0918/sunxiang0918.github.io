@@ -69,8 +69,8 @@
 <h3 id="后续">后续</h3><p>这样就搭建完毕了, 后续我会慢慢的把以前记录到 evernote的东西 精选一些转过来. </p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>现在越来越多的人愿意使用独立的技术博客.如果自己搭建Wordpress等,需要涉及到服务器的问题.所以,很多人选择了GitHub提供的Pages来搭建个人博客,我也赶一回潮流.在MacOS 上 使用Hexo来搭建GitHubPages博客.</p>
-<h2 id="Hexo]]>
+    <![CDATA[这篇文章记录了如何使用Hexo和github搭建个人博客]]>
+    
     </summary>
     
       <category term="Hexo" scheme="http://sunxiang0918.github.io/tags/Hexo/"/>
@@ -88,7 +88,7 @@
     <link href="http://sunxiang0918.github.io/2015/07/23/G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E5%85%A5%E9%97%A8/"/>
     <id>http://sunxiang0918.github.io/2015/07/23/G1垃圾收集器入门/</id>
     <published>2015-07-23T00:37:28.000Z</published>
-    <updated>2015-07-27T01:35:44.000Z</updated>
+    <updated>2015-07-27T02:45:49.000Z</updated>
     <content type="html"><![CDATA[<h1 id="G1垃圾收集器入门">G1垃圾收集器入门</h1><h2 id="说明">说明</h2><hr>
 <p><strong>concurrent</strong>: 并发, 多个线程协同做同一件事情(有状态)</p>
 <p><strong>parallel</strong>: 并行, 多个线程各做各的事情(互相间无共享状态)</p>
@@ -523,9 +523,8 @@ Avg: 2.7, Min: 2.6, Max: 2.8, Diff: 0.2]
 <p>转帖地址:<a href="http://blog.csdn.net/renfufei/article/details/41897113" target="_blank" rel="external">http://blog.csdn.net/renfufei/article/details/41897113</a></p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h1 id="G1垃圾收集器入门">G1垃圾收集器入门</h1><h2 id="说明">说明</h2><hr>
-<p><strong>concurrent</strong>: 并发, 多个线程协同做同一件事情(有状态)</p>
-<p><strong>parallel</stro]]>
+    <![CDATA[这篇文章非常详细的介绍了G1垃圾收集器的相关知识]]>
+    
     </summary>
     
       <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
