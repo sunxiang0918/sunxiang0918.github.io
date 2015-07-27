@@ -1199,6 +1199,24 @@ a {
 #article-nav #article-nav-older {
   float: right;
 }
+#toc .toc {
+  padding: 0;
+}
+#toc .toc li {
+  list-style-type: none;
+}
+#toc ol {
+  margin-left: 0;
+}
+#article-toc .toc {
+  padding: 0;
+}
+#article-toc .toc li {
+  list-style-type: none;
+}
+#article-toc ol {
+  margin-left: 0;
+}
 @-moz-keyframes cd-bounce-1 {
   0% {
     opacity: 0;
