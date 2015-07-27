@@ -1,4 +1,5 @@
 title: Macos 通过安装Hexo 来搭建 GitHub Pages 博客系统
+date: 2015-07-25 18:06:02
 updated: 2015-07-25 18:06:02
 comments: true
 tags: 
@@ -133,3 +134,7 @@ $ hexo deploy
 ``` bash
 $ npm install hexo-deployer-git --save
 ```
+
+---
+###后续
+这样就搭建完毕了, 后续我会慢慢的把以前记录到 evernote的东西 精选一些转过来. 
