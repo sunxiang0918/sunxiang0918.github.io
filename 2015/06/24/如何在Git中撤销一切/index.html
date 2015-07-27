@@ -5,15 +5,40 @@
   
   <title>翔妖除魔的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
+  <meta name="description" content="title: &amp;lt;转&amp;gt;如何在Git中撤销一切date: 2015-06-24 20:23:29tags:
+
+GITtoc: false—-​
+
+&amp;lt;转&amp;gt;如何在Git中撤销一切翻译：李伟审校：张帆译自：Github
+
+任何一个版本控制系统中，最有用的特性之一莫过于 “撤销（undo）”操作。在Git中，“撤销”有很多种含义。当你完成了一次新的提交（commit），Git会及时存储">
+<meta property="og:type" content="article">
 <meta property="og:title" content="翔妖除魔的个人博客">
-<meta property="og:url" content="http://sunxiang0918.github.io/index.html">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/06/24/如何在Git中撤销一切/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
-<meta property="og:description">
+<meta property="og:description" content="title: &amp;lt;转&amp;gt;如何在Git中撤销一切date: 2015-06-24 20:23:29tags:
+
+GITtoc: false—-​
+
+&amp;lt;转&amp;gt;如何在Git中撤销一切翻译：李伟审校：张帆译自：Github
+
+任何一个版本控制系统中，最有用的特性之一莫过于 “撤销（undo）”操作。在Git中，“撤销”有很多种含义。当你完成了一次新的提交（commit），Git会及时存储">
+<meta property="og:image" content="https://jf-bucket-public.oss-cn-qingdao.aliyuncs.com/jfperiodical/attached/image/20150612/2016242594.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/1.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/2.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/3.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/4.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/5.png">
+<meta property="og:updated_time" content="2015-07-27T12:42:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="翔妖除魔的个人博客">
-<meta name="twitter:description">
+<meta name="twitter:description" content="title: &amp;lt;转&amp;gt;如何在Git中撤销一切date: 2015-06-24 20:23:29tags:
+
+GITtoc: false—-​
+
+&amp;lt;转&amp;gt;如何在Git中撤销一切翻译：李伟审校：张帆译自：Github
+
+任何一个版本控制系统中，最有用的特性之一莫过于 “撤销（undo）”操作。在Git中，“撤销”有很多种含义。当你完成了一次新的提交（commit），Git会及时存储">
   
     <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
   
@@ -184,79 +209,7 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/07/25/hello-world/" class="article-date">
-  	<time datetime="2015-07-25T10:06:02.000Z" itemprop="datePublished">2015-07-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/25/hello-world/">Macos 通过安装Hexo 来搭建 GitHub Pages 博客系统</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>现在越来越多的人愿意使用独立的技术博客.如果自己搭建Wordpress等,需要涉及到服务器的问题.所以,很多人选择了GitHub提供的Pages来搭建个人博客,我也赶一回潮流.在MacOS 上 使用Hexo来搭建GitHubPages博客.</p>
-<h2 id="Hexo">Hexo</h2><p>hexo出自台湾大学生 <a href="http://twitter.com/tommy351">tommy351</a> 之手，是一个基于Node.js的静态博客程序，其编译上百篇文字只需要几秒。hexo生成的静态网页可以直接放到GitHub Pages，BAE，SAE等平台上。</p>
-<h3 id="安装Hexo">安装Hexo</h3><p>要安装<code>Hexo</code>需要先安装<code>Npm</code>以及<code>NodeJs</code>.<br>我在MacOS上,是使用<a href="http://brew.sh">Brew</a>安装的.</p>
-<ol>
-<li><p>安装<strong>NodeJS</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install node</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装<strong>Git</strong><br>由于我安装了XCode的,并且安装了<code>Command Line Tool</code>,因此,这一步可以省略了.否则还是在终端中输入:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install git</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/github/">github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/博客/">博客</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/其他/">其他</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/07/25/hello-world/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-如何在Git中撤销一切" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-如何在Git中撤销一切" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2015/06/24/如何在Git中撤销一切/" class="article-date">
@@ -272,6 +225,13 @@
     <div class="article-entry" itemprop="articleBody">
       
       
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#<转>如何在Git中撤销一切"><span class="toc-number">1.</span> <span class="toc-text"><转>如何在Git中撤销一切</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、撤销一个公共修改_Undo_a_“public”_change"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、撤销一个公共修改 Undo a “public” change</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、修改最近一次的提交信息_Fix_the_last_commit_message"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、修改最近一次的提交信息 Fix the last commit message</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、撤销本地更改_Undo_“local”_changes"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、撤销本地更改 Undo “local” changes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、重置本地修改_Reset_“local”_changes"><span class="toc-number">1.0.4.</span> <span class="toc-text">四、重置本地修改 Reset “local” changes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五、撤销本地后重做_Redo_after_undo_“local”"><span class="toc-number">1.0.5.</span> <span class="toc-text">五、撤销本地后重做 Redo after undo “local”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一些说明："><span class="toc-number">1.0.6.</span> <span class="toc-text">一些说明：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#六、与分支有关的那些事_Once_more,_with_branching"><span class="toc-number">1.0.7.</span> <span class="toc-text">六、与分支有关的那些事 Once more, with branching</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#七、事半功倍处理分支_Branch_in_time_saves_nine"><span class="toc-number">1.0.8.</span> <span class="toc-text">七、事半功倍处理分支 Branch in time saves nine</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#八、批量撤销/找回_Mass_undo/redo"><span class="toc-number">1.0.9.</span> <span class="toc-text">八、批量撤销/找回 Mass undo/redo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#九、修复早先的提交_Fix_an_earlier_commit"><span class="toc-number">1.0.10.</span> <span class="toc-text">九、修复早先的提交 Fix an earlier commit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十、停止跟踪一个已被跟踪的文件_Stop_tracking_a_tracked_file"><span class="toc-number">1.0.11.</span> <span class="toc-text">十、停止跟踪一个已被跟踪的文件 Stop tracking a tracked file</span></a></li></ol></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
         <p>title: &lt;转&gt;如何在Git中撤销一切<br>date: 2015-06-24 20:23:29<br>tags:</p>
 <ul>
 <li>GIT<br>toc: false<br>—-​</li>
@@ -320,151 +280,71 @@
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
   
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-使用Lucene进行索引部分更新缓慢原因分析" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/07/25/使用Lucene进行索引部分更新缓慢原因分析/" class="article-date">
-  	<time datetime="2014-07-25T10:23:55.000Z" itemprop="datePublished">2014-07-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+<nav id="article-nav">
+  
+    <a href="/2015/07/25/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/07/25/使用Lucene进行索引部分更新缓慢原因分析/">使用Lucene进行索引部分更新缓慢原因分析</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="使用Lucene进行索引部分更新缓慢原因分析">使用Lucene进行索引部分更新缓慢原因分析</h1><h2 id="问题的引出">问题的引出</h2><p>在我们的系统中,使用了<code>Lucene</code>作为全文检索引擎用作NRT近实时检索.这就牵涉到一个更新的问题.<br>在Lucene当中,其实是<strong>不存在部分更新</strong>的说法的,它仅仅支持全更新.因此,为了应用端的调用方便.在我们的FTEngine全文检索引擎中是提供了部分更新的功能的,其逻辑大体上来说,就是根据传入的<code>uniqueID</code>,在索引中找到对应的<code>Document</code>.然后再恢复它的<code>Term</code>.而后再<strong>构造全更新的Document</strong>,交由Lucene进行全更新.<br>但是,在北京台项目中,突然发现全文检索更新的很慢,往往页面都对素材修改了2个小时了,索引都还没有更新. 从而引出了这个问题.</p>
-<h2 id="解决思路">解决思路</h2><p>经过最初步的分析, 发现发生这种现象多集中于有大量的归档与回迁的操作.这两个操作对索引的影响就是会一次性的大量的进行索引的部分更新. 因此就把原因怀疑到了部分更新上.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lucene/">Lucene</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/07/25/使用Lucene进行索引部分更新缓慢原因分析/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-记一次JVM优化过程" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/06/27/记一次JVM优化过程/" class="article-date">
-  	<time datetime="2014-06-27T02:29:56.000Z" itemprop="datePublished">2014-06-27</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+          Macos 通过安装Hexo 来搭建 GitHub Pages 博客系统
         
+      </div>
+    </a>
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/06/27/记一次JVM优化过程/">记一次JVM优化过程</a>
-    </h1>
   
+    <a href="/2014/07/25/使用Lucene进行索引部分更新缓慢原因分析/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用Lucene进行索引部分更新缓慢原因分析</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
 
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="记一次JVM优化过程">记一次JVM优化过程</h1><h2 id="问题的引出">问题的引出</h2><p>在多个系统环境中都出现了我们的DCMP在运行过程中突然停止响应,并且时间长达几分钟至几十分钟之久.期间DCMP任何功能都无法运行.严重的影响了系统的运行.因此需要分析排查问题的原因</p>
-<h2 id="解决思路">解决思路</h2><p>经过最初步的分析,发现是DCMP在运行一段时间后,会执行<code>FullGC</code>. 在FullGC的过程中整个系统会停止一切响应.因此,解决该问题的思路,就是分析出DCMP平凡进行<code>FullGC</code>的原因.然后进行优化</p>
-<h2 id="分析过程">分析过程</h2><ol>
-<li><p>在DCMP运行的过程中,通过windows任务管理器找到进程的<code>PID</code>.然后调用JDK自带的命令: </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ jstat –gcutil PID 重复次数 间隔时间</span><br></pre></td></tr></table></figure>
-<p> 获取当前JVM的内存信息:<br> <img src="/img/2014/06/27/1.png" alt=""><br> 他上面标识了JVM中每一个区的说占用百分比.</p>
-</li>
-</ol>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/06/27/记一次JVM优化过程/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
   
 </article>
 
 
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="如何在Git中撤销一切" data-title="" data-url="http://sunxiang0918.github.io/2015/06/24/如何在Git中撤销一切/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
 
 
 
-
-  
-  
 </div>
       <footer id="footer">
   <div class="outer">
@@ -488,8 +368,8 @@
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
