@@ -88,7 +88,7 @@
     <link href="http://sunxiang0918.github.io/2015/07/23/G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E5%85%A5%E9%97%A8/"/>
     <id>http://sunxiang0918.github.io/2015/07/23/G1垃圾收集器入门/</id>
     <published>2015-07-23T00:37:28.000Z</published>
-    <updated>2015-07-27T07:09:50.000Z</updated>
+    <updated>2015-07-27T07:10:35.000Z</updated>
     <content type="html"><![CDATA[<h1 id="G1垃圾收集器入门">G1垃圾收集器入门</h1><h2 id="说明">说明</h2><hr>
 <p><strong>concurrent</strong>: 并发, 多个线程协同做同一件事情(有状态)</p>
 <p><strong>parallel</strong>: 并行, 多个线程各做各的事情(互相间无共享状态)</p>
