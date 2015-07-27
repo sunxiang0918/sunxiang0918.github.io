@@ -3,42 +3,24 @@
 <head>
   <meta charset="utf-8">
   
-  <title>翔妖除魔的个人博客</title>
+  <title>&lt;转&gt;如何在Git中撤销一切 | 翔妖除魔的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="title: &amp;lt;转&amp;gt;如何在Git中撤销一切date: 2015-06-24 20:23:29tags:
-
-GITtoc: false—-​
-
-&amp;lt;转&amp;gt;如何在Git中撤销一切翻译：李伟审校：张帆译自：Github
-
-任何一个版本控制系统中，最有用的特性之一莫过于 “撤销（undo）”操作。在Git中，“撤销”有很多种含义。当你完成了一次新的提交（commit），Git会及时存储">
+  <meta name="description" content="这篇文章非常详细的介绍了GIT中撤销提交的相关知识">
 <meta property="og:type" content="article">
-<meta property="og:title" content="翔妖除魔的个人博客">
+<meta property="og:title" content="<转>如何在Git中撤销一切">
 <meta property="og:url" content="http://sunxiang0918.github.io/2015/06/24/如何在Git中撤销一切/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
-<meta property="og:description" content="title: &amp;lt;转&amp;gt;如何在Git中撤销一切date: 2015-06-24 20:23:29tags:
-
-GITtoc: false—-​
-
-&amp;lt;转&amp;gt;如何在Git中撤销一切翻译：李伟审校：张帆译自：Github
-
-任何一个版本控制系统中，最有用的特性之一莫过于 “撤销（undo）”操作。在Git中，“撤销”有很多种含义。当你完成了一次新的提交（commit），Git会及时存储">
+<meta property="og:description" content="这篇文章非常详细的介绍了GIT中撤销提交的相关知识">
 <meta property="og:image" content="https://jf-bucket-public.oss-cn-qingdao.aliyuncs.com/jfperiodical/attached/image/20150612/2016242594.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/1.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/2.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/3.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/4.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/5.png">
-<meta property="og:updated_time" content="2015-07-27T12:43:31.000Z">
+<meta property="og:updated_time" content="2015-07-27T12:47:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="翔妖除魔的个人博客">
-<meta name="twitter:description" content="title: &amp;lt;转&amp;gt;如何在Git中撤销一切date: 2015-06-24 20:23:29tags:
-
-GITtoc: false—-​
-
-&amp;lt;转&amp;gt;如何在Git中撤销一切翻译：李伟审校：张帆译自：Github
-
-任何一个版本控制系统中，最有用的特性之一莫过于 “撤销（undo）”操作。在Git中，“撤销”有很多种含义。当你完成了一次新的提交（commit），Git会及时存储">
+<meta name="twitter:title" content="<转>如何在Git中撤销一切">
+<meta name="twitter:description" content="这篇文章非常详细的介绍了GIT中撤销提交的相关知识">
   
     <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
   
@@ -139,7 +121,7 @@ GITtoc: false—-​
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Lucene/" style="font-size: 10px;">Lucene</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a>
+						<a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/Lucene/" style="font-size: 10px;">Lucene</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a>
 					</div>
 				</section>
 				
@@ -213,7 +195,7 @@ GITtoc: false—-​
   
     <div class="article-meta">
       <a href="/2015/06/24/如何在Git中撤销一切/" class="article-date">
-  	<time datetime="2015-06-23T16:00:00.000Z" itemprop="datePublished">2015-06-24</time>
+  	<time datetime="2015-06-24T12:23:29.000Z" itemprop="datePublished">2015-06-24</time>
 </a>
     </div>
   
@@ -222,21 +204,34 @@ GITtoc: false—-​
       <input type="hidden" class="isFancy" />
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      &lt;转&gt;如何在Git中撤销一切
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GIT/">GIT</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
     <div class="article-entry" itemprop="articleBody">
       
       
       
-        <div id="toc" class="article-toc">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#<转>如何在Git中撤销一切"><span class="toc-number">1.</span> <span class="toc-text"><转>如何在Git中撤销一切</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、撤销一个公共修改_Undo_a_“public”_change"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、撤销一个公共修改 Undo a “public” change</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、修改最近一次的提交信息_Fix_the_last_commit_message"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、修改最近一次的提交信息 Fix the last commit message</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、撤销本地更改_Undo_“local”_changes"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、撤销本地更改 Undo “local” changes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、重置本地修改_Reset_“local”_changes"><span class="toc-number">1.0.4.</span> <span class="toc-text">四、重置本地修改 Reset “local” changes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五、撤销本地后重做_Redo_after_undo_“local”"><span class="toc-number">1.0.5.</span> <span class="toc-text">五、撤销本地后重做 Redo after undo “local”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一些说明："><span class="toc-number">1.0.6.</span> <span class="toc-text">一些说明：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#六、与分支有关的那些事_Once_more,_with_branching"><span class="toc-number">1.0.7.</span> <span class="toc-text">六、与分支有关的那些事 Once more, with branching</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#七、事半功倍处理分支_Branch_in_time_saves_nine"><span class="toc-number">1.0.8.</span> <span class="toc-text">七、事半功倍处理分支 Branch in time saves nine</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#八、批量撤销/找回_Mass_undo/redo"><span class="toc-number">1.0.9.</span> <span class="toc-text">八、批量撤销/找回 Mass undo/redo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#九、修复早先的提交_Fix_an_earlier_commit"><span class="toc-number">1.0.10.</span> <span class="toc-text">九、修复早先的提交 Fix an earlier commit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十、停止跟踪一个已被跟踪的文件_Stop_tracking_a_tracked_file"><span class="toc-number">1.0.11.</span> <span class="toc-text">十、停止跟踪一个已被跟踪的文件 Stop tracking a tracked file</span></a></li></ol></li></ol></li></ol>
-          <hr/>
-        </div>
         
-        
-        <p>title: &lt;转&gt;如何在Git中撤销一切<br>date: 2015-06-24 20:23:29<br>tags:</p>
-<ul>
-<li>GIT<br>toc: false<br>—-​</li>
-</ul>
-<h1 id="&lt;转&gt;如何在Git中撤销一切">&lt;转&gt;如何在Git中撤销一切</h1><p>翻译：李伟<br>审校：张帆<br>译自：<a href="https://github.com/blog/2019-how-to-undo-almost-anything-with-git" target="_blank" rel="external">Github</a></p>
+        <h1 id="&lt;转&gt;如何在Git中撤销一切">&lt;转&gt;如何在Git中撤销一切</h1><p>翻译：李伟<br>审校：张帆<br>译自：<a href="https://github.com/blog/2019-how-to-undo-almost-anything-with-git" target="_blank" rel="external">Github</a></p>
 <p><img src="https://jf-bucket-public.oss-cn-qingdao.aliyuncs.com/jfperiodical/attached/image/20150612/2016242594.png" alt=""></p>
 <p>任何一个版本控制系统中，最有用的特性之一莫过于 “撤销（undo）”操作。在Git中，“撤销”有很多种含义。<br>当你完成了一次新的提交（commit），Git会及时存储当前时刻仓库（repository）的快照（snapshot）；你能够使用Git将项目回退到任何之前的版本。<br>下文中，我将列举几个常见的、需要“撤销”的场景，并且展示如何使用Git来完成这些操作。</p>
 <h3 id="一、撤销一个公共修改_Undo_a_“public”_change">一、撤销一个公共修改 Undo a “public” change</h3><p><strong>场景：</strong>你刚刚用git push将本地修改推送到了GitHub，这时你意识到在提交中有一个错误。你想撤销这次提交。</p>
@@ -286,11 +281,11 @@ GITtoc: false—-​
     
 <nav id="article-nav">
   
-    <a href="/2015/07/25/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/07/23/G1垃圾收集器入门/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          Macos 通过安装Hexo 来搭建 GitHub Pages 博客系统
+          &lt;转&gt;G1垃圾收集器入门
         
       </div>
     </a>
@@ -326,7 +321,7 @@ GITtoc: false—-​
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="如何在Git中撤销一切" data-title="" data-url="http://sunxiang0918.github.io/2015/06/24/如何在Git中撤销一切/"></div>
+	<div class="ds-thread" data-thread-key="如何在Git中撤销一切" data-title="&lt;转&gt;如何在Git中撤销一切" data-url="http://sunxiang0918.github.io/2015/06/24/如何在Git中撤销一切/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
