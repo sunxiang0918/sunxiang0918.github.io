@@ -17,7 +17,7 @@
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/3.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/4.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/5.png">
-<meta property="og:updated_time" content="2015-07-27T12:47:08.000Z">
+<meta property="og:updated_time" content="2015-07-27T12:48:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<转>如何在Git中撤销一切">
 <meta name="twitter:description" content="这篇文章非常详细的介绍了GIT中撤销提交的相关知识">
@@ -231,7 +231,7 @@
       
       
         
-        <h1 id="&lt;转&gt;如何在Git中撤销一切">&lt;转&gt;如何在Git中撤销一切</h1><p>翻译：李伟<br>审校：张帆<br>译自：<a href="https://github.com/blog/2019-how-to-undo-almost-anything-with-git" target="_blank" rel="external">Github</a></p>
+        <h1 id="如何在Git中撤销一切">如何在Git中撤销一切</h1><p>翻译：李伟<br>审校：张帆<br>译自：<a href="https://github.com/blog/2019-how-to-undo-almost-anything-with-git" target="_blank" rel="external">Github</a></p>
 <p><img src="https://jf-bucket-public.oss-cn-qingdao.aliyuncs.com/jfperiodical/attached/image/20150612/2016242594.png" alt=""></p>
 <p>任何一个版本控制系统中，最有用的特性之一莫过于 “撤销（undo）”操作。在Git中，“撤销”有很多种含义。<br>当你完成了一次新的提交（commit），Git会及时存储当前时刻仓库（repository）的快照（snapshot）；你能够使用Git将项目回退到任何之前的版本。<br>下文中，我将列举几个常见的、需要“撤销”的场景，并且展示如何使用Git来完成这些操作。</p>
 <h3 id="一、撤销一个公共修改_Undo_a_“public”_change">一、撤销一个公共修改 Undo a “public” change</h3><p><strong>场景：</strong>你刚刚用git push将本地修改推送到了GitHub，这时你意识到在提交中有一个错误。你想撤销这次提交。</p>
