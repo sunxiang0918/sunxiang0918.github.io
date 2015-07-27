@@ -29,7 +29,7 @@ GITtoc: false—-​
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/3.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/4.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/24/5.png">
-<meta property="og:updated_time" content="2015-07-27T12:42:40.000Z">
+<meta property="og:updated_time" content="2015-07-27T12:43:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="翔妖除魔的个人博客">
 <meta name="twitter:description" content="title: &amp;lt;转&amp;gt;如何在Git中撤销一切date: 2015-06-24 20:23:29tags:
@@ -243,6 +243,7 @@ GITtoc: false—-​
 <p><strong>使用撤销命令：</strong><code>git revert</code></p>
 <p><strong>发生了什么：</strong>git revert将根据给定SHA的相反值，创建一个新的提交。如果旧提交是“matter”，那么新的提交就是“anti-matter”——旧提交中所有已移除的东西将会被添加进到新提交中，旧提交中增加的东西将在新提交中移除。</p>
 <p>这是Git最安全、也是最简单的“撤销”场景，因为这样不会修改历史记录——你现在可以git push下刚刚revert之后的提交来纠正错误了。</p>
+<a id="more"></a>
 <h3 id="二、修改最近一次的提交信息_Fix_the_last_commit_message">二、修改最近一次的提交信息 Fix the last commit message</h3><p><strong>场景：</strong>你只是在最后的提交信息中敲错了字，比如你敲了git commit -m “Fxies bug #42”，而在执行git push之前你已经意识到你应该敲”Fixes bug #42”。</p>
 <p><strong>使用撤销命令：</strong><code>git commit –amend或git commit --amend -m &quot;Fixes bug #42&quot;</code></p>
 <p><strong>发生了什么：</strong>git commit –amend将使用一个包含了刚刚错误提交所有变更的新提交，来更新并替换这个错误提交。由于没有staged的提交，所以实际上这个提交只是重写了先前的提交信息。</p>

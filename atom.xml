@@ -87,7 +87,7 @@
     <link href="http://sunxiang0918.github.io/2015/06/24/%E5%A6%82%E4%BD%95%E5%9C%A8Git%E4%B8%AD%E6%92%A4%E9%94%80%E4%B8%80%E5%88%87/"/>
     <id>http://sunxiang0918.github.io/2015/06/24/如何在Git中撤销一切/</id>
     <published>2015-06-23T16:00:00.000Z</published>
-    <updated>2015-07-27T12:42:40.000Z</updated>
+    <updated>2015-07-27T12:43:31.000Z</updated>
     <content type="html"><![CDATA[<p>title: &lt;转&gt;如何在Git中撤销一切<br>date: 2015-06-24 20:23:29<br>tags:</p>
 <ul>
 <li>GIT<br>toc: false<br>—-​</li>
@@ -99,6 +99,7 @@
 <p><strong>使用撤销命令：</strong><code>git revert</code></p>
 <p><strong>发生了什么：</strong>git revert将根据给定SHA的相反值，创建一个新的提交。如果旧提交是“matter”，那么新的提交就是“anti-matter”——旧提交中所有已移除的东西将会被添加进到新提交中，旧提交中增加的东西将在新提交中移除。</p>
 <p>这是Git最安全、也是最简单的“撤销”场景，因为这样不会修改历史记录——你现在可以git push下刚刚revert之后的提交来纠正错误了。</p>
+<a id="more"></a>
 <h3 id="二、修改最近一次的提交信息_Fix_the_last_commit_message">二、修改最近一次的提交信息 Fix the last commit message</h3><p><strong>场景：</strong>你只是在最后的提交信息中敲错了字，比如你敲了git commit -m “Fxies bug #42”，而在执行git push之前你已经意识到你应该敲”Fixes bug #42”。</p>
 <p><strong>使用撤销命令：</strong><code>git commit –amend或git commit --amend -m &quot;Fixes bug #42&quot;</code></p>
 <p><strong>发生了什么：</strong>git commit –amend将使用一个包含了刚刚错误提交所有变更的新提交，来更新并替换这个错误提交。由于没有staged的提交，所以实际上这个提交只是重写了先前的提交信息。</p>
@@ -138,7 +139,14 @@
 <ul>
 <li>GIT<br>toc: false<br>—-​</li>
 </ul>
-<h1 id="&lt;转&gt;如何在Gi]]>
+<h1 id="&lt;转&gt;如何在Git中撤销一切">&lt;转&gt;如何在Git中撤销一切</h1><p>翻译：李伟<br>审校：张帆<br>译自：<a href="https://github.com/blog/2019-how-to-undo-almost-anything-with-git">Github</a></p>
+<p><img src="https://jf-bucket-public.oss-cn-qingdao.aliyuncs.com/jfperiodical/attached/image/20150612/2016242594.png" alt=""></p>
+<p>任何一个版本控制系统中，最有用的特性之一莫过于 “撤销（undo）”操作。在Git中，“撤销”有很多种含义。<br>当你完成了一次新的提交（commit），Git会及时存储当前时刻仓库（repository）的快照（snapshot）；你能够使用Git将项目回退到任何之前的版本。<br>下文中，我将列举几个常见的、需要“撤销”的场景，并且展示如何使用Git来完成这些操作。</p>
+<h3 id="一、撤销一个公共修改_Undo_a_“public”_change">一、撤销一个公共修改 Undo a “public” change</h3><p><strong>场景：</strong>你刚刚用git push将本地修改推送到了GitHub，这时你意识到在提交中有一个错误。你想撤销这次提交。</p>
+<p><strong>使用撤销命令：</strong><code>git revert</code></p>
+<p><strong>发生了什么：</strong>git revert将根据给定SHA的相反值，创建一个新的提交。如果旧提交是“matter”，那么新的提交就是“anti-matter”——旧提交中所有已移除的东西将会被添加进到新提交中，旧提交中增加的东西将在新提交中移除。</p>
+<p>这是Git最安全、也是最简单的“撤销”场景，因为这样不会修改历史记录——你现在可以git push下刚刚revert之后的提交来纠正错误了。</p>]]>
+    
     </summary>
     
   </entry>
