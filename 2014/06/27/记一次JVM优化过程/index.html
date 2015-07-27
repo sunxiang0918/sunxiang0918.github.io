@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2014/06/27/6.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2014/06/27/7.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2014/06/27/8.png">
-<meta property="og:updated_time" content="2015-07-27T10:08:57.000Z">
+<meta property="og:updated_time" content="2015-07-27T10:12:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次JVM优化过程">
 <meta name="twitter:description" content="这篇文章是记录了一次在我们的项目中遇到CG时间过长的问题排查过程.">
@@ -240,6 +240,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ jstat –gcutil PID 重复次数 间隔时间</span><br></pre></td></tr></table></figure>
 <p> 获取当前JVM的内存信息:<br> <img src="/img/2014/06/27/1.png" alt=""><br> 他上面标识了JVM中每一个区的说占用百分比.</p>
 </li>
+</ol>
+<a id="more"></a>
+<ol>
 <li><p>通过一段时间的观察,发现DCMP每一次<code>FullGC</code>都是由于<code>Perm</code>区内存空间占满造成的,而不是<code>Old</code>区.  在JVM定义中Perm区是<strong>持久区</strong>.用于<strong>存放ClassLoader和Class的类信息以及常量</strong>的.理论上是不会大量的增长的.因此在分段式的GC中是不会被GC的.只有在FullGC中会被GC.而我们的系统中,1G的<code>perm</code>区,仅仅需要10分钟就会被填满.这肯定是有问题的.</p>
 </li>
 <li><p>经过系统最小化的测试原则.也就是把能去掉的模块都去掉,仅仅保留DCMP运行的最少模块.发现<code>Perm</code>区的增长和<code>CDPLB</code><em>(我们系统中的一个组件与任务调度的服务)</em>的轮询时间高度一直.有理由相信和<code>CDPLB</code>有关.于是排查代码.发现对于一个<code>CDPLB</code>的任务,他在每一次轮询的时候都要调用ITaskRedirector的实现类进行分析获取该任务需要交由哪个执行器来处理.于是修改CDPLB的逻辑,让每一个任务在添加的时候就调用一次ITaskRedirector去获取执行器的名字.上线后,再次调用<code>jstat</code>命令发现<code>perm</code>区的增长后明显的好转.但是对于一般的情况,增速还是过快.特别是进行保存元数据的时候,会进行明显的增长.</p>
