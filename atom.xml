@@ -533,4 +533,102 @@ Avg: 2.7, Min: 2.6, Max: 2.8, Diff: 0.2]
     
   </entry>
   
+  <entry>
+    <title><![CDATA[记一次JVM优化过程]]></title>
+    <link href="http://sunxiang0918.github.io/2014/06/27/%E8%AE%B0%E4%B8%80%E6%AC%A1JVM%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B/"/>
+    <id>http://sunxiang0918.github.io/2014/06/27/记一次JVM优化过程/</id>
+    <published>2014-06-27T02:29:56.000Z</published>
+    <updated>2015-07-27T10:08:57.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="记一次JVM优化过程">记一次JVM优化过程</h1><h2 id="问题的引出">问题的引出</h2><p>在多个系统环境中都出现了我们的DCMP在运行过程中突然停止响应,并且时间长达几分钟至几十分钟之久.期间DCMP任何功能都无法运行.严重的影响了系统的运行.因此需要分析排查问题的原因</p>
+<h2 id="解决思路">解决思路</h2><p>经过最初步的分析,发现是DCMP在运行一段时间后,会执行<code>FullGC</code>. 在FullGC的过程中整个系统会停止一切响应.因此,解决该问题的思路,就是分析出DCMP平凡进行<code>FullGC</code>的原因.然后进行优化</p>
+<h2 id="分析过程">分析过程</h2><ol>
+<li><p>在DCMP运行的过程中,通过windows任务管理器找到进程的<code>PID</code>.然后调用JDK自带的命令: </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ jstat –gcutil PID 重复次数 间隔时间</span><br></pre></td></tr></table></figure>
+<p> 获取当前JVM的内存信息:<br> <img src="/img/2014/06/27/1.png" alt=""><br> 他上面标识了JVM中每一个区的说占用百分比.</p>
+</li>
+<li><p>通过一段时间的观察,发现DCMP每一次<code>FullGC</code>都是由于<code>Perm</code>区内存空间占满造成的,而不是<code>Old</code>区.  在JVM定义中Perm区是<strong>持久区</strong>.用于<strong>存放ClassLoader和Class的类信息以及常量</strong>的.理论上是不会大量的增长的.因此在分段式的GC中是不会被GC的.只有在FullGC中会被GC.而我们的系统中,1G的<code>perm</code>区,仅仅需要10分钟就会被填满.这肯定是有问题的.</p>
+</li>
+<li><p>经过系统最小化的测试原则.也就是把能去掉的模块都去掉,仅仅保留DCMP运行的最少模块.发现<code>Perm</code>区的增长和<code>CDPLB</code><em>(我们系统中的一个组件与任务调度的服务)</em>的轮询时间高度一直.有理由相信和<code>CDPLB</code>有关.于是排查代码.发现对于一个<code>CDPLB</code>的任务,他在每一次轮询的时候都要调用ITaskRedirector的实现类进行分析获取该任务需要交由哪个执行器来处理.于是修改CDPLB的逻辑,让每一个任务在添加的时候就调用一次ITaskRedirector去获取执行器的名字.上线后,再次调用<code>jstat</code>命令发现<code>perm</code>区的增长后明显的好转.但是对于一般的情况,增速还是过快.特别是进行保存元数据的时候,会进行明显的增长.</p>
+</li>
+<li><p>再次分析<code>ITaskRedirector</code>实现类与保存元数据的逻辑的共性.发现都有<strong>xml</strong>转换对象的步骤.初步猜测与这个有关.于是编写测试类:<br> <img src="/img/2014/06/27/2.png" alt=""><br> 该断代码的逻辑在于读取一个临时实体的XML字符串. 然后不断的循环,一次采用<code>XStream</code>来反序列化生成临时实体对象,一次采用<code>Dom4j</code>来生成临时实体对象.两种方式交替执行.每次执行停顿<em>5000</em>毫秒.该代码执行后,通过<code>jstat</code>分析得出,每当使用<code>XStream</code>生成临时实体的时候<code>Perm</code>区都会增长<strong>0.5%</strong>左右.而使用<code>Dom4j</code>不会(<em>如果使用Dom4j的XPATH功能,会增长0.1左右</em>).由此可以断定应该是<code>Xstream</code>在反序列化XML生成对象的过程中产生了<strong>动态的代理Class</strong>.造成了<code>perm</code>区的增加.</p>
+</li>
+<li><p>根据网上查到的说法,<code>Xstream</code>是线程安全的,因此修改代码.把以前每调用一次序列化/反序列化 就要注册一次<code>Xstream</code>改为了<strong>缓存常量</strong>.经过这次修改,<code>Perm</code>区增长的问题基本解决.每一次的<code>FullGC</code>都不是由于<code>Perm</code>区满了引起的了.</p>
+</li>
+<li><p>继续使用<code>jstat</code>分析,发现系统虽然<code>FullGC</code>的<strong>频率降低</strong>了,但是每一次<code>FullGC</code>的<strong>持续时间还是很久</strong>.经过进一步的查资料,我们现在使用的是<code>Parallel GC</code>,也就是<strong>并行GC</strong>.该GC的特点是<strong>并行</strong>处理<code>Minor GC</code>.系统吞吐量优先,也就是说,它会尽量减少GC的次数,等到内存满后再进行一次FullGC.所以FullGC的时间相当的长.因此,<strong>更换GC方式为CMS GC</strong>.</p>
+</li>
+<li><p><code>CMS GC</code>全称<code>Concurrent Mark-Sweep GC</code>.它是一种并行的<strong>标记GC</strong>.当有部分内存需要被GC的时候,它会标记这部分内存.然后系统就不再使用这部分内存.同一时间,它开始并行的开始释放被标记的这部分内存.从而达到高响应的.它是一种高响应式的GC,它为了能减少GC的时间,通过不断的标记和交换内存来达到目的.因此对于系统的吞吐量是有一定的影响的.</p>
+</li>
+<li><p>决定选用CMS GC方式后,还需要决定的就是整个系统的堆大小以及每一个区的大小.<br> <img src="/img/2014/06/27/3.png" alt="">  </p>
+</li>
+<li><p>判断JVM是否调优有三个标准:<strong>吞吐量</strong>,<strong>延迟及响应性</strong>,<strong>内存占用</strong>.</p>
+<ul>
+<li><code>吞吐量</code>是对<strong>单位时间内处理工作量的度量</strong>,设计吞吐量需求时,一般不考虑它对延迟或响应时间的影响.通常情况下,增加吞吐量的代价是延迟的增加或内存使用的增加.吞吐量性能的需求的一个典型例子是:应用程序每秒需要完成2500次事务.</li>
+<li><code>延迟及响应性</code>是<strong>对引用程序收到指令开始工作直到完成该工作所消耗时间的度量</strong>.通常情况下,提高响应性的代价是更低的吞吐量,或者更多的内存消耗.延迟需求的一个典型例子是应用程序应该在60ms内完成请求的处理工作</li>
+<li><code>内存占用</code>是指在<strong>同等程度的吞吐量,延迟,可用性等前提下,运行应用程序所需要的内存大小</strong>.内存占用通常以运行应用程序需要的JAVA堆大小或运行应用程序所需要的总大小来表述.一般情况下可以通过增大JAVA堆的方式增加内存能够提高吞吐量,降低延迟.</li>
+</ul>
+</li>
+<li><p>我们的DCMP系统目前暂时没有一个硬性的吞吐量或响应的要求,但是要求尽量在等量内存下达到最大吞吐量或最低响应时间.要达到这个要求有三个原则:</p>
+<ol>
+<li>每一次MinorGC都尽可能多的收集垃圾对象.遵守这一原则可以减少应用程序发生FullGC的频率.FullGC的持续时间总是最长的.是应用程序无法达到其延迟或吞吐量要求的罪魁祸首.</li>
+<li>处理吞吐量和延迟问题时,垃圾处理器能使用的内存越大,即JAVA堆空间越大,垃圾收集效果越好.</li>
+<li>在这三个性能指标(吞吐量,延迟,内存占用)中任意选择两个进行JVM调优.</li>
+</ol>
+</li>
+<li><p>开始优化内存之前,需要理解JVM中堆的布局非常重要,它直接可以从理论上帮助我们确定应用程序使用JAVA堆的大小,微调影响垃圾收集器性能的空间大小.<br><img src="/img/2014/06/27/4.png" alt=""><br>JVM主要有三个空间,分别是:<strong>新生代</strong>,<strong>老年代</strong>以及<strong>永久区</strong>.<br>JAVA应用程序分类JAVA对象的时候,首先在新生代空间(<code>Eden</code>)中分配对象.经过一次<code>MinorGC</code>后,存活下来的对象会放入<code>S0</code>区.然后<code>S0</code>和<code>S1</code>交换.当再一次<code>MinorGC</code>后,把存活下来的对象再放入当前的<code>S0</code>区.经过几次<code>MinorGC</code>之后还保持活跃的对象会被晋升到老年代中.永久代中空间存放的是VM和JAVA类的元数据已经驻留的Strings和类静态变量.</p>
+<ul>
+<li>整个JVM堆大小可以使用 <code>–Xmx</code>和<code>-Xms</code>指定</li>
+<li>新生代可以使用<code>-XX:NewSize</code>  <code>-XX:MaxNewSize</code>  或者 <code>–Xmn</code>指定</li>
+<li>老年代空间大小会根据新生代的大小隐式的指定.即 <strong>老年代=堆大小-新生代</strong></li>
+<li>持久代空间大小通过: <code>-XX:PermSize</code>   <code>-XX:MaxPerSize</code> 来指定<br>新生代,老年代,永久代这三个空间中的任何一个不能满足内存分配请求时,就会发生垃圾回收,理解这一点非常重要.</li>
+</ul>
+</li>
+<li><p>有了理论的知识后,接下来就是根据我们系统具体的进行分析了.首选需要的就是选择JVM运行模式.毫无疑问,我们系统肯定是使用的<code>Server</code>模式.Server模式提供了更复杂的生成码优化功能,这个功能对于服务器的应用而言尤其重要</p>
+</li>
+<li><p>接下来就是确定内存占用.程序的内存并不是越多越好,这需要考虑成本等问题.初始堆大小通常应该是老年代活跃数据的<strong>3-4</strong>倍.永久代大小应该比永久代活跃数据大<strong>1.5-2</strong>倍.新生代大小通常应该是老年代活跃数据的<strong>1-1.5</strong>倍.</p>
+</li>
+<li><p>所谓的活跃数据,即<strong>应用程序运行于稳定态时,长期存活的对象在JAVA堆中占用的空间大小</strong>.换句话说,活跃数据大小是引用程序运行于稳定后,FullGC之后JAVA堆中老年代和永久代占用的空间大小.</p>
+</li>
+<li><p>经过在107机器上大规模的跑hotfolder入库(<em>文件分析-保存元数据</em>).我们老年代的活跃数据大概为<strong>1个G</strong>.因此调整初始化堆大小为<strong>4G</strong>,永久代<strong>346m</strong>,新生代<strong>1.5G</strong><br><img src="/img/2014/06/27/5.png" alt="">  </p>
+</li>
+<li><p>接下来微调新生代的大小.<br>通常情况下,<strong>新生代空间越小,MinorGC持续时间越短</strong>,不考虑这对于MinorGC持续时间的影响,减少新生代空间又会增加MinorGC的频率.因此需要取<strong>它们的中间点</strong>.分析GC数据的时候,如果发现MinorGC的间隔时间过长,修正的方法是减少新生代空间.如果Minor频率太高,修正的方法是增加新生代空间.经过GC日志的分析,新生代1.5G的空间比较合适我们的系统,每次MinorGC的平均时间为0.04秒左右.<br><img src="/img/2014/06/27/6.png" alt="">   </p>
+</li>
+<li><p>微调老年代的大小.<br>这一步的目标是评估FullGC引入的<code>最差停滞时间</code>以及<code>FullGC的频率</code>.<br>同年轻代一样,老年代的优化也需要采集垃圾手机的统计数据.我们关注的是FullGC的持续时间和频率.经过采样,发现了一个问题.在当前的配置情况下,当系统运行了一段时间后,会进行大量的FullGC.而不进行MinorGC. FullGC占到了所有GC的90%以上.虽然每一次FullGC的持续时间都不长,但这是不正常的,经过GC日志的分析.发现,当系统进行大量的FullGC的时候,老年区与持久区并没有被占满,也就是说FullGC不是这两个区被占满造成的.每次出发FullGC的时机都是年轻代占满,进行GC的时候.报concurrent mode failure<br><img src="/img/2014/06/27/7.png" alt=""><br>经过oracle等论坛的查询和源码的分析,发现出现这种现象有一种情况就是当<code>年轻代GC</code>的时候,他需要向<strong>老年代晋升对象</strong>,而老年代的空间如果不够年轻代晋升的对象时(<strong>这里有一个误区,也是让我疑惑了很久的地方,就是明明老年代的空间大于年轻代,为什么还会不够.原因在于CMS方式的GC是不会整理内存的,内存空间是一个一个的片段.当老年区的最大连续内存片段小于年轻代晋升的对象大小时,JVM就会认为空间不足</strong>),就会发生MinorGC失败,从而JVM尝试进行FullGC.因此,可以得出一个结论就是年轻代和老年代空间大小比过小了.在不增加堆空间大小的情况下,就只能减少年轻代的空间.因此,重新修改年轻代大小为1G.</p>
+</li>
+<li><p>Survivor空间调优<br><code>Survivor</code>空间也就是图上的 <code>S0</code> <code>S1</code>空间. 两个空间的大小虽然很小,但是作用很大.整个Survivor空间分成了两个部分,即<strong>S0</strong>和<strong>S1</strong>,也叫<strong>From</strong>区和<strong>To</strong>区.它相当于是一个缓存区,能提高年轻代晋升到老年代的对象的命中率.一旦完成MinorGC,Eden空间会被清空,From空间也会被清空.而To空间中保留了还是活跃的对象,之后Survivor空间交换标记为下一次MinorGC作准备.现在被清空的From区被标记成了To区,而To区被标记成From区.因此MinorGC结束时,Eden空间和一块Survivor空间被清空,另一块Survivor空间中保留经历了上一次MinorGC存货下来的活跃对象.如果MinorGC时.To区空间不足以容纳所有从Eden区和From区中复制过来的活跃对象,超出的部分就会直接晋升至老年区.这会加速FullGC的频率.调整Survivor空间的大小,让其有足够的空间容纳存活对象足够长的时间,直到几个周期之后对象老化.就能避免Survivor空间的溢出.<br>调整Survivor空间大小可以通过: <code>-XX:SurvivorRation=&lt;ratio&gt;</code> 进行调整.<br>计算公式为: <code>Survivor空间大小=-Xmn/(+XX:SurvivorRation=&lt;ration&gt;+2)</code><br>要调优Survivor空间,需要监控晋升阀值.晋升阀值决定了对象在新生代Survivor空间中保留的次数.通过在GC日志中增加<code>-XX:+PrintTenuringDistribution</code>.来监控晋升阀值.<br>增加该参数后,每一个MinorGC都会打印Survivor区中的对象大小以及保留次数:<br>比如:  </p>
+<blockquote>
+<p>age 1: 6115072bytes, 6115072 total<br>age 2:  286672bytes, 6401774 total<br>age 3:  115704 bytes, 6517448 total<br>age 4:   95932 bytes,  6613380 total<br>age 5:   89465 bytes,  6702845 total<br>age 6:   88322 bytes,  6791167 total<br>age 7    88201bytes,  6879368 total  </p>
+</blockquote>
+<p>从上表来看,年龄为<code>1</code> <code>2</code> <code>3</code>的对象非常的多,而年龄<code>4</code>开始就很少了.也就是说系统的Survivor的晋升阀值就是3.即<code>-XX:MaxTenuringThreshold=3</code>.整个年龄为3的对象为65兆.所以就配置Survivor区大小为<strong>130m</strong>.即<strong>-XX:SurvivorRatio=6</strong></p>
+</li>
+<li><p>CMS收集周期调优<br>确定完JVM堆以及每一个区的大小后,还需要的就是根据CMS收集策略来调整一些参数.比如:  </p>
+<ul>
+<li>Perm区满后是采用FullGC还是直接抛异常终止系统运行的<code>-XX:+CMSPermGenSweepingEnabled</code>参数.  </li>
+<li>CMS老年代开始标记的进入周期,如果CMS周期开的太晚,就会发生失速.如果它无法以足够快的速度回收对象,就无法避免老年化空间用尽.但是如果CMS周期开始得过早,又会引起无用的消耗,影响应用程序的吞吐量.经过GC日志的分析,当老年代占用大于1.6G的时候,就会发生concurrent mode failure.因此决定CMS进入时机为老年代的60%,即: <code>-XX:CMSInitiatingOccupancyFraction=60</code></li>
+<li>CMS回收不会整理内存,这就会造成老年区的内存碎片越来越多,影响效率.因此就需要指定进行几次FullGC后,整理老年区的内存.这会增加一个FullGC的时间,但是可以整体的增加系统的吞吐量.经过分析我们的系统很久才会触发一次FullGC,于是配置每一个FullGC前都进行内存整理: <code>-XX:CMSFullGCsBeforeCompaction=1</code></li>
+</ul>
+</li>
+<li><p>到此,GC的配置已完成,然后就是进行大量的测试.现在的配置如下:</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> JAVA_OPTS=%JAVA_OPTS% -Xms4096m -Xmx4096m -XX:PermSize=<span class="number">346</span>m -XX:MaxPermSize=<span class="number">346</span>m -Xmn1024m  -Xss128k -server -XX:MaxTenuringThreshold=<span class="number">5</span></span><br><span class="line"><span class="built_in">set</span> JAVA_OPTS=%JAVA_OPTS% -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSPermGenSweepingEnabled -XX:+UseCMSInitiatingOccupancyOnly -XX:+CMSClassUnloadingEnabled -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:SurvivorRatio=<span class="number">6</span> -XX:CMSFullGCsBeforeCompaction=<span class="number">1</span> -XX:CMSInitiatingOccupancyFraction=<span class="number">60</span> -XX:ParallelGCThreads=<span class="number">4</span></span><br><span class="line"><span class="built_in">set</span> JAVA_OPTS=%JAVA_OPTS% -XX:+DisableExplicitGC</span><br></pre></td></tr></table></figure>
+<p>经过3台AT导入同时导入的压力测试:<br><img src="/img/2014/06/27/8.png" alt="">  </p>
+<p>系统运行<strong>52937</strong>秒,整个GC暂停时间<strong>231.71</strong>秒. 系统可用时间 <strong>99.56%</strong>.平均GC时间<strong>0.039</strong>秒,最大停顿时间<strong>2.7</strong>秒.达到系统要求.</p>
+<ol>
+<li><p>把同样的配置发到旺旺现场,发现系统还是响应很慢,收集GC日志后发现.他们的元数据太大.造成新生代被占满的速度太快.平凡的进行MinorGC. 平均每<strong>0.2秒</strong>就进行一个MinorGC,系统停顿<strong>0.04秒</strong>. 整个系统的可用时间只有<strong>75%</strong>.没达到吞吐量的需求.日志显示<strong>0.2秒</strong>新生代的<strong>900M</strong>空间就会被占满.但是不会平凡的进行FullGC.证明<strong>整体的GC策略是正确的</strong>,但是确实由于量的原因,<strong>4G空间不能满足要求了</strong>.所以一方面增加现场的内存配置到8G.另一方面,分析流程,发现由于AT导入速度大于我们保存元数据的速度.所以保存元数据的流程越来越多,而保存元数据没有使用CDPLB调度,所有的任务都驻留在内存中,造成了新生代增速过快.因此,修改程序让CDPLB也来调度保存元数据,同一时间只有300个任务驻留在内存中.再次观察日志.问题解决.</p>
+</li>
+<li><p>至此,整个DCMP的内存调优结束.</p>
+</li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[这篇文章是记录了一次在我们的项目中遇到CG时间过长的问题排查过程.]]>
+    
+    </summary>
+    
+      <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
+    
+      <category term="JVM" scheme="http://sunxiang0918.github.io/tags/JVM/"/>
+    
+  </entry>
+  
 </feed>
