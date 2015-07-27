@@ -19,28 +19,28 @@ concurrent: 并发, 多个线程协同做同一件事情(有状态)
 parallel: 并行, 多个线程各做各的事情(互相间无共享状态)
 参考: What’s the difference between concurrency and parallelism
 概述目的本文介绍如何使用G1,及在 Hotspot JVM 中怎么使用G1垃圾收集器。 您将了解 G1 收集器的内">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/01_1_JVM_Arch_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/01_2_Key_Hotspot_Components_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/02_1_HeapStructure_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/02_2_G1HeapAllocation_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_1_CMS_Heap_Structure_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_2_How_yong_GC_Works_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_3_Yong_Generation_Collection_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_4_After_Young_GC_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_5_Old_Generation_Collection_in_CMS_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_6_Concurrent_Sweep_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_7_After_Sweeping_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_1_G1_Heap_Structure_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/02_2_G1HeapAllocation_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_3_Young_Generation_in_G1_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_4_A_Young_GC_in_G1_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_5_End_of_Young_GC_with_G1_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_6_Initial_Marking_Phase_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_7_Concurrent_Marking_Phase_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_8_Remark_Phase_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_9_Copying_Cleanup_Phase_CN.png">
-<meta property="og:image" content="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_10_After_Copying_Cleanup_Phase_CN.png">
-<meta property="og:updated_time" content="2015-07-27T01:28:17.000Z">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/01_1_JVM_Arch_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/01_2_Key_Hotspot_Components_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/02_1_HeapStructure_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/02_2_G1HeapAllocation_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/03_1_CMS_Heap_Structure_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/03_2_How_yong_GC_Works_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/03_3_Yong_Generation_Collection_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/03_4_After_Young_GC_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/03_5_Old_Generation_Collection_in_CMS_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/03_6_Concurrent_Sweep_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/03_7_After_Sweeping_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/04_1_G1_Heap_Structure_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/02_2_G1HeapAllocation_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/04_3_Young_Generation_in_G1_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/04_4_A_Young_GC_in_G1_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/04_5_End_of_Young_GC_with_G1_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/04_6_Initial_Marking_Phase_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/04_7_Concurrent_Marking_Phase_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/04_8_Remark_Phase_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/04_9_Copying_Cleanup_Phase_CN.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/07/23/04_10_After_Copying_Cleanup_Phase_CN.png">
+<meta property="og:updated_time" content="2015-07-27T01:35:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<转>G1垃圾收集器入门">
 <meta name="twitter:description" content="G1垃圾收集器入门说明
@@ -294,10 +294,10 @@ parallel: 并行, 多个线程各做各的事情(互相间无共享状态)
 <p>Java 虚拟机完全不关心Java语言的细节, 只识别 class 文件这种特定的二进制格式. 一个 class 文件包含 Java虚拟机指令(或称之为字节码 bytecode) 及符号变量表(symbol table), 还有一些辅助信息.</p>
 <p>基于安全性考虑, Java虚拟机对 class 文件中的代码执行 强语法检查和组成结构规范限制. 既然虚拟机有这种特征, 那么任何一门编程语言,只要能编译为合法的 class 文件，都可以加载到 Java虚拟机 里面执行。由于具有通用性,跨平台特性, 其他语言的实现者可以把Java虚拟机作为该语言的加载执行工具。(1) <a href="http://docs.oracle.com/javase/specs/jvms/se7/html/jvms-1.html" target="_blank" rel="external">The Java Virtual Machine</a></p>
 <h2 id="探索_JVM_体系架构">探索 JVM 体系架构</h2><h3 id="Hotspot_架构">Hotspot 架构</h3><p>HotSpot JVM 有一个稳定强悍的架构, 支持强大的功能与特性, 具备实现高性能和大规模可伸缩性的能力。例如,HotSpot JVM JIT编译器能动态进行优化生成。换句话说,他们运行Java程序时,会针对底层系统架构动态生成高性能的本地机器指令。此外,通过成熟的演进和运行时环境的持续工程,加上多线程垃圾收集器,HotSpot JVM即使实在大型计算机系统上也能获得很高的伸缩性.</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/01_1_JVM_Arch_CN.png" alt="HotSpot JVM: Architecture"></p>
+<p><img src="/img/2015/07/23/01_1_JVM_Arch_CN.png" alt="HotSpot JVM: Architecture"></p>
 <p>JVM 的主要组件包括: 类加载器(class loader), 运行时数据区(runtime data areas), 以及执行引擎(execution engine).</p>
 <h3 id="Hotspot_关键部分">Hotspot 关键部分</h3><p>与性能(performance)有关的部分是 JVM 最重要的组件,下图中用高亮的颜色来显示.</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/01_2_Key_Hotspot_Components_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/01_2_Key_Hotspot_Components_CN.png" alt=""></p>
 <p>对JVM进行性能调优时有三大组件需要重点关注。堆(Heap)是存放对象的内存空间。这个区域由JVM启动时选择的垃圾收集器进行管理。大多数调优参数都是调整堆内存的大小,以及根据实际情况选择最合适的垃圾收集器. JIT编译器也对性能有很大的影响, 但新版本的JVM调优中很少需要关注.</p>
 <h2 id="性能基础">性能基础</h2><p>大多数情况下对 Java 程序进行调优, 主要关注两个目标之一: 响应速度(responsiveness) 和/或 吞吐量(throughput). 下面的教程中我们将讲述这些概念.</p>
 <h3 id="响应能力(Responsiveness)">响应能力(Responsiveness)</h3><p>响应能力就是程序或系统对一个请求的响应有多迅速. 比如:</p>
@@ -323,10 +323,10 @@ parallel: 并行, 多个线程各做各的事情(互相间无共享状态)
 </ul>
 <p>G1的长期目标是取代CMS(Concurrent Mark-Sweep Collector, 并发标记-清除). 因为特性的不同使G1成为比CMS更好的解决方案. 一个区别是,G1是一款压缩型的收集器.G1通过有效的压缩完全避免了对细微空闲内存空间的分配,不用依赖于regions，这不仅大大简化了收集器，而且还消除了潜在的内存碎片问题。除压缩以外，G1的垃圾收集停顿也比CMS容易估计，也允许用户自定义所希望的停顿参数(pause targets)</p>
 <h3 id="G1_操作概述">G1 操作概述</h3><p>上一代的垃圾收集器(串行serial, 并行parallel, 以及CMS)都把堆内存划分为固定大小的三个部分: 年轻代(young generation), 年老代(old generation), 以及持久代(permanent generation).</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/02_1_HeapStructure_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/02_1_HeapStructure_CN.png" alt=""></p>
 <p>内存中的每个对象都存放在这三个区域中的一个.</p>
 <p>而 G1 收集器采用一种不同的方式来管理堆内存.</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/02_2_G1HeapAllocation_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/02_2_G1HeapAllocation_CN.png" alt=""></p>
 <p>堆内存被划分为多个大小相等的 heap 区,每个heap区都是逻辑上连续的一段内存(virtual memory). 其中一部分区域被当成老一代收集器相同的角色(eden, survivor, old), 但每个角色的区域个数都不是固定的。这在内存使用上提供了更多的灵活性。</p>
 <p>G1执行垃圾回收的处理方式与CMS相似. G1在全局标记阶段(global marking phase)并发执行, 以确定堆内存中哪些对象是存活的。标记阶段完成后,G1就可以知道哪些heap区的empty空间最大。它会首先回收这些区,通常会得到大量的自由空间. 这也是为什么这种垃圾收集方法叫做Garbage-First(垃圾优先)的原因。顾名思义, G1将精力集中放在可能布满可收回对象的区域, 可回收对象(reclaimable objects)也就是所谓的垃圾. G1使用暂停预测模型(pause prediction model)来达到用户定义的目标暂停时间,并根据目标暂停时间来选择此次进行垃圾回收的heap区域数量.</p>
 <p>被G1标记为适合回收的heap区将使用转移(evacuation)的方式进行垃圾回收. G1将一个或多个heap区域中的对象拷贝到其他的单个区域中,并在此过程中压缩和释放内存. 在多核CPU上转移是并行执行的(parallel on multi-processors), 这样能减少停顿时间并增加吞吐量. 因此,每次垃圾收集时, G1都会持续不断地减少碎片, 并且在用户给定的暂停时间内执行. 这比以前的方法强大了很多. CMS垃圾收集器(Concurrent Mark Sweep,并发标记清理)不进行压缩. ParallelOld 垃圾收集只对整个堆执行压缩,从而导致相当长的暂停时间。</p>
@@ -378,43 +378,43 @@ parallel: 并行, 多个线程各做各的事情(互相间无共享状态)
 </table>
 <h3 id="CMS的GC步骤">CMS的GC步骤</h3><p>接下来,让我们一步步地讲述CMS收集器的操作.</p>
 <h4 id="1-_CMS的堆内存结构(Heap_Structure)">1. CMS的堆内存结构(Heap Structure)</h4><p>堆内存被分为3个空间.</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_1_CMS_Heap_Structure_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/03_1_CMS_Heap_Structure_CN.png" alt=""></p>
 <p>年轻代(Young generation)分为 1个新生代空间(Eden)和2个存活区(survivor spaces). 老年代(Old generation)是一大块连续的空间, 垃圾回收(Object collection)就地解决(is done in place), 除了 Full GC, 否则不会进行压缩(compaction).</p>
 <h4 id="2-_CMS年轻代(Young)_GC_的工作方式">2. CMS年轻代(Young) GC 的工作方式</h4><p>年轻代(young generation)用高亮的绿色表示, 老年代(old generation)用蓝色表示。如果程序运行了一段时间,那么 CMS 看起来就像下图这个样子. 对象散落在老年代中的各处地方.</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_2_How_yong_GC_Works_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/03_2_How_yong_GC_Works_CN.png" alt=""></p>
 <p>在使用 CMS 时, 老年代的对象回收就地进行(deallocated in place). 他们不会被移动到其他地方. 除了 Full GC, 否则内存空间不会进行压缩.</p>
 <h4 id="3-_年轻代垃圾回收(Young_Generation_Collection)">3. 年轻代垃圾回收(Young Generation Collection)</h4><p>Eden区和survivor区中的存活对象被拷贝到另一个空的survivor 区. 存活时间更长,达到阀值的对象会被提升到老年代(promoted to old generation).</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_3_Yong_Generation_Collection_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/03_3_Yong_Generation_Collection_CN.png" alt=""></p>
 <h4 id="4-_年轻代(Young)_GC_之后">4. 年轻代(Young) GC 之后</h4><p>年轻代(Young)进行一次垃圾回收之后, Eden 区被清理干净(cleared),两个 survivor 区中的一个也被清理干净了. 如下图所示:</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_4_After_Young_GC_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/03_4_After_Young_GC_CN.png" alt=""></p>
 <p>图中新提升的对象用深蓝色来标识. 绿色的部分是年轻代中存活的对象,但还没被提升到老年代中.</p>
 <h4 id="5-_CMS的老年代回收(Old_Generation_Collection)">5. CMS的老年代回收(Old Generation Collection)</h4><p>两次stop the world事件发生在: 初始标记(initial mark)以及重新标记(remark)阶段. 当老年代达到一定的占有率时,CMS垃圾回收器就开始工作.</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_5_Old_Generation_Collection_in_CMS_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/03_5_Old_Generation_Collection_in_CMS_CN.png" alt=""></p>
 <p>(1) 初始标记(Initial mark)阶段的停顿时间很短,在此阶段存活的(live,reachable,可及的) 对象被记下来. (2) 并发标记(Concurrent marking)在程序继续运行的同时找出存活的对象. 最后, 在第(3)阶段(remark phase), 查找在第(2)阶段(concurrent marking)中错过的对象.</p>
 <h4 id="6-_老年代回收_-_并发清理(Concurrent_Sweep)">6. 老年代回收 - 并发清理(Concurrent Sweep)</h4><p>在前面阶段未被标记的对象将会就地释放(deallocated in place). 此处没有压缩(compaction).</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_6_Concurrent_Sweep_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/03_6_Concurrent_Sweep_CN.png" alt=""></p>
 <p><strong>备注:</strong> 未标记(Unmarked)的对象 == 已死对象(Dead Objects)</p>
 <h4 id="7-_老年代回收_-_清理之后(After_Sweeping)">7. 老年代回收 - 清理之后(After Sweeping)</h4><p>在第(4)步(Sweeping phase)之后, 可以看到很多内存被释放了. 还应该注意到,这里并没有执行内存压缩整理(no compaction).</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/03_7_After_Sweeping_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/03_7_After_Sweeping_CN.png" alt=""></p>
 <p>最后, CMS 收集器进入(move through)第(5)阶段, 重置(resetting phase), 然后等候下一次的GC阀值到来(GC threshold).</p>
 <h2 id="G1垃圾收集器概述">G1垃圾收集器概述</h2><h3 id="一步步介绍G1">一步步介绍G1</h3><p>G1收集器采用一种不同的方式来分配堆. 下面通过图解的方式一步步地讲述G1系统.</p>
 <h4 id="1-_G1的堆内存结构">1. G1的堆内存结构</h4><p>堆内存被划分为固定大小的多个区域.</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_1_G1_Heap_Structure_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/04_1_G1_Heap_Structure_CN.png" alt=""></p>
 <p>每个heap区(Region)的大小在JVM启动时就确定了. JVM 通常生成 2000 个左右的heap区, 根据堆内存的总大小,区的size范围允许为 1Mb 到 32Mb.</p>
 <h4 id="2-_G1_堆空间分配">2. G1 堆空间分配</h4><p>实际上,这些区域(regions)被映射为逻辑上的 Eden, Survivor, 和 old generation(老年代)空间.</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/02_2_G1HeapAllocation_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/02_2_G1HeapAllocation_CN.png" alt=""></p>
 <p>图中的颜色标识了每一个区域属于哪个角色. 存活的对象从一块区域转移(复制或移动)到另一块区域。设计成 heap 区的目的是为了并行地进行垃圾回收(的同时停止/或不停止其他应用程序线程).</p>
 <p>如图所示,heap区可以分配为 Eden, Survivor, 或 old generation(老年代)区. 此外,还有第四种类型的对象被称为巨无霸区域(Humongous regions),这种巨无霸区是设计了用来保存比标准heap区大50%及以上的对象, 它们存储在一组连续的区中. 最后一个类型是堆内存中的未使用区(unused areas).</p>
 <p><strong>备注:</strong> 截止英文原文发表时,巨无霸对象的回收还没有得到优化. 因此,您应该尽量避免创建太大(大于32MB?)的对象.</p>
 <h4 id="3-_G1中的年轻代(Young_Generation)">3. G1中的年轻代(Young Generation)</h4><p>堆被分为大约2000个区. 最小size为1 Mb, 最大size为 32Mb. 蓝色的区保存老年代对象,绿色区域保存年轻代对象.</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_3_Young_Generation_in_G1_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/04_3_Young_Generation_in_G1_CN.png" alt=""></p>
 <p>注意G1中各代的heap区不像老一代垃圾收集器一样要求各部分是连续的.</p>
 <h4 id="4-_G1中的一次年轻代GC">4. G1中的一次年轻代GC</h4><p>存活的对象被转移(copied or moved)到一个/或多个存活区(survivor regions). 如果存活时间达到阀值,这部分对象就会被提升到老年代(promoted to old generation regions).</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_4_A_Young_GC_in_G1_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/04_4_A_Young_GC_in_G1_CN.png" alt=""></p>
 <p>此时会有一次 stop the world(STW)暂停. 会计算出 Eden大小和 survivor 大小,给下一次年轻代GC使用. 清单统计信息(Accounting)保存了用来辅助计算size. 诸如暂停时间目标之类的东西也会纳入考虑.</p>
 <p>这种方法使得调整各代区域的尺寸很容易, 让其更大或更小一些以满足需要.</p>
 <h4 id="5-_G1的一次年轻代GC完成后">5. G1的一次年轻代GC完成后</h4><p>存活对象被转移到存活区(survivor regions) 或 老年代(old generation regions).</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_5_End_of_Young_GC_with_G1_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/04_5_End_of_Young_GC_with_G1_CN.png" alt=""></p>
 <p>刚刚被提升上来的对象用深绿色显示. Survivor 区用绿色表示.</p>
 <p>总结起来,G1的年轻代收集归纳如下:</p>
 <ul>
@@ -459,15 +459,15 @@ parallel: 并行, 多个线程各做各的事情(互相间无共享状态)
 <p>在存活对象和完全空闲的区域上执行统计(accounting). (Stop the world)<br>擦写 Remembered Sets. (Stop the world)<br>重置空heap区并将他们返还给空闲列表(free list). (Concurrent, 并发)|<br>|(*) 拷贝(Copying)|    (Stop the World Event,所有应用线程暂停) 产生STW事件来转移或拷贝存活的对象到新的未使用的heap区(new unused regions). 只在年轻代发生时日志会记录为 <code>[GC pause (young)]</code>. 如果在年轻代和老年代一起执行则会被日志记录为 <code>[GC Pause (mixed)]</code>.|</p>
 <h3 id="G1老年代收集步骤">G1老年代收集步骤</h3><p>顺着定义的阶段,让我们看看G1收集器如何处理老年代(old generation).</p>
 <h4 id="6-_初始标记阶段(Initial_Marking_Phase)">6. 初始标记阶段(Initial Marking Phase)</h4><p>存活对象的初始标记被固定在年轻代垃圾收集里面. 在日志中被记为 GC pause (young)(inital-mark)。</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_6_Initial_Marking_Phase_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/04_6_Initial_Marking_Phase_CN.png" alt=""></p>
 <h4 id="7-_并发标记阶段(Concurrent_Marking_Phase)">7. 并发标记阶段(Concurrent Marking Phase)</h4><p>如果找到空的区域(如用红叉“X”标示的区域), 则会在 Remark 阶段立即移除. 当然,”清单(accounting)”信息决定了活跃度(liveness)的计算.</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_7_Concurrent_Marking_Phase_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/04_7_Concurrent_Marking_Phase_CN.png" alt=""></p>
 <h4 id="8-_再次标记阶段(Remark_Phase)">8. 再次标记阶段(Remark Phase)</h4><p>空的区域被移除并回收。现在计算所有区域的活跃度(Region liveness).</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_8_Remark_Phase_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/04_8_Remark_Phase_CN.png" alt=""></p>
 <h4 id="9-_拷贝/清理阶段(Copying/Cleanup)">9. 拷贝/清理阶段(Copying/Cleanup)</h4><p>G1选择“活跃度(liveness)”最低的区域, 这些区域可以最快的完成回收. 然后这些区域和年轻代GC在同时被垃圾收集 . 在日志被标识为 [GC pause (mixed)]. 所以年轻代和老年代都在同一时间被垃圾收集.</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_9_Copying_Cleanup_Phase_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/04_9_Copying_Cleanup_Phase_CN.png" alt=""></p>
 <h4 id="10-拷贝/清理之后(After_Copying/Cleanup)">10.拷贝/清理之后(After Copying/Cleanup)</h4><p>所选择的区域被收集和压缩到下图所示的深蓝色区域和深绿色区域.</p>
-<p><img src="https://github.com/cncounter/translation/raw/master/tiemao_2014/G1/04_10_After_Copying_Cleanup_Phase_CN.png" alt=""></p>
+<p><img src="/img/2015/07/23/04_10_After_Copying_Cleanup_Phase_CN.png" alt=""></p>
 <h3 id="老年代GC(Old_Generation_GC)总结">老年代GC(Old Generation GC)总结</h3><p>总结下来,G1对老年代的GC有如下几个关键点:</p>
 <ul>
 <li>并发标记清理阶段(Concurrent Marking Phase)<ul>
