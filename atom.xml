@@ -538,9 +538,10 @@ Avg: 2.7, Min: 2.6, Max: 2.8, Diff: 0.2]
     <link href="http://sunxiang0918.github.io/2014/07/25/%E4%BD%BF%E7%94%A8Lucene%E8%BF%9B%E8%A1%8C%E7%B4%A2%E5%BC%95%E9%83%A8%E5%88%86%E6%9B%B4%E6%96%B0%E7%BC%93%E6%85%A2%E5%8E%9F%E5%9B%A0%E5%88%86%E6%9E%90/"/>
     <id>http://sunxiang0918.github.io/2014/07/25/使用Lucene进行索引部分更新缓慢原因分析/</id>
     <published>2014-07-25T10:23:55.000Z</published>
-    <updated>2015-07-27T11:05:34.000Z</updated>
+    <updated>2015-07-27T11:05:59.000Z</updated>
     <content type="html"><![CDATA[<h1 id="使用Lucene进行索引部分更新缓慢原因分析">使用Lucene进行索引部分更新缓慢原因分析</h1><h2 id="问题的引出">问题的引出</h2><p>在我们的系统中,使用了<code>Lucene</code>作为全文检索引擎用作NRT近实时检索.这就牵涉到一个更新的问题.<br>在Lucene当中,其实是<strong>不存在部分更新</strong>的说法的,它仅仅支持全更新.因此,为了应用端的调用方便.在我们的FTEngine全文检索引擎中是提供了部分更新的功能的,其逻辑大体上来说,就是根据传入的<code>uniqueID</code>,在索引中找到对应的<code>Document</code>.然后再恢复它的<code>Term</code>.而后再<strong>构造全更新的Document</strong>,交由Lucene进行全更新.<br>但是,在北京台项目中,突然发现全文检索更新的很慢,往往页面都对素材修改了2个小时了,索引都还没有更新. 从而引出了这个问题.</p>
 <h2 id="解决思路">解决思路</h2><p>经过最初步的分析, 发现发生这种现象多集中于有大量的归档与回迁的操作.这两个操作对索引的影响就是会一次性的大量的进行索引的部分更新. 因此就把原因怀疑到了部分更新上.</p>
+<a id="more"></a>
 <h2 id="分析过程">分析过程</h2><ol>
 <li>修改FTEngine的源代码.在项目中,加入大量的日志,全部显示使用时间.<br><img src="/img/2014/07/25/1.png" alt=""><br><img src="/img/2014/07/25/2.png" alt="">  </li>
 <li><p>发现程序在恢复<strong>没有Store</strong>的字段的Term的时候非常的慢.经过分析以及网上找问题,发现是由于我们对于Index的字段没有使用Lucene提供的<strong>TermVector</strong>功能,也就是Term的位置向量.它是以空间来换取时间,当使用了位置向量后,就相当于为每一个Term都编了号,记录了位置.这样在恢复的时候大大的提高了查询Term的性能.这样就能很快的恢复Document了.</p>
