@@ -20,7 +20,7 @@ comments: true
 1. 最开始就怀疑是hibernate和DB2的配合的问题,于是打断点.一路跟踪到它卡住的地方.  
 ![](/img/2014/07/28/1.png)  
 就是这里,调用JDBC的statement.executeUpdate就会卡住. 这句是标准的JDBC的代码.其中statement的实例是DB2的驱动中的对象,于是<span style="background:yellow">怀疑是DB2的驱动问题</span>.于是从网上重新找驱动.
-
+<!--more-->
 2. DB2的驱动是个锤子,官网上根本下不到.需要验证码,验证码IBM又不发给我们.于是只能大海捞针的到处找.终于找到了DB2 9.5的驱动.<span style="background:red">于是换上新的驱动,继续测试. 结果依旧.</span>问题没有解决.看来不是驱动的问题.
 
 3. 换一种思路.写了一段小的JDBC程序来执行创建表的操作:  
