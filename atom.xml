@@ -87,7 +87,7 @@
     <link href="http://sunxiang0918.github.io/2015/07/23/G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E5%85%A5%E9%97%A8/"/>
     <id>http://sunxiang0918.github.io/2015/07/23/G1垃圾收集器入门/</id>
     <published>2015-07-23T00:37:28.000Z</published>
-    <updated>2015-07-27T12:45:50.000Z</updated>
+    <updated>2015-07-28T01:52:51.000Z</updated>
     <content type="html"><![CDATA[<h1 id="G1垃圾收集器入门">G1垃圾收集器入门</h1><h2 id="说明">说明</h2><hr>
 <p><strong>concurrent</strong>: 并发, 多个线程协同做同一件事情(有状态)</p>
 <p><strong>parallel</strong>: 并行, 多个线程各做各的事情(互相间无共享状态)</p>
@@ -538,7 +538,7 @@ Avg: 2.7, Min: 2.6, Max: 2.8, Diff: 0.2]
     <link href="http://sunxiang0918.github.io/2015/06/24/%E5%A6%82%E4%BD%95%E5%9C%A8Git%E4%B8%AD%E6%92%A4%E9%94%80%E4%B8%80%E5%88%87/"/>
     <id>http://sunxiang0918.github.io/2015/06/24/如何在Git中撤销一切/</id>
     <published>2015-06-24T12:23:29.000Z</published>
-    <updated>2015-07-27T12:48:23.000Z</updated>
+    <updated>2015-07-28T01:52:40.000Z</updated>
     <content type="html"><![CDATA[<h1 id="如何在Git中撤销一切">如何在Git中撤销一切</h1><p>翻译：李伟<br>审校：张帆<br>译自：<a href="https://github.com/blog/2019-how-to-undo-almost-anything-with-git" target="_blank" rel="external">Github</a></p>
 <p><img src="https://jf-bucket-public.oss-cn-qingdao.aliyuncs.com/jfperiodical/attached/image/20150612/2016242594.png" alt=""></p>
 <p>任何一个版本控制系统中，最有用的特性之一莫过于 “撤销（undo）”操作。在Git中，“撤销”有很多种含义。<br>当你完成了一次新的提交（commit），Git会及时存储当前时刻仓库（repository）的快照（snapshot）；你能够使用Git将项目回退到任何之前的版本。<br>下文中，我将列举几个常见的、需要“撤销”的场景，并且展示如何使用Git来完成这些操作。</p>
@@ -587,6 +587,80 @@ Avg: 2.7, Min: 2.6, Max: 2.8, Diff: 0.2]
     </summary>
     
       <category term="GIT" scheme="http://sunxiang0918.github.io/tags/GIT/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析]]></title>
+    <link href="http://sunxiang0918.github.io/2014/07/28/DB2%E4%B8%8B%E4%BD%BF%E7%94%A8Hibernate%E8%87%AA%E5%8A%A8%E9%87%8D%E5%BB%BA%E8%A1%A8%E5%AF%BC%E8%87%B4%E6%95%B4%E4%B8%AADB2%E5%8D%A1%E4%BD%8F%E7%9A%84%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90/"/>
+    <id>http://sunxiang0918.github.io/2014/07/28/DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析/</id>
+    <published>2014-07-28T01:51:28.000Z</published>
+    <updated>2015-07-28T02:18:50.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析">DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析</h1><h2 id="问题现象:">问题现象:</h2><p>今天在做高级检索的时候,当用户在界面配置了高级检索的字段后,需要程序自动的把AI3_ADVANCEDSEARCH表删除后,重建.本来这个功能在XDA和xSpace上是能正常工作的.<br>这两个系统所使用的数据库是 MYSQL和ORACLE.一切正常.  现在TVBS使用的是DB2. 在做测试的时候发现.<strong>每当重建表的时候,整个重建的线程都卡住了</strong>.同时,<strong>使用DB2的SQL管理工具,对任意的表进行修改/删除/新建,都会卡住</strong>.这肯定是有问题的.</p>
+<h2 id="原因分析过程:">原因分析过程:</h2><ol>
+<li><p>最开始就怀疑是hibernate和DB2的配合的问题,于是打断点.一路跟踪到它卡住的地方.<br><img src="/img/2014/07/28/1.png" alt=""><br>就是这里,调用JDBC的statement.executeUpdate就会卡住. 这句是标准的JDBC的代码.其中statement的实例是DB2的驱动中的对象,于是<span style="background:yellow">怀疑是DB2的驱动问题</span>.于是从网上重新找驱动.</p>
+</li>
+<li><p>DB2的驱动是个锤子,官网上根本下不到.需要验证码,验证码IBM又不发给我们.于是只能大海捞针的到处找.终于找到了DB2 9.5的驱动.<span style="background:red">于是换上新的驱动,继续测试. 结果依旧.</span>问题没有解决.看来不是驱动的问题.</p>
+</li>
+<li><p>换一种思路.写了一段小的JDBC程序来执行创建表的操作:<br><img src="/img/2014/07/28/2.png" alt=""><br>这样操作又能成功. 于是对比分析两次执行的差别.<span style="background:yellow">发现  statement对象的类型不同</span>.<br> 简单的JDBC使用的是 db2驱动中的类<code>com.ibm.db2.jcc.am.tm.</code>而MAMSpace中使用的是JBOSS封装过的类<code>org.jboss.resource.adapter.jdbc.WrappedStatement</code><br> 于是<span style="background:yellow">怀疑是JBOSS的JNDI数据库连接池的问题.</span></p>
+</li>
+<li><p>马上<span style="background:yellow">更换我们dcmp使用的连接池.</span>不是用JBOSS的JNDI数据库连接池.然后再次进行测试.<br> <span style="background:red">结果……问题依旧…..</span></p>
+</li>
+<li><p>重启DB2….再次把小程序和MAMSpace都断点到同一位置.然后<span style="background:yellow">开始怀疑是否是事务等问题.</span>于是分析两个statment对象中属性的不同. 但是….一个驱动.居然混淆了的.<br><img src="/img/2014/07/28/3.png" alt=""><br>它所有的字段,属性全部都是 a b c d 的命名.<span style="background:red">大致对比了一下.还是没发现问题.</span></p>
+</li>
+<li><p>无耐.只有重新再来.经过五六次的不断断点,不断重启DB2. <strong>发现一个很怪异的现象</strong>.<br> 就是 每次卡住以后,只有重启DB2才能恢复 DB2对数据表的DDL功能.<br>并且,<span style="background:yellow">重启后,会发现其实这个时候DB2已经把 AI3_ADVANCEDSEARCH表建出来了. 但是缺少一个字段.</span><br> 建表语句:</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> <span class="string">"AI3_ADVANCESEARCH"</span> (ID <span class="built_in">bigint</span> <span class="keyword">not</span> <span class="literal">null</span>,ENTITYCONTENTID <span class="built_in">varchar</span>(<span class="number">255</span>),ENTITYID <span class="built_in">bigint</span>,ENTITYTYPE <span class="built_in">varchar</span>(<span class="number">255</span>),rEvtl <span class="built_in">varchar</span>(<span class="number">255</span>),<span class="keyword">primary</span> <span class="keyword">key</span> (ID))</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>卡住重启后,建出来的表:   
+![](/img/2014/07/28/4.png)  
+注意,与建表语句相比,差了 rEvtl字段.  于是<span class="tag">&lt;<span class="title">span</span> <span class="attribute">style</span>=<span class="value">"background:yellow"</span>&gt;</span>开始怀疑是否是这个字段有问题.<span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+</code></pre><p>7.再一次重启DB2和DCMP,并断点到执行建表语句的位置. 这次直接把内存中的SQL语句给更改了.改成:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> <span class="string">"AI3_ADVANCESEARCH"</span> (ID <span class="built_in">bigint</span> <span class="keyword">not</span> <span class="literal">null</span>,ENTITYCONTENTID <span class="built_in">varchar</span>(<span class="number">255</span>),ENTITYID <span class="built_in">bigint</span>,ENTITYTYPE <span class="built_in">varchar</span>(<span class="number">255</span>),<span class="keyword">primary</span> <span class="keyword">key</span> (ID))</span></span><br></pre></td></tr></table></figure>
+<p>也就是去掉rEvtl字段,只建4个基本字段.<br><span style="background:green">果然这次程序没有被卡住.</span><br>于是,马上回跳程序.<span style="background:yellow">在不重启服务器和DB2的情况下</span>,执行有rEvtl字段的建表语句.也就是会被卡住的DDL. <span style="background:green">结果执行成功.并没有被卡住…..</span>  无语了.只能<span style="background:yellow">怀疑是DB2的内部处理中有甚么特殊的地方.</span></p>
+<ol>
+<li>再一次重启DB2和DCMP.这次直接把内存中SQL语句给更改成:</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> <span class="string">"AI3_ADVANCESEARCH"</span> (ID <span class="built_in">bigint</span> <span class="keyword">not</span> <span class="literal">null</span>,ENTITYCONTENTID <span class="built_in">varchar</span>(<span class="number">255</span>),ENTITYID <span class="built_in">bigint</span>,ENTITYTYPE <span class="built_in">varchar</span>(<span class="number">255</span>),NHNXL <span class="built_in">varchar</span>(<span class="number">255</span>),<span class="keyword">primary</span> <span class="keyword">key</span> (ID))</span></span><br></pre></td></tr></table></figure>
+<p>也就是第5个字段改成大写.<span style="background:red">测试结果还是失败</span>…看来<span style="background:yellow">不是字段大小写的问题.</span></p>
+<ol>
+<li>再一次重启DB2和DCMP.这次直接把内存中SQL语句中第五个字段的字段类型改成bigint.:</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> <span class="string">"AI3_ADVANCESEARCH"</span> (ID <span class="built_in">bigint</span> <span class="keyword">not</span> <span class="literal">null</span>,ENTITYCONTENTID <span class="built_in">varchar</span>(<span class="number">255</span>),ENTITYID <span class="built_in">bigint</span>,ENTITYTYPE <span class="built_in">varchar</span>(<span class="number">255</span>),OSEBi <span class="built_in">bigint</span>,<span class="keyword">primary</span> <span class="keyword">key</span> (ID))</span></span><br></pre></td></tr></table></figure>
+<p><span style="background:red">测试结果再次失败</span>….看来<span style="background:yellow">不是字段类型的问题.</span></p>
+<ol>
+<li>再一次重启DB2和DCMP.这次直接把内存中SQL语句改成:</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> AI3_ADVANCESEARCH (ID <span class="built_in">bigint</span> <span class="keyword">not</span> <span class="literal">null</span>,ENTITYCONTENTID <span class="built_in">varchar</span>(<span class="number">255</span>),ENTITYID <span class="built_in">bigint</span>,ENTITYTYPE <span class="built_in">varchar</span>(<span class="number">255</span>),ENldl <span class="built_in">varchar</span>(<span class="number">255</span>),<span class="keyword">primary</span> <span class="keyword">key</span> (ID)) <span class="keyword">IN</span> TBL_SMAM <span class="keyword">INDEX</span> <span class="keyword">IN</span> IDX_SMAM</span></span><br></pre></td></tr></table></figure>
+<p>也就是把表名的双引号去掉.增加上表空间. <span style="background:red">测试结果依然失败</span>…..看来<span style="background:yellow">不是表名和表空间的问题.</span></p>
+<ol>
+<li>再一次重启DB2和DCMP.这次直接把内存中SQL语句改成:</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> AI3_ADVANCESEARCH (ID <span class="built_in">bigint</span> <span class="keyword">not</span> <span class="literal">null</span>,ENTITYCONTENTID <span class="built_in">varchar</span>(<span class="number">255</span>),ENTITYID <span class="built_in">bigint</span>,QMwQH <span class="built_in">varchar</span>(<span class="number">255</span>),<span class="keyword">primary</span> <span class="keyword">key</span> (ID)) <span class="keyword">IN</span> TBL_SMAM <span class="keyword">INDEX</span> <span class="keyword">IN</span> IDX_SMAM</span></span><br></pre></td></tr></table></figure>
+<p>也就是把ENTITYTYPE这个字段删掉,<span style="background:red">测试结果还是不行</span>….</p>
+<ol>
+<li><p>转变一下思路, 先在SQL管理器中把表删除了. 然后再在程序里面创建表.<span style="background:green">就OK了.</span><br>转变一下,由此可见,<span style="background:yellow">问题并不在于Create表的地方.应该是drop表出的问题.</span></p>
+</li>
+<li><p>既然出在drop表的地方.那么我在这个地方是不是可以不调用drop表喃?于是写了一段存储过程.</p>
+</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> <span class="string">"MAMDBA"</span>.<span class="string">"DROPADVANCESEARCH"</span>()</span><br><span class="line"><span class="keyword">LANGUAGE</span> <span class="keyword">SQL</span></span><br><span class="line">SPECIFIC DROPADAVANCESEARCH</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">	<span class="keyword">IF</span> <span class="keyword">EXISTS</span> (<span class="keyword">select</span> * <span class="keyword">from</span> sysibm.systables <span class="keyword">where</span> TID &lt;&gt; <span class="number">0</span> <span class="keyword">and</span> name = <span class="string">'AI3_ADVANCESEARCH'</span> ) <span class="keyword">then</span></span><br><span class="line">		<span class="keyword">drop</span> <span class="keyword">table</span> AI3_ADVANCESEARCH;</span></span><br><span class="line">	<span class="operator"><span class="keyword">END</span> <span class="keyword">IF</span>;</span></span><br><span class="line"><span class="operator"><span class="keyword">END</span></span></span><br></pre></td></tr></table></figure>
+<p>然后在调用删除的地方直接调用存储过程来进行删除: “call dropadvancesearch()”.    <span style="background:red">测试结果还是不得行.</span></p>
+<ol>
+<li>再一次的对比了一下成功的情况. 发现<span style="background:yellow">如果drop表的语句是通过hibernate执行的,那么,虽然在SQL管理器中看到表确实是删除了,日志中事务确实是提交了.但是再次建表的时候如果新建的表结构与被删除的表表结构不同,DB2就会被卡住.</span> 重启DB2后,被删除的表又冒出来了.<span style="background:yellow">这可能和DB2的某个执行有关.但是网上DB2的资料太少了.找不出问题的原因</span>.因此,<span style="background:blue">最后.只能在删除表的地方判断下是否是DB2,如果是,那么就直接使用JDBC来删除表而不使用hibernate来执行删除</span>. 重启后,<span style="background:green">问题解决.</span><br><img src="/img/2014/07/28/5.png" alt=""> </li>
+</ol>
+<hr>
+<h2 id="总结:">总结:</h2><p>这个问题相当的奇怪,到最后都没找出真正的问题原因.在MYSQL和Oracle中不存在这个问题.因此可以确定应该是DB2中的某些处理相当奇怪,造成了在Hibernate管理事务的情况下.会造成DB2删除表在DB2内部发生死锁.于是乎,导致整个DB2停止响应.当重启后,真正的表并没有删除,因此,如果又建立一张和以前被删除的表的名字一样的表的话,是有问题的.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析">DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析</h1><h2 id="问题现象:">问题现象:</h2><p>今天在做高级检索的时候,当用户在界面配置了高级检索的字段后]]>
+    </summary>
+    
+      <category term="DB2" scheme="http://sunxiang0918.github.io/tags/DB2/"/>
+    
+      <category term="Hibernate" scheme="http://sunxiang0918.github.io/tags/Hibernate/"/>
+    
+      <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
     
   </entry>
   
@@ -741,7 +815,7 @@ Avg: 2.7, Min: 2.6, Max: 2.8, Diff: 0.2]
     <link href="http://sunxiang0918.github.io/2013/04/21/JBOSS4%E5%85%B3%E9%97%AD%E6%97%B6%E4%B8%8D%E6%96%AD%E5%BC%80%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90/"/>
     <id>http://sunxiang0918.github.io/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/</id>
     <published>2013-04-21T01:43:10.000Z</published>
-    <updated>2015-07-28T01:47:33.000Z</updated>
+    <updated>2015-07-28T01:52:45.000Z</updated>
     <content type="html"><![CDATA[<h1 id="JBOSS4作为windows服务关闭时不断开数据库连接问题分析">JBOSS4作为windows服务关闭时不断开数据库连接问题分析</h1><h2 id="问题现象:">问题现象:</h2><p>现场发现,每次重启媒资服务,Oracle的数据库连接会增加约20个的JDBC连接.这样就会导致数据库连接越来越多.</p>
 <h2 id="问题分析">问题分析</h2><p>接到这个问题, 使用<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> program,i.* <span class="keyword">from</span> v$<span class="keyword">session</span> i <span class="keyword">where</span> program = <span class="string">'JDBC Thin Client’</span></span></span><br></pre></td></tr></table></figure></p>
 <p>这个SQL语句查询到 确实每次重启都有 大约20个 名为<code>&#39;JDBC Thin Client’</code> 的数据库连接没有释放. </p>
