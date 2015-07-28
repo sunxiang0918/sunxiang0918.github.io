@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2015-07-28T16:21:28.000Z</updated>
+  <updated>2015-07-28T16:22:27.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[Swift2.0中字符串的设计]]></title>
+    <title><![CDATA[<翻译>Swift2.0中字符串的设计]]></title>
     <link href="http://sunxiang0918.github.io/2015/07/29/Swift2-0%E4%B8%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%AE%BE%E8%AE%A1/"/>
     <id>http://sunxiang0918.github.io/2015/07/29/Swift2-0中字符串的设计/</id>
     <published>2015-07-28T16:19:28.000Z</published>
-    <updated>2015-07-28T16:21:28.000Z</updated>
+    <updated>2015-07-28T16:22:27.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Swift2-0中字符串的设计">Swift2.0中字符串的设计</h1><p>Swift中提供了一个高性能的,兼容Unicode的字符串实现作为其标准库中的一部分.在Swift2中,<code>String</code>类型不再实现<code>CollectionType</code>协议.在以前<code>String</code>字符串是一个由<code>Character</code>字符组成的集合,其表现类似于一个数组.而现在,<code>String</code>则是提供了一个<code>characters</code>属性用来暴露字符集合.</p>
 <p>为什么会有这样的变化呢?尽管把字符串当做一个字符的集合看起来更自然.但是其实<code>String</code>字符串类型的操作与<code>Array</code>,<code>Set</code>或者<code>Dictionary</code>等集合一直都是完全不同的.但自从Swift2增加了协议扩展后,针对这些差异有必要进行一些根本性的变化了.</p>
 <a id="more"></a>
