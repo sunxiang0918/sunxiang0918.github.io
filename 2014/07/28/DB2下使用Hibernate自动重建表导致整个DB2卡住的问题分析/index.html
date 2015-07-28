@@ -15,7 +15,7 @@
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/28/2.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/28/3.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/28/5.png">
-<meta property="og:updated_time" content="2015-07-28T02:18:50.000Z">
+<meta property="og:updated_time" content="2015-07-28T02:29:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析">
 <meta name="twitter:description" content="DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析问题现象:今天在做高级检索的时候,当用户在界面配置了高级检索的字段后,需要程序自动的把AI3_ADVANCEDSEARCH表删除后,重建.本来这个功能在XDA和xSpace上是能正常工作的.这两个系统所使用的数据库是 MYSQL和ORACLE.一切正常.  现在TVBS使用的是DB2. 在做测试的时候发现.每当重建表的时候,整个重">
@@ -231,8 +231,7 @@
         
         <h1 id="DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析">DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析</h1><h2 id="问题现象:">问题现象:</h2><p>今天在做高级检索的时候,当用户在界面配置了高级检索的字段后,需要程序自动的把AI3_ADVANCEDSEARCH表删除后,重建.本来这个功能在XDA和xSpace上是能正常工作的.<br>这两个系统所使用的数据库是 MYSQL和ORACLE.一切正常.  现在TVBS使用的是DB2. 在做测试的时候发现.<strong>每当重建表的时候,整个重建的线程都卡住了</strong>.同时,<strong>使用DB2的SQL管理工具,对任意的表进行修改/删除/新建,都会卡住</strong>.这肯定是有问题的.</p>
 <h2 id="原因分析过程:">原因分析过程:</h2><ol>
-<li><p>最开始就怀疑是hibernate和DB2的配合的问题,于是打断点.一路跟踪到它卡住的地方.<br><img src="/img/2014/07/28/1.png" alt=""><br>就是这里,调用JDBC的statement.executeUpdate就会卡住. 这句是标准的JDBC的代码.其中statement的实例是DB2的驱动中的对象,于是<span style="background:yellow">怀疑是DB2的驱动问题</span>.于是从网上重新找驱动.</p>
-</li>
+<li>最开始就怀疑是hibernate和DB2的配合的问题,于是打断点.一路跟踪到它卡住的地方.<br><img src="/img/2014/07/28/1.png" alt=""><br>就是这里,调用JDBC的statement.executeUpdate就会卡住. 这句是标准的JDBC的代码.其中statement的实例是DB2的驱动中的对象,于是<span style="background:yellow">怀疑是DB2的驱动问题</span>.于是从网上重新找驱动.<a id="more"></a></li>
 <li><p>DB2的驱动是个锤子,官网上根本下不到.需要验证码,验证码IBM又不发给我们.于是只能大海捞针的到处找.终于找到了DB2 9.5的驱动.<span style="background:red">于是换上新的驱动,继续测试. 结果依旧.</span>问题没有解决.看来不是驱动的问题.</p>
 </li>
 <li><p>换一种思路.写了一段小的JDBC程序来执行创建表的操作:<br><img src="/img/2014/07/28/2.png" alt=""><br>这样操作又能成功. 于是对比分析两次执行的差别.<span style="background:yellow">发现  statement对象的类型不同</span>.<br> 简单的JDBC使用的是 db2驱动中的类<code>com.ibm.db2.jcc.am.tm.</code>而MAMSpace中使用的是JBOSS封装过的类<code>org.jboss.resource.adapter.jdbc.WrappedStatement</code><br> 于是<span style="background:yellow">怀疑是JBOSS的JNDI数据库连接池的问题.</span></p>
