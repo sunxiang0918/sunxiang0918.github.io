@@ -747,7 +747,7 @@ var _hmt = _hmt || [];
 <h2 id="问题分析">问题分析</h2><p>接到这个问题, 使用<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> program,i.* <span class="keyword">from</span> v$<span class="keyword">session</span> i <span class="keyword">where</span> program = <span class="string">'JDBC Thin Client’</span></span></span><br></pre></td></tr></table></figure></p>
 <p>这个SQL语句查询到 确实每次重启都有 大约20个 名为<code>&#39;JDBC Thin Client’</code> 的数据库连接没有释放. </p>
 <ol>
-<li>于是,想办法给JDBC的连接加上了名字. 具体办法是:修改<code>Oracle-DS.xml</code> 增加一行配置<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">connection-property</span> <span class="attribute">name</span>=<span class="value">"v$session.program”&gt;DCMP DB Connection&lt;/connection-property&gt;</span></span></span><br></pre></td></tr></table></figure>
+<li>于是,想办法给JDBC的连接加上了名字. 具体办法是:修改<code>Oracle-DS.xml</code> 增加一行配置<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">connection-property</span> <span class="attribute">name</span>=<span class="value">"v$session.program"</span>&gt;</span>DCMP DB Connection<span class="tag">&lt;/<span class="title">connection-property</span>&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>这样就可以给我们的服务的数据库连接增加名字.</p>
