@@ -680,6 +680,57 @@ Avg: 2.7, Min: 2.6, Max: 2.8, Diff: 0.2]
   </entry>
   
   <entry>
+    <title><![CDATA[zookeeper 集群部署]]></title>
+    <link href="http://sunxiang0918.github.io/2014/09/20/zookeeper-%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"/>
+    <id>http://sunxiang0918.github.io/2014/09/20/zookeeper-集群部署/</id>
+    <published>2014-09-20T11:55:15.000Z</published>
+    <updated>2015-07-29T12:44:31.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="zookeeper_集群部署">zookeeper 集群部署</h1><p>在现在的软件系统中,通常都会搭建集群或者分布式环境了.而在这种情况下,通常都需要一个分布式程序协调者的服务.这最常用的就是zookeeper了.<br>在我们的系统中,会使用zookeeper来做<code>统一的配置管理</code>,集群<code>节点状态管理</code>,以及<code>分布式锁</code>的功能.<br>为了保证zookeeper本身的高可用性,那么这就需要对ZK进行集群.</p>
+<h2 id="安装环境">安装环境</h2><p>操作系统:Ubuntu 12.04 64位<br>JDK:1.7.0_55 64位<br>机器: <code>192.168.1.100</code> <code>192.168.1.101</code>  <code>192.168.1.101</code></p>
+<h2 id="安装步骤">安装步骤</h2><a id="more"></a>
+<h3 id="1-_下载Zookeeper">1. 下载Zookeeper</h3><p>直接到他的官网上下载最新的zookeeper软件: <a href="http://zookeeper.apache.org/releases.html#download" target="_blank" rel="external">http://zookeeper.apache.org/releases.html#download</a></p>
+<p><img src="/img/2014/09/20/1.png" alt=""></p>
+<h3 id="2-_上传Zookeeper安装包到服务器">2. 上传Zookeeper安装包到服务器</h3><p>这个随便使用什么东西上传都可以, <code>sft</code> <code>scp</code> 等等</p>
+<h3 id="3-_为Zookeeper创建目录-">3. 为Zookeeper创建目录.</h3><p>在bash中创建文件夹. 我把目录建到 /usr/local/下的.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir /usr/<span class="built_in">local</span>/zookeeper</span><br></pre></td></tr></table></figure>
+<h3 id="4-_解压安装包到zk的目录">4. 解压安装包到zk的目录</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tar –xzvf zookeeper-<span class="number">3.4</span>.<span class="number">6</span>.tar.gz /usr/<span class="built_in">local</span>/zookeeper</span><br></pre></td></tr></table></figure>
+<h3 id="5-_再创建几个ZK必要的文件夹">5. 再创建几个ZK必要的文件夹</h3><p>ZK还需要创建几个运行时必要的文件夹: 一个用来存放数据<code>data</code>,一个用来存放数据日志的<code>datalog</code>,以及一个存放ZK运行时日志的目录<code>logs</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir /usr/<span class="built_in">local</span>/zookeeper/data</span><br><span class="line">$ mkdir /usr/<span class="built_in">local</span>/zookeeper/datalog</span><br><span class="line">$ mkdir /usr/<span class="built_in">local</span>/zookeeper/logs</span><br></pre></td></tr></table></figure>
+<h3 id="6-_在data目录中创建一个myid文件">6. 在data目录中创建一个myid文件</h3><p>这个文件主要是用于标示自己是哪一个服务器的.文件的内容很简单,里面就是一个数字.<br>比如自己的server1,那么里面就写一个<code>1</code>.如果是server2,那么里面就写一个<code>2</code>.</p>
+<h3 id="7-_配置ZK的配置文件zoo-cfg">7. 配置ZK的配置文件zoo.cfg</h3><p>接下来进入zk的conf目录.这个目录中应该有一个<code>zoo_sample.cfg</code>的文件.拷贝这个文件,并重命名为<code>zoo.cfg</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cp zoo_sample.cfg zoo.cfg</span><br></pre></td></tr></table></figure>
+<h3 id="8-_修改zoo-cfg文件的内容">8. 修改zoo.cfg文件的内容</h3><p>配置的内容如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The number of milliseconds of each tick</span></span><br><span class="line">tickTime=<span class="number">2000</span></span><br><span class="line"><span class="comment"># The number of ticks that the initial </span></span><br><span class="line"><span class="comment"># synchronization phase can take</span></span><br><span class="line">initLimit=<span class="number">10</span></span><br><span class="line"><span class="comment"># The number of ticks that can pass between </span></span><br><span class="line"><span class="comment"># sending a request and getting an acknowledgement</span></span><br><span class="line">syncLimit=<span class="number">5</span></span><br><span class="line"><span class="comment"># the directory where the snapshot is stored.</span></span><br><span class="line"><span class="comment"># do not use /tmp for storage, /tmp here is just </span></span><br><span class="line"><span class="comment"># example sakes.</span></span><br><span class="line">dataDir=/usr/<span class="built_in">local</span>/zookeeper/data</span><br><span class="line">dataLogDir=/usr/<span class="built_in">local</span>/zookeeper/datalog</span><br><span class="line"><span class="comment"># the port at which the clients will connect</span></span><br><span class="line">clientPort=<span class="number">2181</span></span><br><span class="line"><span class="comment"># the maximum number of client connections.</span></span><br><span class="line"><span class="comment"># increase this if you need to handle more clients</span></span><br><span class="line"><span class="comment">#maxClientCnxns=60</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Be sure to read the maintenance section of the </span></span><br><span class="line"><span class="comment"># administrator guide before turning on autopurge.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The number of snapshots to retain in dataDir</span></span><br><span class="line"><span class="comment">#autopurge.snapRetainCount=3</span></span><br><span class="line"><span class="comment"># Purge task interval in hours</span></span><br><span class="line"><span class="comment"># Set to "0" to disable auto purge feature</span></span><br><span class="line"><span class="comment">#autopurge.purgeInterval=1</span></span><br><span class="line"></span><br><span class="line">minSessionTimeout=<span class="number">1000</span></span><br><span class="line">maxSessionTimeout=<span class="number">1500</span></span><br><span class="line"></span><br><span class="line">server.<span class="number">1</span>=<span class="number">192.168</span>.<span class="number">1.100</span>:<span class="number">2888</span>:<span class="number">3888</span>  </span><br><span class="line">server.<span class="number">2</span>=<span class="number">192.168</span>.<span class="number">1.101</span>:<span class="number">2888</span>:<span class="number">3888</span>  </span><br><span class="line">server.<span class="number">3</span>=<span class="number">192.168</span>.<span class="number">1.102</span>:<span class="number">2888</span>:<span class="number">3888</span></span><br></pre></td></tr></table></figure>
+<p><strong>参数说明:</strong><br><code>tickTime</code>：zookeeper中使用的基本时间单位, 毫秒值.</p>
+<p><code>initLimit</code>: zookeeper集群中的包含多台server, 其中一台为leader, 集群中其余的server为follower。 initLimit参数配置初始化连接时, follower和leader之间的最长心跳时间. 此时该参数设置为5, 说明时间限制为5倍tickTime, 即5*2000=10000ms=10s.</p>
+<p><code>syncLimit</code>: 该参数配置leader和follower之间发送消息, 请求和应答的最大时间长度. 此时该参数设置为2, 说明时间限制为2倍tickTime, 即4000ms.</p>
+<p><code>dataDir</code>: 数据存放目录. 可以是任意目录.但是我喜欢这么干</p>
+<p><code>dataLogDir</code>: log目录, 同样可以是任意目录. 如果没有设置该参数, 将使用和dataDir相同的设置</p>
+<p><code>clientPort</code>: 监听client连接的端口号.</p>
+<p><code>server.X=A:B:C</code>: 其中X是一个数字, 表示这是第几号server. A是该server所在的IP地址. B配置该server和集群中的leader交换消息所使用的端口. C配置选举leader时所使用的端口.</p>
+<p><code>minSessionTimeout</code>: 最小的会话超时时间,这两个参数可以适当的调低一点,否则如果一个临时状态节点挂掉以后,会有很长时间才会在ZK中体现出来.</p>
+<p><code>maxSessionTimeout</code>: 最大的会话超时时间</p>
+<h3 id="9-_启动Zookeeper">9. 启动Zookeeper</h3><p>配置到这里就完了.其实ZK的集群配置非常的简单.<br>启动也非常的简单.直接在命令行中调用:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./zkServer.sh start</span><br></pre></td></tr></table></figure>
+<p>第一台机器启动的时候可能会报异常,这是正常的.他启动后会尝试连接其他的两台机器.但是由于其他两台还没启动起来,所以会报错. 启动了就好了.</p>
+<p>PS: 需要注意的是,ZK集群提供了过半存活的能力.也就是说2n+1台机器环境下的ZK集群.最多允许n个节点挂掉.超过了就无法选举出leader了.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="zookeeper_集群部署">zookeeper 集群部署</h1><p>在现在的软件系统中,通常都会搭建集群或者分布式环境了.而在这种情况下,通常都需要一个分布式程序协调者的服务.这最常用的就是zookeeper了.<br>在我们的系统中,会使用zookeeper来做<code>统一的配置管理</code>,集群<code>节点状态管理</code>,以及<code>分布式锁</code>的功能.<br>为了保证zookeeper本身的高可用性,那么这就需要对ZK进行集群.</p>
+<h2 id="安装环境">安装环境</h2><p>操作系统:Ubuntu 12.04 64位<br>JDK:1.7.0_55 64位<br>机器: <code>192.168.1.100</code> <code>192.168.1.101</code>  <code>192.168.1.101</code></p>
+<h2 id="安装步骤">安装步骤</h2>]]>
+    
+    </summary>
+    
+      <category term="Zookeeper" scheme="http://sunxiang0918.github.io/tags/Zookeeper/"/>
+    
+      <category term="大数据" scheme="http://sunxiang0918.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+      <category term="集群" scheme="http://sunxiang0918.github.io/tags/%E9%9B%86%E7%BE%A4/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析]]></title>
     <link href="http://sunxiang0918.github.io/2014/07/28/DB2%E4%B8%8B%E4%BD%BF%E7%94%A8Hibernate%E8%87%AA%E5%8A%A8%E9%87%8D%E5%BB%BA%E8%A1%A8%E5%AF%BC%E8%87%B4%E6%95%B4%E4%B8%AADB2%E5%8D%A1%E4%BD%8F%E7%9A%84%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90/"/>
     <id>http://sunxiang0918.github.io/2014/07/28/DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析/</id>
