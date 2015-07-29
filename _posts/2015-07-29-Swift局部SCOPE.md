@@ -34,7 +34,7 @@ C 系语言中在方法内部我们是可以任意添加成对的大括号 {} �
 <!--more-->
 在这里只添加了两个 view，就已经够让人心烦的了。真实的界面当然会比这个复杂很多，想想看如果有十来个 view 的话，这段代码会变成什么样子吧。我们需要考虑对各个子 view 的命名，以确保它们的意义明确。如果我们在上面的代码中把某个配置 textLabel 的代码写错成了 titleLabel 的话，编译器也不会给我们任何警告。这种 bug 是非常难以发现的，因此在类似这种一大堆代码但是又不太可能进行重用的时候，我更推荐使用局部 scope 将它们分隔开来。比如上面的代码建议加上括号重写为以下形式，这样至少编译器会提醒我们一些低级错误，我们也可能更专注于每个代码块：
 
-```swift
+```objc
 -(void)loadView {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 480)];
 
@@ -92,7 +92,7 @@ override func loadView() {
 
 在 Objective-C 中还有一个很棒的技巧是使用 GNU C 的[声明扩展](https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html#Statement-Exprs)来在限制局部作用域的时候同时进行赋值，运用得当的话，可以使代码更加紧凑和整洁。比如上面的 titleLabel 如果我们需要保留一个引用的话，在 Objective-C 中可以写为：
 
-```swift
+```objc
 self.titleLabel = ({
     UILabel *label = [[UILabel alloc] 
             initWithFrame:CGRectMake(150, 30, 20, 40)];
