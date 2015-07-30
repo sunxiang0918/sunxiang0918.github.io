@@ -3,17 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>翔妖除魔的个人博客</title>
+  <title>JDK新特性思维导图 | 翔妖除魔的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="翔妖除魔的个人博客">
-<meta property="og:url" content="http://sunxiang0918.github.io/page/2/index.html">
+  <meta name="description" content="这篇文章是我在重温JDK1.5开始的新特性的时候整理的思维导图,可以当做大纲来查看">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JDK新特性思维导图">
+<meta property="og:url" content="http://sunxiang0918.github.io/2014/12/06/JDK新特性思维导图/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
-<meta property="og:description">
+<meta property="og:description" content="这篇文章是我在重温JDK1.5开始的新特性的时候整理的思维导图,可以当做大纲来查看">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/12/06/1.jpg">
+<meta property="og:updated_time" content="2015-07-30T13:40:42.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="翔妖除魔的个人博客">
-<meta name="twitter:description">
+<meta name="twitter:title" content="JDK新特性思维导图">
+<meta name="twitter:description" content="这篇文章是我在重温JDK1.5开始的新特性的时候整理的思维导图,可以当做大纲来查看">
   
     <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
   
@@ -194,13 +196,11 @@ var _hmt = _hmt || [];
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-记一次JVM优化过程" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-JDK新特性思维导图" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2014/06/27/记一次JVM优化过程/" class="article-date">
-  	<time datetime="2014-06-27T02:29:56.000Z" itemprop="datePublished">2014-06-27</time>
+      <a href="/2014/12/06/JDK新特性思维导图/" class="article-date">
+  	<time datetime="2014-12-06T13:37:44.000Z" itemprop="datePublished">2014-12-06</time>
 </a>
     </div>
   
@@ -212,125 +212,101 @@ var _hmt = _hmt || [];
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/06/27/记一次JVM优化过程/">记一次JVM优化过程</a>
+    <h1 class="article-title" itemprop="name">
+      JDK新特性思维导图
     </h1>
   
 
       </header>
       
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="记一次JVM优化过程">记一次JVM优化过程</h1><h2 id="问题的引出">问题的引出</h2><p>在多个系统环境中都出现了我们的DCMP在运行过程中突然停止响应,并且时间长达几分钟至几十分钟之久.期间DCMP任何功能都无法运行.严重的影响了系统的运行.因此需要分析排查问题的原因</p>
-<h2 id="解决思路">解决思路</h2><p>经过最初步的分析,发现是DCMP在运行一段时间后,会执行<code>FullGC</code>. 在FullGC的过程中整个系统会停止一切响应.因此,解决该问题的思路,就是分析出DCMP平凡进行<code>FullGC</code>的原因.然后进行优化</p>
-<h2 id="分析过程">分析过程</h2><ol>
-<li><p>在DCMP运行的过程中,通过windows任务管理器找到进程的<code>PID</code>.然后调用JDK自带的命令: </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ jstat –gcutil PID 重复次数 间隔时间</span><br></pre></td></tr></table></figure>
-<p> 获取当前JVM的内存信息:<br> <img src="/img/2014/06/27/1.png" alt=""><br> 他上面标识了JVM中每一个区的说占用百分比.</p>
-</li>
-</ol>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/06/27/记一次JVM优化过程/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-JBOSS4关闭时不断开数据库连接问题分析" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/" class="article-date">
-  	<time datetime="2013-04-21T01:43:10.000Z" itemprop="datePublished">2013-04-21</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+      <div class="article-info article-info-post">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/">JBOSS4关闭时不断开数据库连接问题分析</a>
-    </h1>
-  
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+	</div>
 
-      </header>
+        
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="JBOSS4作为windows服务关闭时不断开数据库连接问题分析">JBOSS4作为windows服务关闭时不断开数据库连接问题分析</h1><h2 id="问题现象:">问题现象:</h2><p>现场发现,每次重启媒资服务,Oracle的数据库连接会增加约20个的JDBC连接.这样就会导致数据库连接越来越多.</p>
-<h2 id="问题分析">问题分析</h2><p>接到这个问题, 使用<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> program,i.* <span class="keyword">from</span> v$<span class="keyword">session</span> i <span class="keyword">where</span> program = <span class="string">'JDBC Thin Client’</span></span></span><br></pre></td></tr></table></figure></p>
-<p>这个SQL语句查询到 确实每次重启都有 大约20个 名为<code>&#39;JDBC Thin Client’</code> 的数据库连接没有释放. </p>
-<ol>
-<li>于是,想办法给JDBC的连接加上了名字. 具体办法是:修改<code>Oracle-DS.xml</code> 增加一行配置<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">connection-property</span> <span class="attribute">name</span>=<span class="value">"v$session.program"</span>&gt;</span>DCMP DB Connection<span class="tag">&lt;/<span class="title">connection-property</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>这样就可以给我们的服务的数据库连接增加名字.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JBOSS/">JBOSS</a></li></ul>
-	</div>
+        
+        <h1 id="JDK新特性思维导图">JDK新特性思维导图</h1><p>这篇文章是我重温JDK1.5开始的新特性的时候整理的思维导图,可以当做大纲来查看.有时搞忘的时候可以拿来再看看.</p>
+<p><img src="/img/2014/12/06/1.jpg" alt=""></p>
 
       
-
-      
-        <p class="article-more-link">
-          <a  href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
     </div>
     
   </div>
   
+    
+<nav id="article-nav">
+  
+    <a href="/2015/06/24/如何在Git中撤销一切/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          &lt;转&gt;如何在Git中撤销一切
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/09/20/zookeeper-集群部署/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">zookeeper 集群部署</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
 </article>
 
 
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="JDK新特性思维导图" data-title="JDK新特性思维导图" data-url="http://sunxiang0918.github.io/2014/12/06/JDK新特性思维导图/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
 
 
 
-
-  
-  
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-    </nav>
-  
 </div>
       <footer id="footer">
   <div class="outer">
@@ -354,8 +330,8 @@ var _hmt = _hmt || [];
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

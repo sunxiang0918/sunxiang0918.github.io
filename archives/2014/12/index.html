@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>翔妖除魔的个人博客</title>
+  <title>Archives: 2014/12 | 翔妖除魔的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="翔妖除魔的个人博客">
-<meta property="og:url" content="http://sunxiang0918.github.io/page/2/index.html">
+<meta property="og:url" content="http://sunxiang0918.github.io/archives/2014/12/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -196,141 +196,52 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
-    <article id="post-记一次JVM优化过程" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a href="/2014/06/27/记一次JVM优化过程/" class="article-date">
-  	<time datetime="2014-06-27T02:29:56.000Z" itemprop="datePublished">2014-06-27</time>
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2014" class="archive-year">2014</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2014/12/06/JDK新特性思维导图/" class="archive-article-date">
+  	<time datetime="2014-12-06T13:37:44.000Z" itemprop="datePublished">12月 6</time>
 </a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
+        </div>
+    	 
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2014/06/27/记一次JVM优化过程/">记一次JVM优化过程</a>
+      <a class="archive-article-title" href="/2014/12/06/JDK新特性思维导图/">JDK新特性思维导图</a>
     </h1>
   
 
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="记一次JVM优化过程">记一次JVM优化过程</h1><h2 id="问题的引出">问题的引出</h2><p>在多个系统环境中都出现了我们的DCMP在运行过程中突然停止响应,并且时间长达几分钟至几十分钟之久.期间DCMP任何功能都无法运行.严重的影响了系统的运行.因此需要分析排查问题的原因</p>
-<h2 id="解决思路">解决思路</h2><p>经过最初步的分析,发现是DCMP在运行一段时间后,会执行<code>FullGC</code>. 在FullGC的过程中整个系统会停止一切响应.因此,解决该问题的思路,就是分析出DCMP平凡进行<code>FullGC</code>的原因.然后进行优化</p>
-<h2 id="分析过程">分析过程</h2><ol>
-<li><p>在DCMP运行的过程中,通过windows任务管理器找到进程的<code>PID</code>.然后调用JDK自带的命令: </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ jstat –gcutil PID 重复次数 间隔时间</span><br></pre></td></tr></table></figure>
-<p> 获取当前JVM的内存信息:<br> <img src="/img/2014/06/27/1.png" alt=""><br> 他上面标识了JVM中每一个区的说占用百分比.</p>
-</li>
-</ol>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
 	</div>
 
-      
+          
 
-      
-        <p class="article-more-link">
-          <a  href="/2014/06/27/记一次JVM优化过程/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
-  
 </article>
-
-
-
-
-
-
-
   
-    <article id="post-JBOSS4关闭时不断开数据库连接问题分析" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/" class="article-date">
-  	<time datetime="2013-04-21T01:43:10.000Z" itemprop="datePublished">2013-04-21</time>
-</a>
-    </div>
+    </div></section>
   
-  <div class="article-inner">
+
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/">JBOSS4关闭时不断开数据库连接问题分析</a>
-    </h1>
-  
 
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="JBOSS4作为windows服务关闭时不断开数据库连接问题分析">JBOSS4作为windows服务关闭时不断开数据库连接问题分析</h1><h2 id="问题现象:">问题现象:</h2><p>现场发现,每次重启媒资服务,Oracle的数据库连接会增加约20个的JDBC连接.这样就会导致数据库连接越来越多.</p>
-<h2 id="问题分析">问题分析</h2><p>接到这个问题, 使用<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> program,i.* <span class="keyword">from</span> v$<span class="keyword">session</span> i <span class="keyword">where</span> program = <span class="string">'JDBC Thin Client’</span></span></span><br></pre></td></tr></table></figure></p>
-<p>这个SQL语句查询到 确实每次重启都有 大约20个 名为<code>&#39;JDBC Thin Client’</code> 的数据库连接没有释放. </p>
-<ol>
-<li>于是,想办法给JDBC的连接加上了名字. 具体办法是:修改<code>Oracle-DS.xml</code> 增加一行配置<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">connection-property</span> <span class="attribute">name</span>=<span class="value">"v$session.program"</span>&gt;</span>DCMP DB Connection<span class="tag">&lt;/<span class="title">connection-property</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>这样就可以给我们的服务的数据库连接增加名字.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JBOSS/">JBOSS</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-  
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-    </nav>
-  
 </div>
       <footer id="footer">
   <div class="outer">
@@ -354,9 +265,9 @@ var _hmt = _hmt || [];
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: true,
+		isHome: false,
 		isPost: false,
-		isArchive: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false
