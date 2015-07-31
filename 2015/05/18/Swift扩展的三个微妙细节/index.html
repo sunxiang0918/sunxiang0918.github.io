@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;转&gt;Swift扩展的三个微妙细节 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Swift扩展的三个微妙细节每当我初次翻看某文档时，我都走马观花似的快速阅过，还一边点着头一边喃喃自语说：“好！懂了，就这么回事！”，可是过后当我真正要运用到这些我以为已经理解了的知识点时，却发现实际情况和我想的往往不一样，每当这时我就懵了，心想：“哇哦…怎么回事？这和我想的完全不一样啊！文档里有说这事吗？”。
+最近的几次讨论促使我扪心自问是否真正的理解了Swift中的扩展。我阅读过关于扩展的文档">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<转>Swift扩展的三个微妙细节">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/05/18/Swift扩展的三个微妙细节/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="Swift扩展的三个微妙细节每当我初次翻看某文档时，我都走马观花似的快速阅过，还一边点着头一边喃喃自语说：“好！懂了，就这么回事！”，可是过后当我真正要运用到这些我以为已经理解了的知识点时，却发现实际情况和我想的往往不一样，每当这时我就懵了，心想：“哇哦…怎么回事？这和我想的完全不一样啊！文档里有说这事吗？”。
+最近的几次讨论促使我扪心自问是否真正的理解了Swift中的扩展。我阅读过关于扩展的文档">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/05/18/1.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/05/18/2.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/05/18/3.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/05/18/4.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/05/18/5.png">
+<meta property="og:updated_time" content="2015-07-31T14:08:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<转>Swift扩展的三个微妙细节">
+<meta name="twitter:description" content="Swift扩展的三个微妙细节每当我初次翻看某文档时，我都走马观花似的快速阅过，还一边点着头一边喃喃自语说：“好！懂了，就这么回事！”，可是过后当我真正要运用到这些我以为已经理解了的知识点时，却发现实际情况和我想的往往不一样，每当这时我就懵了，心想：“哇哦…怎么回事？这和我想的完全不一样啊！文档里有说这事吗？”。
+最近的几次讨论促使我扪心自问是否真正的理解了Swift中的扩展。我阅读过关于扩展的文档">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 13.33px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 10px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lucene/" style="font-size: 10px;">Lucene</a> <a href="/tags/Swift/" style="font-size: 16.67px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Swift扩展的三个微妙细节" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/18/Swift扩展的三个微妙细节/" class="article-date">
+  	<time datetime="2015-05-18T13:55:14.000Z" itemprop="datePublished">2015-05-18</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      &lt;转&gt;Swift扩展的三个微妙细节
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Swift扩展的三个微妙细节"><span class="toc-number">1.</span> <span class="toc-text">Swift扩展的三个微妙细节</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#三个关于扩展的微妙细节"><span class="toc-number">1.1.</span> <span class="toc-text">三个关于扩展的微妙细节</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展对类型的访问能力"><span class="toc-number">1.2.</span> <span class="toc-text">扩展对类型的访问能力</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义在同一个文件里"><span class="toc-number">1.2.1.</span> <span class="toc-text">定义在同一个文件里</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定义在不同文件里"><span class="toc-number">1.2.2.</span> <span class="toc-text">定义在不同文件里</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#默认情况下的扩展访问控制"><span class="toc-number">1.3.</span> <span class="toc-text">默认情况下的扩展访问控制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#没有明确声明访问修饰赋时的默认访问"><span class="toc-number">1.3.1.</span> <span class="toc-text">没有明确声明访问修饰赋时的默认访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正常声明扩展，但给扩展的implementation添加public修饰"><span class="toc-number">1.3.2.</span> <span class="toc-text">正常声明扩展，但给扩展的implementation添加public修饰</span></a></li></ol></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="Swift扩展的三个微妙细节">Swift扩展的三个微妙细节</h1><p>每当我初次翻看某文档时，我都走马观花似的快速阅过，还一边点着头一边喃喃自语说：“好！懂了，就这么回事！”，可是过后当我真正要运用到这些我以为已经理解了的知识点时，却发现实际情况和我想的往往不一样，每当这时我就懵了，心想：“哇哦…怎么回事？这和我想的完全不一样啊！文档里有说这事吗？”。</p>
+<p>最近的几次讨论促使我扪心自问是否真正的理解了Swift中的扩展。我阅读过关于扩展的文档，并且我“认为”我自己对这块内容已经是理解的相当透彻了。可是这几次讨论，加上自己私下通过敲代码的验证，让我发现了我原先不曾注意到几个微妙的细节。</p>
+<p>更新：这篇文章刚一发表，Swift社区就出手襄助并帮助我弄明白了我最根本的纠结点在哪。为此，我写了另一篇文章“<a href="http://www.andrewcbancroft.com/2015/04/24/clarifying-swift-access-control-hint-swift-isnt-c-sharp/" target="_blank" rel="external">阐明Swift访问控制</a>”进一步说明我之前的误解。为了避免犯我曾今犯过的错误，我建议大家去读一读。</p>
+<h2 id="三个关于扩展的微妙细节">三个关于扩展的微妙细节</h2><p>对下面列出的三个细节的思考严重挑战了我之前对Swift扩展的理解：</p>
+<ol>
+<li>Swift扩展对它所扩展类型的<strong>visibility</strong>。比如，扩展能访问被<code>private</code>所修饰的内容吗?</li>
+<li>定义扩展的位置是否对扩展的<strong>visibility</strong>有影响。比如我这有一个类型我想写个扩展，把扩展写在同一个源文件里和把扩展写在另一个文件里有什么区别吗？</li>
+<li>扩展里“成员”的默认访问修饰符以及是否给他们添加修饰对这个扩展作为一个类型的公共接口的影响。</li>
+</ol>
+<a id="more"></a>
+<p>在我开始之前，假设我有一个公共结构体<code>Person</code>。这个结构体有一些私有属性，<code>name</code>，<code>gender</code>，和<code>age</code>。用一个枚举把<code>Gender</code>封装了一下。这个结构体看起来如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">struct</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    private <span class="keyword">var</span> name: <span class="type">String</span></span><br><span class="line">    private <span class="keyword">var</span> gender: <span class="type">Gender</span></span><br><span class="line">    private <span class="keyword">var</span> age: <span class="type">Int</span></span><br><span class="line"> </span><br><span class="line">    public <span class="keyword">init</span>(name: <span class="type">String</span>, gender: <span class="type">Gender</span>, age: <span class="type">Int</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.name = name</span><br><span class="line">        <span class="keyword">self</span>.gender = gender</span><br><span class="line">        <span class="keyword">self</span>.age = age</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    public <span class="func"><span class="keyword">func</span> <span class="title">howOldArdYou</span><span class="params">()</span></span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> formattedAge()</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 私有方法，用于下面分析扩展的`visibility`...</span></span><br><span class="line">    private <span class="func"><span class="keyword">func</span> <span class="title">formattedAge</span><span class="params">()</span></span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> <span class="keyword">self</span>.gender &#123;</span><br><span class="line">        <span class="keyword">case</span> .<span class="type">Male</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"I'm <span class="subst">\(<span class="keyword">self</span>.age)</span>."</span></span><br><span class="line">        <span class="keyword">case</span> .<span class="type">Female</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"Not telling."</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    public <span class="class"><span class="keyword">enum</span> <span class="title">Gender</span> </span>&#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="type">Male</span></span><br><span class="line">        <span class="keyword">case</span> <span class="type">Female</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在，就让我们给<code>Person</code>写个扩展，通过实践来弄清楚刚刚提到的三个小细节…</p>
+<h2 id="扩展对类型的访问能力">扩展对类型的访问能力</h2><p>当我提出第一个细节时，关于扩展对被扩展类型的访问能力时，我问了一个问题：“扩展能访问到被<code>private</code>修饰的内容吗?”。答案一开始出乎我的预料：能…扩展能访问到。</p>
+<p>然而，这里就要考虑到第二个细节所涉及的问题，那就是：在哪里定义这个扩展是绝对有影响的。</p>
+<h3 id="定义在同一个文件里">定义在同一个文件里</h3><p>如果扩展和类型是在写同一个源文件里，则扩展能访问到在类型中被<code>priavte</code>所修饰的内容。</p>
+<p>举个栗子，在Person.swift里定义一个<code>Person</code>的扩展就会允许这个扩展访问被<code>private</code>修饰的变量和方法</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getAge</span><span class="params">()</span></span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> age <span class="comment">// 尽管age是 --private--， 但编译成功</span></span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getFormattedAge</span><span class="params">()</span></span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> formattedAge() <span class="comment">// 尽管 formattedAge是 --private--，但编译成功</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>“这谁知道？！什么？？为啥？”，我当时就没想明白…</p>
+<p>至于为什么把扩展写在同一个源文件里头会这样，我自己的推理是其实可以在写类型的时候，就把扩展的implementation当作类型的一部分给写了，这样的最终效果是一样的。</p>
+<p>我在我要“扩展”的类型的源文件里，所以无论是我把要新添加的功能当作这个类型的扩展写下来，或是就在这个类型里面定义我原本打算写在扩展里的功能是没有区别的，都是一样的效果。</p>
+<p>所以，站在编译器的角度来看，编译器可能会说：“好吧，我看到这里写了一个扩展，但是真没这个必要，因为扩展和类型都在同一个源文件里…，所以开发者完全可以把扩展里的这些代码直接写在类型里面…，所以他／她能够访问到被<code>private</code>修饰的代码段。”</p>
+<p>更新:我上面的写的推理恰恰说明了我压根就没搞明白Swift访问控制机制。所以我建议大家读一读我后来写的“<a href="http://www.andrewcbancroft.com/2015/04/24/clarifying-swift-access-control-hint-swift-isnt-c-sharp/" target="_blank" rel="external">阐明Swfit控制机制</a>”这篇文章，里面有更多的细节。</p>
+<h3 id="定义在不同文件里">定义在不同文件里</h3><p>把扩展写在另一个文件里，则扩展无法访问类型中那些被<code>private</code>修饰的内容了。</p>
+<p>按照上文我自己推理的逻辑来反过来想，定义在不同文件中就访问不了私有属性对我来说也是说的通的。</p>
+<p>大多数情况下，你都会给那些你没有源代码的类型扩展，在这种情况下，扩展就只能访问那些被<code>public</code>修饰的内容了。<br><img src="/img/2015/05/18/1.png" alt=""></p>
+<h2 id="默认情况下的扩展访问控制">默认情况下的扩展访问控制</h2><p>对最后一个细节的验证也让我更深的体会。<a href="https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/AccessControl.html#//apple_ref/doc/uid/TP40014097-CH41-ID25" target="_blank" rel="external">苹果官方文档</a>说了，但是直到我动手验证了一番，我才算领会到了默认访问控制修饰符给扩展所造成的微妙的影响。</p>
+<h3 id="没有明确声明访问修饰赋时的默认访问">没有明确声明访问修饰赋时的默认访问</h3><p>简单的说，当你声明一个扩展但没有特别明确指明访问修饰符时（默认情况下），这个扩展的默认访问等级取决于被扩展的那个类型的访问等级。</p>
+<ul>
+<li>如果类型是<code>public</code>或者是<code>internal</code>，那么扩展的implementation的“成员”就默认为<code>internal</code>。这里让我没想到是，除非你特别声明，那么给<code>public</code>类型的扩展的成员变量在默认情况下也是<code>internal</code>。</li>
+<li>如果类型是<code>private</code>，那么默认情况下扩展的implementation中的“成员”也是<code>private</code></li>
+</ul>
+<p>下面就是在我们不明确的声明添加什么访问修饰的前提下，来看扩展会是一个什么反应（为了能访问私有属性变量和方法，我在Person.swift里定义了这个扩展）：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">struct</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getAge</span><span class="params">()</span></span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> age</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getFormattedAge</span><span class="params">()</span></span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> formattedAge()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>像上面这段代码用默认的访问修饰符时就会允许在同一个模块中的实例访问扩展里的API。但是，如果被扩展的类型的实例是在另一个模块（比如在测试模块）,则无法访问扩展中任何新增的公共API。</p>
+<p>同一模块</p>
+<p><img src="/img/2015/05/18/2.png" alt=""></p>
+<p>不同模块（测试）</p>
+<p><img src="/img/2015/05/18/3.png" alt=""><br>因为某些原因，我一直都以为如果给一个是<code>public</code>的类型添加扩展，那么扩展里的成员也理应是<code>public</code>。我不知道为什么我会这么想，但是幸好我的验证把这点捋清楚了。</p>
+<h3 id="正常声明扩展，但给扩展的implementation添加public修饰">正常声明扩展，但给扩展的implementation添加public修饰</h3><p>给扩展的implementation的成员添加了<code>public</code>访问控制修饰，那么不管是在同一模块还是不同模块（test target）都能访问这些成员。</p>
+<p>只要成员被<code>public</code>修饰，那么在同一个源文件里声明扩展还是在另一个文件里声明扩展已经无所谓了…但是，正如前文所讲，只有在同一个源文件中声明的扩展才能够访问那些被<code>private</code>修饰的类型成员变量。</p>
+<p>在不同（左）和同一个（右）源文件中声明的扩展</p>
+<p><img src="/img/2015/05/18/4.png" alt=""></p>
+<p>在不同模块中也能访问公共的扩展成员变量</p>
+<p><img src="/img/2015/05/18/5.png" alt=""><br>这里请注意，在我写<code>extension Person {...}</code>时，我没有给这个扩展添加任何的修饰，我只是给这个扩展的成员添加了<code>public</code>。即便如此，新添加的方法仍然可以在不同的模块中被访问到。</p>
+<p>也就是说，没有必要写<code>public extension Person {...}</code>。因为<code>Person</code>已经是<code>public</code>了，所以基于<code>Person</code>的扩展也就很自然的延用了类型本身的访问等级。</p>
+<p>总结<br>对我来说，这篇文章所提到的三个关于Swift扩展的细节已足以让我敲敲代码去验证一番了。我希望这里所作的分析能够为那些尝试理解Swfit扩展的朋友扫清一些障碍。</p>
+<hr>
+<p>原文链接:<a href="http://www.devtf.cn/?p=460" target="_blank" rel="external">http://www.devtf.cn/?p=460</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/06/24/如何在Git中撤销一切/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          &lt;转&gt;如何在Git中撤销一切
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/12/06/JDK新特性思维导图/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JDK新特性思维导图</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Swift扩展的三个微妙细节" data-title="&lt;转&gt;Swift扩展的三个微妙细节" data-url="http://sunxiang0918.github.io/2015/05/18/Swift扩展的三个微妙细节/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
