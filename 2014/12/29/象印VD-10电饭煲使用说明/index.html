@@ -3,31 +3,39 @@
 <head>
   <meta charset="utf-8">
   
-  <title>使用Lucene进行索引部分更新缓慢原因分析 | 翔妖除魔的个人博客</title>
+  <title>&lt;翻译&gt;象印VD-10电饭煲使用说明 | 翔妖除魔的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="这篇文章是记录了在我们系统中使用Lucene作为全文检索的时候,进行大量的部分更新时非常缓慢的原因分析排查过程.">
+  <meta name="description" content="象印VD-10电饭煲使用说明最近日淘非常的流行,特别是电饭煲``马桶盖这些玩意儿.结果我一朋友跑日本去耍,带回来一个象印的电饭煲,据说还是特别热门的型号.但是他买回来才发现看不懂.于是这个时候想起了我这个自学过一年日语的半吊子帮忙…于是乎,凭着隐约还记得一点的日语,挑重点帮他翻译了一下说明书.我想既然是热门型号.那我就把这个东西放上来,有需要的就自取吧.
+查看原图
+查看原图
+查看原图
+查看原图
+查">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用Lucene进行索引部分更新缓慢原因分析">
-<meta property="og:url" content="http://sunxiang0918.github.io/2014/07/25/使用Lucene进行索引部分更新缓慢原因分析/index.html">
+<meta property="og:title" content="<翻译>象印VD-10电饭煲使用说明">
+<meta property="og:url" content="http://sunxiang0918.github.io/2014/12/29/象印VD-10电饭煲使用说明/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
-<meta property="og:description" content="这篇文章是记录了在我们系统中使用Lucene作为全文检索的时候,进行大量的部分更新时非常缓慢的原因分析排查过程.">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/25/1.png">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/25/2.png">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/25/3.png">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/25/4.png">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/25/5.png">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/25/6.png">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/25/7.png">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/25/8.png">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/25/9.png">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/25/10.png">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/25/11.png">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/25/12.png">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/07/25/13.png">
-<meta property="og:updated_time" content="2015-07-27T11:05:59.000Z">
+<meta property="og:description" content="象印VD-10电饭煲使用说明最近日淘非常的流行,特别是电饭煲``马桶盖这些玩意儿.结果我一朋友跑日本去耍,带回来一个象印的电饭煲,据说还是特别热门的型号.但是他买回来才发现看不懂.于是这个时候想起了我这个自学过一年日语的半吊子帮忙…于是乎,凭着隐约还记得一点的日语,挑重点帮他翻译了一下说明书.我想既然是热门型号.那我就把这个东西放上来,有需要的就自取吧.
+查看原图
+查看原图
+查看原图
+查看原图
+查">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/12/29/1.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/12/29/2.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/12/29/3.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/12/29/4.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/12/29/5.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2014/12/29/6.png">
+<meta property="og:updated_time" content="2015-07-31T15:12:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Lucene进行索引部分更新缓慢原因分析">
-<meta name="twitter:description" content="这篇文章是记录了在我们系统中使用Lucene作为全文检索的时候,进行大量的部分更新时非常缓慢的原因分析排查过程.">
+<meta name="twitter:title" content="<翻译>象印VD-10电饭煲使用说明">
+<meta name="twitter:description" content="象印VD-10电饭煲使用说明最近日淘非常的流行,特别是电饭煲``马桶盖这些玩意儿.结果我一朋友跑日本去耍,带回来一个象印的电饭煲,据说还是特别热门的型号.但是他买回来才发现看不懂.于是这个时候想起了我这个自学过一年日语的半吊子帮忙…于是乎,凭着隐约还记得一点的日语,挑重点帮他翻译了一下说明书.我想既然是热门型号.那我就把这个东西放上来,有需要的就自取吧.
+查看原图
+查看原图
+查看原图
+查看原图
+查">
   
     <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
   
@@ -208,11 +216,11 @@ var _hmt = _hmt || [];
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap"><article id="post-使用Lucene进行索引部分更新缓慢原因分析" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-象印VD-10电饭煲使用说明" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2014/07/25/使用Lucene进行索引部分更新缓慢原因分析/" class="article-date">
-  	<time datetime="2014-07-25T10:23:55.000Z" itemprop="datePublished">2014-07-25</time>
+      <a href="/2014/12/29/象印VD-10电饭煲使用说明/" class="article-date">
+  	<time datetime="2014-12-29T04:52:45.000Z" itemprop="datePublished">2014-12-29</time>
 </a>
     </div>
   
@@ -225,7 +233,7 @@ var _hmt = _hmt || [];
         
   
     <h1 class="article-title" itemprop="name">
-      使用Lucene进行索引部分更新缓慢原因分析
+      &lt;翻译&gt;象印VD-10电饭煲使用说明
     </h1>
   
 
@@ -234,7 +242,7 @@ var _hmt = _hmt || [];
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lucene/">Lucene</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/其他/">其他</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
 	</div>
 
         
@@ -248,33 +256,13 @@ var _hmt = _hmt || [];
       
       
         
-        <h1 id="使用Lucene进行索引部分更新缓慢原因分析">使用Lucene进行索引部分更新缓慢原因分析</h1><h2 id="问题的引出">问题的引出</h2><p>在我们的系统中,使用了<code>Lucene</code>作为全文检索引擎用作NRT近实时检索.这就牵涉到一个更新的问题.<br>在Lucene当中,其实是<strong>不存在部分更新</strong>的说法的,它仅仅支持全更新.因此,为了应用端的调用方便.在我们的FTEngine全文检索引擎中是提供了部分更新的功能的,其逻辑大体上来说,就是根据传入的<code>uniqueID</code>,在索引中找到对应的<code>Document</code>.然后再恢复它的<code>Term</code>.而后再<strong>构造全更新的Document</strong>,交由Lucene进行全更新.<br>但是,在北京台项目中,突然发现全文检索更新的很慢,往往页面都对素材修改了2个小时了,索引都还没有更新. 从而引出了这个问题.</p>
-<h2 id="解决思路">解决思路</h2><p>经过最初步的分析, 发现发生这种现象多集中于有大量的归档与回迁的操作.这两个操作对索引的影响就是会一次性的大量的进行索引的部分更新. 因此就把原因怀疑到了部分更新上.</p>
-<a id="more"></a>
-<h2 id="分析过程">分析过程</h2><ol>
-<li>修改FTEngine的源代码.在项目中,加入大量的日志,全部显示使用时间.<br><img src="/img/2014/07/25/1.png" alt=""><br><img src="/img/2014/07/25/2.png" alt="">  </li>
-<li><p>发现程序在恢复<strong>没有Store</strong>的字段的Term的时候非常的慢.经过分析以及网上找问题,发现是由于我们对于Index的字段没有使用Lucene提供的<strong>TermVector</strong>功能,也就是Term的位置向量.它是以空间来换取时间,当使用了位置向量后,就相当于为每一个Term都编了号,记录了位置.这样在恢复的时候大大的提高了查询Term的性能.这样就能很快的恢复Document了.</p>
-</li>
-<li><p>经过修改后,再进行测试,发现有些Document的恢复还是很慢. 对比恢复的快的与慢得Document.发现他们的区别在于恢复字段的时候,如果每一个字段都是有值的,那么由于有termVector那么会非常的快.但是如果这个字段是没有值的,那么恢复Term就相当的慢.<br><img src="/img/2014/07/25/3.png" alt=""><br><img src="/img/2014/07/25/4.png" alt=""> </p>
-</li>
-<li><p>进一步分析,没有<strong>digitalbarcode</strong>字段,那么他恢复这个的时候是如何处理的呢?<br>代码先去找这条记录的这个字段是否有<strong>Vector</strong>向量.<br><img src="/img/2014/07/25/5.png" alt=""><br>因为该条Documnet根本就没有这个字段,所以肯定没有这个向量.所以他走到<code>else</code>中去了.<br><img src="/img/2014/07/25/6.png" alt=""><br>else中的处理是先读到该字段的所有<code>term</code>. digitalTapeBarcode大概有2万个term.然后把这些term都取出来.遍历所有的term.然后判断这个term是否是属于这个document的.<br><img src="/img/2014/07/25/7.png" alt="">  </p>
-</li>
-<li><p>程序的结果也符合预期:<br><img src="/img/2014/07/25/8.png" alt="">  </p>
-</li>
-<li><p>找到问题原因后,就着手进行修改. 由于Lucene本身没有提供根据document来查询这条记录是否有这个字段.所以我们才会进行遍历.这也是无法修改的.</p>
-</li>
-<li><p>但是,在这我使用了一个取巧的办法.<br><img src="/img/2014/07/25/9.png" alt=""><br>也就是认为如果在使用TermVector的情况下(现在的索引,在北京台之后的都是使用了TermVector的).<br><strong>如果在TermVector中没有找到,就认为该Document中没有这个字段,不需要恢复.</strong>也就没必要去遍历这几万次.<br><img src="/img/2014/07/25/10.png" alt=""><br><img src="/img/2014/07/25/11.png" alt="">  </p>
-</li>
-</ol>
-<p>相同的90条记录,进行部分更新.   修改前用时 <strong>38778</strong>毫秒 ,修改后  <strong>4475</strong>毫秒. 基本认为问题解决.<br>在不修改底层到<code>Lucene</code>的情况下,只能这样了</p>
-<ol>
-<li>做1W条记录的批量部分更新测试:</li>
-</ol>
-<p>修改前: 开始时间: 2014-07-25 11:57:35,666      结束时间:2014-07-25 13:12:39,811 共用时:<strong>4504</strong>秒<br><img src="/img/2014/07/25/12.png" alt="">    </p>
-<p>修改后:开始时间:2014-07-25 17:20:23,382      结束时间:2014-07-25 17:25:57,946 共用时:<strong>334</strong>秒<br><img src="/img/2014/07/25/13.png" alt=""> </p>
-<ol>
-<li>到此,问题基本解决</li>
-</ol>
+        <h1 id="象印VD-10电饭煲使用说明">象印VD-10电饭煲使用说明</h1><p>最近日淘非常的流行,特别是<code>电饭煲``马桶盖</code>这些玩意儿.<br>结果我一朋友跑日本去耍,带回来一个象印的电饭煲,据说还是特别热门的型号.<br>但是他买回来才发现看不懂.于是这个时候想起了我这个自学过一年日语的半吊子帮忙…<br>于是乎,凭着隐约还记得一点的日语,挑重点帮他翻译了一下说明书.<br>我想既然是热门型号.那我就把这个东西放上来,有需要的就自取吧.</p>
+<p><img src="/img/2014/12/29/1.png" alt=""><br><a href="/img/2014/12/29/1.png">查看原图</a></p>
+<p><img src="/img/2014/12/29/2.png" alt=""><br><a href="/img/2014/12/29/2.png">查看原图</a></p>
+<p><img src="/img/2014/12/29/3.png" alt=""><br><a href="/img/2014/12/29/3.png">查看原图</a></p>
+<p><img src="/img/2014/12/29/4.png" alt=""><br><a href="/img/2014/12/29/4.png">查看原图</a></p>
+<p><img src="/img/2014/12/29/5.png" alt=""><br><a href="/img/2014/12/29/5.png">查看原图</a></p>
+<p><img src="/img/2014/12/29/6.png" alt=""><br><a href="/img/2014/12/29/6.png">查看原图</a></p>
 
       
     </div>
@@ -284,18 +272,18 @@ var _hmt = _hmt || [];
     
 <nav id="article-nav">
   
-    <a href="/2014/07/28/DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/03/25/74个Swift标准库函数/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析
+          &lt;转&gt;74个Swift标准库函数
         
       </div>
     </a>
   
   
-    <a href="/2014/07/21/自定义hibernate方言-支持正则表达式查询/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">自定义hibernate方言 支持正则表达式查询</div>
+    <a href="/2014/12/06/JDK新特性思维导图/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JDK新特性思维导图</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -324,7 +312,7 @@ var _hmt = _hmt || [];
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="使用Lucene进行索引部分更新缓慢原因分析" data-title="使用Lucene进行索引部分更新缓慢原因分析" data-url="http://sunxiang0918.github.io/2014/07/25/使用Lucene进行索引部分更新缓慢原因分析/"></div>
+	<div class="ds-thread" data-thread-key="象印VD-10电饭煲使用说明" data-title="&lt;翻译&gt;象印VD-10电饭煲使用说明" data-url="http://sunxiang0918.github.io/2014/12/29/象印VD-10电饭煲使用说明/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
