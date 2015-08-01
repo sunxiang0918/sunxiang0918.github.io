@@ -68,7 +68,8 @@ modules: 14
 openssl: 1.0.1p
     ```
     这样就说明安装完成了.
-    但是如果是显示的: ```hexo: command not found ```. 说明环境变量没有设置.我也不知道为什么.但是只要补上环境变量就可以了.
+    但是如果是显示的: `hexo: command not found`. 说明环境变量没有设置.我也不知道为什么.但是只要补上环境变量就可以了.
+    
     > **hexo环境变量的设置:** 在`~/` 用户的根目录下创建一个目录:`.bash_profile`.其中的内容为:`export PATH="/usr/local/Cellar/node/0.12.7/libexec/npm/lib/node_modules/hexo/bi$`  其中的路径就是hexo的安装路径
 
 ### 使用Hexo创建博客
