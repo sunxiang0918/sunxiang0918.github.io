@@ -1443,6 +1443,49 @@ Avg: 2.7, Min: 2.6, Max: 2.8, Diff: 0.2]
   </entry>
   
   <entry>
+    <title><![CDATA[Jboss4控制台加锁]]></title>
+    <link href="http://sunxiang0918.github.io/2014/05/18/Jboss4%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%8A%A0%E9%94%81/"/>
+    <id>http://sunxiang0918.github.io/2014/05/18/Jboss4控制台加锁/</id>
+    <published>2014-05-18T06:10:01.000Z</published>
+    <updated>2015-08-01T06:28:00.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="Jboss4控制台加锁">Jboss4控制台加锁</h1><p>由于Jboss服务器默认的情况下,可以通过远程的方式登陆控制台,然后关闭卸载服务.这对于真正的线上服务来说是非常危险的操作,哪怕是在电视台内部的局域网也是如此.因此,需要给JBOSS控制台加上密码.</p>
+<h2 id="隐藏访问目录">隐藏访问目录</h2><p>这一步主要是隐藏控制台的访问目录.<br>具体是修改:<code>jboss_home/server/default/deploy/jbossweb-tomcat55.sar/conf/web.xml</code>文件:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">param-name</span>&gt;</span>listings<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">param-value</span>&gt;</span>false<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="设置JMX-Console控制台密码">设置JMX-Console控制台密码</h2><p>因为即使用防火墙将8080端口屏蔽，别有用心的用户也可以通过<a href="http://your_domain/JMX-Console进行访问，修改如下" target="_blank" rel="external">http://your_domain/JMX-Console进行访问，修改如下</a>:</p>
+<ol>
+<li>修改<code>JBOSS_HOME/server/default/deploy/jmx-console.war/WEB-INF/web.xml</code>,取消<code>&lt;security-constraint&gt;</code>这段注释</li>
+<li>修改同目录下<code>jboss-web.xml</code>,取消<code>&lt;security-domain&gt;</code>这段注释</li>
+<li>修改<code>JBOSS_HOME/server/default/conf/props/jmx-console-users.properties</code>,增加用户<code>修改 admin=admin   设置用户名=设置密码</code></li>
+<li>修改同目录下<code>jmx-console-roles.properties</code>     修改 admin 改为   上面设置的用户名</li>
+</ol>
+<h2 id="设置Web-Console控制台密码">设置Web-Console控制台密码</h2><ol>
+<li>修改<code>JBOSS_HOME/server/default/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xml</code> 取消<code>&lt;security-constraint&gt;</code>这段注释</li>
+<li>修改同目录下的<code>jboss-web.xml</code> 取消<code>&lt;security-domain&gt;</code> 这段注释</li>
+<li>修改<code>JBOSS_HOME/server/default/conf/props/web-console-roles.properties</code> 增加<code>admin=JBossAdmin,HttpInvoker</code></li>
+<li>修改<code>JBOSS_HOME/server/default/conf/login-config.xml</code>.改为下面这样:</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">application-policy</span> <span class="attribute">name</span>=<span class="value">"web-console"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">authentication</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">login-module</span> <span class="attribute">code</span>=<span class="value">"org.jboss.security.auth.spi.UsersRolesLoginModule"</span> <span class="attribute">flag</span>=<span class="value">"required"</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">module-option</span> <span class="attribute">name</span>=<span class="value">"usersProperties"</span>&gt;</span>props/web-console-users.properties<span class="tag">&lt;/<span class="title">module-option</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">module-option</span> <span class="attribute">name</span>=<span class="value">"rolesProperties"</span>&gt;</span>props/web-console-roles.properties<span class="tag">&lt;/<span class="title">module-option</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">login-module</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="title">authentication</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">application-policy</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>修改<code>jboss_home/server/default/conf/jboss-service.xml</code>.将:</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- A flag to disable the scans --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">attribute</span> <span class="attribute">name</span>=<span class="value">"ScanEnabled"</span>&gt;</span>false<span class="tag">&lt;/<span class="title">attribute</span>&gt;</span> <span class="comment">&lt;!--将true改为false--&gt;</span></span><br></pre></td></tr></table></figure>
+<p>到这里,就完成了JBoss控制台密码的设置了. 重启JBOSS就OK了.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="Jboss4控制台加锁">Jboss4控制台加锁</h1><p>由于Jboss服务器默认的情况下,可以通过远程的方式登陆控制台,然后关闭卸载服务.这对于真正的线上服务来说是非常危险的操作,哪怕是在电视台内部的局域网也是如此.因此,需要给JBOSS控制台加上密码.</p>
+<h2 id="隐藏访问目录">隐藏访问目录</h2><p>这一步主要是隐藏控制台的访问目录.<br>具体是修改:<code>jboss_home/server/default/deploy/jbossweb-tomcat55.sar/conf/web.xml</code>文件:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">param-name</span>&gt;</span>listings<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">param-value</span>&gt;</span>false<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span></span><br></pre></td></tr></table></figure>]]>
+    
+    </summary>
+    
+      <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
+    
+      <category term="JBOSS" scheme="http://sunxiang0918.github.io/tags/JBOSS/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[JBOSS4关闭时不断开数据库连接问题分析]]></title>
     <link href="http://sunxiang0918.github.io/2013/04/21/JBOSS4%E5%85%B3%E9%97%AD%E6%97%B6%E4%B8%8D%E6%96%AD%E5%BC%80%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90/"/>
     <id>http://sunxiang0918.github.io/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/</id>
