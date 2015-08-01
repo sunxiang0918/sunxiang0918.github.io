@@ -995,6 +995,39 @@ Avg: 2.7, Min: 2.6, Max: 2.8, Diff: 0.2]
   </entry>
   
   <entry>
+    <title><![CDATA[在MAC下使用beyondcompare比较JAVA Class文件]]></title>
+    <link href="http://sunxiang0918.github.io/2014/09/20/%E5%9C%A8MAC%E4%B8%8B%E4%BD%BF%E7%94%A8beyondcompare%E6%AF%94%E8%BE%83JAVA-Class%E6%96%87%E4%BB%B6/"/>
+    <id>http://sunxiang0918.github.io/2014/09/20/在MAC下使用beyondcompare比较JAVA-Class文件/</id>
+    <published>2014-09-20T02:33:29.000Z</published>
+    <updated>2015-08-01T06:52:07.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="在MAC下使用beyondcompare比较JAVA_Class文件">在MAC下使用beyondcompare比较JAVA Class文件</h1><p>2014年9月1日.beyondCompare终于推出了Mac版了.真的是大快人心的大好事,大了又大.<br>以前用过很多MAC上的比较工具,像什么<code>Araxis Merge</code> <code>DiffFork</code> <code>DiffMerge</code> <code>Kaleidoscope</code>等等. 都没有很好用. 对比Windows平台上的BeyondCompare,差的不是一点半点.</p>
+<p>使用beyondcompare对比.class文件的时候,默认是直接对比的二进制文件.这基本上就看不懂.因此,需要在对比的时候自动的反编译为源代码.然后再进行对比.</p>
+<a id="more"></a>
+<ol>
+<li>打开beyondcompare. </li>
+<li>选择 <code>BeyondCompare—&gt;File Formats</code></li>
+<li>然后新建一个文本的 解析格式:  class<br> <img src="/img/2014/09/20/2.png" alt=""></li>
+<li>在<code>general</code> 里面 过滤格式 输入  <code>*.class</code></li>
+<li><code>Conversion</code>里面  选择  <code>External Program</code>.</li>
+<li><code>Loading</code> 里面输入   <code>had -p %s &gt;%t</code></li>
+<li>选择上 <code>Disable editing</code></li>
+<li>在<a href="http://varaneckas.com/jad/" target="_blank" rel="external">http://varaneckas.com/jad/</a>上面下载适用于MAC使用的JAD软件.并解压到第三步配置的地方.</li>
+</ol>
+<p>这样就OK了.使用beyondCompare直接比较JAVA Class文件</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="在MAC下使用beyondcompare比较JAVA_Class文件">在MAC下使用beyondcompare比较JAVA Class文件</h1><p>2014年9月1日.beyondCompare终于推出了Mac版了.真的是大快人心的大好事,大了又大.<br>以前用过很多MAC上的比较工具,像什么<code>Araxis Merge</code> <code>DiffFork</code> <code>DiffMerge</code> <code>Kaleidoscope</code>等等. 都没有很好用. 对比Windows平台上的BeyondCompare,差的不是一点半点.</p>
+<p>使用beyondcompare对比.class文件的时候,默认是直接对比的二进制文件.这基本上就看不懂.因此,需要在对比的时候自动的反编译为源代码.然后再进行对比.</p>]]>
+    
+    </summary>
+    
+      <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
+    
+      <category term="Mac" scheme="http://sunxiang0918.github.io/tags/Mac/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析]]></title>
     <link href="http://sunxiang0918.github.io/2014/07/28/DB2%E4%B8%8B%E4%BD%BF%E7%94%A8Hibernate%E8%87%AA%E5%8A%A8%E9%87%8D%E5%BB%BA%E8%A1%A8%E5%AF%BC%E8%87%B4%E6%95%B4%E4%B8%AADB2%E5%8D%A1%E4%BD%8F%E7%9A%84%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90/"/>
     <id>http://sunxiang0918.github.io/2014/07/28/DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析/</id>
