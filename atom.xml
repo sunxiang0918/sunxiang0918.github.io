@@ -849,6 +849,56 @@ Avg: 2.7, Min: 2.6, Max: 2.8, Diff: 0.2]
   </entry>
   
   <entry>
+    <title><![CDATA[GIT 两个仓库的合并]]></title>
+    <link href="http://sunxiang0918.github.io/2015/01/13/GIT-%E4%B8%A4%E4%B8%AA%E4%BB%93%E5%BA%93%E7%9A%84%E5%90%88%E5%B9%B6/"/>
+    <id>http://sunxiang0918.github.io/2015/01/13/GIT-两个仓库的合并/</id>
+    <published>2015-01-13T05:47:18.000Z</published>
+    <updated>2015-08-01T06:04:35.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="GIT_两个仓库的合并">GIT 两个仓库的合并</h1><p>情况是这样的,以前我们的全文检索引擎是按照模块提交到不同的Git仓库上的. 现在做新的检索引擎准备按照springframe那样,按照模块还是提交到一个Git仓库中,便于版本的维护.<br>这就牵涉到,需要把以前的一些模块仓库,合并到一起来.因为我们还是想保留以前的提交记录等等.而不是直接新建一个仓库,然后把代码都拷贝到一起.这样就会丢失以前的提交记录.</p>
+<h2 id="操作过程是这样的:">操作过程是这样的:</h2><ol>
+<li><p>先在<a href="https://www.sourcetreeapp.com/" target="_blank" rel="external">sourcetree</a>中 <code>clone</code>新的仓库.比如:<a href="http://127.0.0.1/a.git" target="_blank" rel="external">http://127.0.0.1/a.git</a></p>
+ <a id="more"></a>
+</li>
+<li><p>然后在<code>sourcetree</code>中 增加新的远程仓库. 地址是旧的仓库地址:<br> <img src="/img/2015/01/13/1.png" alt=""><br> <img src="/img/2015/01/13/2.png" alt="">  </p>
+<p> 这时界面是这样的:<br> <img src="/img/2015/01/13/3.png" alt="">  </p>
+</li>
+<li><p>右键选中temp远程仓库:</p>
+<p> <img src="/img/2015/01/13/4.png" alt="">  </p>
+</li>
+<li><p>选择 <code>Fetch from temp</code> 抓取远程分支数据到本地仓库:</p>
+<p> <img src="/img/2015/01/13/5.png" alt="">  </p>
+</li>
+<li><p>然后选择master分支,<code>check out</code></p>
+<p> <img src="/img/2015/01/13/6.png" alt="">  </p>
+<p> <img src="/img/2015/01/13/7.png" alt="">  </p>
+</li>
+<li><p>切换回本地的<code>master</code>分支</p>
+<p> <img src="/img/2015/01/13/8.png" alt="">  </p>
+</li>
+<li><p>然后选择合并<code>master</code>和<code>temp</code>分支</p>
+<p> <img src="/img/2015/01/13/9.png" alt="">  </p>
+<p> 合并结果:</p>
+<p> <img src="/img/2015/01/13/10.png" alt="">  </p>
+</li>
+<li><p>最后提交到新仓库的<code>master</code>分支上,就OK了.</p>
+<p> <img src="/img/2015/01/13/11.png" alt="">  </p>
+</li>
+<li><p>最后再删除本地和远程的<code>temp</code>分支即可</p>
+</li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="GIT_两个仓库的合并">GIT 两个仓库的合并</h1><p>情况是这样的,以前我们的全文检索引擎是按照模块提交到不同的Git仓库上的. 现在做新的检索引擎准备按照springframe那样,按照模块还是提交到一个Git仓库中,便于版本的维护.<br>这就牵涉到,需要把以前的一些模块仓库,合并到一起来.因为我们还是想保留以前的提交记录等等.而不是直接新建一个仓库,然后把代码都拷贝到一起.这样就会丢失以前的提交记录.</p>
+<h2 id="操作过程是这样的:">操作过程是这样的:</h2><ol>
+<li><p>先在<a href="https://www.sourcetreeapp.com/">sourcetree</a>中 <code>clone</code>新的仓库.比如:<a href="http://127.0.0.1/a.git">http://127.0.0.1/a.git</a></p>]]>
+    
+    </summary>
+    
+      <category term="GIT" scheme="http://sunxiang0918.github.io/tags/GIT/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[<翻译>象印NPVD-10电饭煲使用说明]]></title>
     <link href="http://sunxiang0918.github.io/2014/12/29/%E8%B1%A1%E5%8D%B0VD-10%E7%94%B5%E9%A5%AD%E7%85%B2%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/"/>
     <id>http://sunxiang0918.github.io/2014/12/29/象印VD-10电饭煲使用说明/</id>
