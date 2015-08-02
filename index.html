@@ -225,9 +225,7 @@ var _hmt = _hmt || [];
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="swift中多线程的使用方法">swift中多线程的使用方法</h1><h2 id="概述">概述</h2><p>多线程可能是每一个程序开发都会遇到的问题.在swift中,苹果并没有重新开发出一套线程框架,而是继续使用ObjectiveC原有的一套线程框架.<br>目前在swift中最常用的线程方案主要有<code>NSThread</code>,<code>GCD</code>,<code>NSOperation&amp;NSOperationQueue</code>三套方案.所以,接下来会分别的描述下这些方案的使用方法以及例子.</p>
-<h2 id="NSThread">NSThread</h2><p><code>NSThread</code>是苹果封装的一套完全面向对象的多线程框架.相比其他的两种方案,这种方案更轻量.你可以直接操作线程对象,很直观和方便.但是,由于<code>NSThread</code>只是一个轻量级的封装.所以需要自己管理线程的生命周期，线程同步。并且线程同步对数据的加锁会有一定的系统开销.因此这套方案使用的频率并不高.通常都是用来获取线程的信息</p>
-<h3 id="NSThread的创建">NSThread的创建</h3><p><code>NSThread</code>主要有两种直接创建的方式:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">func</span> <span class="title">detachNewThreadSelector</span>(<span class="title">selector</span>: <span class="title">Selector</span>, <span class="title">toTarget</span> <span class="title">target</span>: <span class="title">AnyObject</span>, <span class="title">withObject</span> <span class="title">argument</span>: <span class="title">AnyObject</span>?)</span><br><span class="line"></span><br><span class="line"><span class="title">convenience</span> <span class="title">init</span>(<span class="title">target</span>: <span class="title">AnyObject</span>, <span class="title">selector</span>: <span class="title">Selector</span>, <span class="title">object</span> <span class="title">argument</span>: <span class="title">AnyObject</span>?)</span></span><br></pre></td></tr></table></figure>
+<h2 id="NSThread">NSThread</h2><p><code>NSThread</code>是苹果封装的一套完全面向对象的多线程框架.相比其他的两种方案,这种方案更轻量.你可以直接操作线程对象,很直观和方便.但是,由于<code>NSThread</code>只是一个轻量级的封装.所以需要自己管理线程的生命周期，线程同步。并且线程同步对数据的加锁会有一定的系统开销.因此这套方案使用的频率并不高.通常都是用来获取线程的信息<br>
       
     </div>
     
