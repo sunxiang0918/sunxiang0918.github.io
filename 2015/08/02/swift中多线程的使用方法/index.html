@@ -3,17 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>翔妖除魔的个人博客</title>
+  <title>swift中多线程的使用方法 | 翔妖除魔的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="翔妖除魔的个人博客">
-<meta property="og:url" content="http://sunxiang0918.github.io/index.html">
+  <meta name="description" content="swift中多线程的使用方法概述多线程可能是每一个程序开发都会遇到的问题.在swift中,苹果并没有重新开发出一套线程框架,而是继续使用ObjectiveC原有的一套线程框架.目前在swift中最常用的线程方案主要有NSThread,GCD,NSOperation&amp;amp;NSOperationQueue三套方案.所以,接下来会分别的描述下这些方案的使用方法以及例子.
+NSThreadNSThre">
+<meta property="og:type" content="article">
+<meta property="og:title" content="swift中多线程的使用方法">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/08/02/swift中多线程的使用方法/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
-<meta property="og:description">
+<meta property="og:description" content="swift中多线程的使用方法概述多线程可能是每一个程序开发都会遇到的问题.在swift中,苹果并没有重新开发出一套线程框架,而是继续使用ObjectiveC原有的一套线程框架.目前在swift中最常用的线程方案主要有NSThread,GCD,NSOperation&amp;amp;NSOperationQueue三套方案.所以,接下来会分别的描述下这些方案的使用方法以及例子.
+NSThreadNSThre">
+<meta property="og:updated_time" content="2015-08-02T14:35:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="翔妖除魔的个人博客">
-<meta name="twitter:description">
+<meta name="twitter:title" content="swift中多线程的使用方法">
+<meta name="twitter:description" content="swift中多线程的使用方法概述多线程可能是每一个程序开发都会遇到的问题.在swift中,苹果并没有重新开发出一套线程框架,而是继续使用ObjectiveC原有的一套线程框架.目前在swift中最常用的线程方案主要有NSThread,GCD,NSOperation&amp;amp;NSOperationQueue三套方案.所以,接下来会分别的描述下这些方案的使用方法以及例子.
+NSThreadNSThre">
   
     <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
   
@@ -196,9 +200,7 @@ var _hmt = _hmt || [];
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-swift中多线程的使用方法" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-swift中多线程的使用方法" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2015/08/02/swift中多线程的使用方法/" class="article-date">
@@ -214,17 +216,35 @@ var _hmt = _hmt || [];
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/02/swift中多线程的使用方法/">swift中多线程的使用方法</a>
+    <h1 class="article-title" itemprop="name">
+      swift中多线程的使用方法
     </h1>
   
 
       </header>
       
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
     
     <div class="article-entry" itemprop="articleBody">
       
       
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#swift中多线程的使用方法"><span class="toc-number">1.</span> <span class="toc-text">swift中多线程的使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">1.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSThread"><span class="toc-number">1.2.</span> <span class="toc-text">NSThread</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSThread的创建"><span class="toc-number">1.2.1.</span> <span class="toc-text">NSThread的创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NSThread的其他方法"><span class="toc-number">1.2.2.</span> <span class="toc-text">NSThread的其他方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GCD"><span class="toc-number">1.3.</span> <span class="toc-text">GCD</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#设计"><span class="toc-number">1.3.1.</span> <span class="toc-text">设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建"><span class="toc-number">1.3.2.</span> <span class="toc-text">创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行"><span class="toc-number">1.3.3.</span> <span class="toc-text">执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组执行"><span class="toc-number">1.3.4.</span> <span class="toc-text">组执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Barrier执行"><span class="toc-number">1.3.5.</span> <span class="toc-text">Barrier执行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSOperation&NSOperationQueue"><span class="toc-number">1.4.</span> <span class="toc-text">NSOperation&NSOperationQueue</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建任务"><span class="toc-number">1.4.1.</span> <span class="toc-text">创建任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建队列"><span class="toc-number">1.4.2.</span> <span class="toc-text">创建队列</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.5.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
         <h1 id="swift中多线程的使用方法">swift中多线程的使用方法</h1><h2 id="概述">概述</h2><p>多线程可能是每一个程序开发都会遇到的问题.在swift中,苹果并没有重新开发出一套线程框架,而是继续使用ObjectiveC原有的一套线程框架.<br>目前在swift中最常用的线程方案主要有<code>NSThread</code>,<code>GCD</code>,<code>NSOperation&amp;NSOperationQueue</code>三套方案.所以,接下来会分别的描述下这些方案的使用方法以及例子.</p>
 <h2 id="NSThread">NSThread</h2><p><code>NSThread</code>是苹果封装的一套完全面向对象的多线程框架.相比其他的两种方案,这种方案更轻量.你可以直接操作线程对象,很直观和方便.但是,由于<code>NSThread</code>只是一个轻量级的封装.所以需要自己管理线程的生命周期，线程同步。并且线程同步对数据的加锁会有一定的系统开销.因此这套方案使用的频率并不高.通常都是用来获取线程的信息</p>
 <h3 id="NSThread的创建">NSThread的创建</h3><p><code>NSThread</code>主要有两种直接创建的方式:</p>
@@ -304,623 +324,62 @@ var _hmt = _hmt || [];
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/07/29/Swift局部SCOPE/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">&lt;转&gt;Swift局部SCOPE</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
   
 </article>
 
 
-
-
-
-
-
-  
-    <article id="post-Swift局部SCOPE" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/07/29/Swift局部SCOPE/" class="article-date">
-  	<time datetime="2015-07-29T02:06:40.000Z" itemprop="datePublished">2015-07-29</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/29/Swift局部SCOPE/">&lt;转&gt;Swift局部SCOPE</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="局部SCOPE">局部SCOPE</h1><p>C 系语言中在方法内部我们是可以任意添加成对的大括号 {} 来限定代码的作用范围的。这么做一般来说有两个好处，首先是超过作用域后里面的临时变量就将失效，这不仅可以使方法内的命名更加容易，也使得那些不被需要的引用的回收提前进行了，可以稍微提高一些代码的效率；另外，在合适的位置插入括号也利于方法的梳理，对于那些不太方便提取为一个单独方法，但是又应该和当前方法内的其他部分进行一些区分的代码，使用大括号可以将这样的结构进行一个相对自然的划分。</p>
-<p>举一个不失一般性的例子，虽然我个人不太喜欢使用代码手写 UI，但钟情于这么做的人还是不在少数。如果我们要在 Objective-C 中用代码构建 UI 的话，我们一般会选择在 -loadView 里写一些类似这样的代码：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-(<span class="keyword">void</span>)loadView &#123;</span><br><span class="line">    <span class="built_in">UIView</span> *view = [[<span class="built_in">UIView</span> alloc] initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">320</span>, <span class="number">480</span>)];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UILabel</span> *titleLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">            initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">30</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">    titleLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">    titleLabel<span class="variable">.text</span> = <span class="string">@"Title"</span>;</span><br><span class="line">    [view addSubview:titleLabel];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UILabel</span> *textLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">            initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">80</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">    textLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">    textLabel<span class="variable">.text</span> = <span class="string">@"Text"</span>;</span><br><span class="line">    [view addSubview:textLabel];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span><span class="variable">.view</span> = view;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-      
 
-      
-        <p class="article-more-link">
-          <a  href="/2015/07/29/Swift局部SCOPE/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
 
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="swift中多线程的使用方法" data-title="swift中多线程的使用方法" data-url="http://sunxiang0918.github.io/2015/08/02/swift中多线程的使用方法/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
 
 
 
-
-
-  
-    <article id="post-Swift2-0中字符串的设计" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/07/29/Swift2-0中字符串的设计/" class="article-date">
-  	<time datetime="2015-07-28T16:19:28.000Z" itemprop="datePublished">2015-07-29</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/29/Swift2-0中字符串的设计/">&lt;翻译&gt;Swift2.0中字符串的设计</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Swift2-0中字符串的设计">Swift2.0中字符串的设计</h1><p>Swift中提供了一个高性能的,兼容Unicode的字符串实现作为其标准库中的一部分.在Swift2中,<code>String</code>类型不再实现<code>CollectionType</code>协议.在以前<code>String</code>字符串是一个由<code>Character</code>字符组成的集合,其表现类似于一个数组.而现在,<code>String</code>则是提供了一个<code>characters</code>属性用来暴露字符集合.</p>
-<p>为什么会有这样的变化呢?尽管把字符串当做一个字符的集合看起来更自然.但是其实<code>String</code>字符串类型的操作与<code>Array</code>,<code>Set</code>或者<code>Dictionary</code>等集合一直都是完全不同的.但自从Swift2增加了协议扩展后,针对这些差异有必要进行一些根本性的变化了.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/07/29/Swift2-0中字符串的设计/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/07/25/hello-world/" class="article-date">
-  	<time datetime="2015-07-25T10:06:02.000Z" itemprop="datePublished">2015-07-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/25/hello-world/">Macos 通过安装Hexo 来搭建 GitHub Pages 博客系统</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>现在越来越多的人愿意使用独立的技术博客.如果自己搭建Wordpress等,需要涉及到服务器的问题.所以,很多人选择了GitHub提供的Pages来搭建个人博客,我也赶一回潮流.在MacOS 上 使用Hexo来搭建GitHubPages博客.</p>
-<h2 id="Hexo">Hexo</h2><p>hexo出自台湾大学生 <a href="http://twitter.com/tommy351">tommy351</a> 之手，是一个基于Node.js的静态博客程序，其编译上百篇文字只需要几秒。hexo生成的静态网页可以直接放到GitHub Pages，BAE，SAE等平台上。</p>
-<h3 id="安装Hexo">安装Hexo</h3><p>要安装<code>Hexo</code>需要先安装<code>Npm</code>以及<code>NodeJs</code>.<br>我在MacOS上,是使用<a href="http://brew.sh">Brew</a>安装的.</p>
-<ol>
-<li><p>安装<strong>NodeJS</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install node</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装<strong>Git</strong><br>由于我安装了XCode的,并且安装了<code>Command Line Tool</code>,因此,这一步可以省略了.否则还是在终端中输入:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install git</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/github/">github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/博客/">博客</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/其他/">其他</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/07/25/hello-world/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-G1垃圾收集器入门" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/07/23/G1垃圾收集器入门/" class="article-date">
-  	<time datetime="2015-07-23T00:37:28.000Z" itemprop="datePublished">2015-07-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/23/G1垃圾收集器入门/">&lt;转&gt;G1垃圾收集器入门</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="G1垃圾收集器入门">G1垃圾收集器入门</h1><h2 id="说明">说明</h2><hr>
-<p><strong>concurrent</strong>: 并发, 多个线程协同做同一件事情(有状态)</p>
-<p><strong>parallel</strong>: 并行, 多个线程各做各的事情(互相间无共享状态)</p>
-<p>参考: <a href="http://joearms.github.io/2013/04/05/concurrent-and-parallel-programming.html">What’s the difference between concurrency and parallelism</a></p>
-<h2 id="概述">概述</h2><h3 id="目的">目的</h3><p>本文介绍如何使用G1,及在 Hotspot JVM 中怎么使用G1垃圾收集器。 您将了解 G1 收集器的内部原理, 切换为 G1 收集器的命令行参数, 以及让其记录GC日志的选项。</p>
-<h3 id="需要的时间">需要的时间</h3><p>大约 1 个小时</p>
-<h3 id="简介">简介</h3><p>本文涵盖了Java虚拟机(JVM, Java Virtual Machine)中 G1 的基础知识。</p>
-<ol>
-<li>第一部分, 简单概述JVM的同时介绍了垃圾收集和性能.</li>
-<li>接下来讲述了 Hotspot JVM 中 CMS 收集器是如何工作的.</li>
-<li>接着再一步一步地指导在 Hotspot JVM 中使用G1进行垃圾回收的工作方式.</li>
-<li>之后的一个小节介绍 G1 垃圾收集器可用的命令行参数.</li>
-<li>最后,您将了解如何配置使G1收集器记录日志.</li>
-</ol>
-<h3 id="硬件与软件环境需求">硬件与软件环境需求</h3><p>下面是 硬件与软件环境需求 清单:</p>
-<ul>
-<li>一台PC机, 运行 Windows XP 以上操作系统, Mac OS X 或者 Linux 都可以. 注意,因为作者在Windows 7上进行开发和测试, 尚未在所有平台上完成测试。 但在 OS X和Linux 上应该也是正常的。最好配置了多核CPU.</li>
-<li>Java 7 Update 9 或更高版本</li>
-<li>最新的 Java 7 Demos and Samples Zip 文件</li>
-</ul>
-<h3 id="准备条件">准备条件</h3><p>在开始学习本教程之前, 你需要:</p>
-<ul>
-<li><p>下载并安装最新的 Java JDK (JDK 7 u9 或 以后的版本): Java 7 JDK 下载页面</p>
-</li>
-<li><p>下载并安装 Demos and Samples (示例与样例) zip 文件, 下载页面和JDK相同. 然后解压到合适的位置. 如:C:\javademos</p>
-</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/07/23/G1垃圾收集器入门/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-MongoDB在Linux下的集群安装与配置" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/06/29/MongoDB在Linux下的集群安装与配置/" class="article-date">
-  	<time datetime="2015-06-29T13:24:24.000Z" itemprop="datePublished">2015-06-29</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/29/MongoDB在Linux下的集群安装与配置/">MongoDB在Linux下的集群安装与配置</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="MongoDB在Linux下的集群安装与配置">MongoDB在Linux下的集群安装与配置</h1><h2 id="一-MongoDB集群方式">一.MongoDB集群方式</h2><p><strong>Mongodb</strong>是时下流行的NoSql数据库.它拥有三种集群的搭建方式:<code>Replica Set</code> / <code>Sharding</code> / <code>Master-Slaver</code>.   分别为 副本集方式集群, 分片集群, 主从集群.<br>三种集群搭建方式首选<code>Replica Set</code>，只有真的是大数据，Sharding才能显现威力，毕竟备节点同步数据是需要时间的。Sharding可以将多片数据集中到路由节点上进行一些对比，然后将数据返回给客户端，但是效率还是比较低的说。  </p>
-<p>这里用最常用的 Replica的方式集群来做介绍</p>
-<h2 id="二-Replica_Set">二.Replica Set</h2><p><code>Replica Set</code>集群当中包含了多份数据，保证主节点挂掉了，备节点能继续提供数据服务，提供的前提就是数据需要和主节点一致。如下图：<br><img src="/img/2015/06/29/1.png" alt=""></p>
-<p><code>Mongodb(M)</code>表示主节点，<code>Mongodb(S)</code>表示备节点，<code>Mongodb(A)</code>表示仲裁节点。主备节点存储数据，仲裁节点不存储数据。客户端同时连接主节点与备节点，不连接仲裁节点。</p>
-<p>使用的时候 可以通过配置 让M负责写,S负责读.从而达到读写分离的效果</p>
-<p>仲裁节点是一种特殊的节点，它本身并<code>不存储数据</code>，主要的作用是决定哪一个备节点在主节点挂掉之后提升为主节点，所以客户端不需要连接此节点。这里虽然只有一个备节点，但是仍然需要一个仲裁节点来提升备节点级别。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/06/29/MongoDB在Linux下的集群安装与配置/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-如何在Git中撤销一切" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/06/24/如何在Git中撤销一切/" class="article-date">
-  	<time datetime="2015-06-24T12:23:29.000Z" itemprop="datePublished">2015-06-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/24/如何在Git中撤销一切/">&lt;转&gt;如何在Git中撤销一切</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="如何在Git中撤销一切">如何在Git中撤销一切</h1><p>翻译：李伟<br>审校：张帆<br>译自：<a href="https://github.com/blog/2019-how-to-undo-almost-anything-with-git">Github</a></p>
-<p><img src="https://jf-bucket-public.oss-cn-qingdao.aliyuncs.com/jfperiodical/attached/image/20150612/2016242594.png" alt=""></p>
-<p>任何一个版本控制系统中，最有用的特性之一莫过于 “撤销（undo）”操作。在Git中，“撤销”有很多种含义。<br>当你完成了一次新的提交（commit），Git会及时存储当前时刻仓库（repository）的快照（snapshot）；你能够使用Git将项目回退到任何之前的版本。<br>下文中，我将列举几个常见的、需要“撤销”的场景，并且展示如何使用Git来完成这些操作。</p>
-<h3 id="一、撤销一个公共修改_Undo_a_“public”_change">一、撤销一个公共修改 Undo a “public” change</h3><p><strong>场景：</strong>你刚刚用git push将本地修改推送到了GitHub，这时你意识到在提交中有一个错误。你想撤销这次提交。</p>
-<p><strong>使用撤销命令：</strong><code>git revert</code></p>
-<p><strong>发生了什么：</strong>git revert将根据给定SHA的相反值，创建一个新的提交。如果旧提交是“matter”，那么新的提交就是“anti-matter”——旧提交中所有已移除的东西将会被添加进到新提交中，旧提交中增加的东西将在新提交中移除。</p>
-<p>这是Git最安全、也是最简单的“撤销”场景，因为这样不会修改历史记录——你现在可以git push下刚刚revert之后的提交来纠正错误了。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GIT/">GIT</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/06/24/如何在Git中撤销一切/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Swift扩展的三个微妙细节" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/05/18/Swift扩展的三个微妙细节/" class="article-date">
-  	<time datetime="2015-05-18T13:55:14.000Z" itemprop="datePublished">2015-05-18</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/18/Swift扩展的三个微妙细节/">&lt;转&gt;Swift扩展的三个微妙细节</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Swift扩展的三个微妙细节">Swift扩展的三个微妙细节</h1><p>每当我初次翻看某文档时，我都走马观花似的快速阅过，还一边点着头一边喃喃自语说：“好！懂了，就这么回事！”，可是过后当我真正要运用到这些我以为已经理解了的知识点时，却发现实际情况和我想的往往不一样，每当这时我就懵了，心想：“哇哦…怎么回事？这和我想的完全不一样啊！文档里有说这事吗？”。</p>
-<p>最近的几次讨论促使我扪心自问是否真正的理解了Swift中的扩展。我阅读过关于扩展的文档，并且我“认为”我自己对这块内容已经是理解的相当透彻了。可是这几次讨论，加上自己私下通过敲代码的验证，让我发现了我原先不曾注意到几个微妙的细节。</p>
-<p>更新：这篇文章刚一发表，Swift社区就出手襄助并帮助我弄明白了我最根本的纠结点在哪。为此，我写了另一篇文章“<a href="http://www.andrewcbancroft.com/2015/04/24/clarifying-swift-access-control-hint-swift-isnt-c-sharp/">阐明Swift访问控制</a>”进一步说明我之前的误解。为了避免犯我曾今犯过的错误，我建议大家去读一读。</p>
-<h2 id="三个关于扩展的微妙细节">三个关于扩展的微妙细节</h2><p>对下面列出的三个细节的思考严重挑战了我之前对Swift扩展的理解：</p>
-<ol>
-<li>Swift扩展对它所扩展类型的<strong>visibility</strong>。比如，扩展能访问被<code>private</code>所修饰的内容吗?</li>
-<li>定义扩展的位置是否对扩展的<strong>visibility</strong>有影响。比如我这有一个类型我想写个扩展，把扩展写在同一个源文件里和把扩展写在另一个文件里有什么区别吗？</li>
-<li>扩展里“成员”的默认访问修饰符以及是否给他们添加修饰对这个扩展作为一个类型的公共接口的影响。</li>
-</ol>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/05/18/Swift扩展的三个微妙细节/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-74个Swift标准库函数" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/25/74个Swift标准库函数/" class="article-date">
-  	<time datetime="2015-03-25T14:33:03.000Z" itemprop="datePublished">2015-03-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/25/74个Swift标准库函数/">&lt;转&gt;74个Swift标准库函数</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="74个Swift标准库函数">74个Swift标准库函数</h1><blockquote>
-<p>本文译自 <a href="http://practicalswift.com/2014/06/14/the-swift-standard-library-list-of-built-in-functions/">Swift Standard Library: Documented and undocumented built-in functions in the Swift standard library – the complete list with all 74 functions</a>。我不是原作者，我只是勤劳的翻译工：）文中作者没有提及他是如何发现这么多未在文档中体现的内置函数的，估计是反编译的结果。我测试了好多个都能用，而且Xcode还会给出语法提示：）</p>
-</blockquote>
-<p>Swift包含了74个内置函数，但在<code>The Swift Programming Langage</code>一书中只介绍了其中的7个，其它的都没有在文档中体现。</p>
-<p>这篇文章列举出了所有的内置Swift函数。文中所谓的<code>内置函数</code>是指无需引入任何模块（比如说Fundation等）即可以直接使用的函数。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/03/25/74个Swift标准库函数/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-GIT-两个仓库的合并" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/13/GIT-两个仓库的合并/" class="article-date">
-  	<time datetime="2015-01-13T05:47:18.000Z" itemprop="datePublished">2015-01-13</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/13/GIT-两个仓库的合并/">GIT 两个仓库的合并</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="GIT_两个仓库的合并">GIT 两个仓库的合并</h1><p>情况是这样的,以前我们的全文检索引擎是按照模块提交到不同的Git仓库上的. 现在做新的检索引擎准备按照springframe那样,按照模块还是提交到一个Git仓库中,便于版本的维护.<br>这就牵涉到,需要把以前的一些模块仓库,合并到一起来.因为我们还是想保留以前的提交记录等等.而不是直接新建一个仓库,然后把代码都拷贝到一起.这样就会丢失以前的提交记录.</p>
-<h2 id="操作过程是这样的:">操作过程是这样的:</h2><ol>
-<li><p>先在<a href="https://www.sourcetreeapp.com/">sourcetree</a>中 <code>clone</code>新的仓库.比如:<a href="http://127.0.0.1/a.git">http://127.0.0.1/a.git</a></p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GIT/">GIT</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/01/13/GIT-两个仓库的合并/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-  
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
-  
 </div>
       <footer id="footer">
   <div class="outer">
@@ -944,8 +403,8 @@ var _hmt = _hmt || [];
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
