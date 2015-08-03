@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;转&gt;Lucene打分公式的数学推导 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Lucene打分公式的数学推导在进行Lucene的搜索过程解析之前，有必要单独的一张把Lucene score公式的推导，各部分的意义阐述一下。因为Lucene的搜索过程，很重要的一个步骤就是逐步的计算各部分的分数。
+Lucene的打分公式非常复杂，如下：
+在推导之前，先逐个介绍每部分的意义：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<转>Lucene打分公式的数学推导">
+<meta property="og:url" content="http://sunxiang0918.github.io/2012/11/14/Lucene打分公式的数学推导/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="Lucene打分公式的数学推导在进行Lucene的搜索过程解析之前，有必要单独的一张把Lucene score公式的推导，各部分的意义阐述一下。因为Lucene的搜索过程，很重要的一个步骤就是逐步的计算各部分的分数。
+Lucene的打分公式非常复杂，如下：
+在推导之前，先逐个介绍每部分的意义：">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/1.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/2.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/3.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/4.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/5.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/6.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/7.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/8.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/9.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/10.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/11.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/12.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/13.png">
+<meta property="og:updated_time" content="2015-08-03T14:14:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<转>Lucene打分公式的数学推导">
+<meta name="twitter:description" content="Lucene打分公式的数学推导在进行Lucene的搜索过程解析之前，有必要单独的一张把Lucene score公式的推导，各部分的意义阐述一下。因为Lucene的搜索过程，很重要的一个步骤就是逐步的计算各部分的分数。
+Lucene的打分公式非常复杂，如下：
+在推导之前，先逐个介绍每部分的意义：">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/GIT/" style="font-size: 13.33px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 13.33px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 13.33px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 13.33px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Swift/" style="font-size: 16.67px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Lucene打分公式的数学推导" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2012/11/14/Lucene打分公式的数学推导/" class="article-date">
+  	<time datetime="2012-11-14T13:58:12.000Z" itemprop="datePublished">2012-11-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      &lt;转&gt;Lucene打分公式的数学推导
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lucene/">Lucene</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Lucene打分公式的数学推导"><span class="toc-number">1.</span> <span class="toc-text">Lucene打分公式的数学推导</span></a></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="Lucene打分公式的数学推导">Lucene打分公式的数学推导</h1><p>在进行Lucene的搜索过程解析之前，有必要单独的一张把Lucene score公式的推导，各部分的意义阐述一下。因为Lucene的搜索过程，很重要的一个步骤就是逐步的计算各部分的分数。</p>
+<p>Lucene的打分公式非常复杂，如下：<br><img src="/img/2012/11/14/1.png" alt=""></p>
+<p>在推导之前，先逐个介绍每部分的意义：<br><a id="more"></a></p>
+<ul>
+<li><strong>t：Term</strong>，这里的Term是指包含域信息的Term，也即<code>title:hello</code>和<code>content:hello</code>是不同的Term</li>
+<li><strong>coord(q,d)</strong>：一次搜索可能包含多个搜索词，而一篇文档中也可能包含多个搜索词，此项表示，当一篇文档中包含的搜索词越多，则此文档则打分越高。</li>
+<li><p><strong>queryNorm(q)</strong>：计算每个查询条目的方差和，此值并不影响排序，而仅仅使得不同的query之间的分数可以比较。其公式如下：<br><img src="/img/2012/11/14/2.png" alt=""></p>
+</li>
+<li><p><strong>tf(t in d)</strong>：Term t在文档d中出现的词频</p>
+</li>
+<li><strong>idf(t)</strong>：Term t在几篇文档中出现过</li>
+<li><p><strong>norm(t, d)</strong>：标准化因子，它包括三个参数：</p>
+<ul>
+<li><strong>Document boost</strong>：此值越大，说明此文档越重要。</li>
+<li><strong>Field boost</strong>：此域越大，说明此域越重要。</li>
+<li><strong>lengthNorm(field) = (1.0 / Math.sqrt(numTerms))</strong>：一个域中包含的Term总数越多，也即文档越长，此值越小，文档越短，此值越大。<br><img src="/img/2012/11/14/3.png" alt=""><br><img src="/img/2012/11/14/4.png" alt=""></li>
+</ul>
+</li>
+<li><p>各类Boost值</p>
+<ul>
+<li><strong>t.getBoost()</strong>：查询语句中每个词的权重，可以在查询中设定某个词更加重要，<code>common^4 hello</code></li>
+<li><strong>d.getBoost()</strong>：文档权重，在索引阶段写入nrm文件，表明某些文档比其他文档更重要。</li>
+<li><strong>f.getBoost()</strong>：域的权重，在索引阶段写入nrm文件，表明某些域比其他的域更重要。<br>以上在Lucene的文档中已经详细提到，并在很多文章中也被阐述过，如何调整上面的各部分，以影响文档的打分，请参考<a href="http://forfuture1978.javaeye.com/blog/591804" target="_blank" rel="external">有关Lucene的问题(4):影响Lucene对文档打分的四种方式</a>一文。</li>
+</ul>
+</li>
+</ul>
+<p>然而上面各部分为什么要这样计算在一起呢？这么复杂的公式是怎么得出来的呢？下面我们来推导。</p>
+<p>首先，将以上各部分代入<code>score(q, d)</code>公式，将得到一个非常复杂的公式，让我们忽略所有的boost，因为这些属于人为的调整，也省略coord，这和公式所要表达的原理无关。得到下面的公式：<br><img src="/img/2012/11/14/5.png" alt=""></p>
+<p>然后，有<a href="http://forfuture1978.javaeye.com/blog/546771" target="_blank" rel="external">Lucene学习总结之一：全文检索的基本原理</a>中的描述我们知道，Lucene的打分机制是采用向量空间模型的：</p>
+<p>我们把文档看作一系列词(Term)，每一个词(<code>Term</code>)都有一个权重(<code>Term weight</code>)，不同的词(Term)根据自己在文档中的权重来影响文档相关性的打分计算。</p>
+<p>于是我们把所有此文档中词(term)的权重(term weight) 看作一个向量。</p>
+<blockquote>
+<p>Document = {term1, term2, …… ,term N}</p>
+<p>Document Vector = {weight1, weight2, …… ,weight N}</p>
+</blockquote>
+<p>同样我们把查询语句看作一个简单的文档，也用向量来表示。</p>
+<blockquote>
+<p>Query = {term1, term 2, …… , term N}</p>
+<p>Query Vector = {weight1, weight2, …… , weight N}</p>
+</blockquote>
+<p>我们把所有搜索出的文档向量及查询向量放到一个N维空间中，每个词(term)是一维。<br><img src="/img/2012/11/14/6.png" alt=""><br>我们认为两个向量之间的夹角越小，相关性越大。<br>所以我们计算夹角的余弦值作为相关性的打分，夹角越小，余弦值越大，打分越高，相关性越大。<br>余弦公式如下：<br><img src="/img/2012/11/14/7.png" alt=""><br>下面我们假设：</p>
+<blockquote>
+<p>查询向量为Vq = <w(t1, q),="" w(t2,="" ……,="" w(tn,="" q)=""></w(t1,></p>
+<p>文档向量为Vd = <w(t1, d),="" w(t2,="" ……,="" w(tn,="" d)=""></w(t1,></p>
+</blockquote>
+<p>向量空间维数为n，是查询语句和文档的并集的长度，当某个Term不在查询语句中出现的时候，<code>w(t, q)</code>为零，当某个Term不在文档中出现的时候，<code>w(t, d)</code>为零。<br>w代表weight，计算公式一般为<code>tf*idf</code>。<br>我们首先计算余弦公式的分子部分，也即两个向量的点积：</p>
+<blockquote>
+<p>Vq*Vd = w(t1, q)*w(t1, d) + w(t2, q)*w(t2, d) + …… + w(tn ,q)*w(tn, d)</p>
+</blockquote>
+<p>把w的公式代入，则为</p>
+<blockquote>
+<p>Vq*Vd = tf(t1, q)*idf(t1, q)*tf(t1, d)*idf(t1, d) + tf(t2, q)*idf(t2, q)*tf(t2, d)*idf(t2, d) + …… + tf(tn ,q)*idf(tn, q)*tf(tn, d)*idf(tn, d)</p>
+</blockquote>
+<p>在这里有三点需要指出：</p>
+<ul>
+<li>由于是点积，则此处的t1, t2, ……, tn只有查询语句和文档的并集有非零值，只在查询语句出现的或只在文档中出现的Term的项的值为零。</li>
+<li>在查询的时候，很少有人会在查询语句中输入同样的词，因而可以假设<code>tf(t, q)</code>都为1</li>
+<li>idf是指Term在多少篇文档中出现过，其中也包括查询语句这篇小文档，因而<code>idf(t, q)</code>和<code>idf(t, d)</code>其实是一样的，是索引中的文档总数加一，当索引中的文档总数足够大的时候，查询语句这篇小文档可以忽略，因而可以假设<code>idf(t, q) = idf(t, d) = idf(t)</code></li>
+</ul>
+<p>基于上述三点，点积公式为：</p>
+<blockquote>
+<p>Vq<em>Vd = tf(t1, d) </em> idf(t1) <em> idf(t1) + tf(t2, d) </em> idf(t2) <em> idf(t2) + …… + tf(tn, d) </em> idf(tn) * idf(tn)</p>
+</blockquote>
+<p>所以余弦公式变为：<br><img src="/img/2012/11/14/8.png" alt=""><br>下面要推导的就是查询语句的长度了。<br>由上面的讨论，查询语句中tf都为1，idf都忽略查询语句这篇小文档，得到如下公式<br><img src="/img/2012/11/14/9.png" alt=""><br>所以余弦公式变为：<br><img src="/img/2012/11/14/10.png" alt=""><br>下面推导的就是文档的长度了，本来文档长度的公式应该如下：<br><img src="/img/2012/11/14/11.png" alt=""><br>这里需要讨论的是，为什么在打分过程中，需要除以文档的长度呢？</p>
+<p>因为在索引中，不同的文档长度不一样，很显然，<strong>对于任意一个term，在长的文档中的tf要大的多</strong>，因而分数也越高，<strong>这样对小的文档不公平</strong>，举一个极端的例子，在一篇1000万个词的鸿篇巨著中，”lucene”这个词出现了11次，而在一篇12个词的短小文档中，”lucene”这个词出现了10次，如果不考虑长度在内，当然鸿篇巨著应该分数更高，然而显然这篇小文档才是真正关注”lucene”的。</p>
+<p>然而如果按照标准的余弦计算公式，<strong>完全消除文档长度的影响，则又对长文档不公平</strong>(毕竟它是包含了更多的信息)，偏向于首先返回短小的文档的，这样在实际应用中使得搜索结果很难看。</p>
+<p>所以在Lucene中，<code>Similarity</code>的<code>lengthNorm接口</code>是开放出来，用户可以根据自己应用的需要，改写lengthNorm的计算公式。比如我想做一个经济学论文的搜索系统，经过一定时间的调研，发现大多数的经济学论文的长度在8000到10000词，因而lengthNorm的公式应该是一个倒抛物线型的，8000到 10000词的论文分数最高，更短或更长的分数都应该偏低，方能够返回给用户最好的数据。</p>
+<p>在默认状况下，Lucene采用<code>DefaultSimilarity</code>，认为在计算文档的向量长度的时候，每个Term的权重就不再考虑在内了，而是全部为一。</p>
+<p>而从Term的定义我们可以知道，Term是包含域信息的，也即<code>title:hello</code>和<code>content:hello</code>是不同的Term，也即一个Term只可能在文档中的一个域中出现。<br>所以文档长度的公式为：<br><img src="/img/2012/11/14/12.png" alt=""><br>代入余弦公式：<br><img src="/img/2012/11/14/13.png" alt=""><br>再加上各种boost和coord，则可得出Lucene的打分计算公式。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          JBOSS4关闭时不断开数据库连接问题分析
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Lucene打分公式的数学推导" data-title="&lt;转&gt;Lucene打分公式的数学推导" data-url="http://sunxiang0918.github.io/2012/11/14/Lucene打分公式的数学推导/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
