@@ -28,7 +28,7 @@ Lucene的打分公式非常复杂，如下：
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/11.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/12.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/13.png">
-<meta property="og:updated_time" content="2015-08-03T14:16:42.000Z">
+<meta property="og:updated_time" content="2015-08-03T14:20:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<转>Lucene打分公式的数学推导">
 <meta name="twitter:description" content="Lucene打分公式的数学推导在进行Lucene的搜索过程解析之前，有必要单独的一张把Lucene score公式的推导，各部分的意义阐述一下。因为Lucene的搜索过程，很重要的一个步骤就是逐步的计算各部分的分数。
@@ -144,7 +144,7 @@ var _hmt = _hmt || [];
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/GIT/" style="font-size: 13.33px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 13.33px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 13.33px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 13.33px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Swift/" style="font-size: 16.67px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/GIT/" style="font-size: 12.5px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12.5px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12.5px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 15px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Swift/" style="font-size: 17.5px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
 					</div>
 				</section>
 				
@@ -326,7 +326,7 @@ var _hmt = _hmt || [];
 <p>在默认状况下，Lucene采用<code>DefaultSimilarity</code>，认为在计算文档的向量长度的时候，每个Term的权重就不再考虑在内了，而是全部为一。</p>
 <p>而从Term的定义我们可以知道，Term是包含域信息的，也即<code>title:hello</code>和<code>content:hello</code>是不同的Term，也即一个Term只可能在文档中的一个域中出现。<br>所以文档长度的公式为：<br><img src="/img/2012/11/14/12.png" alt=""><br>代入余弦公式：<br><img src="/img/2012/11/14/13.png" alt=""><br>再加上各种boost和coord，则可得出Lucene的打分计算公式。</p>
 <hr>
-<p>原文链接:<a href="http://www.cnblogs.com/forfuture1978/archive/2010/03/07/1680007.html" target="_blank" rel="external">http://www.cnblogs.com/forfuture1978/archive/2010/03/07/1680007.html</a></p>
+<p>原文链接:<a href="http://forfuture1978.iteye.com/blog/609502" target="_blank" rel="external">http://forfuture1978.iteye.com/blog/609502</a></p>
 
       
     </div>
@@ -336,11 +336,11 @@ var _hmt = _hmt || [];
     
 <nav id="article-nav">
   
-    <a href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2012/11/14/影响Lucene对文档打分的四种方式/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          JBOSS4关闭时不断开数据库连接问题分析
+          &lt;转&gt;影响Lucene对文档打分的四种方式
         
       </div>
     </a>

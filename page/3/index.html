@@ -124,7 +124,7 @@ var _hmt = _hmt || [];
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/GIT/" style="font-size: 13.33px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 13.33px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 13.33px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 13.33px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Swift/" style="font-size: 16.67px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/GIT/" style="font-size: 12.5px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12.5px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12.5px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 15px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Swift/" style="font-size: 17.5px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
 					</div>
 				</section>
 				
@@ -197,6 +197,77 @@ var _hmt = _hmt || [];
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-影响Lucene对文档打分的四种方式" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2012/11/14/影响Lucene对文档打分的四种方式/" class="article-date">
+  	<time datetime="2012-11-14T14:25:45.000Z" itemprop="datePublished">2012-11-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2012/11/14/影响Lucene对文档打分的四种方式/">&lt;转&gt;影响Lucene对文档打分的四种方式</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="影响Lucene对文档打分的四种方式">影响Lucene对文档打分的四种方式</h1><h2 id="在索引阶段设置Document_Boost和Field_Boost，存储在(-nrm)文件中。">在索引阶段设置Document Boost和Field Boost，存储在(.nrm)文件中。</h2><p>如果希望某些文档和某些域比其他的域更重要，如果此文档和此域包含所要查询的词则应该得分较高，则可以在索引阶段设定文档的boost和域的boost值。<br>这些值是在索引阶段就写入索引文件的，存储在标准化因子(.nrm)文件中，一旦设定，除非删除此文档，否则无法改变。<br>如果不进行设定，则Document Boost和Field Boost默认为1。<br>Document Boost及FieldBoost的设定方式如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Document doc = <span class="keyword">new</span> Document();</span><br><span class="line">Field f = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"hello world"</span>, Field.Store.NO, Field.Index.ANALYZED);</span><br><span class="line">f.setBoost(<span class="number">100</span>);</span><br><span class="line">doc.add(f);</span><br><span class="line">doc.setBoost(<span class="number">100</span>);</span><br></pre></td></tr></table></figure>
+<p>两者是如何影响Lucene的文档打分的呢？<br>让我们首先来看一下Lucene的文档打分的公式：</p>
+<p><code>score(q,d)   =   coord(q,d)  ·  queryNorm(q)  ·  ∑( tf(t in d)  ·  idf(t)2  ·  t.getBoost() ·  norm(t,d) )</code></p>
+<p>Document Boost和Field Boost影响的是norm(t, d)，其公式如下：</p>
+<blockquote>
+<p>norm(t,d)   =   doc.getBoost()  ·  lengthNorm(field)  ·  ∏f.getBoost()<br>field f in d named as t</p>
+</blockquote>
+<p>它包括三个参数：</p>
+<ul>
+<li>Document boost：此值越大，说明此文档越重要。</li>
+<li>Field boost：此域越大，说明此域越重要。</li>
+<li>lengthNorm(field) = (1.0 / Math.sqrt(numTerms))：一个域中包含的Term总数越多，也即文档越长，此值越小，文档越短，此值越大。</li>
+</ul>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lucene/">Lucene</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2012/11/14/影响Lucene对文档打分的四种方式/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-Lucene打分公式的数学推导" class="article article-type-post" itemscope itemprop="blogPost">
   

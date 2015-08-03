@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;转&gt;影响Lucene对文档打分的四种方式 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="影响Lucene对文档打分的四种方式在索引阶段设置Document Boost和Field Boost，存储在(.nrm)文件中。如果希望某些文档和某些域比其他的域更重要，如果此文档和此域包含所要查询的词则应该得分较高，则可以在索引阶段设定文档的boost和域的boost值。这些值是在索引阶段就写入索引文件的，存储在标准化因子(.nrm)文件中，一旦设定，除非删除此文档，否则无法改变。如果不进行设">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<转>影响Lucene对文档打分的四种方式">
+<meta property="og:url" content="http://sunxiang0918.github.io/2012/11/14/影响Lucene对文档打分的四种方式/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="影响Lucene对文档打分的四种方式在索引阶段设置Document Boost和Field Boost，存储在(.nrm)文件中。如果希望某些文档和某些域比其他的域更重要，如果此文档和此域包含所要查询的词则应该得分较高，则可以在索引阶段设定文档的boost和域的boost值。这些值是在索引阶段就写入索引文件的，存储在标准化因子(.nrm)文件中，一旦设定，除非删除此文档，否则无法改变。如果不进行设">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/14.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/15.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/16.png">
+<meta property="og:updated_time" content="2015-08-03T14:46:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<转>影响Lucene对文档打分的四种方式">
+<meta name="twitter:description" content="影响Lucene对文档打分的四种方式在索引阶段设置Document Boost和Field Boost，存储在(.nrm)文件中。如果希望某些文档和某些域比其他的域更重要，如果此文档和此域包含所要查询的词则应该得分较高，则可以在索引阶段设定文档的boost和域的boost值。这些值是在索引阶段就写入索引文件的，存储在标准化因子(.nrm)文件中，一旦设定，除非删除此文档，否则无法改变。如果不进行设">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/GIT/" style="font-size: 12.5px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12.5px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12.5px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 15px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Swift/" style="font-size: 17.5px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-影响Lucene对文档打分的四种方式" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2012/11/14/影响Lucene对文档打分的四种方式/" class="article-date">
+  	<time datetime="2012-11-14T14:25:45.000Z" itemprop="datePublished">2012-11-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      &lt;转&gt;影响Lucene对文档打分的四种方式
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lucene/">Lucene</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#影响Lucene对文档打分的四种方式"><span class="toc-number">1.</span> <span class="toc-text">影响Lucene对文档打分的四种方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#在索引阶段设置Document_Boost和Field_Boost，存储在(-nrm)文件中。"><span class="toc-number">1.1.</span> <span class="toc-text">在索引阶段设置Document Boost和Field Boost，存储在(.nrm)文件中。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在搜索语句中，设置Query_Boost-"><span class="toc-number">1.2.</span> <span class="toc-text">在搜索语句中，设置Query Boost.</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#继承并实现自己的Similarity"><span class="toc-number">2.</span> <span class="toc-text">继承并实现自己的Similarity</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="##"><span class="toc-number">2.1.</span> <span class="toc-text">#</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#继承并实现自己的collector"><span class="toc-number">2.2.</span> <span class="toc-text">继承并实现自己的collector</span></a></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="影响Lucene对文档打分的四种方式">影响Lucene对文档打分的四种方式</h1><h2 id="在索引阶段设置Document_Boost和Field_Boost，存储在(-nrm)文件中。">在索引阶段设置Document Boost和Field Boost，存储在(.nrm)文件中。</h2><p>如果希望某些文档和某些域比其他的域更重要，如果此文档和此域包含所要查询的词则应该得分较高，则可以在索引阶段设定文档的boost和域的boost值。<br>这些值是在索引阶段就写入索引文件的，存储在标准化因子(.nrm)文件中，一旦设定，除非删除此文档，否则无法改变。<br>如果不进行设定，则Document Boost和Field Boost默认为1。<br>Document Boost及FieldBoost的设定方式如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Document doc = <span class="keyword">new</span> Document();</span><br><span class="line">Field f = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"hello world"</span>, Field.Store.NO, Field.Index.ANALYZED);</span><br><span class="line">f.setBoost(<span class="number">100</span>);</span><br><span class="line">doc.add(f);</span><br><span class="line">doc.setBoost(<span class="number">100</span>);</span><br></pre></td></tr></table></figure>
+<p>两者是如何影响Lucene的文档打分的呢？<br>让我们首先来看一下Lucene的文档打分的公式：</p>
+<p><code>score(q,d)   =   coord(q,d)  ·  queryNorm(q)  ·  ∑( tf(t in d)  ·  idf(t)2  ·  t.getBoost() ·  norm(t,d) )</code></p>
+<p>Document Boost和Field Boost影响的是norm(t, d)，其公式如下：</p>
+<blockquote>
+<p>norm(t,d)   =   doc.getBoost()  ·  lengthNorm(field)  ·  ∏f.getBoost()<br>field f in d named as t</p>
+</blockquote>
+<p>它包括三个参数：</p>
+<ul>
+<li>Document boost：此值越大，说明此文档越重要。</li>
+<li>Field boost：此域越大，说明此域越重要。</li>
+<li>lengthNorm(field) = (1.0 / Math.sqrt(numTerms))：一个域中包含的Term总数越多，也即文档越长，此值越小，文档越短，此值越大。</li>
+</ul>
+<a id="more"></a>
+<p>其中第三个参数可以在自己的Similarity中影响打分，下面会论述。<br>当然，也可以在添加Field的时候，设置Field.Index.ANALYZED_NO_NORMS或Field.Index.NOT_ANALYZED_NO_NORMS，完全不用norm，来节约空间。<br>根据Lucene的注释，<em>No norms means that index-time field and document boosting and field length normalization are disabled.  The benefit is less memory usage as norms take up one byte of RAM per indexed field for every document in the index, during searching.  Note that once you index a given field with norms enabled, disabling norms will have no effect.</em> 没有norms意味着索引阶段禁用了文档boost和域的boost及长度标准化。好处在于节省内存，不用在搜索阶段为索引中的每篇文档的每个域都占用一个字节来保存norms信息了。但是对norms信息的禁用是必须全部域都禁用的，一旦有一个域不禁用，则其他禁用的域也会存放默认的norms值。因为为了加快norms的搜索速度，Lucene是根据文档号乘以每篇文档的norms信息所占用的大小来计算偏移量的，中间少一篇文档，偏移量将无法计算。也即norms信息要么都保存，要么都不保存。</p>
+<p>下面几个试验可以验证norms信息的作用：<br><strong>试验一：</strong>Document Boost的作用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testNormsDocBoost</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123; </span><br><span class="line">  File indexDir = <span class="keyword">new</span> File(<span class="string">"testNormsDocBoost"</span>); </span><br><span class="line">  IndexWriter writer = <span class="keyword">new</span> IndexWriter(FSDirectory.open(indexDir), <span class="keyword">new</span> StandardAnalyzer(Version.LUCENE_CURRENT), <span class="keyword">true</span>, IndexWriter.MaxFieldLength.LIMITED); </span><br><span class="line">  writer.setUseCompoundFile(<span class="keyword">false</span>); </span><br><span class="line">  Document doc1 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f1 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"common hello hello"</span>, Field.Store.NO, Field.Index.ANALYZED); </span><br><span class="line">  doc1.add(f1); </span><br><span class="line">  doc1.setBoost(<span class="number">100</span>); </span><br><span class="line">  writer.addDocument(doc1); </span><br><span class="line">  Document doc2 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f2 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"common common hello"</span>, Field.Store.NO, Field.Index.ANALYZED_NO_NORMS); </span><br><span class="line">  doc2.add(f2); </span><br><span class="line">  writer.addDocument(doc2); </span><br><span class="line">  Document doc3 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f3 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"common common common"</span>, Field.Store.NO, Field.Index.ANALYZED_NO_NORMS); </span><br><span class="line">  doc3.add(f3); </span><br><span class="line">  writer.addDocument(doc3); </span><br><span class="line">  writer.close();</span><br><span class="line">  IndexReader reader = IndexReader.open(FSDirectory.open(indexDir)); </span><br><span class="line">  IndexSearcher searcher = <span class="keyword">new</span> IndexSearcher(reader); </span><br><span class="line">  TopDocs docs = searcher.search(<span class="keyword">new</span> TermQuery(<span class="keyword">new</span> Term(<span class="string">"contents"</span>, <span class="string">"common"</span>)), <span class="number">10</span>); </span><br><span class="line">  <span class="keyword">for</span> (ScoreDoc doc : docs.scoreDocs) &#123; </span><br><span class="line">    System.out.println(<span class="string">"docid : "</span> + doc.doc + <span class="string">" score : "</span> + doc.score); </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果第一篇文档的域f1也为Field.Index.ANALYZED_NO_NORMS的时候，搜索排名如下：</p>
+<blockquote>
+<p>docid : 2 score : 1.2337708<br>docid : 1 score : 1.0073696<br>docid : 0 score : 0.71231794</p>
+</blockquote>
+<p>如果第一篇文档的域f1设为Field.Index.ANALYZED，则搜索排名如下：</p>
+<blockquote>
+<p>docid : 0 score : 39.889805<br>docid : 2 score : 0.6168854<br>docid : 1 score : 0.5036848</p>
+</blockquote>
+<p><strong>试验二：</strong>Field Boost的作用<br>如果我们觉得title要比contents要重要，可以做一下设定。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testNormsFieldBoost</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123; </span><br><span class="line">  File indexDir = <span class="keyword">new</span> File(<span class="string">"testNormsFieldBoost"</span>); </span><br><span class="line">  IndexWriter writer = <span class="keyword">new</span> IndexWriter(FSDirectory.open(indexDir), <span class="keyword">new</span> StandardAnalyzer(Version.LUCENE_CURRENT), <span class="keyword">true</span>, IndexWriter.MaxFieldLength.LIMITED); </span><br><span class="line">  writer.setUseCompoundFile(<span class="keyword">false</span>); </span><br><span class="line">  Document doc1 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f1 = <span class="keyword">new</span> Field(<span class="string">"title"</span>, <span class="string">"common hello hello"</span>, Field.Store.NO, Field.Index.ANALYZED); </span><br><span class="line">  f1.setBoost(<span class="number">100</span>); </span><br><span class="line">  doc1.add(f1); </span><br><span class="line">  writer.addDocument(doc1); </span><br><span class="line">  Document doc2 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f2 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"common common hello"</span>, Field.Store.NO, Field.Index.ANALYZED_NO_NORMS); </span><br><span class="line">  doc2.add(f2); </span><br><span class="line">  writer.addDocument(doc2); </span><br><span class="line">  writer.close();</span><br><span class="line">  IndexReader reader = IndexReader.open(FSDirectory.open(indexDir)); </span><br><span class="line">  IndexSearcher searcher = <span class="keyword">new</span> IndexSearcher(reader); </span><br><span class="line">  QueryParser parser = <span class="keyword">new</span> QueryParser(Version.LUCENE_CURRENT, <span class="string">"contents"</span>, <span class="keyword">new</span> StandardAnalyzer(Version.LUCENE_CURRENT)); </span><br><span class="line">  Query query = parser.parse(<span class="string">"title:common contents:common"</span>); </span><br><span class="line">  TopDocs docs = searcher.search(query, <span class="number">10</span>); </span><br><span class="line">  <span class="keyword">for</span> (ScoreDoc doc : docs.scoreDocs) &#123; </span><br><span class="line">    System.out.println(<span class="string">"docid : "</span> + doc.doc + <span class="string">" score : "</span> + doc.score); </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果第一篇文档的域f1也为Field.Index.ANALYZED_NO_NORMS的时候，搜索排名如下：</p>
+<blockquote>
+<p>docid : 1 score : 0.49999997<br>docid : 0 score : 0.35355338</p>
+</blockquote>
+<p>如果第一篇文档的域f1设为Field.Index.ANALYZED，则搜索排名如下：</p>
+<blockquote>
+<p>docid : 0 score : 19.79899<br>docid : 1 score : 0.49999997</p>
+</blockquote>
+<p><strong>试验三：</strong>norms中文档长度对打分的影响</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testNormsLength</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123; </span><br><span class="line">  File indexDir = <span class="keyword">new</span> File(<span class="string">"testNormsLength"</span>); </span><br><span class="line">  IndexWriter writer = <span class="keyword">new</span> IndexWriter(FSDirectory.open(indexDir), <span class="keyword">new</span> StandardAnalyzer(Version.LUCENE_CURRENT), <span class="keyword">true</span>, IndexWriter.MaxFieldLength.LIMITED); </span><br><span class="line">  writer.setUseCompoundFile(<span class="keyword">false</span>); </span><br><span class="line">  Document doc1 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f1 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"common hello hello"</span>, Field.Store.NO, Field.Index.ANALYZED_NO_NORMS); </span><br><span class="line">  doc1.add(f1); </span><br><span class="line">  writer.addDocument(doc1); </span><br><span class="line">  Document doc2 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f2 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"common common hello hello hello hello"</span>, Field.Store.NO, Field.Index.ANALYZED_NO_NORMS); </span><br><span class="line">  doc2.add(f2); </span><br><span class="line">  writer.addDocument(doc2); </span><br><span class="line">  writer.close();</span><br><span class="line">  IndexReader reader = IndexReader.open(FSDirectory.open(indexDir)); </span><br><span class="line">  IndexSearcher searcher = <span class="keyword">new</span> IndexSearcher(reader); </span><br><span class="line">  QueryParser parser = <span class="keyword">new</span> QueryParser(Version.LUCENE_CURRENT, <span class="string">"contents"</span>, <span class="keyword">new</span> StandardAnalyzer(Version.LUCENE_CURRENT)); </span><br><span class="line">  Query query = parser.parse(<span class="string">"title:common contents:common"</span>); </span><br><span class="line">  TopDocs docs = searcher.search(query, <span class="number">10</span>); </span><br><span class="line">  <span class="keyword">for</span> (ScoreDoc doc : docs.scoreDocs) &#123; </span><br><span class="line">    System.out.println(<span class="string">"docid : "</span> + doc.doc + <span class="string">" score : "</span> + doc.score); </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当norms被禁用的时候，包含两个common的第二篇文档打分较高：</p>
+<blockquote>
+<p>docid : 1 score : 0.13928263<br>docid : 0 score : 0.09848769</p>
+</blockquote>
+<p>当norms起作用的时候，虽然包含两个common的第二篇文档，由于长度较长，因而打分较低：</p>
+<blockquote>
+<p>docid : 0 score : 0.09848769<br>docid : 1 score : 0.052230984</p>
+</blockquote>
+<p><strong>试验四：</strong>norms信息要么都保存，要么都不保存的特性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testOmitNorms</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123; </span><br><span class="line">  File indexDir = <span class="keyword">new</span> File(<span class="string">"testOmitNorms"</span>); </span><br><span class="line">  IndexWriter writer = <span class="keyword">new</span> IndexWriter(FSDirectory.open(indexDir), <span class="keyword">new</span> StandardAnalyzer(Version.LUCENE_CURRENT), <span class="keyword">true</span>, IndexWriter.MaxFieldLength.LIMITED); </span><br><span class="line">  writer.setUseCompoundFile(<span class="keyword">false</span>); </span><br><span class="line">  Document doc1 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f1 = <span class="keyword">new</span> Field(<span class="string">"title"</span>, <span class="string">"common hello hello"</span>, Field.Store.NO, Field.Index.ANALYZED); </span><br><span class="line">  doc1.add(f1); </span><br><span class="line">  writer.addDocument(doc1); </span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123; </span><br><span class="line">    Document doc2 = <span class="keyword">new</span> Document(); </span><br><span class="line">    Field f2 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"common common hello hello hello hello"</span>, Field.Store.NO, Field.Index.ANALYZED_NO_NORMS);</span><br><span class="line">    doc2.add(f2); </span><br><span class="line">    writer.addDocument(doc2); </span><br><span class="line">  &#125; </span><br><span class="line">  writer.close(); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当我们添加10001篇文档，所有的文档都设为Field.Index.ANALYZED_NO_NORMS的时候，我们看索引文件，发现.nrm文件只有1K，也即其中除了保持一定的格式信息，并无其他数据。<br><img src="/img/2012/11/14/14.png" alt=""></p>
+<p>当我们把第一篇文档设为Field.Index.ANALYZED，而其他10000篇文档都设为Field.Index.ANALYZED_NO_NORMS的时候，发现.nrm文件又10K，也即所有的文档都存储了norms信息，而非只有第一篇文档。<br><img src="/img/2012/11/14/15.png" alt=""> </p>
+<h2 id="在搜索语句中，设置Query_Boost-">在搜索语句中，设置Query Boost.</h2><p>在搜索中，我们可以指定，某些词对我们来说更重要，我们可以设置这个词的boost：</p>
+<blockquote>
+<p>common^4 hello</p>
+</blockquote>
+<p>使得包含common的文档比包含hello的文档获得更高的分数。<br>由于在Lucene中，一个Term定义为Field:Term，则也可以影响不同域的打分：</p>
+<blockquote>
+<p>title:common^4 content:common</p>
+</blockquote>
+<p>使得title中包含common的文档比content中包含common的文档获得更高的分数。<br>实例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testQueryBoost</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123; </span><br><span class="line">  File indexDir = <span class="keyword">new</span> File(<span class="string">"TestQueryBoost"</span>); </span><br><span class="line">  IndexWriter writer = <span class="keyword">new</span> IndexWriter(FSDirectory.open(indexDir), <span class="keyword">new</span> StandardAnalyzer(Version.LUCENE_CURRENT), <span class="keyword">true</span>, IndexWriter.MaxFieldLength.LIMITED); </span><br><span class="line">  Document doc1 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f1 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"common1 hello hello"</span>, Field.Store.NO, Field.Index.ANALYZED); </span><br><span class="line">  doc1.add(f1); </span><br><span class="line">  writer.addDocument(doc1); </span><br><span class="line">  Document doc2 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f2 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"common2 common2 hello"</span>, Field.Store.NO, Field.Index.ANALYZED); </span><br><span class="line">  doc2.add(f2); </span><br><span class="line">  writer.addDocument(doc2); </span><br><span class="line">  writer.close();</span><br><span class="line">  IndexReader reader = IndexReader.open(FSDirectory.open(indexDir)); </span><br><span class="line">  IndexSearcher searcher = <span class="keyword">new</span> IndexSearcher(reader); </span><br><span class="line">  QueryParser parser = <span class="keyword">new</span> QueryParser(Version.LUCENE_CURRENT, <span class="string">"contents"</span>, <span class="keyword">new</span> StandardAnalyzer(Version.LUCENE_CURRENT)); </span><br><span class="line">  Query query = parser.parse(<span class="string">"common1 common2"</span>); </span><br><span class="line">  TopDocs docs = searcher.search(query, <span class="number">10</span>); </span><br><span class="line">  <span class="keyword">for</span> (ScoreDoc doc : docs.scoreDocs) &#123; </span><br><span class="line">    System.out.println(<span class="string">"docid : "</span> + doc.doc + <span class="string">" score : "</span> + doc.score); </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>根据tf/idf，包含两个common2的第二篇文档打分较高：</p>
+<blockquote>
+<p>docid : 1 score : 0.24999999<br>docid : 0 score : 0.17677669</p>
+</blockquote>
+<p>如果我们输入的查询语句为：”common1^100 common2”，则第一篇文档打分较高：</p>
+<blockquote>
+<p>docid : 0 score : 0.2499875<br>docid : 1 score : 0.0035353568</p>
+</blockquote>
+<p>那Query Boost是如何影响文档打分的呢？<br>根据Lucene的打分计算公式：<br><code>score(q,d)   =   coord(q,d)  ·  queryNorm(q)  · ∑( tf(t in d)  ·  idf(t)2  ·  t.getBoost() ·  norm(t,d) )</code><br>                                                                      t in q<br>注：在queryNorm的部分，也有q.getBoost()的部分，但是对query向量的归一化(见向量空间模型与Lucene的打分机制[<a href="http://forfuture1978.iteye.com/blog/588721" target="_blank" rel="external">http://forfuture1978.iteye.com/blog/588721</a>])。</p>
+<h1 id="继承并实现自己的Similarity">继承并实现自己的Similarity</h1><p>Similariy是计算Lucene打分的最主要的类，实现其中的很多借口可以干预打分的过程。</p>
+<ol>
+<li>float computeNorm(String field, FieldInvertState state)</li>
+<li>float lengthNorm(String fieldName, int numTokens)</li>
+<li>float queryNorm(float sumOfSquaredWeights)</li>
+<li>float tf(float freq)</li>
+<li>float idf(int docFreq, int numDocs)</li>
+<li>float coord(int overlap, int maxOverlap)</li>
+<li>float scorePayload(int docId, String fieldName, int start, int end, byte [] payload, int offset, int length)<br>它们分别影响Lucene打分计算的如下部分：<br><code>score(q,d)   =   (6)coord(q,d)  ·  (3)queryNorm(q)  · ∑( (4)tf(t in d)  ·  (5)idf(t)2  ·  t.getBoost() ·  (1)norm(t,d) )</code></li>
+</ol>
+<p><code>norm(t,d)   =   doc.getBoost()  ·  (2)lengthNorm(field)  ·  ∏f.getBoost()</code></p>
+<p>下面逐个进行解释：</p>
+<ol>
+<li>float computeNorm(String field, FieldInvertState state)<br>影响标准化因子的计算，如上述，他主要包含了三部分：文档boost，域boost，以及文档长度归一化。此函数一般按照上面norm(t, d)的公式进行计算。</li>
+<li>float lengthNorm(String fieldName, int numTokens)<br>主要计算文档长度的归一化，默认是1.0 / Math.sqrt(numTerms)。<br>因为在索引中，不同的文档长度不一样，很显然，对于任意一个term，在长的文档中的tf要大的多，因而分数也越高，这样对小的文档不公平，举一个极端的例子，在一篇1000万个词的鸿篇巨著中，”lucene”这个词出现了11次，而在一篇12个词的短小文档中，”lucene”这个词出现了10次，如果不考虑长度在内，当然鸿篇巨著应该分数更高，然而显然这篇小文档才是真正关注”lucene”的。<br>因而在此处是要除以文档的长度，从而减少因文档长度带来的打分不公。<br>然而现在这个公式是偏向于首先返回短小的文档的，这样在实际应用中使得搜索结果也很难看。<br>于是在实践中，要根据项目的需要，根据搜索的领域，改写lengthNorm的计算公式。比如我想做一个经济学论文的搜索系统，经过一定时间的调研，发现大多数的经济学论文的长度在8000到10000词，因而lengthNorm的公式应该是一个倒抛物线型的，8000到10000词的论文分数最高，更短或更长的分数都应该偏低，方能够返回给用户最好的数据。</li>
+<li>float queryNorm(float sumOfSquaredWeights)<br>这是按照向量空间模型，对query向量的归一化。此值并不影响排序，而仅仅使得不同的query之间的分数可以比较。</li>
+<li>float tf(float freq)<br>freq是指在一篇文档中包含的某个词的数目。tf是根据此数目给出的分数，默认为Math.sqrt(freq)。也即此项并不是随着包含的数目的增多而线性增加的。</li>
+<li><p>float idf(int docFreq, int numDocs)<br>idf是根据包含某个词的文档数以及总文档数计算出的分数，默认为(Math.log(numDocs/(double)(docFreq+1)) + 1.0)。<br>由于此项计算涉及到总文档数和包含此词的文档数，因而需要全局的文档数信息，这给跨索引搜索造成麻烦。<br>从下面的例子我们可以看出，用MultiSearcher来一起搜索两个索引和分别用IndexSearcher来搜索两个索引所得出的分数是有很大差异的。<br>究其原因是MultiSearcher的docFreq(Term term)函数计算了包含两个索引中包含此词的总文档数，而IndexSearcher仅仅计算了每个索引中包含此词的文档数。当两个索引包含的文档总数是有很大不同的时候，分数是无法比较的。</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMultiIndex</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123; </span><br><span class="line">  MultiIndexSimilarity sim = <span class="keyword">new</span> MultiIndexSimilarity(); </span><br><span class="line">  File indexDir01 = <span class="keyword">new</span> File(<span class="string">"TestMultiIndex/TestMultiIndex01"</span>); </span><br><span class="line">  File indexDir02 = <span class="keyword">new</span> File(<span class="string">"TestMultiIndex/TestMultiIndex02"</span>); </span><br><span class="line">  IndexReader reader01 = IndexReader.open(FSDirectory.open(indexDir01)); </span><br><span class="line">  IndexReader reader02 = IndexReader.open(FSDirectory.open(indexDir02)); </span><br><span class="line">  IndexSearcher searcher01 = <span class="keyword">new</span> IndexSearcher(reader01); </span><br><span class="line">  searcher01.setSimilarity(sim); </span><br><span class="line">  IndexSearcher searcher02 = <span class="keyword">new</span> IndexSearcher(reader02); </span><br><span class="line">  searcher02.setSimilarity(sim); </span><br><span class="line">  MultiSearcher multiseacher = <span class="keyword">new</span> MultiSearcher(searcher01, searcher02); </span><br><span class="line">  multiseacher.setSimilarity(sim); </span><br><span class="line">  QueryParser parser = <span class="keyword">new</span> QueryParser(Version.LUCENE_CURRENT, <span class="string">"contents"</span>, <span class="keyword">new</span> StandardAnalyzer(Version.LUCENE_CURRENT)); </span><br><span class="line">  Query query = parser.parse(<span class="string">"common"</span>); </span><br><span class="line">  TopDocs docs = searcher01.search(query, <span class="number">10</span>); </span><br><span class="line">  System.out.println(<span class="string">"----------------------------------------------"</span>); </span><br><span class="line">  <span class="keyword">for</span> (ScoreDoc doc : docs.scoreDocs) &#123; </span><br><span class="line">    System.out.println(<span class="string">"docid : "</span> + doc.doc + <span class="string">" score : "</span> + doc.score); </span><br><span class="line">  &#125; </span><br><span class="line">  System.out.println(<span class="string">"----------------------------------------------"</span>); </span><br><span class="line">  docs = searcher02.search(query, <span class="number">10</span>); </span><br><span class="line">  <span class="keyword">for</span> (ScoreDoc doc : docs.scoreDocs) &#123; </span><br><span class="line">    System.out.println(<span class="string">"docid : "</span> + doc.doc + <span class="string">" score : "</span> + doc.score); </span><br><span class="line">  &#125; </span><br><span class="line">  System.out.println(<span class="string">"----------------------------------------------"</span>); </span><br><span class="line">  docs = multiseacher.search(query, <span class="number">20</span>); </span><br><span class="line">  <span class="keyword">for</span> (ScoreDoc doc : docs.scoreDocs) &#123; </span><br><span class="line">    System.out.println(<span class="string">"docid : "</span> + doc.doc + <span class="string">" score : "</span> + doc.score); </span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">	结果为：</span><br><span class="line"></span><br><span class="line">	------------------------------- </span><br><span class="line">docid : <span class="number">0</span> score : <span class="number">0.49317428</span> </span><br><span class="line">docid : <span class="number">1</span> score : <span class="number">0.49317428</span> </span><br><span class="line">docid : <span class="number">2</span> score : <span class="number">0.49317428</span> </span><br><span class="line">docid : <span class="number">3</span> score : <span class="number">0.49317428</span> </span><br><span class="line">docid : <span class="number">4</span> score : <span class="number">0.49317428</span> </span><br><span class="line">docid : <span class="number">5</span> score : <span class="number">0.49317428</span> </span><br><span class="line">docid : <span class="number">6</span> score : <span class="number">0.49317428</span> </span><br><span class="line">docid : <span class="number">7</span> score : <span class="number">0.49317428</span> </span><br><span class="line">------------------------------- </span><br><span class="line">docid : <span class="number">0</span> score : <span class="number">0.45709616</span> </span><br><span class="line">docid : <span class="number">1</span> score : <span class="number">0.45709616</span> </span><br><span class="line">docid : <span class="number">2</span> score : <span class="number">0.45709616</span> </span><br><span class="line">docid : <span class="number">3</span> score : <span class="number">0.45709616</span> </span><br><span class="line">docid : <span class="number">4</span> score : <span class="number">0.45709616</span> </span><br><span class="line">------------------------------- </span><br><span class="line">docid : <span class="number">0</span> score : <span class="number">0.5175894</span> </span><br><span class="line">docid : <span class="number">1</span> score : <span class="number">0.5175894</span> </span><br><span class="line">docid : <span class="number">2</span> score : <span class="number">0.5175894</span> </span><br><span class="line">docid : <span class="number">3</span> score : <span class="number">0.5175894</span> </span><br><span class="line">docid : <span class="number">4</span> score : <span class="number">0.5175894</span> </span><br><span class="line">docid : <span class="number">5</span> score : <span class="number">0.5175894</span> </span><br><span class="line">docid : <span class="number">6</span> score : <span class="number">0.5175894</span> </span><br><span class="line">docid : <span class="number">7</span> score : <span class="number">0.5175894</span> </span><br><span class="line">docid : <span class="number">8</span> score : <span class="number">0.5175894</span> </span><br><span class="line">docid : <span class="number">9</span> score : <span class="number">0.5175894</span> </span><br><span class="line">docid : <span class="number">10</span> score : <span class="number">0.5175894</span> </span><br><span class="line">docid : <span class="number">11</span> score : <span class="number">0.5175894</span> </span><br><span class="line">docid : <span class="number">12</span> score : <span class="number">0.5175894</span></span><br></pre></td></tr></table></figure>
+<p> 如果几个索引都是在一台机器上，则用MultiSearcher或者MultiReader就解决问题了，然而有时候索引是分布在多台机器上的，虽然Lucene也提供了RMI，或用NFS保存索引的方法，然而效率和并行性一直是一个问题。<br> 一个可以尝试的办法是在Similarity中，idf返回1，然后多个机器上的索引并行搜索，在汇总结果的机器上，再融入idf的计算。<br>如下面的例子可以看出，当idf返回1的时候，打分可以比较了：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MultiIndexSimilarity</span> <span class="keyword">extends</span> <span class="title">Similarity</span> </span>&#123;</span><br><span class="line">  <span class="annotation">@Override</span> </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">idf</span><span class="params">(<span class="keyword">int</span> docFreq, <span class="keyword">int</span> numDocs)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">return</span> <span class="number">1.0f</span>; </span><br><span class="line">  &#125;</span><br><span class="line">----------------------------- </span><br><span class="line">docid : <span class="number">0</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">1</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">2</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">3</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">4</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">5</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">6</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">7</span> score : <span class="number">0.559017</span> </span><br><span class="line">----------------------------- </span><br><span class="line">docid : <span class="number">0</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">1</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">2</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">3</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">4</span> score : <span class="number">0.559017</span> </span><br><span class="line">----------------------------- </span><br><span class="line">docid : <span class="number">0</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">1</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">2</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">3</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">4</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">5</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">6</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">7</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">8</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">9</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">10</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">11</span> score : <span class="number">0.559017</span> </span><br><span class="line">docid : <span class="number">12</span> score : <span class="number">0.559017</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>float coord(int overlap, int maxOverlap)<br>一次搜索可能包含多个搜索词，而一篇文档中也可能包含多个搜索词，此项表示，当一篇文档中包含的搜索词越多，则此文档则打分越高。</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestCoord</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123; </span><br><span class="line">  MySimilarity sim = <span class="keyword">new</span> MySimilarity(); </span><br><span class="line">  File indexDir = <span class="keyword">new</span> File(<span class="string">"TestCoord"</span>); </span><br><span class="line">  IndexWriter writer = <span class="keyword">new</span> IndexWriter(FSDirectory.open(indexDir), <span class="keyword">new</span> StandardAnalyzer(Version.LUCENE_CURRENT), <span class="keyword">true</span>, IndexWriter.MaxFieldLength.LIMITED); </span><br><span class="line">  Document doc1 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f1 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"common hello world"</span>, Field.Store.NO, Field.Index.ANALYZED); </span><br><span class="line">  doc1.add(f1); </span><br><span class="line">  writer.addDocument(doc1); </span><br><span class="line">  Document doc2 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f2 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"common common common"</span>, Field.Store.NO, Field.Index.ANALYZED); </span><br><span class="line">  doc2.add(f2); </span><br><span class="line">  writer.addDocument(doc2); </span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123; </span><br><span class="line">    Document doc3 = <span class="keyword">new</span> Document(); </span><br><span class="line">    Field f3 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"world"</span>, Field.Store.NO, Field.Index.ANALYZED); </span><br><span class="line">    doc3.add(f3); </span><br><span class="line">    writer.addDocument(doc3); </span><br><span class="line">  &#125; </span><br><span class="line">  writer.close();</span><br><span class="line">  IndexReader reader = IndexReader.open(FSDirectory.open(indexDir)); </span><br><span class="line">  IndexSearcher searcher = <span class="keyword">new</span> IndexSearcher(reader); </span><br><span class="line">  searcher.setSimilarity(sim); </span><br><span class="line">  QueryParser parser = <span class="keyword">new</span> QueryParser(Version.LUCENE_CURRENT, <span class="string">"contents"</span>, <span class="keyword">new</span> StandardAnalyzer(Version.LUCENE_CURRENT)); </span><br><span class="line">  Query query = parser.parse(<span class="string">"common world"</span>); </span><br><span class="line">  TopDocs docs = searcher.search(query, <span class="number">2</span>); </span><br><span class="line">  <span class="keyword">for</span> (ScoreDoc doc : docs.scoreDocs) &#123; </span><br><span class="line">    System.out.println(<span class="string">"docid : "</span> + doc.doc + <span class="string">" score : "</span> + doc.score); </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MySimilarity</span> <span class="keyword">extends</span> <span class="title">Similarity</span> </span>&#123;</span><br><span class="line">  <span class="annotation">@Override</span> </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">coord</span><span class="params">(<span class="keyword">int</span> overlap, <span class="keyword">int</span> maxOverlap)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>; </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 如上面的实例，当coord返回1，不起作用的时候，文档一虽然包含了两个搜索词common和world，但由于world的所在的文档数太多，而文档二包含common的次数比较多，因而文档二分数较高：</p>
+<blockquote>
+<p>docid : 1 score : 1.9059997<br>docid : 0 score : 1.2936771<br> 而当coord起作用的时候，文档一由于包含了两个搜索词而分数较高：</p>
+</blockquote>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">MySimilarity</span> <span class="keyword">extends</span> <span class="title">Similarity</span> </span>&#123;</span><br><span class="line">  <span class="annotation">@Override</span> </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">coord</span><span class="params">(<span class="keyword">int</span> overlap, <span class="keyword">int</span> maxOverlap)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">return</span> overlap / (<span class="keyword">float</span>)maxOverlap; </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>docid : 0 score : 1.2936771<br>docid : 1 score : 0.95299983</p>
+</blockquote>
+</li>
+<li>float scorePayload(int docId, String fieldName, int start, int end, byte [] payload, int offset, int length)<br>由于Lucene引入了payload，因而可以存储一些自己的信息，用户可以根据自己存储的信息，来影响Lucene的打分。</li>
+</ol>
+<h2 id="#">#</h2><p>我们知道，索引是以倒排表形式存储的，对于每一个词，都保存了包含这个词的一个链表，当然为了加快查询速度，此链表多用跳跃表进行存储。<br>Payload信息就是存储在倒排表中的，同文档号一起存放，多用于存储与每篇文档相关的一些信息。当然这部分信息也可以存储域里(stored Field)，两者从功能上基本是一样的，然而当要存储的信息很多的时候，存放在倒排表里，利用跳跃表，有利于大大提高搜索速度。<br>Payload的存储方式如下图：<br><img src="/img/2012/11/14/16.png" alt=""><br>由payload的定义，我们可以看出，payload可以存储一些不但与文档相关，而且与查询词也相关的信息。比如某篇文档的某个词有特殊性，则可以在这个词的这个文档的position信息后存储payload信息，使得当搜索这个词的时候，这篇文档获得较高的分数。<br>要利用payload来影响查询需要做到以下几点，下面举例用<b></b>标记的词在payload中存储1，否则存储0：<br>首先要实现自己的Analyzer从而在Token中放入payload信息：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BoldAnalyzer</span> <span class="keyword">extends</span> <span class="title">Analyzer</span> </span>&#123;</span><br><span class="line">  <span class="annotation">@Override</span> </span><br><span class="line">  <span class="function"><span class="keyword">public</span> TokenStream <span class="title">tokenStream</span><span class="params">(String fieldName, Reader reader)</span> </span>&#123; </span><br><span class="line">    TokenStream result = <span class="keyword">new</span> WhitespaceTokenizer(reader); </span><br><span class="line">    result = <span class="keyword">new</span> BoldFilter(result); </span><br><span class="line">    <span class="keyword">return</span> result; </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BoldFilter</span> <span class="keyword">extends</span> <span class="title">TokenFilter</span> </span>&#123; </span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> IS_NOT_BOLD = <span class="number">0</span>; </span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> IS_BOLD = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">private</span> TermAttribute termAtt; </span><br><span class="line">  <span class="keyword">private</span> PayloadAttribute payloadAtt;</span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="title">BoldFilter</span><span class="params">(TokenStream input)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">super</span>(input); </span><br><span class="line">    termAtt = addAttribute(TermAttribute.class); </span><br><span class="line">    payloadAtt = addAttribute(PayloadAttribute.class); </span><br><span class="line">  &#125;</span><br><span class="line">  <span class="annotation">@Override</span> </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">incrementToken</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123; </span><br><span class="line">    <span class="keyword">if</span> (input.incrementToken()) &#123;</span><br><span class="line">      <span class="keyword">final</span> <span class="keyword">char</span>[] buffer = termAtt.termBuffer(); </span><br><span class="line">      <span class="keyword">final</span> <span class="keyword">int</span> length = termAtt.termLength();</span><br><span class="line">      String tokenstring = <span class="keyword">new</span> String(buffer, <span class="number">0</span>, length); </span><br><span class="line">      <span class="keyword">if</span> (tokenstring.startsWith(<span class="string">"&lt;b&gt;"</span>) &amp;&amp; tokenstring.endsWith(<span class="string">"&lt;/b&gt;"</span>)) &#123; </span><br><span class="line">        tokenstring = tokenstring.replace(<span class="string">"&lt;b&gt;"</span>, <span class="string">""</span>); </span><br><span class="line">        tokenstring = tokenstring.replace(<span class="string">"&lt;/b&gt;"</span>, <span class="string">""</span>); </span><br><span class="line">        termAtt.setTermBuffer(tokenstring); </span><br><span class="line">        payloadAtt.setPayload(<span class="keyword">new</span> Payload(int2bytes(IS_BOLD))); </span><br><span class="line">      &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">        payloadAtt.setPayload(<span class="keyword">new</span> Payload(int2bytes(IS_NOT_BOLD))); </span><br><span class="line">      &#125; </span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>; </span><br><span class="line">    &#125; <span class="keyword">else</span> </span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">false</span>; </span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">bytes2int</span><span class="params">(<span class="keyword">byte</span>[] b)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">int</span> mask = <span class="number">0xff</span>; </span><br><span class="line">    <span class="keyword">int</span> temp = <span class="number">0</span>; </span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>; </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123; </span><br><span class="line">      res &lt;&lt;= <span class="number">8</span>; </span><br><span class="line">      temp = b[i] &amp; mask; </span><br><span class="line">      res |= temp; </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">return</span> res; </span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] int2bytes(<span class="keyword">int</span> num) &#123; </span><br><span class="line">    <span class="keyword">byte</span>[] b = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4</span>]; </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123; </span><br><span class="line">      b[i] = (<span class="keyword">byte</span>) (num &gt;&gt;&gt; (<span class="number">24</span> - i * <span class="number">8</span>)); </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">return</span> b; </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后，实现自己的Similarity，从payload中读出信息，根据信息来打分。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PayloadSimilarity</span> <span class="keyword">extends</span> <span class="title">DefaultSimilarity</span> </span>&#123;</span><br><span class="line">  <span class="annotation">@Override</span> </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">scorePayload</span><span class="params">(<span class="keyword">int</span> docId, String fieldName, <span class="keyword">int</span> start, <span class="keyword">int</span> end, <span class="keyword">byte</span>[] payload, <span class="keyword">int</span> offset, <span class="keyword">int</span> length)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">int</span> isbold = BoldFilter.bytes2int(payload); </span><br><span class="line">    <span class="keyword">if</span>(isbold == BoldFilter.IS_BOLD)&#123; </span><br><span class="line">      System.out.println(<span class="string">"It is a bold char."</span>); </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">      System.out.println(<span class="string">"It is not a bold char."</span>); </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>; </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后，查询的时候，一定要用PayloadXXXQuery(在此用PayloadTermQuery，在Lucene 2.4.1中，用BoostingTermQuery)，否则scorePayload不起作用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testPayloadScore</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123; </span><br><span class="line">  PayloadSimilarity sim = <span class="keyword">new</span> PayloadSimilarity(); </span><br><span class="line">  File indexDir = <span class="keyword">new</span> File(<span class="string">"TestPayloadScore"</span>); </span><br><span class="line">  IndexWriter writer = <span class="keyword">new</span> IndexWriter(FSDirectory.open(indexDir), <span class="keyword">new</span> BoldAnalyzer(), <span class="keyword">true</span>, IndexWriter.MaxFieldLength.LIMITED); </span><br><span class="line">  Document doc1 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f1 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"common hello world"</span>, Field.Store.NO, Field.Index.ANALYZED); </span><br><span class="line">  doc1.add(f1); </span><br><span class="line">  writer.addDocument(doc1); </span><br><span class="line">  Document doc2 = <span class="keyword">new</span> Document(); </span><br><span class="line">  Field f2 = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"common &lt;b&gt;hello&lt;/b&gt; world"</span>, Field.Store.NO, Field.Index.ANALYZED); </span><br><span class="line">  doc2.add(f2); </span><br><span class="line">  writer.addDocument(doc2); </span><br><span class="line">  writer.close();</span><br><span class="line">  IndexReader reader = IndexReader.open(FSDirectory.open(indexDir)); </span><br><span class="line">  IndexSearcher searcher = <span class="keyword">new</span> IndexSearcher(reader); </span><br><span class="line">  searcher.setSimilarity(sim); </span><br><span class="line">  PayloadTermQuery query = <span class="keyword">new</span> PayloadTermQuery(<span class="keyword">new</span> Term(<span class="string">"contents"</span>, <span class="string">"hello"</span>), <span class="keyword">new</span> MaxPayloadFunction()); </span><br><span class="line">  TopDocs docs = searcher.search(query, <span class="number">10</span>); </span><br><span class="line">  <span class="keyword">for</span> (ScoreDoc doc : docs.scoreDocs) &#123; </span><br><span class="line">    System.out.println(<span class="string">"docid : "</span> + doc.doc + <span class="string">" score : "</span> + doc.score); </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果scorePayload函数始终是返回1，则结果如下，<b></b>不起作用。</p>
+<blockquote>
+<p>It is not a bold char.<br>It is a bold char.<br>docid : 0 score : 0.2101998<br>docid : 1 score : 0.2101998</p>
+</blockquote>
+<p>如果scorePayload函数如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PayloadSimilarity</span> <span class="keyword">extends</span> <span class="title">DefaultSimilarity</span> </span>&#123;</span><br><span class="line">  <span class="annotation">@Override</span> </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">scorePayload</span><span class="params">(<span class="keyword">int</span> docId, String fieldName, <span class="keyword">int</span> start, <span class="keyword">int</span> end, <span class="keyword">byte</span>[] payload, <span class="keyword">int</span> offset, <span class="keyword">int</span> length)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">int</span> isbold = BoldFilter.bytes2int(payload); </span><br><span class="line">    <span class="keyword">if</span>(isbold == BoldFilter.IS_BOLD)&#123; </span><br><span class="line">      System.out.println(<span class="string">"It is a bold char."</span>); </span><br><span class="line">      <span class="keyword">return</span> <span class="number">10</span>; </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">      System.out.println(<span class="string">"It is not a bold char."</span>); </span><br><span class="line">      <span class="keyword">return</span> <span class="number">1</span>; </span><br><span class="line">    &#125; </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>则结果如下，同样是包含hello，包含加粗的文档获得较高分：</p>
+<blockquote>
+<p>It is not a bold char.<br>It is a bold char.<br>docid : 1 score : 2.101998<br>docid : 0 score : 0.2101998</p>
+</blockquote>
+<h2 id="继承并实现自己的collector">继承并实现自己的collector</h2><p>以上各种方法，已经把Lucene score计算公式的所有变量都涉及了，如果这还不能满足您的要求，还可以继承实现自己的collector。<br>在Lucene 2.4中，HitCollector有个函数public abstract void collect(int doc, float score)，用来收集搜索的结果。<br>其中TopDocCollector的实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">collect</span><span class="params">(<span class="keyword">int</span> doc, <span class="keyword">float</span> score)</span> </span>&#123; </span><br><span class="line">  <span class="keyword">if</span> (score &gt; <span class="number">0.0f</span>) &#123; </span><br><span class="line">    totalHits++; </span><br><span class="line">    <span class="keyword">if</span> (reusableSD == <span class="keyword">null</span>) &#123; </span><br><span class="line">      reusableSD = <span class="keyword">new</span> ScoreDoc(doc, score); </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &gt;= reusableSD.score) &#123; </span><br><span class="line">      reusableSD.doc = doc; </span><br><span class="line">      reusableSD.score = score; </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">      <span class="keyword">return</span>; </span><br><span class="line">    &#125; </span><br><span class="line">    reusableSD = (ScoreDoc) hq.insertWithOverflow(reusableSD); </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此函数将docid和score插入一个PriorityQueue中，使得得分最高的文档先返回。<br>我们可以继承HitCollector，并在此函数中对score进行修改，然后再插入PriorityQueue，或者插入自己的数据结构。<br>比如我们在另外的地方存储docid和文档创建时间的对应，我们希望当文档时间是一天之内的分数最高，一周之内的分数其次，一个月之外的分数很低。<br>我们可以这样修改：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> milisecondsOneDay = <span class="number">24L</span> * <span class="number">3600L</span> * <span class="number">1000L</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> millisecondsOneWeek = <span class="number">7L</span> * <span class="number">24L</span> * <span class="number">3600L</span> * <span class="number">1000L</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> millisecondsOneMonth = <span class="number">30L</span> * <span class="number">24L</span> * <span class="number">3600L</span> * <span class="number">1000L</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">collect</span><span class="params">(<span class="keyword">int</span> doc, <span class="keyword">float</span> score)</span> </span>&#123; </span><br><span class="line">  <span class="keyword">if</span> (score &gt; <span class="number">0.0f</span>) &#123;</span><br><span class="line">    <span class="keyword">long</span> time = getTimeByDocId(doc);</span><br><span class="line">    <span class="keyword">if</span>(time &lt; milisecondsOneDay) &#123;</span><br><span class="line">        score = score * <span class="number">1.0</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (time &lt; millisecondsOneWeek)&#123;</span><br><span class="line">        score = score * <span class="number">0.8</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (time &lt; millisecondsOneMonth) &#123;</span><br><span class="line">        score = score * <span class="number">0.3</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        score = score * <span class="number">0.1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    totalHits++; </span><br><span class="line">    <span class="keyword">if</span> (reusableSD == <span class="keyword">null</span>) &#123; </span><br><span class="line">      reusableSD = <span class="keyword">new</span> ScoreDoc(doc, score); </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &gt;= reusableSD.score) &#123; </span><br><span class="line">      reusableSD.doc = doc; </span><br><span class="line">      reusableSD.score = score; </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">      <span class="keyword">return</span>; </span><br><span class="line">    &#125; </span><br><span class="line">    reusableSD = (ScoreDoc) hq.insertWithOverflow(reusableSD); </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Lucene 3.0中，Collector接口为void collect(int doc)，TopScoreDocCollector实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">collect</span><span class="params">(<span class="keyword">int</span> doc)</span> <span class="keyword">throws</span> IOException </span>&#123; </span><br><span class="line">  <span class="keyword">float</span> score = scorer.score(); </span><br><span class="line">  totalHits++; </span><br><span class="line">  <span class="keyword">if</span> (score &lt;= pqTop.score) &#123; </span><br><span class="line">    <span class="keyword">return</span>; </span><br><span class="line">  &#125; </span><br><span class="line">  pqTop.doc = doc + docBase; </span><br><span class="line">  pqTop.score = score; </span><br><span class="line">  pqTop = pq.updateTop(); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样可以用上面的方式影响其打分。</p>
+<hr>
+<p>原文链接:<a href="http://forfuture1978.iteye.com/blog/591804" target="_blank" rel="external">http://forfuture1978.iteye.com/blog/591804</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          JBOSS4关闭时不断开数据库连接问题分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2012/11/14/Lucene打分公式的数学推导/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">&lt;转&gt;Lucene打分公式的数学推导</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="影响Lucene对文档打分的四种方式" data-title="&lt;转&gt;影响Lucene对文档打分的四种方式" data-url="http://sunxiang0918.github.io/2012/11/14/影响Lucene对文档打分的四种方式/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
