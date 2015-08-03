@@ -28,7 +28,7 @@ Lucene的打分公式非常复杂，如下：
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/11.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/12.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2012/11/14/13.png">
-<meta property="og:updated_time" content="2015-08-03T14:14:45.000Z">
+<meta property="og:updated_time" content="2015-08-03T14:16:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<转>Lucene打分公式的数学推导">
 <meta name="twitter:description" content="Lucene打分公式的数学推导在进行Lucene的搜索过程解析之前，有必要单独的一张把Lucene score公式的推导，各部分的意义阐述一下。因为Lucene的搜索过程，很重要的一个步骤就是逐步的计算各部分的分数。
@@ -255,11 +255,6 @@ var _hmt = _hmt || [];
       
       
       
-        <div id="toc" class="article-toc">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Lucene打分公式的数学推导"><span class="toc-number">1.</span> <span class="toc-text">Lucene打分公式的数学推导</span></a></li></ol>
-          <hr/>
-        </div>
-        
         
         <h1 id="Lucene打分公式的数学推导">Lucene打分公式的数学推导</h1><p>在进行Lucene的搜索过程解析之前，有必要单独的一张把Lucene score公式的推导，各部分的意义阐述一下。因为Lucene的搜索过程，很重要的一个步骤就是逐步的计算各部分的分数。</p>
 <p>Lucene的打分公式非常复杂，如下：<br><img src="/img/2012/11/14/1.png" alt=""></p>
@@ -330,6 +325,8 @@ var _hmt = _hmt || [];
 <p>所以在Lucene中，<code>Similarity</code>的<code>lengthNorm接口</code>是开放出来，用户可以根据自己应用的需要，改写lengthNorm的计算公式。比如我想做一个经济学论文的搜索系统，经过一定时间的调研，发现大多数的经济学论文的长度在8000到10000词，因而lengthNorm的公式应该是一个倒抛物线型的，8000到 10000词的论文分数最高，更短或更长的分数都应该偏低，方能够返回给用户最好的数据。</p>
 <p>在默认状况下，Lucene采用<code>DefaultSimilarity</code>，认为在计算文档的向量长度的时候，每个Term的权重就不再考虑在内了，而是全部为一。</p>
 <p>而从Term的定义我们可以知道，Term是包含域信息的，也即<code>title:hello</code>和<code>content:hello</code>是不同的Term，也即一个Term只可能在文档中的一个域中出现。<br>所以文档长度的公式为：<br><img src="/img/2012/11/14/12.png" alt=""><br>代入余弦公式：<br><img src="/img/2012/11/14/13.png" alt=""><br>再加上各种boost和coord，则可得出Lucene的打分计算公式。</p>
+<hr>
+<p>原文链接:<a href="http://www.cnblogs.com/forfuture1978/archive/2010/03/07/1680007.html" target="_blank" rel="external">http://www.cnblogs.com/forfuture1978/archive/2010/03/07/1680007.html</a></p>
 
       
     </div>
