@@ -198,6 +198,66 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-GIT-两个仓库的合并" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/13/GIT-两个仓库的合并/" class="article-date">
+  	<time datetime="2015-01-13T05:47:18.000Z" itemprop="datePublished">2015-01-13</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/13/GIT-两个仓库的合并/">GIT 两个仓库的合并</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="GIT_两个仓库的合并">GIT 两个仓库的合并</h1><p>情况是这样的,以前我们的全文检索引擎是按照模块提交到不同的Git仓库上的. 现在做新的检索引擎准备按照springframe那样,按照模块还是提交到一个Git仓库中,便于版本的维护.<br>这就牵涉到,需要把以前的一些模块仓库,合并到一起来.因为我们还是想保留以前的提交记录等等.而不是直接新建一个仓库,然后把代码都拷贝到一起.这样就会丢失以前的提交记录.</p>
+<h2 id="操作过程是这样的:">操作过程是这样的:</h2><ol>
+<li><p>先在<a href="https://www.sourcetreeapp.com/">sourcetree</a>中 <code>clone</code>新的仓库.比如:<a href="http://127.0.0.1/a.git">http://127.0.0.1/a.git</a></p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GIT/">GIT</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/01/13/GIT-两个仓库的合并/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-象印VD-10电饭煲使用说明" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -777,71 +837,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2014/05/18/Jboss4控制台加锁/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-JBOSS4关闭时不断开数据库连接问题分析" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/" class="article-date">
-  	<time datetime="2013-04-21T01:43:10.000Z" itemprop="datePublished">2013-04-21</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/">JBOSS4关闭时不断开数据库连接问题分析</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="JBOSS4作为windows服务关闭时不断开数据库连接问题分析">JBOSS4作为windows服务关闭时不断开数据库连接问题分析</h1><h2 id="问题现象:">问题现象:</h2><p>现场发现,每次重启媒资服务,Oracle的数据库连接会增加约20个的JDBC连接.这样就会导致数据库连接越来越多.</p>
-<h2 id="问题分析">问题分析</h2><p>接到这个问题, 使用<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> program,i.* <span class="keyword">from</span> v$<span class="keyword">session</span> i <span class="keyword">where</span> program = <span class="string">'JDBC Thin Client’</span></span></span><br></pre></td></tr></table></figure></p>
-<p>这个SQL语句查询到 确实每次重启都有 大约20个 名为<code>&#39;JDBC Thin Client’</code> 的数据库连接没有释放. </p>
-<ol>
-<li>于是,想办法给JDBC的连接加上了名字. 具体办法是:修改<code>Oracle-DS.xml</code> 增加一行配置<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">connection-property</span> <span class="attribute">name</span>=<span class="value">"v$session.program"</span>&gt;</span>DCMP DB Connection<span class="tag">&lt;/<span class="title">connection-property</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>这样就可以给我们的服务的数据库连接增加名字.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JBOSS/">JBOSS</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

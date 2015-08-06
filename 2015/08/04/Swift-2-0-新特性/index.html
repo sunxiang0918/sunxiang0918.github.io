@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Swift 2.0 新特性 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Swift 2.0 新特性Swift2.0 算是一个大得版本更新.新增或修改了很多的特性.出来这么久了,我也把我练手写的知乎日报全部转换成了Swfit2.0.其中还是遇到了一些问题.因此,趁有空,就尝试总结一下Swift2.0的一些新特性或新的变化.
+PS:本文写的时候采用的是 Swift2.0+Xcode7 beta4 的环境.
+1.guard语句Swift2.0中新引入了一个关键字guard用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift 2.0 新特性">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/08/04/Swift-2-0-新特性/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="Swift 2.0 新特性Swift2.0 算是一个大得版本更新.新增或修改了很多的特性.出来这么久了,我也把我练手写的知乎日报全部转换成了Swfit2.0.其中还是遇到了一些问题.因此,趁有空,就尝试总结一下Swift2.0的一些新特性或新的变化.
+PS:本文写的时候采用的是 Swift2.0+Xcode7 beta4 的环境.
+1.guard语句Swift2.0中新引入了一个关键字guard用">
+<meta property="og:updated_time" content="2015-08-06T02:57:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Swift 2.0 新特性">
+<meta name="twitter:description" content="Swift 2.0 新特性Swift2.0 算是一个大得版本更新.新增或修改了很多的特性.出来这么久了,我也把我练手写的知乎日报全部转换成了Swfit2.0.其中还是遇到了一些问题.因此,趁有空,就尝试总结一下Swift2.0的一些新特性或新的变化.
+PS:本文写的时候采用的是 Swift2.0+Xcode7 beta4 的环境.
+1.guard语句Swift2.0中新引入了一个关键字guard用">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/GIT/" style="font-size: 12.5px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12.5px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12.5px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 15px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Swift/" style="font-size: 17.5px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Swift-2-0-新特性" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/04/Swift-2-0-新特性/" class="article-date">
+  	<time datetime="2015-08-04T13:35:51.000Z" itemprop="datePublished">2015-08-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Swift 2.0 新特性
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Swift_2-0_新特性"><span class="toc-number">1.</span> <span class="toc-text">Swift 2.0 新特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-guard语句"><span class="toc-number">1.1.</span> <span class="toc-text">1.guard语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-协议扩展"><span class="toc-number">1.2.</span> <span class="toc-text">2.协议扩展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Available检查"><span class="toc-number">1.3.</span> <span class="toc-text">3.Available检查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-defer关键字"><span class="toc-number">1.4.</span> <span class="toc-text">4.defer关键字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-异常处理"><span class="toc-number">1.5.</span> <span class="toc-text">5.异常处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-print改变"><span class="toc-number">1.6.</span> <span class="toc-text">6.print改变</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-do-while语句重命名"><span class="toc-number">1.7.</span> <span class="toc-text">7.do-while语句重命名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-重新可以使用performSelector"><span class="toc-number">1.8.</span> <span class="toc-text">8.重新可以使用performSelector</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-更强的语言结构性"><span class="toc-number">1.9.</span> <span class="toc-text">9.更强的语言结构性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-枚举的递归"><span class="toc-number">1.10.</span> <span class="toc-text">10.枚举的递归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-增强化的模式匹配"><span class="toc-number">1.11.</span> <span class="toc-text">11.增强化的模式匹配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结束语"><span class="toc-number">1.12.</span> <span class="toc-text">结束语</span></a></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="Swift_2-0_新特性">Swift 2.0 新特性</h1><p><code>Swift2.0</code> 算是一个大得版本更新.新增或修改了很多的特性.出来这么久了,我也把我练手写的知乎日报全部转换成了<code>Swfit2.0</code>.其中还是遇到了一些问题.因此,趁有空,就尝试总结一下<code>Swift2.0</code>的一些新特性或新的变化.</p>
+<p>PS:本文写的时候采用的是 Swift2.0+Xcode7 beta4 的环境.</p>
+<h2 id="1-guard语句">1.guard语句</h2><p><code>Swift2.0</code>中新引入了一个关键字<code>guard</code>用于条件的判断处理.它和<code>if</code>语句比较类似,都是通过一个<code>boolean</code>值来决定流程的走向.但是与<code>if</code>语句不同的是.<code>guard</code>语句只会有一个代码块.没有像<code>if else</code>那样有多个<code>guard else</code>.</p>
+<p>那么<code>guard</code>到底有何作用呢?<code>guard</code>允许在一个代码周期中提前退出.也就是说,在<code>guard</code>关键字后接一个布尔表达式,只有当值为<code>false</code>的时候,才会执行<code>else</code>后的内容.如果值为<code>true</code>,那么就跳过这个<code>guard</code>代码块.</p>
+<p><code>guard</code>语句最常见的用法就是替代<code>if</code>做参数的合法性校验.<br>比如在以前:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">doSomeThing</span><span class="params">(a:String?,b:String?)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>	<span class="keyword">let</span> _a = a &#123;</span><br><span class="line">		<span class="keyword">if</span>	<span class="keyword">let</span> _b = b &#123;</span><br><span class="line">			<span class="built_in">print</span>(<span class="string">"<span class="subst">\(_a)</span>:<span class="subst">\(_b)</span>"</span>)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// print("\(_a):(_b)")  //这个地方不能访问_a和_b</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>向上面的例子那样,如果每一个参数都使用<code>if</code>语句来判断,那么这样的代码写起来非常的繁琐.读起来也不是很清晰.基于这种的情况,<code>Swift2.0</code>增加了<code>guard</code>关键字.把上面的代码改成使用<code>guard</code>的写法就会成这样:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">doSomeThing2</span><span class="params">(a:String?,b:String?)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    guard <span class="keyword">let</span> _a = a <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    guard <span class="keyword">let</span> _b = b <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"<span class="subst">\(_a)</span>:<span class="subst">\(_b)</span>"</span>)	<span class="comment">//这个地方是可以访问_a和_b</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样写比起以前使用<code>if</code>来做判断,代码的可读性更强了.并且<code>Optaion</code>类型的变量的解包可以在全局可见了.这在网络编程中解析JSON等是非常有用的.</p>
+<p><code>guard</code>除了用于入参的校验和可选类型的解包外.还可以用于抛出异常以及结合<code>available</code>做函数的检查:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">guard name != <span class="literal">nil</span> <span class="keyword">else</span> &#123;</span><br><span class="line">	throw <span class="type">IllegalArgumentException</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">guard #available(iOS <span class="number">8</span>, *) <span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="2-协议扩展">2.协议扩展</h2><p>在之前的<code>Swift</code>中,协议(<code>Protocol</code>)其实相当于JAVA中的接口,可以定义若干的方法以及属性.然后其他的类、结构体、枚举等都继承这个协议.然后有各自的实现.而现在,在<code>Swift2.0</code>中,可以对协议进行扩展(<code>extension</code>),就和给一般的<code>Class</code>进行扩展一样.并且,同<code>JDK1.8</code>一样,现在协议允许拥有默认的<strong>方法实现</strong>了.这样就大大的增加了编程的灵活度.避免了当需要修改协议时候，需要修改全部实现该协议的类.<br>举一个例子:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 申明一个协议 要求实现 说话的方法</span></span><br><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">	<span class="func"><span class="keyword">func</span> <span class="title">sayHello</span><span class="params">()</span></span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 扩展协议 增加 walk 方法, 并默认实现</span></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">	<span class="func"><span class="keyword">func</span> <span class="title">walk</span><span class="params">()</span></span>&#123;</span><br><span class="line">		sayHello()</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">"walk"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个Lily类遵循Person协议</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Lily</span> : <span class="title">Person</span> </span>&#123;</span><br><span class="line">	<span class="comment">//实现协议中定义的方法</span></span><br><span class="line">	<span class="func"><span class="keyword">func</span> <span class="title">sayHello</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">"hello!"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例化一个Lily对象</span></span><br><span class="line"><span class="keyword">let</span> lily = <span class="type">Lily</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这个时候lily类可以直接调用协议中的两个方法</span></span><br><span class="line">lily.sayHello()</span><br><span class="line">lily.walk()</span><br></pre></td></tr></table></figure>
+<p>在<code>swift2.0</code>中很多的协议都被苹果公司增加了扩展. 比如<code>CollectionType</code>这个协议.所有的集合类型都遵循了这个协议,然后在<code>swift2.0</code>中增加了若干的扩展:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">map</span><span class="generics">&lt;T&gt;</span><span class="params">(@noescape transform: <span class="params">(<span class="keyword">Self</span>.Generator.Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>]</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">filter</span><span class="params">(@noescape includeElement: <span class="params">(<span class="keyword">Self</span>.Generator.Element)</span></span></span> -&gt; <span class="type">Bool</span>) -&gt; [<span class="type">Self</span>.<span class="type">Generator</span>.<span class="type">Element</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> last: <span class="type">Self</span>.<span class="type">Generator</span>.<span class="type">Element</span>? &#123; <span class="keyword">get</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">indexOf</span><span class="params">(element: <span class="keyword">Self</span>.Generator.Element)</span></span> -&gt; <span class="type">Self</span>.<span class="type">Index</span>?</span><br></pre></td></tr></table></figure>
+<p>等等.</p>
+<p>这样就可以在不改变原有协议的基础上给协议增加了若干的方法:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> numbers = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">10</span>, <span class="number">16</span>, <span class="number">42</span>, <span class="number">45</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// Swift 1</span></span><br><span class="line"><span class="built_in">find</span>(<span class="built_in">filter</span>(<span class="built_in">map</span>(numbers, &#123; $<span class="number">0</span> * <span class="number">2</span>&#125;), &#123; $<span class="number">0</span> % <span class="number">3</span> == <span class="number">0</span> &#125;), <span class="number">90</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Swift 2</span></span><br><span class="line">numbers.<span class="built_in">map</span> &#123; $<span class="number">0</span> * <span class="number">2</span> &#125;.<span class="built_in">filter</span> &#123; $<span class="number">0</span> % <span class="number">3</span> == <span class="number">0</span> &#125;.indexOf(<span class="number">90</span>) <span class="comment">// returns 2</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-Available检查">3.Available检查</h2><p>由于在苹果的生态环境中,基本上每一年都会推出新的<code>OS</code>,每年在发布会上都会说新的操作系统又新增了好多好多的<code>API</code>.好处当然是增加了很多功能,坏处也是显而易见的—-不同版本间的<code>API</code>存在兼容的问题.比如我们调用了一个<code>IOS9</code>中新增的方法,那么这个应用程序运行在了<code>IOS8</code>上,这个时候如果我们不进行系统的版本测试的话,那么我们的应用就会直接的崩溃掉,这显然不是我们所期望的.</p>
+<p>为了解决这个问题,在<code>Swift2.0</code>中新引入了<code>#available</code>.配合Available检查,新的<code>Swift</code>编译器,也会在编译的时候就进行检测,当我们在低版本的OS中使用高版本的<code>API</code>的时候,编译器会直接的报错.而当编译器帮我们检测到<code>API</code>版本问题后,接下来就需要我们使用<code>#available</code>语法进行处理了.</p>
+<p><code>#available</code>的使用语法是:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> #abailable(platform name version,...,*)&#123;</span><br><span class="line">	<span class="comment">//执行对应APIS</span></span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="comment">//执行之前老版本APIS</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>前面的<code>platform name version</code>表示的是在平台的版本,允许有多个.<br>后面的* 表示的是其他平台,例如<code>Watch OS</code></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> #available(iOS9,<span class="type">OSX</span> <span class="number">10.11</span>,*)&#123;</span><br><span class="line">	<span class="comment">//使用iOS 9以上的 API接口 以及使用 OS X10.11以上的API接口</span></span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="comment">//使用老版本接口</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样就可以使用一套代码来完成不同平台的正确编译与运行了.这对我们现在的开发有了很大的便利.</p>
+<h2 id="4-defer关键字">4.defer关键字</h2><p>由于我是学<code>JAVA</code>的,所以当学习<code>Swift</code>的时候就思考过一个问题:在<code>Swift</code>中有没有类似于<code>JAVA</code>中<code>try/finally</code>的语法.也就是说无论前面的代码如何执行,在离开这个代码块之前,一定要执行一段逻辑.很遗憾的是我在<code>swift1</code>中没有发现类似的语法.而在<code>Swift2.0</code>中,Apple提供了这个功能,也就是新引入的<code>defer</code>关键字.</p>
+<p><code>defer</code>关键字允许包括一个代码块.然后让这段代码块延迟到<code>defer</code>所在域的最后执行.这样说起来有第一点抽象,看一个例子就明白了.</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">processFile</span><span class="params">(filename: String)</span></span> throws &#123;</span><br><span class="line">    <span class="keyword">if</span> exists(filename) &#123;</span><br><span class="line">        <span class="keyword">let</span> file = open(filename)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">let</span> line = try file.readline() &#123;</span><br><span class="line">            <span class="comment">// Work with the file.</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        close(file) <span class="keyword">is</span> called here, at the end of the scope.</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码有一个问题,那就是如果file.readline方法抛出异常的时候,那么 这段代码最后的close(file)方法可能就不会执行了,这就造成了资源的未关闭问题.</p>
+<p>那么如果我们使用<code>defer</code>来修正这个问题,就会这样:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">processFile</span><span class="params">(filename: String)</span></span> throws &#123;</span><br><span class="line">    <span class="keyword">if</span> exists(filename) &#123;</span><br><span class="line">        <span class="keyword">let</span> file = open(filename)</span><br><span class="line">        defer &#123;</span><br><span class="line">            close(file)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">let</span> line = try file.readline() &#123;</span><br><span class="line">            <span class="comment">// Work with the file.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的代码中,有一个<code>defer</code>代码块.其中编写了文件关闭的逻辑. 而这段逻辑就会在整个<code>if</code>作用域的最后执行,无论是程序是正常的走出<code>if</code>,还是由于异常而跳出<code>if</code>.这样就保证了无论如何程序都会关闭文件.</p>
+<p>这里有一个地方需要注意的是多个<code>defer</code>的调用顺序,如果是在不同的作用域中,那么<code>defer</code>的执行顺序是从里到外的.而如果是在同一个作用域中,<code>defer</code>的执行顺序是自下而上的.这和平时的代码调用顺序是相反的.</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">aaa</span><span class="params">(a:Boolean)</span></span> &#123;</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"1-1"</span>)</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"1-2"</span>)</span><br><span class="line">	defer&#123;</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">"1-3"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>	a &#123;</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">"2-1"</span>)</span><br><span class="line">		defer&#123;</span><br><span class="line">			<span class="built_in">print</span>(<span class="string">"2-2"</span>)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">"2-3"</span>)</span><br><span class="line">		defer&#123;</span><br><span class="line">			<span class="built_in">print</span>(<span class="string">"2-4"</span>)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">aaa(<span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+<p>上面这段代码最后打印出来的信息是:</p>
+<blockquote>
+<p>1-1<br>1-2<br>2-1<br>2-3<br>2-4<br>2-2<br>1-3<br>大家注意一下这个的打印顺序,体会一下就明白了.</p>
+</blockquote>
+<h2 id="5-异常处理">5.异常处理</h2><p>上面说完了类似于<code>JAVA</code>中的<code>try-finally</code>,下面就来说说<code>try-catch</code>.<br>在<code>Swift1</code>中是没有异常处理以及抛出异常的,如果要处理异常.大多数情况下都是使用<code>NSError</code>或者闭包回调的方式来处理的.这些方法都没法像<code>JAVA</code>中的<code>try-catch</code>一样方便简洁的处理异常.虽然现在在<code>JAVA</code>界中现在有人觉得随意的抛出异常是一种不负责任的做法,会导致程序的可读性降低,并且开始反思有没有一种更好的方式来处理异常,但就目前来说,无疑是最好的方式.</p>
+<p>在<code>Swift2.0</code>中,苹果提供了<code>throws</code> <code>throw</code> <code>do</code> <code>catch</code> <code>try</code> 这几个关键字来处理异常.</p>
+<ul>
+<li><code>throws</code>关键字写在一个方法签名的后面,返回值前,用于标识这个方法是会抛出异常的.</li>
+<li><code>throw</code>关键字用于在代码块中抛出一个异常</li>
+<li><code>do</code>关键字用于包裹一个代码块,形成一个<code>do-catch</code>作用域,来捕获异常</li>
+<li><code>catch</code>关键字用于捕获某种异常,并且申明异常的处理逻辑</li>
+<li><code>try</code>关键字用于调用某个会抛出异常的方法前,用于标识会尝试调用这个方法</li>
+</ul>
+<p>例如:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个异常类型</span></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">AppException</span> : <span class="title">ErrorType</span> </span>&#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="type">IllegalArgumentException</span></span><br><span class="line">	<span class="keyword">case</span> <span class="type">IllegalFormatException</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义一个方法,可能会抛出异常</span></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">doSomeThing</span><span class="params">(age:Int)</span></span> throws -&gt; <span class="type">Void</span> &#123;</span><br><span class="line">	<span class="comment">// 检测入参是否合法,如果不合法就抛出异常</span></span><br><span class="line">	<span class="keyword">if</span> age &lt; <span class="number">0</span> &#123;</span><br><span class="line">		throw <span class="type">AppException</span>.<span class="type">IllegalArgumentException</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 合法 执行业务逻辑</span></span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"age:<span class="subst">\(age)</span>"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试执行方法</span></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">tryDoing</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">do</span> &#123;</span><br><span class="line">		try doSomeThing(-<span class="number">1</span>)</span><br><span class="line">	&#125; catch e &#123;</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">"error: <span class="subst">\(e)</span>"</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>首先,需要定义一个异常,和<code>JAVA</code>中所有的异常都需要实现<code>Throwable</code>接口一样,在<code>Swift2</code>中异常是需要遵循<code>ErrorType</code>协议. 这里只是定义了一个异常的枚举.</li>
+<li>然后定义一个方法,并用<code>throws</code>关键字来标志这个函数会抛出异常.但是这个关键字后面不需要申明到底抛出什么异常</li>
+<li>接着在方法中使用<code>throw</code>抛出一个异常.这个和<code>JAVA</code>类似.</li>
+<li>在调用<code>doSomeThing</code>方法的地方使用<code>do-catch</code>来捕获异常.注意的是,这个地方apple又任性了一把,没有使用其他语言中通常使用的<code>try-catch</code>.</li>
+<li>在具体调用会抛出异常的方法时,使用<code>try</code>关键字来标识.这样做有一个好处,就是可以一眼就看出在一个代码域中到底是哪可能会抛出异常.而不是将所有的代码都混在<code>try-catch</code>作用域中.</li>
+<li><p>在<code>do-catch</code>语法中,同<code>try-catch</code>一样,也是允许有多个<code>catch</code>代码块的.比如:</p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span>&#123;</span><br><span class="line">	try doSomeThing(-<span class="number">1</span>)</span><br><span class="line">&#125;catch <span class="type">AppException</span>.<span class="type">IllegalArgumentException</span>&#123;</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"xxx"</span>) </span><br><span class="line">&#125;catch <span class="type">AppException</span>.<span class="type">IllegalFormatException</span>&#123;</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"aaaa"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>同可选类型的解包一样.<code>try</code>也支持<code>try!</code>的写法.用于表示在明确的知道某一个throwing的方法不会抛出异常的情况下,使用<code>try!</code>就可以不用捕捉异常了.比如:</p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">try! doSomeThing(<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>当然,现在<code>Swift2.0</code>中的异常捕获还有完善的地方,比如还没有区分运行时异常,非运行时异常,错误等等.但这已经是一个好的开始,期望在以后的版本中继续完善.</p>
+<h2 id="6-print改变">6.print改变</h2><p>Apple已经把它的简洁的基因发挥到了极致了.居然想到了把从C语言就开始的<code>println</code>与<code>print</code>函数统一成了一个<code>func print&lt;T&gt;(value: T, appendNewline: Bool)</code>函数.第二个参数就是用于表示是否起新的一行. 默认是<code>true</code>.<br>以后学编程的第一个例子再也不是</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">println</span>(<span class="string">"Hello World"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="7-do-while语句重命名">7.do-while语句重命名</h2><p>由于<code>do</code>关键字已经被用于了异常的捕获了.如果这个地方再使用<code>do-while</code>就有可能产生歧义.因此,apple也把这个从C语言开始就有的语法给改了名字:<code>repeat-while</code>.幸好,只是改了一个名字,还是同样的配方,还是同样的味道 ^.^</p>
+<h2 id="8-重新可以使用performSelector">8.重新可以使用performSelector</h2><p><code>performSelector</code>方法在<code>Swift1</code>中被Apple认为有安全的问题而去掉了.然后,为了实现相同的功能,广大码农想了千奇百怪的办法.比如使用<code>NSThread.detachNewThreadSelector:</code>,比如<code>NSTimer.scheduledTimerWithTimeInterval:</code>,又比如<code>sendAction:</code>.<br>不过在<code>Swift2.0</code>中,Apple又在<code>NSObjectProtocol</code>协议中恢复了这个方法的调用.<br>现在可以方便的使用了</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">performSelector</span><span class="params">(aSelector: Selector)</span></span> -&gt; <span class="type">Unmanaged</span>&lt;<span class="type">AnyObject</span>&gt;!</span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">performSelector</span><span class="params">(aSelector: Selector, withObject object: AnyObject!)</span></span> -&gt; <span class="type">Unmanaged</span>&lt;<span class="type">AnyObject</span>&gt;!</span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">performSelector</span><span class="params">(aSelector: Selector, withObject object1: AnyObject!, withObject object2: AnyObject!)</span></span> -&gt; <span class="type">Unmanaged</span>&lt;<span class="type">AnyObject</span>&gt;!</span><br></pre></td></tr></table></figure>
+<p>比如:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">self</span>.performSelector(<span class="string">"action"</span>, withObject: <span class="literal">nil</span>)</span><br><span class="line"><span class="keyword">self</span>.performSelectorInBackground(<span class="string">"action"</span>, withObject: <span class="literal">nil</span>)</span><br></pre></td></tr></table></figure>
+<p>注意,这个方法在<code>Playground</code>中还是不能使用哈.</p>
+<h2 id="9-更强的语言结构性">9.更强的语言结构性</h2><p>由于<code>扩展协议</code>功能的出现,Apple把大量原来非面向对象的全局函数都封装到了各个协议中.让整个<code>Swift2</code>的语言结构性更强了.比如:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> numbers = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">10</span>, <span class="number">16</span>, <span class="number">42</span>, <span class="number">45</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// Swift 1</span></span><br><span class="line"><span class="built_in">find</span>(<span class="built_in">filter</span>(<span class="built_in">map</span>(numbers, &#123; $<span class="number">0</span> * <span class="number">2</span>&#125;), &#123; $<span class="number">0</span> % <span class="number">3</span> == <span class="number">0</span> &#125;), <span class="number">90</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Swift 2</span></span><br><span class="line">numbers.<span class="built_in">map</span> &#123; $<span class="number">0</span> * <span class="number">2</span> &#125;.<span class="built_in">filter</span> &#123; $<span class="number">0</span> % <span class="number">3</span> == <span class="number">0</span> &#125;.indexOf(<span class="number">90</span>) <span class="comment">// returns 2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//Swift 1</span></span><br><span class="line"><span class="keyword">if</span>	<span class="built_in">contains</span>(numbers,<span class="number">6</span>) &#123;</span><br><span class="line">	<span class="built_in">println</span>(<span class="string">"success"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Swift 2</span></span><br><span class="line"><span class="keyword">if</span>	numbers.<span class="built_in">contains</span>(<span class="number">6</span>) &#123;</span><br><span class="line">	<span class="built_in">println</span>(<span class="string">"success"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> str = <span class="string">"Swift"</span></span><br><span class="line"><span class="comment">//Swift 1</span></span><br><span class="line"><span class="keyword">let</span> <span class="built_in">c</span> = <span class="built_in">count</span>(str)</span><br><span class="line"></span><br><span class="line"><span class="comment">//Swift 2</span></span><br><span class="line"><span class="keyword">let</span> <span class="built_in">c</span> = str.characters.<span class="built_in">count</span></span><br></pre></td></tr></table></figure>
+<h2 id="10-枚举的递归">10.枚举的递归</h2><p>在Swift中枚举类型是非常的强大的.它不仅可以拥有自己的属性,自己的方法.还可以遵循协议.极端点来说上来说,光使用枚举和结构体,就能把一个程序写完.<br>在<code>Swift2.0</code>中枚举又得到了增强,现在可以递归的定义枚举类型了.<br>什么叫递归的枚举喃?就是在枚举定义中引用自己,看一个例子就明白了:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">indirect <span class="class"><span class="keyword">enum</span> <span class="title">Tree</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">       <span class="keyword">case</span> <span class="type">Leaf</span>(<span class="type">T</span>)</span><br><span class="line">       <span class="keyword">case</span> <span class="type">Branch</span>(<span class="keyword">left</span>: <span class="type">Tree</span>&lt;<span class="type">T</span>&gt;, <span class="keyword">right</span>: <span class="type">Tree</span>&lt;<span class="type">T</span>&gt;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看到了没,在定义Tree.Branch枚举的时候允许传入两个参数,并且这两个参数又是Tree枚举的.这就形成了枚举的递归.这样做有什么用呢?它其实扩大了枚举的使用场景.通过枚举就可以构建很复杂的数据结构和业务逻辑了.<br>比如:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//: 定义一个计算的协议</span></span><br><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Evaluate</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">evaluate</span><span class="params">()</span></span> -&gt; <span class="type">Int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//: 定义一个计算表达式的枚举</span></span><br><span class="line">indirect <span class="class"><span class="keyword">enum</span> <span class="title">ArithmeticExpression</span> : <span class="title">Evaluate</span></span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//表示数  </span></span><br><span class="line">  <span class="keyword">case</span> <span class="type">Number</span>(<span class="type">Int</span>)</span><br><span class="line">  <span class="comment">//表示加法</span></span><br><span class="line">  <span class="keyword">case</span> <span class="type">Addition</span>(<span class="type">ArithmeticExpression</span>,<span class="type">ArithmeticExpression</span>)</span><br><span class="line">  <span class="comment">//表示乘法</span></span><br><span class="line">  <span class="keyword">case</span> <span class="type">Multiplication</span>(<span class="type">ArithmeticExpression</span>,<span class="type">ArithmeticExpression</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//实现Evaluate协议</span></span><br><span class="line">  <span class="func"><span class="keyword">func</span> <span class="title">evaluate</span><span class="params">()</span></span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">  	<span class="comment">//进行计算</span></span><br><span class="line">    <span class="keyword">switch</span> <span class="keyword">self</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> .<span class="type">Number</span>(<span class="keyword">let</span> value):</span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line">    <span class="keyword">case</span> .<span class="type">Addition</span>(<span class="keyword">let</span> <span class="keyword">left</span>, <span class="keyword">let</span> <span class="keyword">right</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">left</span>.evaluate() + <span class="keyword">right</span>.evaluate()</span><br><span class="line">    <span class="keyword">case</span> .<span class="type">Multiplication</span>(<span class="keyword">let</span> <span class="keyword">left</span>, <span class="keyword">let</span> <span class="keyword">right</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">left</span>.evaluate() * <span class="keyword">right</span>.evaluate()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// evaluate (3 + 8) * 3</span></span><br><span class="line"><span class="keyword">let</span> three = <span class="type">ArithmeticExpression</span>.<span class="type">Number</span>(<span class="number">3</span>)</span><br><span class="line"><span class="keyword">let</span> eight = <span class="type">ArithmeticExpression</span>.<span class="type">Number</span>(<span class="number">8</span>)</span><br><span class="line"><span class="keyword">let</span> sum = <span class="type">ArithmeticExpression</span>.<span class="type">Addition</span>(three, eight)</span><br><span class="line"><span class="keyword">let</span> product = <span class="type">ArithmeticExpression</span>.<span class="type">Multiplication</span>(sum,three)</span><br><span class="line"><span class="built_in">print</span>(product.evaluate())		<span class="comment">//这里打印结果 33</span></span><br></pre></td></tr></table></figure>
+<h2 id="11-增强化的模式匹配">11.增强化的模式匹配</h2><p>在<code>Swift2.0</code>中强化了模式匹配,现在对于控制流增加了很多种组合.比如:<br><code>if/case</code> <code>while/case</code> <code>guard/case</code> <code>for-in/case</code>等等,并且上述的语法都允许像<code>switch</code>/<code>case</code>那样后面接上<code>where</code>做判断.<br>比如:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">SignUpFormField</span> </span>&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">FirstName</span>(<span class="type">String</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">LastName</span>(<span class="type">String</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">EmailAddress</span>(<span class="type">String</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">DOB</span>(<span class="type">NSDate</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Swift1</span></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">bornBeforeTaylorSwift</span><span class="params">(signUpFormField: SignUpFormField)</span></span> &#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">switch</span> signUpFormField &#123;</span><br><span class="line">    <span class="keyword">case</span> .<span class="type">DOB</span>(<span class="keyword">let</span> otherBday)</span><br><span class="line">        <span class="keyword">where</span> taylorSwiftsBday.compare(otherBday) == .<span class="type">OrderedDescending</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Fun fact: You were born before Taylor Swift!"</span>)</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Swift2</span></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">bornBeforeTaylorSwift</span><span class="params">(signUpFormField: SignUpFormField)</span></span> &#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">case</span> .<span class="type">DOB</span>(<span class="keyword">let</span> otherBday) = signUpFormField</span><br><span class="line">        <span class="keyword">where</span> taylorSwiftsBday.compare(otherBday) == .<span class="type">OrderedDescending</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Fun fact: You were born before Taylor Swift!"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面例子说明,<code>if/case</code>的用法,它和<code>switch</code>中的<code>case</code>其实是一样的.如果满足case后的条件,那么就执行<code>if</code>中的操作.这样像上例那样只有一个分支的枚举选择,就不需要使用<code>switch</code>语句了.</p>
+<p>增强的模式匹配不光是可以用在枚举类型上.对于<code>可选类型</code>的解包操作同样的奏效.比如:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> someNumber:<span class="type">Int</span>? = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//使用case的方式解包</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">case</span> <span class="keyword">let</span> x? = someNumber &#123;</span><br><span class="line">	<span class="comment">//这里的x已经不是可选类型了</span></span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"someNumber is <span class="subst">\(x)</span>"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arrayOfNumbers:[<span class="type">Int</span>?] = [<span class="number">1</span>,<span class="number">2</span>,<span class="literal">nil</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="literal">nil</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">//Swift1</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> arrayOfNumbers &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="keyword">let</span> _x = x &#123;</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">"Found a number <span class="subst">\(_x)</span>"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Swift2.0</span></span><br><span class="line"><span class="keyword">for</span> <span class="keyword">case</span> <span class="keyword">let</span> x? <span class="keyword">in</span> arrayOfNumbers &#123;</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"Found a number <span class="subst">\(x)</span>"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>直接一步就搞定了,比以前方便了.</p>
+<h2 id="结束语">结束语</h2><p><code>Swift2.0</code>是一个大版本,有着许多优化与改动.经过这一次的改变,<code>Swift2.0</code>变得更加的友好、方便、安全,大大的增加了我们的开发体验.这里只介绍了其中的一些大点的改动,更多的API方面的变化等着我们继续的去挖掘.</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/08/02/swift中多线程的使用方法/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">swift中多线程的使用方法</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Swift-2-0-新特性" data-title="Swift 2.0 新特性" data-url="http://sunxiang0918.github.io/2015/08/04/Swift-2-0-新特性/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
