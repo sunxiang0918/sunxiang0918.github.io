@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;转&gt;Neo4j 底层存储结构分析 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Neo4j 底层存储结构分析neo4j 中节点和关系的物理存储模型neo4j存储模型
+The node records contain only a pointer to their first property and their first relationship (in what is oftentermed the _relationship chain). From here, we">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<转>Neo4j 底层存储结构分析">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/06/27/neo4j-底层存储结构分析/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="Neo4j 底层存储结构分析neo4j 中节点和关系的物理存储模型neo4j存储模型
+The node records contain only a pointer to their first property and their first relationship (in what is oftentermed the _relationship chain). From here, we">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/1.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/2.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/3.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/4.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/5.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/6.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/7.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/8.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/9.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/10.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/11.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/12.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/13.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/14.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/15.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/16.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/17.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/18.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/19.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/20.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/21.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/22.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/23.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/24.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/25.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/27/26.jpg">
+<meta property="og:updated_time" content="2015-08-06T15:05:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<转>Neo4j 底层存储结构分析">
+<meta name="twitter:description" content="Neo4j 底层存储结构分析neo4j 中节点和关系的物理存储模型neo4j存储模型
+The node records contain only a pointer to their first property and their first relationship (in what is oftentermed the _relationship chain). From here, we">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/GIT/" style="font-size: 12.5px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12.5px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12.5px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 15px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Swift/" style="font-size: 17.5px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/大数据/" style="font-size: 12.5px;">大数据</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-neo4j-底层存储结构分析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/06/27/neo4j-底层存储结构分析/" class="article-date">
+  	<time datetime="2015-06-27T13:08:13.000Z" itemprop="datePublished">2015-06-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      &lt;转&gt;Neo4j 底层存储结构分析
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo4j/">Neo4j</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Neo4j_底层存储结构分析"><span class="toc-number">1.</span> <span class="toc-text">Neo4j 底层存储结构分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#neo4j_中节点和关系的物理存储模型"><span class="toc-number">1.1.</span> <span class="toc-text">neo4j 中节点和关系的物理存储模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#neo4j存储模型"><span class="toc-number">1.1.1.</span> <span class="toc-text">neo4j存储模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例1"><span class="toc-number">1.1.2.</span> <span class="toc-text">示例1</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#neo4j_graph_db的存储文件介绍"><span class="toc-number">1.2.</span> <span class="toc-text">neo4j graph db的存储文件介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#存储_node_的文件"><span class="toc-number">1.2.1.</span> <span class="toc-text">存储 node 的文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存储_relationship_的文件"><span class="toc-number">1.2.2.</span> <span class="toc-text">存储 relationship 的文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存储_label_的文件"><span class="toc-number">1.2.3.</span> <span class="toc-text">存储 label 的文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存储_property_的文件"><span class="toc-number">1.2.4.</span> <span class="toc-text">存储 property 的文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他的文件"><span class="toc-number">1.2.5.</span> <span class="toc-text">其他的文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#neo4j存储结构"><span class="toc-number">1.3.</span> <span class="toc-text">neo4j存储结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#neo4j_的_store_部分类图"><span class="toc-number">1.3.1.</span> <span class="toc-text">neo4j 的 store 部分类图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#neo4j_的db文件及对应的存储格式类型"><span class="toc-number">1.3.2.</span> <span class="toc-text">neo4j 的db文件及对应的存储格式类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通用的Store_类型"><span class="toc-number">1.3.3.</span> <span class="toc-text">通用的Store 类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#id_类型"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">id 类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DynamicStore_类型"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">DynamicStore 类型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Property_的存储"><span class="toc-number">1.3.4.</span> <span class="toc-text">Property 的存储</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PropertyStore类型的存储格式"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">PropertyStore类型的存储格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#String_类型属性值的保存过程"><span class="toc-number">1.3.4.2.</span> <span class="toc-text">String 类型属性值的保存过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ShortArray_类型属性值的保存过程"><span class="toc-number">1.3.4.3.</span> <span class="toc-text">ShortArray 类型属性值的保存过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PropertyKeyTokenStore的文件存储格式"><span class="toc-number">1.3.4.4.</span> <span class="toc-text">PropertyKeyTokenStore的文件存储格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Node_数据存储"><span class="toc-number">1.3.5.</span> <span class="toc-text">Node 数据存储</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#NodeStore的主文件存储格式"><span class="toc-number">1.3.5.1.</span> <span class="toc-text">NodeStore的主文件存储格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NodeStore-java"><span class="toc-number">1.3.5.2.</span> <span class="toc-text">NodeStore.java</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Relationship_的存储"><span class="toc-number">1.3.6.</span> <span class="toc-text">Relationship 的存储</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RelationshipTypeTokenStore的主文件存储格式"><span class="toc-number">1.3.6.1.</span> <span class="toc-text">RelationshipTypeTokenStore的主文件存储格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RelationshipStore的文件存储格式"><span class="toc-number">1.3.6.2.</span> <span class="toc-text">RelationshipStore的文件存储格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RelationshipGroupStore类型的存储格式"><span class="toc-number">1.3.6.3.</span> <span class="toc-text">RelationshipGroupStore类型的存储格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例1:neo4j_exam"><span class="toc-number">1.3.7.</span> <span class="toc-text">示例1:neo4j_exam</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#neo4j_exm_代码"><span class="toc-number">1.3.7.1.</span> <span class="toc-text">neo4j_exm 代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#neostore-nodestore-db-id_的内容"><span class="toc-number">1.3.7.2.</span> <span class="toc-text">neostore.nodestore.db.id 的内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#neostore-nodestore-db_的内容"><span class="toc-number">1.3.7.3.</span> <span class="toc-text">neostore.nodestore.db 的内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#neostore-relationshipstore-db_的内容"><span class="toc-number">1.3.7.4.</span> <span class="toc-text">neostore.relationshipstore.db 的内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#neostore-relationshiptypestore-db的内容"><span class="toc-number">1.3.7.5.</span> <span class="toc-text">neostore.relationshiptypestore.db的内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#neostore-relationshiptypestore-db-names_的内容"><span class="toc-number">1.3.7.6.</span> <span class="toc-text">neostore.relationshiptypestore.db.names 的内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#neostore-propertystore-db的内容"><span class="toc-number">1.3.7.7.</span> <span class="toc-text">neostore.propertystore.db的内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#neostore-propertystore-db-strings的内容"><span class="toc-number">1.3.7.8.</span> <span class="toc-text">neostore.propertystore.db.strings的内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#neostore-propertystore-db-index的内容"><span class="toc-number">1.3.7.9.</span> <span class="toc-text">neostore.propertystore.db.index的内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#neostore-propertystore-db-index-keys的内容"><span class="toc-number">1.3.7.10.</span> <span class="toc-text">neostore.propertystore.db.index.keys的内容</span></a></li></ol></li></ol></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="Neo4j_底层存储结构分析">Neo4j 底层存储结构分析</h1><h2 id="neo4j_中节点和关系的物理存储模型">neo4j 中节点和关系的物理存储模型</h2><h3 id="neo4j存储模型">neo4j存储模型</h3><p><img src="/img/2015/06/27/1.jpg" alt=""></p>
+<p>The node records contain only a pointer to their first property and their first relationship (in what is oftentermed the _relationship chain). From here, we can follow the (doubly) linked-list of relationships until we find the one we’re interested in, the  LIKES relationship from  Node 1 to  Node 2 in this case. Once we’ve found the relationship record of interest, we can simply read its properties if there are any via the same singly-linked list structure as node properties, or we can examine the node records that it relates via its start node and end node IDs. These IDs, multiplied by the node record size, of course give the immediate offset of both nodes in the node store file.</p>
+<p>上面的英文摘自<code>&lt;Graph Databases&gt;</code>(作者：IanRobinson) 一书，描述了 neo4j 的存储模型。Node和Relationship 的 Property 是用一个 Key-Value 的双向列表来保存的； Node 的 Relatsionship 是用一个双向列表来保存的，通过关系，可以方便的找到关系的 from-to Node. Node 节点保存第1个属性和第1个关系ID。</p>
+<p>通过上述存储模型，从一个Node-A开始，可以方便的遍历以该Node-A为起点的图。下面给个示例，来帮助理解上面的存储模型，存储文件的具体格式在第2章详细描述。</p>
+<h3 id="示例1">示例1</h3><p><img src="/img/2015/06/27/2.png" alt=""><br>在这个例子中，A~E表示Node 的编号，R1~R7 表示 <code>Relationship</code> 编号，P1~P10 表示<code>Property</code> 的编号。</p>
+<ul>
+<li>Node 的存储示例图如下,每个<code>Node</code> 保存了第1个<code>Property</code> 和 第1个<code>Relationship</code>：<br><img src="/img/2015/06/27/3.png" alt=""></li>
+<li>关系的存储示意图如下：<br><img src="/img/2015/06/27/4.png" alt=""><br>从示意图可以看出，从 Node-B 开始，可以通过关系的 next 指针，遍历Node-B 的所有关系，然后可以到达与其有关系的第1层Nodes,在通过遍历第1层Nodes的关系，可以达到第2层Nodes,…</li>
+</ul>
+<a id="more"></a>
+<h2 id="neo4j_graph_db的存储文件介绍">neo4j graph db的存储文件介绍</h2><p>当我们下载neo4j-community-2.1.0-M01 并安装，然后拿 neo4j embedded-example 的EmbeddedNeo4j 例子跑一下，可以看到在target/neo4j-hello-db下会生成如下neo4j graph db 的存储文件。</p>
+<pre><code><span class="tag">-rw-r</span>–<span class="tag">r</span>–     11 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">active_tx_log</span>
+
+<span class="tag">drwxr-xr-x</span>   4096 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">index</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–  23740 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">messages</span><span class="class">.log</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–     78 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–     22 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.labeltokenstore</span><span class="class">.db</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.labeltokenstore</span><span class="class">.db</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–     64 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.labeltokenstore</span><span class="class">.db</span><span class="class">.names</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.labeltokenstore</span><span class="class">.db</span><span class="class">.names</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–     61 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.nodestore</span><span class="class">.db</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.nodestore</span><span class="class">.db</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–     93 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.nodestore</span><span class="class">.db</span><span class="class">.labels</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.nodestore</span><span class="class">.db</span><span class="class">.labels</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–    307 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.propertystore</span><span class="class">.db</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–    153 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.propertystore</span><span class="class">.db</span><span class="class">.arrays</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.propertystore</span><span class="class">.db</span><span class="class">.arrays</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.propertystore</span><span class="class">.db</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–     61 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.propertystore</span><span class="class">.db</span><span class="class">.index</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.propertystore</span><span class="class">.db</span><span class="class">.index</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–    216 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.propertystore</span><span class="class">.db</span><span class="class">.index</span><span class="class">.keys</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.propertystore</span><span class="class">.db</span><span class="class">.index</span><span class="class">.keys</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–    410 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.propertystore</span><span class="class">.db</span><span class="class">.strings</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.propertystore</span><span class="class">.db</span><span class="class">.strings</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–     69 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.relationshipgroupstore</span><span class="class">.db</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.relationshipgroupstore</span><span class="class">.db</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–     92 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.relationshipstore</span><span class="class">.db</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.relationshipstore</span><span class="class">.db</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–     38 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.relationshiptypestore</span><span class="class">.db</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.relationshiptypestore</span><span class="class">.db</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–    140 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.relationshiptypestore</span><span class="class">.db</span><span class="class">.names</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.relationshiptypestore</span><span class="class">.db</span><span class="class">.names</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–     82 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.schemastore</span><span class="class">.db</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      9 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">neostore</span><span class="class">.schemastore</span><span class="class">.db</span><span class="class">.id</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      4 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">nioneo_logical</span><span class="class">.log</span><span class="class">.active</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–   2249 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">nioneo_logical</span><span class="class">.log</span><span class="class">.v0</span>
+
+<span class="tag">drwxr-xr-x</span>   4096 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">schema</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–      0 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">store_lock</span>
+
+<span class="tag">-rw-r</span>–<span class="tag">r</span>–    800 04<span class="tag">-11</span> 13<span class="pseudo">:28</span> <span class="tag">tm_tx_log</span><span class="class">.1</span>
+</code></pre><h3 id="存储_node_的文件">存储 node 的文件</h3><ol>
+<li>存储节点数据及其序列Id<ul>
+<li><code>neostore.nodestore.db</code>:  存储节点数组，数组的下标即是该节点的ID</li>
+<li><code>neostore.nodestore.db.id</code>  ：存储最大的ID 及已经free的ID</li>
+</ul>
+</li>
+<li>存储节点label及其序列Id<ul>
+<li><code>neostore.nodestore.db.labels</code>  ：存储节点label数组数据，数组的下标即是该节点label的ID</li>
+<li><code>neostore.nodestore.db.labels.id</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="存储_relationship_的文件">存储 relationship 的文件</h3><ol>
+<li>存储关系数据及其序列Id<ul>
+<li><code>neostore.relationshipstore.db</code> 存储关系 record 数组数据</li>
+<li><code>neostore.relationshipstore.db.id</code></li>
+</ul>
+</li>
+<li>存储关系组数据及其序列Id<ul>
+<li><code>neostore.relationshipgroupstore.db</code>  存储关系 group数组数据</li>
+<li><code>neostore.relationshipgroupstore.db.id</code></li>
+</ul>
+</li>
+<li>存储关系类型及其序列Id<ul>
+<li><code>neostore.relationshiptypestore.db</code>  存储关系类型数组数据</li>
+<li><code>neostore.relationshiptypestore.db.id</code></li>
+</ul>
+</li>
+<li>存储关系类型的名称及其序列Id<ul>
+<li><code>neostore.relationshiptypestore.db.names</code> 存储关系类型 token 数组数据</li>
+<li><code>neostore.relationshiptypestore.db.names.id</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="存储_label_的文件">存储 label 的文件</h3><ol>
+<li>存储label token数据及其序列Id<ul>
+<li><code>neostore.labeltokenstore.db</code> 存储lable token 数组数据</li>
+<li><code>neostore.labeltokenstore.db.id</code></li>
+</ul>
+</li>
+<li>存储label token名字数据及其序列Id<ul>
+<li><code>neostore.labeltokenstore.db.names</code>  存储 label token 的 names 数据</li>
+<li><code>neostore.labeltokenstore.db.names.id</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="存储_property_的文件">存储 property 的文件</h3><ol>
+<li>存储属性数据及其序列Id<ul>
+<li><code>neostore.propertystore.db</code>  存储 property 数据</li>
+<li><code>neostore.propertystore.db.id</code></li>
+</ul>
+</li>
+<li>存储属性数据中的数组类型数据及其序列Id<ul>
+<li><code>neostore.propertystore.db.arrays</code>  存储 property (key-value 结构)的Value值是数组的数据。</li>
+<li><code>neostore.propertystore.db.arrays.id</code></li>
+</ul>
+</li>
+<li>属性数据为长字符串类型的存储文件及其序列Id<ul>
+<li><code>neostore.propertystore.db.strings</code>     存储 property (key-value 结构)的Value值是字符串的数据。</li>
+<li><code>neostore.propertystore.db.strings.id</code></li>
+</ul>
+</li>
+<li>属性数据的索引数据文件及其序列Id<ul>
+<li><code>neostore.propertystore.db.index</code>      存储 property (key-value 结构)的key 的索引数据。</li>
+<li><code>neostore.propertystore.db.index.id</code></li>
+</ul>
+</li>
+<li>属性数据的键值数据存储文件及其序列Id<ul>
+<li><code>neostore.propertystore.db.index.keys</code>     存储 property (key-value 结构)的key 的字符串值。</li>
+<li><code>neostore.propertystore.db.index.keys.id</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="其他的文件">其他的文件</h3><ol>
+<li>存储版本信息<ul>
+<li><code>neostore</code></li>
+<li><code>neostore.id</code></li>
+</ul>
+</li>
+<li>存储 schema 数据<ul>
+<li><code>neostore.schemastore.db</code></li>
+<li><code>neostore.schemastore.db.id</code></li>
+</ul>
+</li>
+<li>活动的逻辑日志<ul>
+<li><code>nioneo_logical.log.active</code></li>
+</ul>
+</li>
+<li>记录当前活动的日志文件名称<ul>
+<li><code>active_tx_log</code></li>
+</ul>
+</li>
+</ol>
+<h2 id="neo4j存储结构">neo4j存储结构</h2><p>neo4j 中,主要有4类节点，属性，关系等文件是以数组作为核心存储结构；同时对节点，属性，关系等类型的每个数据项都会分配一个唯一的ID，在存储时以该ID 为数组的下标。这样，在访问时通过其ID作为下标，实现快速定位。所以在图遍历等操作时，可以实现 free-index。</p>
+<h3 id="neo4j_的_store_部分类图">neo4j 的 store 部分类图</h3><p><img src="/img/2015/06/27/5.png" alt=""></p>
+<p><strong>3.1.1 CommonAbstractStore.java</strong><br><code>CommonAbstractStore</code> 是所有 <code>Store</code> 类的基类，下面的代码片段是 CommonAbstractStore 的成员变量，比较重要的是飘红的几个，特别是<code>IdGenerator</code>，每种Store 的实例都有自己的 id 分配管理器; <code>StoreChannel</code> 是负责Store文件的读写和定位；<code>WindowsPool</code> 是与Store Record相关的缓存，用来提升性能的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">CommonAbstractStore</span> <span class="keyword">implements</span> <span class="title">IdSequence</span></span><br><span class="line"> </span><br><span class="line"></span>&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Configuration</span></span><br><span class="line"> </span><br><span class="line"></span>&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Setting store_dir = InternalAbstractGraphDatabase.Configuration.store_dir;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Setting neo_store = InternalAbstractGraphDatabase.Configuration.neo_store;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Setting read_only = GraphDatabaseSettings.read_only;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Setting backup_slave = GraphDatabaseSettings.backup_slave;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Setting use_memory_mapped_buffers = GraphDatabaseSettings.use_memory_mapped_buffers;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String ALL_STORES_VERSION = <span class="string">"v0.A.2"</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String UNKNOWN_VERSION = <span class="string">"Uknown"</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">protected</span> Config configuration;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> IdGeneratorFactory idGeneratorFactory;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> WindowPoolFactory windowPoolFactory;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">protected</span> FileSystemAbstraction fileSystemAbstraction;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> File storageFileName;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> IdType idType;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">protected</span> StringLogger stringLogger;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span> IdGenerator idGenerator = <span class="keyword">null</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span> StoreChannel fileChannel = <span class="keyword">null</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span> WindowPool windowPool;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">boolean</span> storeOk = <span class="keyword">true</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span> Throwable causeOfStoreNotOk;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span> FileLock fileLock;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">boolean</span> readOnly = <span class="keyword">false</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">boolean</span> backupSlave = <span class="keyword">false</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">long</span> highestUpdateRecordId = -<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="neo4j_的db文件及对应的存储格式类型">neo4j 的db文件及对应的存储格式类型</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">文件名</th>
+<th style="text-align:left">文件存储格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">neostore.labeltokenstore.db</td>
+<td style="text-align:left">LabelTokenStore（TokenStore）</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.labeltokenstore.db.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.labeltokenstore.db.names</td>
+<td style="text-align:left">StringPropertyStore (AbstractDynamicStore, NAME_STORE_BLOCK_SIZE = 30)</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.labeltokenstore.db.names.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.nodestore.db</td>
+<td style="text-align:left">NodeStore</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.nodestore.db.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.nodestore.db.labels</td>
+<td style="text-align:left">ArrayPropertyStore (AbstractDynamicStorelabel_block_size=60)</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.nodestore.db.labels.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.propertystore.db</td>
+<td style="text-align:left">PropertyStore</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.propertystore.db.arrays</td>
+<td style="text-align:left">ArrayPropertyStore (AbstractDynamicStorearray_block_size=120)</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.propertystore.db.arrays.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.propertystore.db.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.propertystore.db.index</td>
+<td style="text-align:left">PropertyIndexStore</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.propertystore.db.index.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.propertystore.db.index.keys</td>
+<td style="text-align:left">StringPropertyStore (AbstractDynamicStore, NAME_STORE_BLOCK_SIZE = 30)</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.propertystore.db.index.keys.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.propertystore.db.strings</td>
+<td style="text-align:left">StringPropertyStore (AbstractDynamicStorestring_block_size=120)</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.propertystore.db.strings.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.relationshipgroupstore.db</td>
+<td style="text-align:left">RelationshipGroupStore</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.relationshipgroupstore.db.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.relationshipstore.db</td>
+<td style="text-align:left">RelationshipStore</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.relationshipstore.db.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.relationshiptypestore.db</td>
+<td style="text-align:left">RelationshipTypeTokenStore（TokenStore）</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.relationshiptypestore.db.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.relationshiptypestore.db.names</td>
+<td style="text-align:left">StringPropertyStore (AbstractDynamicStore, NAME_STORE_BLOCK_SIZE = 30)</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.relationshiptypestore.db.names.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.schemastore.db</td>
+<td style="text-align:left">SchemaStore(AbstractDynamicStore, BLOCK_SIZE = 56)</td>
+</tr>
+<tr>
+<td style="text-align:left">neostore.schemastore.db.id</td>
+<td style="text-align:left">ID 类型</td>
+</tr>
+</tbody>
+</table>
+<h3 id="通用的Store_类型">通用的Store 类型</h3><h4 id="id_类型">id 类型</h4><p>下面是 neo4j db 中,每种<code>Store</code>都有自己的ID文件(即后缀.id 文件)，它们的格式都是一样的。</p>
+<pre><code>[test00]$ls -lh target/neo4j-test00.db/ |grep .id
+
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.labeltokenstore.db.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.labeltokenstore.db.names.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.nodestore.db.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.nodestore.db.labels.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.propertystore.db.arrays.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.propertystore.db.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.propertystore.db.index.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.propertystore.db.index.keys.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.propertystore.db.strings.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.relationshipgroupstore.db.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.relationshipstore.db.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.relationshiptypestore.db.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.relationshiptypestore.db.names.id
+</span>
+-<span class="ruby">rw-r–r–<span class="number">9</span> <span class="number">04</span>-<span class="number">11</span> <span class="number">13</span><span class="symbol">:</span><span class="number">28</span> neostore.schemastore.db.id</span>
+</code></pre><p><strong>3.3.1.1. ID类型文件的存储格式</strong><br><img src="/img/2015/06/27/6.png" alt=""><br>neo4j 中后缀为 “.id”的文件格式如上图所示，由<code>文件头</code>（9 Bytes）和 <code>long类型 数组</code> 2部分构成：</p>
+<ul>
+<li><code>sticky(1 byte)</code> : if sticky the id generator wasn’t closed properly so it has to berebuilt (go through the node, relationship, property, rel type etc files).</li>
+<li><code>nextFreeId(long)</code> : 保存最大的ID,该值与对应类型的存储数组的数组大小相对应。</li>
+<li><code>reuseId(long)</code>:用来保存已经释放且可复用的ID值。通过复用ID ,可以减少资源数组的空洞，提高磁盘利用率。</li>
+</ul>
+<p><strong>3.3.1.2. IdGeneratorImpl.java</strong><br>每一种资源类型的ID 分配 neo4j 中是通过 <code>IdGeneratorImpl</code> 来实现的，其功能是负责ID管理分配和回收复用。对于<code>节点</code>，<code>关系</code>，<code>属性</code>等每一种资源类型，都可以生成一个<code>IdGenerator</code>  实例来负责其ID管理分配和回收复用。</p>
+<p><strong>3.3.1.2.1. 读取id 文件进行初始化</strong><br>下面是 <code>IdGeneratorImpl.java</code> 中， 读取id 文件进行初始化的过程，<code>IdGeneratorImpl</code> 会从 id 文件中读取grabSize 个<code>可复用的ID</code> (reuseId) 到<code>idsReadFromFile(LinkedList&lt;Long&gt;)</code>中，在需要申请id 时优先分配 <code>idsReadFromFile</code>中的<code>可复用ID</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">initGenerator</span><span class="params">()</span></span><br><span class="line"></span><br><span class="line">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            fileChannel = fs.open(fileName, <span class="string">"rw"</span>);</span><br><span class="line"></span><br><span class="line">            ByteBuffer buffer = ByteBuffer.allocate(HEADER_SIZE);</span><br><span class="line"></span><br><span class="line">            readHeader(buffer);</span><br><span class="line"></span><br><span class="line">            markAsSticky(buffer);</span><br><span class="line"></span><br><span class="line">            fileChannel.position(HEADER_SIZE);</span><br><span class="line"></span><br><span class="line">            maxReadPosition = fileChannel.size();</span><br><span class="line"></span><br><span class="line">            defraggedIdCount = (<span class="keyword">int</span>) (maxReadPosition - HEADER_SIZE) / <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">            readIdBatch();</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> UnderlyingStorageException(</span><br><span class="line"></span><br><span class="line">                    <span class="string">"Unable to init id generator "</span> + fileName, e);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readHeader</span><span class="params">(ByteBuffer buffer)</span> <span class="keyword">throws</span> IOException</span><br><span class="line"></span><br><span class="line">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        readPosition = fileChannel.read(buffer);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (readPosition != HEADER_SIZE)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            fileChannel.close();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidIdGeneratorException(</span><br><span class="line"></span><br><span class="line">                    <span class="string">"Unable to read header, bytes read: "</span> + readPosition);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        buffer.flip();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">byte</span> storageStatus = buffer.get();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (storageStatus != CLEAN_GENERATOR)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            fileChannel.close();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidIdGeneratorException(<span class="string">"Sticky generator[ "</span> +</span><br><span class="line"></span><br><span class="line">                    fileName + <span class="string">"] delete this id file and build a new one"</span>);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.highId.set(buffer.getLong());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readIdBatch</span><span class="params">()</span></span><br><span class="line"></span><br><span class="line">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!canReadMoreIdBatches())</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> howMuchToRead = (<span class="keyword">int</span>) Math.min(grabSize * <span class="number">8</span>, maxReadPosition - readPosition);</span><br><span class="line"></span><br><span class="line">            ByteBuffer readBuffer = ByteBuffer.allocate(howMuchToRead);</span><br><span class="line"></span><br><span class="line">            fileChannel.position(readPosition);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> bytesRead = fileChannel.read(readBuffer);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">assert</span> fileChannel.position() &lt;= maxReadPosition;</span><br><span class="line"></span><br><span class="line">            readPosition += bytesRead;</span><br><span class="line"></span><br><span class="line">            readBuffer.flip();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">assert</span> (bytesRead % <span class="number">8</span>) == <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> idsRead = bytesRead / <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">            defraggedIdCount -= idsRead;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; idsRead; i++)</span><br><span class="line"></span><br><span class="line">            &#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">long</span> id = readBuffer.getLong();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (id != INTEGER_MINUS_ONE)</span><br><span class="line"></span><br><span class="line">                &#123;</span><br><span class="line"></span><br><span class="line">                    idsReadFromFile.add(id);</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> UnderlyingStorageException(</span><br><span class="line"></span><br><span class="line">                    <span class="string">"Failed reading defragged id batch"</span>, e);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>3.3.1.2.2. 释放id(freeId)</strong><br>用户释放一个 id 后，会先放入 <code>releasedIdList （LinkedList&lt;Long&gt;）</code>，当<code>releasedIdList</code> 中回收的 id 个数超过 <code>grabSize</code> 个时， 写入到 id 文件的末尾。所以可见，对于一个 <code>IdGeneratorImpl</code>， 最多有 <code>2 * grabSize</code> 个 id 缓存(releasedIdList 和 idsReadFromFile)。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// initialize the id generator and performs a simple validation</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * Frees the &lt;CODE&gt;id&lt;/CODE&gt; making it a defragged id that will be</span><br><span class="line">     * &lt;p/&gt;</span><br><span class="line">     * returned by next id before any new id (that hasn't been used yet) is</span><br><span class="line">     * &lt;p/&gt;</span><br><span class="line">     * returned.</span><br><span class="line">     * &lt;p/&gt;</span><br><span class="line">     * &lt;p/&gt;</span><br><span class="line">     * &lt;p/&gt;</span><br><span class="line">     * This method will throw an &lt;CODE&gt;IOException&lt;/CODE&gt; if id is negative or</span><br><span class="line">     * &lt;p/&gt;</span><br><span class="line">     * if id is greater than the highest returned id. However as stated in the</span><br><span class="line">     * &lt;p/&gt;</span><br><span class="line">     * class documentation above the id isn't validated to see if it really is</span><br><span class="line">     * &lt;p/&gt;</span><br><span class="line">     * free.</span><br><span class="line">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">freeId</span><span class="params">(<span class="keyword">long</span> id)</span></span><br><span class="line"></span><br><span class="line">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (id == INTEGER_MINUS_ONE)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (fileChannel == <span class="keyword">null</span>)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Generator closed "</span> + fileName);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (id &lt; <span class="number">0</span> || id &gt;= highId.get())</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal id["</span> + id + <span class="string">"]"</span>);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        releasedIdList.add(id);</span><br><span class="line"></span><br><span class="line">        defraggedIdCount++;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (releasedIdList.size() &gt;= grabSize)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            writeIdBatch(ByteBuffer.allocate(grabSize * <span class="number">8</span>));</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>3.3.1.2.3. 申请id ( nextId)</strong><br>当用户申请一个 id  时，<code>IdGeneratorImpl</code> 在分配时，有2种分配策略：<code>“正常的分配策略”</code> 和<code>“激进分配策略”</code>（aggressiveReuse），可以根据配置进行选择。</p>
+<ul>
+<li>“正常的分配策略”：<ul>
+<li>首先从idsReadFromFile 中分配; 如果 idsReadFromFile 为空，则先从对应的 id 文件中读取已释放且可复用的 id 到idsReadFromFile.</li>
+<li>如果 idsReadFromFile 及 id 文件中没有已释放且可复用的 id了，则分配全新的id,即id = highId.get()  并将highId 加1；</li>
+</ul>
+</li>
+<li>“激进分配策略”（aggressiveReuse）:<ul>
+<li>首先从releasedIdList（刚回收的ID List）中分配。</li>
+<li>releasedIdList分配光了，则从idsReadFromFile 中分配; 如果 idsReadFromFile 为空，则先从对应的 id 文件中读取已释放且可复用的 id 到idsReadFromFile.</li>
+<li>如果 idsReadFromFile 及 id 文件中没有已释放且可复用的 id了，则分配全新的id,即id = highId.get()  并将highId 加1；</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">     * Returns the next "free" id. If a defragged id exist it will be returned</span><br><span class="line">     * &lt;p/&gt;</span><br><span class="line">     * else the next free id that hasn't been used yet is returned. If no id</span><br><span class="line">     * &lt;p/&gt;</span><br><span class="line">     * exist the capacity is exceeded (all values &lt;= max are taken) and a</span><br><span class="line">     * &lt;p/&gt;</span><br><span class="line">     * &#123;<span class="doctag">@link</span> UnderlyingStorageException&#125; will be thrown.</span><br><span class="line">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">long</span> <span class="title">nextId</span><span class="params">()</span></span><br><span class="line"></span><br><span class="line">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        assertStillOpen();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">long</span> nextDefragId = nextIdFromDefragList();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nextDefragId != -<span class="number">1</span>) <span class="keyword">return</span> nextDefragId;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">long</span> id = highId.get();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (id == INTEGER_MINUS_ONE)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Skip the integer -1 (0xFFFFFFFF) because it represents</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// special values, f.ex. the end of a relationships/property chain.</span></span><br><span class="line"></span><br><span class="line">            id = highId.incrementAndGet();</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        assertIdWithinCapacity(id);</span><br><span class="line"></span><br><span class="line">        highId.incrementAndGet();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="DynamicStore_类型">DynamicStore 类型</h4><p><strong>3.3.2.1. AbstractDynamicStore 的存储格式</strong><br>neo4j 中对于字符串等变长值的保存策略是用一组定长的 block 来保存，block之间用单向链表链接。类 AbstractDynamicStore 实现了该功能，下面是其注释说明。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"></span><br><span class="line"> * An abstract representation of a dynamic store. The difference between a</span><br><span class="line"></span><br><span class="line"> * normal AbstractStore and a AbstractDynamicStore is</span><br><span class="line"></span><br><span class="line"> * that the size of a record/entry can be dynamic.</span><br><span class="line"></span><br><span class="line"> * Instead of a fixed record this class uses blocks to store a record. If a</span><br><span class="line"></span><br><span class="line"> * record size is greater than the block size the record will use one or more</span><br><span class="line"></span><br><span class="line"> * blocks to store its data.</span><br><span class="line"></span><br><span class="line"> * A dynamic store don’t have a IdGenerator because the position of a</span><br><span class="line"></span><br><span class="line"> * record can’t be calculated just by knowing the id. Instead one should use a</span><br><span class="line"></span><br><span class="line"> * AbstractStore and store the start block of the record located in the</span><br><span class="line"></span><br><span class="line"> * dynamic store. Note: This class makes use of an id generator internally for</span><br><span class="line"></span><br><span class="line"> * managing free and non free blocks.</span><br><span class="line"></span><br><span class="line"> * Note, the first block of a dynamic store is reserved and contains information</span><br><span class="line"></span><br><span class="line"> * about the store.</span><br><span class="line"></span><br><span class="line"> */</span></span><br></pre></td></tr></table></figure>
+<p><img src="/img/2015/06/27/7.jpg" alt=""><br><code>AbstractDynamicStore</code>类对应的存储文件格式如上图所示, 整个文件是有一个<code>block_size=BLOCK_HEADER_SIZE(8Bytes)+block_content_size</code>的定长数组和一个字符串<code>“StringPropertyStore v0.A.2”</code>或<code>“ArrayPropertyStore v0.A.2”</code>或<code>“SchemaStore v0.A.2”</code>(文件类型描述TYPE_DESCRIPTOR和 neo4j 的 ALL_STORES_VERSION构成)。访问时，可以通过 id 作为数组的下标进行访问。其中，文件的第1个 record 中前4 字节用来保存 block_size。文件的第2个 record开始保存实际的block数据,它由8个字节的block_header和定长的 block_content（可配置）构成. block_header 结构如下:</p>
+<ul>
+<li>inUse(1 Byte):第1字节,共分成3部分<br>  [x__ ,    ]  0: start record, 1: linked record<br>  [   x,    ]  inUse<br>  [    ,xxxx]  high next block bits  <ul>
+<li>第1~4 bit 表示<code>next_block</code> 的高4位</li>
+<li>第5 bit表示<code>block</code> 是否在 use;</li>
+<li>第8 bit 表示 <code>block</code> 是否是单向链表的第1个 block；<code>0</code>表示第1个block, <code>1</code>表示后续 block.</li>
+</ul>
+</li>
+<li>nr_of_bytes(3Bytes)：本 block 中保存的数据的长度。</li>
+<li>next_block(4Bytes): next_block 的低 4 个字节，加上 <code>inUse</code> 的第1~4 位，<code>next_block</code> 的实际长度共 36 bit。以数组方式存储的单向链表的指针，指向保存同一条数据的下一个 block 的id.</li>
+</ul>
+<p><strong>3.3.2.2. AbstractDynamicStore.java</strong><br>下面看一下 AbstractDynamicStore.java 中 <code>getRecord()</code> 和<code>readAndVerifyBlockSize()</code> 成员函数，可以帮助理解 DynamicStore 的存储格式。</p>
+<ul>
+<li>getRecord( long blockId, PersistenceWindow window, RecordLoad load )</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> DynamicRecord <span class="title">getRecord</span><span class="params">( <span class="keyword">long</span> blockId, PersistenceWindow window, RecordLoad load )</span>&lt;/pre&gt;</span><br><span class="line">&lt;div&gt;</span>&#123;</span><br><span class="line"> </span><br><span class="line">DynamicRecord record = <span class="keyword">new</span> DynamicRecord( blockId );</span><br><span class="line"> </span><br><span class="line">Buffer buffer = window.getOffsettedBuffer( blockId );</span><br><span class="line"> </span><br><span class="line"><span class="comment">/*</span><br><span class="line"> </span><br><span class="line">* First 4b</span><br><span class="line"> </span><br><span class="line">* [x   ,    ][    ,    ][    ,    ][    ,    ] 0: start record, 1: linked record</span><br><span class="line"> </span><br><span class="line">* [   x,    ][    ,    ][    ,    ][    ,    ] inUse</span><br><span class="line"> </span><br><span class="line">* [    ,xxxx][    ,    ][    ,    ][    ,    ] high next block bits</span><br><span class="line"> </span><br><span class="line">* [    ,    ][xxxx,xxxx][xxxx,xxxx][xxxx,xxxx] nr of bytes in the data field in this record</span><br><span class="line"> </span><br><span class="line">*</span><br><span class="line"> </span><br><span class="line">*/</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> firstInteger = buffer.getUnsignedInt();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">boolean</span> isStartRecord = (firstInteger &amp; <span class="number">0x80000000</span>) == <span class="number">0</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> maskedInteger = firstInteger &amp; ~<span class="number">0x80000000</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">int</span> highNibbleInMaskedInteger = (<span class="keyword">int</span>) ( ( maskedInteger ) &gt;&gt; <span class="number">28</span> );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">boolean</span> inUse = highNibbleInMaskedInteger == Record.IN_USE.intValue();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( !inUse &amp;&amp; load != RecordLoad.FORCE )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">throw</span> <span class="keyword">new</span> InvalidRecordException( <span class="string">"DynamicRecord Not in use, blockId["</span> + blockId + <span class="string">"]"</span> );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">int</span> dataSize = getBlockSize() - BLOCK_HEADER_SIZE;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">int</span> nrOfBytes = (<span class="keyword">int</span>) ( firstInteger &amp; <span class="number">0xFFFFFF</span> );</span><br><span class="line"> </span><br><span class="line"><span class="comment">/*</span><br><span class="line"> </span><br><span class="line">* Pointer to next block 4b (low bits of the pointer)</span><br><span class="line"> </span><br><span class="line">*/</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> nextBlock = buffer.getUnsignedInt();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> nextModifier = ( firstInteger &amp; <span class="number">0xF000000L</span> ) &lt;&lt; <span class="number">8</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> longNextBlock = longFromIntAndMod( nextBlock, nextModifier );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">boolean</span> readData = load != RecordLoad.CHECK;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( longNextBlock != Record.NO_NEXT_BLOCK.intValue()</span><br><span class="line"> </span><br><span class="line">&amp;&amp; nrOfBytes &lt; dataSize || nrOfBytes &gt; dataSize )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line">readData = <span class="keyword">false</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( load != RecordLoad.FORCE )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">throw</span> <span class="keyword">new</span> InvalidRecordException( <span class="string">"Next block set["</span> + nextBlock</span><br><span class="line"> </span><br><span class="line">+ <span class="string">"] current block illegal size["</span> + nrOfBytes + <span class="string">"/"</span> + dataSize + <span class="string">"]"</span> );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">record.setInUse( inUse );</span><br><span class="line"> </span><br><span class="line">record.setStartRecord( isStartRecord );</span><br><span class="line"> </span><br><span class="line">record.setLength( nrOfBytes );</span><br><span class="line"> </span><br><span class="line">record.setNextBlock( longNextBlock );</span><br><span class="line"> </span><br><span class="line"><span class="comment">/*</span><br><span class="line"> </span><br><span class="line">* Data 'nrOfBytes' bytes</span><br><span class="line"> </span><br><span class="line">*/</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( readData )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">byte</span> byteArrayElement[] = <span class="keyword">new</span> <span class="keyword">byte</span>[nrOfBytes];</span><br><span class="line"> </span><br><span class="line">buffer.get( byteArrayElement );</span><br><span class="line"> </span><br><span class="line">record.setData( byteArrayElement );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> record;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>readAndVerifyBlockSize()</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">readAndVerifyBlockSize</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span><br><span class="line"> </span><br><span class="line"></span>&#123;</span><br><span class="line"> </span><br><span class="line">ByteBuffer buffer = ByteBuffer.allocate( <span class="number">4</span> );</span><br><span class="line"> </span><br><span class="line">getFileChannel().position( <span class="number">0</span> );</span><br><span class="line"> </span><br><span class="line">getFileChannel().read( buffer );</span><br><span class="line"> </span><br><span class="line">buffer.flip();</span><br><span class="line"> </span><br><span class="line">blockSize = buffer.getInt();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( blockSize &lt;= <span class="number">0</span> )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">throw</span> <span class="keyword">new</span> InvalidRecordException( <span class="string">"Illegal block size: "</span> +</span><br><span class="line"> </span><br><span class="line">blockSize + <span class="string">" in "</span> + getStorageFileName() );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>3.3.2.3  类DynamicArrayStore, DynamicStringStore</strong><br>类<code>SchemaStore</code>，<code>DynamicArrayStore(ArrayPropertyStore)</code>, <code>DynamicStringStore(StringPropertyStore)</code>都是继承成自类<code>AbstractDynamicStore</code>，所以与类DynamicArrayStore, DynamicStringStore和 SchemaStore对应文件的存储格式，都是遵循AbstractDynamicStore的存储格式，除了block块的大小（block_size）不同外。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">db 文件</th>
+<th style="text-align:center">存储类型</th>
+<th style="text-align:center">block_size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">neostore.labeltokenstore.db.names</td>
+<td style="text-align:center">StringPropertyStore</td>
+<td style="text-align:center">NAME_STORE_BLOCK_SIZE=30</td>
+</tr>
+<tr>
+<td style="text-align:center">neostore.propertystore.db.index.keys</td>
+<td style="text-align:center">StringPropertyStore</td>
+<td style="text-align:center">NAME_STORE_BLOCK_SIZE=30</td>
+</tr>
+<tr>
+<td style="text-align:center">neostore.relationshiptypestore.db.names</td>
+<td style="text-align:center">StringPropertyStore</td>
+<td style="text-align:center">NAME_STORE_BLOCK_SIZE=30</td>
+</tr>
+<tr>
+<td style="text-align:center">neostore.propertystore.db.strings</td>
+<td style="text-align:center">StringPropertyStore</td>
+<td style="text-align:center">string_block_size=120</td>
+</tr>
+<tr>
+<td style="text-align:center">neostore.nodestore.db.labels</td>
+<td style="text-align:center">ArrayPropertyStore</td>
+<td style="text-align:center">label_block_size=60</td>
+</tr>
+<tr>
+<td style="text-align:center">neostore.propertystore.db.arrays</td>
+<td style="text-align:center">ArrayPropertyStore</td>
+<td style="text-align:center">array_block_size=120</td>
+</tr>
+<tr>
+<td style="text-align:center">neostore.schemastore.db</td>
+<td style="text-align:center">SchemaStore</td>
+<td style="text-align:center">BLOCK_SIZE=56</td>
+</tr>
+</tbody>
+</table>
+<p><code>block_size</code> 通过配置文件或缺省值来设置的，下面的代码片段展示了neostore.propertystore.db.strings 文件的创建过程及block_size 的大小如何传入。</p>
+<ol>
+<li><p>GraphDatabaseSettings.java</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Setting string_block_size = setting(<span class="string">"string_block_size"</span>, INTEGER, <span class="string">"120"</span>,min(<span class="number">1</span>));</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Setting array_block_size = setting(<span class="string">"array_block_size"</span>, INTEGER, <span class="string">"120"</span>,min(<span class="number">1</span>));</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Setting label_block_size = setting(<span class="string">"label_block_size"</span>, INTEGER, <span class="string">"60"</span>,min(<span class="number">1</span>));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>StoreFactory.java的Configuration 类</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Configuration</span></span>&#123;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Setting string_block_size = GraphDatabaseSettings.string_block_size;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Setting array_block_size = GraphDatabaseSettings.array_block_size;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Setting label_block_size = GraphDatabaseSettings.label_block_size;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Setting dense_node_threshold = GraphDatabaseSettings.dense_node_threshold;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>StoreFactory.java的createPropertyStore 函数</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createPropertyStore</span><span class="params">( File fileName )</span></span>&#123;</span><br><span class="line">	createEmptyStore( fileName, buildTypeDescriptorAndVersion( PropertyStore.TYPE_DESCRIPTOR )); </span><br><span class="line">	<span class="keyword">int</span> stringStoreBlockSize = config.get( Configuration.string_block_size );</span><br><span class="line">	<span class="keyword">int</span> arrayStoreBlockSize = config.get( Configuration.array_block_size )</span><br><span class="line">createDynamicStringStore(<span class="keyword">new</span> File( fileName.getPath() + STRINGS_PART), 	stringStoreBlockSize, IdType.STRING_BLOCK);</span><br><span class="line">	createPropertyKeyTokenStore( <span class="keyword">new</span> File( fileName.getPath() + INDEX_PART ) );</span><br><span class="line">	createDynamicArrayStore( <span class="keyword">new</span> File( fileName.getPath() + ARRAYS_PART ), 	arrayStoreBlockSize );</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>StoreFactory.java的createDynamicStringStore函数</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">createDynamicStringStore</span><span class="params">( File fileName, <span class="keyword">int</span> blockSize, IdType idType )</span></span>&#123;</span><br><span class="line">createEmptyDynamicStore(fileName, blockSize, DynamicStringStore.VERSION, idType);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>StoreFactory.java的createEmptyDynamicStore 函数</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">* Creates a new empty store. A factory method returning an implementation</span><br><span class="line">* should make use of this method to initialize an empty store. Block size</span><br><span class="line">* must be greater than zero. Not that the first block will be marked as</span><br><span class="line">* reserved (contains info about the block size). There will be an overhead</span><br><span class="line">* for each block of &lt;CODE&gt;AbstractDynamicStore.BLOCK_HEADER_SIZE&lt;/CODE&gt;bytes.</span><br><span class="line">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createEmptyDynamicStore</span><span class="params">( File fileName, <span class="keyword">int</span> baseBlockSize,</span><br><span class="line">String typeAndVersionDescriptor, IdType idType)</span></span><br><span class="line"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> blockSize = baseBlockSize;</span><br><span class="line"><span class="comment">// sanity checks</span></span><br><span class="line">…</span><br><span class="line">blockSize += AbstractDynamicStore.BLOCK_HEADER_SIZE;</span><br><span class="line"><span class="comment">// write the header</span></span><br><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">FileChannel channel = fileSystemAbstraction.create(fileName);</span><br><span class="line"><span class="keyword">int</span> endHeaderSize = blockSize</span><br><span class="line">+ UTF8.encode( typeAndVersionDescriptor ).length;</span><br><span class="line">ByteBuffer buffer = ByteBuffer.allocate( endHeaderSize );</span><br><span class="line">buffer.putInt( blockSize );</span><br><span class="line">buffer.position( endHeaderSize - typeAndVersionDescriptor.length() );</span><br><span class="line">buffer.put( UTF8.encode( typeAndVersionDescriptor ) ).flip();</span><br><span class="line">channel.write( buffer );</span><br><span class="line">channel.force( <span class="keyword">false</span> );</span><br><span class="line">channel.close();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> ( IOException e )</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">throw</span> <span class="keyword">new</span> UnderlyingStorageException( <span class="string">"Unable to create store "</span></span><br><span class="line">+ fileName, e );</span><br><span class="line">&#125;</span><br><span class="line">idGeneratorFactory.create( fileSystemAbstraction, <span class="keyword">new</span> File( fileName.getPath() + <span class="string">".id"</span>), <span class="number">0</span> );</span><br><span class="line"><span class="comment">// <span class="doctag"><span class="keyword">TODO</span></span> highestIdInUse = 0 works now, but not when slave can create store files.</span></span><br><span class="line">IdGenerator idGenerator = idGeneratorFactory.open(fileSystemAbstraction,</span><br><span class="line"><span class="keyword">new</span> File( fileName.getPath() + <span class="string">".id"</span>),idType.getGrabSize(), idType, <span class="number">0</span> );</span><br><span class="line">idGenerator.nextId(); <span class="comment">// reserve first for blockSize</span></span><br><span class="line">idGenerator.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="Property_的存储">Property 的存储</h3><p>下面是neo4j graph db 中，Property数据存储对应的文件：</p>
+<pre><code>neostore<span class="class">.propertystore</span><span class="class">.db</span>
+
+neostore<span class="class">.propertystore</span><span class="class">.db</span><span class="class">.arrays</span>
+
+neostore<span class="class">.propertystore</span><span class="class">.db</span><span class="class">.arrays</span><span class="class">.id</span>
+
+neostore<span class="class">.propertystore</span><span class="class">.db</span><span class="class">.id</span>
+
+neostore<span class="class">.propertystore</span><span class="class">.db</span><span class="class">.index</span>
+
+neostore<span class="class">.propertystore</span><span class="class">.db</span><span class="class">.index</span><span class="class">.id</span>
+
+neostore<span class="class">.propertystore</span><span class="class">.db</span><span class="class">.index</span><span class="class">.keys</span>
+
+neostore<span class="class">.propertystore</span><span class="class">.db</span><span class="class">.index</span><span class="class">.keys</span><span class="class">.id</span>
+
+neostore<span class="class">.propertystore</span><span class="class">.db</span><span class="class">.strings</span>
+
+neostore<span class="class">.propertystore</span><span class="class">.db</span><span class="class">.strings</span><span class="class">.id</span>
+</code></pre><p>neo4j 中, <code>Property</code> 的存储是由 <code>PropertyStore</code>, <code>ArrayPropertyStore</code>, <code>StringPropertyStore</code> 和<code>PropertyKeyTokenStore</code> 4种类型的Store配合来完成的.</p>
+<p>类<code>PropertyStore</code>对应的存储文件是neostore.propertystore.db, 相应的用来存储 string/array 类型属性值的文件分别是neostore.propertystore.db.strings (StringPropertyStore) 和 neostore.propertystore.db.arrays(ArrayPropertyStore). 其存储模型示意图如下：<br><img src="/img/2015/06/27/8.png" alt=""><br>其中<code>PropertyStore</code>是Property最主要的存储结构，当Property的Key-Value对的Value 是字符串或数组类型并且要求的存储空间比较大，在PropertyStore中保存不了，则会存在StringPropertyStore/ ArrayPropertyStore这样的DynamicStore 中。如果长度超过一个block ，则分block存储，并将其在StringPropertyStore/ ArrayPropertyStore中的第1个block 的 block_id 保存到 PropertyStore类型文件相应record 的PropertyBlock字段中。</p>
+<p><code>PropertyKeyTokenStore</code>和<code>StringPropertyStore</code> 配合用来存储Propery的Key部分。Propery的Key是编码的，key 的 id 保存在 PropertyKeyTokenStore (即 neostore.propertystore.db.index)，key 的字符串名保存在对应的StringPropertyStore类型文件neostore.propertystore.db.index.keys 中。</p>
+<p><code>ArrayPropertyStore</code>的存储格式见&lt; 3.3.2 DynamicStore 类型&gt;，下面分别介绍一下PropertyStore和PropertyKeyTokenStore（PropertyKeyTokenStore）的文件存储格式。</p>
+<h4 id="PropertyStore类型的存储格式">PropertyStore类型的存储格式</h4><p>neostore.propertystore.db文件存储格式示意图如下，整个文件是有一个 <code>RECORD_SIZE=41 Bytes</code> 的定长数组和一个字符串描述符<code>“PropertyStore v0.A.2”</code>(文件类型描述TYPE_DESCRIPTOR和 neo4j 的 ALL_STORES_VERSION构成)。访问时，可以通过 prop_id 作为数组的下标进行访问。</p>
+<p><img src="/img/2015/06/27/9.png" alt=""></p>
+<p>下面介绍一下 property record 中每个字段的含义：</p>
+<ul>
+<li><code>highByte(1 Byte)</code>:第1字节,共分成2部分<br>  //[pppp,nnnn] previous, next high bits<br>  byte modifiers = buffer.get();  <ul>
+<li>第1~4 bit 表示 <code>next</code> 的高4位；</li>
+<li>第 5~8 bit表示 <code>prev</code> 的高4位 </li>
+</ul>
+</li>
+<li><code>prev(4 Bytes)</code>: Node或Relationship 的属性是通过双向链表方式组织的，prev 表示本属性在双向链表中的上一个属性的id。第2~5字节是prev property_id的 低32位. 加上highByte字节的第 5~8 bit作为高4位，构成一个完整的36位property_id。</li>
+<li><code>next(4 Bytes)</code>: next 表示本属性在双向链表中的下一个属性的id。第6~9字节是next property_id的 低32位. 加上highByte字节的第 1~4 bit作为高4位，构成一个完整的36位property_id。</li>
+<li><code>payload</code>:  payload 由block_header(8 Bytes)加3个property_block(8 Bytes)组成，共计 32 Bytes.  block_header 分成3部分:<ul>
+<li><code>key_id(24 bits)</code>: 第1 ~24 bit , property 的key 的 id</li>
+<li><code>type( 4 bits )</code>:   第25 ~28 bit , property 的 value 的类型，支持 string, Interger,Boolean, Float, Long,Double, Byte, Character,Short, array.</li>
+<li><code>payload(36 bits)</code>: 第29 ~64 bit, 共计36bit；对于Interger, Boolean, Float, Byte, Character , Short 类型的值，直接保存在payload；对于long，如果36位可以表示，则直接保存在payload，如果不够，则保存到第1个PropertyBlock中；double 类型，保存到第1个PropertyBlock中；对于 array/string ，如果编码后在 block_header及3个PropertyBlock 能保存，则直接保存；否则，保存到ArrayDynamicStore/StringDynamicStore 中， payload 保存其在ArrayDynamicStore中的数组下表。</li>
+</ul>
+</li>
+</ul>
+<h4 id="String_类型属性值的保存过程">String 类型属性值的保存过程</h4><p>下面的代码片段展示了neo4j 中，比较长的 String 类型属性值的保存处理过程，其是如何<code>分成多个</code> DynamicBlock 来存储的。<br><img src="/img/2015/06/27/10.jpg" alt=""></p>
+<p><strong>3.5.2.1 encodeValue 函数</strong><br>encodeValue 函数是 PropertySTore.java 的成员函数, 它实现了不同类型的属性值的编码.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">encodeValue</span><span class="params">( PropertyBlock block, <span class="keyword">int</span> keyId, Object value )</span></span><br><span class="line"> </span><br><span class="line"></span>&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( value <span class="keyword">instanceof</span> String )</span><br><span class="line"> </span><br><span class="line">&#123;   <span class="comment">// Try short string first, i.e. inlined in the property block</span></span><br><span class="line"> </span><br><span class="line">String string = (String) value;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( LongerShortString.encode( keyId, string, block, PropertyType.getPayloadSize() ) )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Fall back to dynamic string store</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">byte</span>[] encodedString = encodeString( string );</span><br><span class="line"> </span><br><span class="line">Collection valueRecords = allocateStringRecords( encodedString );</span><br><span class="line"> </span><br><span class="line">setSingleBlockValue( block, keyId, PropertyType.STRING, first( valueRecords ).getId() );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> ( DynamicRecord valueRecord : valueRecords )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line">valueRecord.setType( PropertyType.STRING.intValue() );</span><br><span class="line"> </span><br><span class="line">block.addValueRecord( valueRecord );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> ( value <span class="keyword">instanceof</span> Integer )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line">setSingleBlockValue( block, keyId, PropertyType.INT, ((Integer) value).longValue() );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> ( value <span class="keyword">instanceof</span> Boolean )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line">setSingleBlockValue( block, keyId, PropertyType.BOOL, ((Boolean) value ? <span class="number">1L</span> : <span class="number">0L</span>) );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> ( value <span class="keyword">instanceof</span> Float )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line">setSingleBlockValue( block, keyId, PropertyType.FLOAT, Float.floatToRawIntBits( (Float) value ) );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> ( value <span class="keyword">instanceof</span> Long )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> keyAndType = keyId | (((<span class="keyword">long</span>) PropertyType.LONG.intValue()) &lt;&lt; <span class="number">24</span>);</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( ShortArray.LONG.getRequiredBits( (Long) value ) &lt;= <span class="number">35</span> )</span><br><span class="line"> </span><br><span class="line">&#123;   <span class="comment">// We only need one block for this value, special layout compared to, say, an integer</span></span><br><span class="line"> </span><br><span class="line">block.setSingleBlock( keyAndType | (<span class="number">1L</span> &lt;&lt; <span class="number">28</span>) | ((Long) value &lt;&lt; <span class="number">29</span>) );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> </span><br><span class="line">&#123;   <span class="comment">// We need two blocks for this value</span></span><br><span class="line"> </span><br><span class="line">block.setValueBlocks( <span class="keyword">new</span> <span class="keyword">long</span>[]&#123;keyAndType, (Long) value&#125; );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> ( value <span class="keyword">instanceof</span> Double )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line">block.setValueBlocks( <span class="keyword">new</span> <span class="keyword">long</span>[]&#123;</span><br><span class="line"> </span><br><span class="line">keyId | (((<span class="keyword">long</span>) PropertyType.DOUBLE.intValue()) &lt;&lt; <span class="number">24</span>),</span><br><span class="line"> </span><br><span class="line">Double.doubleToRawLongBits( (Double) value )&#125; );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> ( value <span class="keyword">instanceof</span> Byte )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line">setSingleBlockValue( block, keyId, PropertyType.BYTE, ((Byte) value).longValue() );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> ( value <span class="keyword">instanceof</span> Character )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line">setSingleBlockValue( block, keyId, PropertyType.CHAR, (Character) value );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> ( value <span class="keyword">instanceof</span> Short )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line">setSingleBlockValue( block, keyId, PropertyType.SHORT, ((Short) value).longValue() );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> ( value.getClass().isArray() )</span><br><span class="line"> </span><br><span class="line">&#123;   <span class="comment">// Try short array first, i.e. inlined in the property block</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( ShortArray.encode( keyId, value, block, PropertyType.getPayloadSize() ) )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Fall back to dynamic array store</span></span><br><span class="line"> </span><br><span class="line">Collection arrayRecords = allocateArrayRecords( value );</span><br><span class="line"> </span><br><span class="line">setSingleBlockValue( block, keyId, PropertyType.ARRAY, first( arrayRecords ).getId() );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> ( DynamicRecord valueRecord : arrayRecords )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line">valueRecord.setType( PropertyType.ARRAY.intValue() );</span><br><span class="line"> </span><br><span class="line">block.addValueRecord( valueRecord );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException( <span class="string">"Unknown property type on: "</span> + value + <span class="string">", "</span> + value.getClass() );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>3.5.2.2 allocateStringRecords 函数</strong><br><code>allocateStringRecords</code> 函数是 PropertySTore.java 的成员函数.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Collection <span class="title">allocateStringRecords</span><span class="params">( <span class="keyword">byte</span>[] chars )</span></span><br><span class="line"> </span><br><span class="line"></span>&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> stringPropertyStore.allocateRecordsFromBytes( chars );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>3.5.2.3 allocateRecordsFromBytes 函数</strong><br><code>allocateRecordsFromBytes</code> 函数是 AbstractDynamicStore .java 的成员函数.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> Collection <span class="title">allocateRecordsFromBytes</span><span class="params">( <span class="keyword">byte</span> src[] )</span></span><br><span class="line"> </span><br><span class="line"></span>&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> allocateRecordsFromBytes( src, Collections.emptyList().iterator(),</span><br><span class="line"> </span><br><span class="line">recordAllocator );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>3.5.2.4 allocateRecordsFromBytes 函数</strong><br><code>allocateRecordsFromBytes</code> 函数是 AbstractDynamicStore .java 的成员函数.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Collection <span class="title">allocateRecordsFromBytes</span><span class="params">(</span><br><span class="line"> </span><br><span class="line"><span class="keyword">byte</span> src[], Iterator recordsToUseFirst,</span><br><span class="line"> </span><br><span class="line">DynamicRecordAllocator dynamicRecordAllocator )</span></span><br><span class="line"> </span><br><span class="line"></span>&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">assert</span> src != <span class="keyword">null</span> : <span class="string">"Null src argument"</span>;</span><br><span class="line"> </span><br><span class="line">List recordList = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line"> </span><br><span class="line">DynamicRecord nextRecord = dynamicRecordAllocator.nextUsedRecordOrNew( recordsToUseFirst );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">int</span> srcOffset = <span class="number">0</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">int</span> dataSize = dynamicRecordAllocator.dataSize();</span><br><span class="line"> </span><br><span class="line">do</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line">DynamicRecord record = nextRecord;</span><br><span class="line"> </span><br><span class="line">record.setStartRecord( srcOffset == <span class="number">0</span> );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( src.length - srcOffset &gt; dataSize )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">byte</span> data[] = <span class="keyword">new</span> <span class="keyword">byte</span>[dataSize];</span><br><span class="line"> </span><br><span class="line">System.arraycopy( src, srcOffset, data, <span class="number">0</span>, dataSize );</span><br><span class="line"> </span><br><span class="line">record.setData( data );</span><br><span class="line"> </span><br><span class="line">nextRecord = dynamicRecordAllocator.nextUsedRecordOrNew( recordsToUseFirst );</span><br><span class="line"> </span><br><span class="line">record.setNextBlock( nextRecord.getId() );</span><br><span class="line"> </span><br><span class="line">srcOffset += dataSize;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">byte</span> data[] = <span class="keyword">new</span> <span class="keyword">byte</span>[src.length - srcOffset];</span><br><span class="line"> </span><br><span class="line">System.arraycopy( src, srcOffset, data, <span class="number">0</span>, data.length );</span><br><span class="line"> </span><br><span class="line">record.setData( data );</span><br><span class="line"> </span><br><span class="line">nextRecord = <span class="keyword">null</span>;</span><br><span class="line"> </span><br><span class="line">record.setNextBlock( Record.NO_NEXT_BLOCK.intValue() );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">recordList.add( record );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">assert</span> !record.isLight();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">assert</span> record.getData() != <span class="keyword">null</span>;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">while</span> ( nextRecord != <span class="keyword">null</span> );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> recordList;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="ShortArray_类型属性值的保存过程">ShortArray 类型属性值的保存过程</h4><p><code>ShortArray.encode( keyId, value, block, PropertyType.getPayloadSize() )</code>, 它是在 kernel/impl/nioneo/store/ShortArray.java 中实现的，下面是其代码片段。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">encode</span><span class="params">( <span class="keyword">int</span> keyId, Object array, PropertyBlock target, <span class="keyword">int</span> payloadSizeInBytes )</span></span><br><span class="line"> </span><br><span class="line"></span>&#123;</span><br><span class="line"> </span><br><span class="line"><span class="comment">/*</span><br><span class="line"> </span><br><span class="line">*  If the array is huge, we don't have to check anything else.</span><br><span class="line"> </span><br><span class="line">*  So do the length check first.</span><br><span class="line"> </span><br><span class="line">*/</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">int</span> arrayLength = Array.getLength( array );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( arrayLength &gt; <span class="number">63</span> )<span class="comment">/*because we only use 6 bits for length*/</span></span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">ShortArray type = typeOf( array );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( type == <span class="keyword">null</span> )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">int</span> requiredBits = type.calculateRequiredBitsForArray( array, arrayLength );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( !willFit( requiredBits, arrayLength, payloadSizeInBytes ) )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Too big array</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">final</span> <span class="keyword">int</span> numberOfBytes = calculateNumberOfBlocksUsed( arrayLength, requiredBits ) * <span class="number">8</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( Bits.requiredLongs( numberOfBytes ) &gt; PropertyType.getPayloadSizeLongs() )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">Bits result = Bits.bits( numberOfBytes );</span><br><span class="line"> </span><br><span class="line"><span class="comment">// [][][    ,bbbb][bbll,llll][yyyy,tttt][kkkk,kkkk][kkkk,kkkk][kkkk,kkkk]</span></span><br><span class="line"> </span><br><span class="line">writeHeader( keyId, type, arrayLength, requiredBits, result );</span><br><span class="line"> </span><br><span class="line">type.writeAll( array, arrayLength, requiredBits, result );</span><br><span class="line"> </span><br><span class="line">target.setValueBlocks( result.getLongs() );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">writeHeader</span><span class="params">( <span class="keyword">int</span> keyId, ShortArray type, <span class="keyword">int</span> arrayLength, <span class="keyword">int</span> requiredBits, Bits result )</span></span><br><span class="line"> </span><br><span class="line"></span>&#123;</span><br><span class="line"> </span><br><span class="line">result.put( keyId, <span class="number">24</span> );</span><br><span class="line"> </span><br><span class="line">result.put( PropertyType.SHORT_ARRAY.intValue(), <span class="number">4</span> );</span><br><span class="line"> </span><br><span class="line">result.put( type.type.intValue(), <span class="number">4</span> );</span><br><span class="line"> </span><br><span class="line">result.put( arrayLength, <span class="number">6</span> );</span><br><span class="line"> </span><br><span class="line">result.put( requiredBits, <span class="number">6</span> );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="PropertyKeyTokenStore的文件存储格式">PropertyKeyTokenStore的文件存储格式</h4><p><img src="/img/2015/06/27/11.png" alt=""><br>类PropertyTypeTokenStore对应的存储文件名是neostore.propertystore.db.index，其对应的存储格式如上图所示: 是一个长度为 RECORD_SIZE=9Bytes 的 record 数组和和一个字符串“PropertyIndexStore v0.A.2”(文件类型描述TYPE_DESCRIPTOR和 neo4j 的 ALL_STORES_VERSION构成)。访问时，可以通过 token_id 作为数组的下标进行访问。</p>
+<p>record 是由 in_use(1 Byte) ,prop_count(4 Bytes), name_id(4 Bytes)构成。</p>
+<h3 id="Node_数据存储">Node 数据存储</h3><p>neo4j 中, Node 的存储是由 <code>NodeStore</code> 和 <code>ArrayPropertyStore</code> 2中类型配合来完成的. node 的label 内容是存在ArrayPropertyStore这样的DynamicStore 中，如果长度超过一个block ，则分block存储，并将其在ArrayPropertyStore中的第1个block 的 block_id 保存到 NodeStore类型文件相应record 的labels字段中。</p>
+<p>下面是neo4j graph db 中，Node数据存储对应的文件：</p>
+<pre><code>neostore<span class="class">.nodestore</span><span class="class">.db</span>
+
+neostore<span class="class">.nodestore</span><span class="class">.db</span><span class="class">.id</span>
+
+neostore<span class="class">.nodestore</span><span class="class">.db</span><span class="class">.labels</span>
+
+neostore<span class="class">.nodestore</span><span class="class">.db</span><span class="class">.labels</span><span class="class">.id</span>
+</code></pre><p>ArrayPropertyStore的存储格式见&lt; 3.3.2 DynamicStore 类型&gt;，下面介绍一下 NodeStore 的文件存储格式。</p>
+<h4 id="NodeStore的主文件存储格式">NodeStore的主文件存储格式</h4><p>NodeStore的主文件是neostore.nodestore.db， 其文件存储格式示意图如下，整个文件是有一个 RECORD_SIZE=15Bytes  的定长数组和一个字符串描述符“NodeStore v0.A.2”(文件类型描述TYPE_DESCRIPTOR和 neo4j 的 ALL_STORES_VERSION) 构成。访问时，可以通过 node_id 作为数组的下标进行访问。<br><img src="/img/2015/06/27/12.png" alt=""><br><img src="/img/2015/06/27/13.png" alt=""></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// in_use(byte)+next_rel_id(int)+next_prop_id(int)+labels(5)+extra(byte)</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> RECORD_SIZE = <span class="number">15</span>;</span><br></pre></td></tr></table></figure>
+<p>下面介绍一下 node record 中每个字段的含义：</p>
+<ul>
+<li><code>inUse(1 Byte)</code>:第1字节,共分成3部分<ul>
+<li>第1 bit 表示 record 是否在 use;</li>
+<li>第2~4 bit 表示 node 的第1个 relationship_id 的 高3位；</li>
+<li>第 5~8 bit表示 node 的第1个property_id 的 高4位</li>
+</ul>
+</li>
+<li><code>next_rel_id(4 Bytes)</code> : 第2~5字节是node 的第1个 relationship_id 的 低32位. 加上inUse 字节的第 2~4 bit作为高3位，构成一个完整的35位relationship_id。</li>
+<li><code>next_prop_id(4 Bytes)</code> : 第6~9字节是node 的第1个 property_id 的 低32位. 加上inUse 字节的第 5~8 bit作为高4位，构成一个完整的36 位 property_id。</li>
+<li><code>labels(5 Bytes)</code> : 第10~14字节是node 的label field。</li>
+<li><code>extra(1 Byte)</code> : 第15字节是 extra , 目前只用到第 1 bit ，表示该node 是否 dense, 缺省的配置是 该 node 的 relationshiop 的数量超过 50 个，这表示是 dense.</li>
+</ul>
+<h4 id="NodeStore-java">NodeStore.java</h4><p>neo4j 中与neostore.nodestore.db文件相对应的类是NodeStore,负责NodeRecord在neostore.nodestore.db文件中的读写。</p>
+<p>下面看一下 NodeStore.java 中 getRecord 成员函数，可以帮助理解 Node Record 的存储格式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> NodeRecord <span class="title">getRecord</span><span class="params">(<span class="keyword">long</span> id, PersistenceWindow window, RecordLoad load)</span> </span>&#123;</span><br><span class="line">        Buffer buffer = window.getOffsettedBuffer(id);</span><br><span class="line">        <span class="comment">// [    ,   x] in use bit</span></span><br><span class="line">        <span class="comment">// [    ,xxx ] higher bits for rel id</span></span><br><span class="line">        <span class="comment">// [xxxx,    ] higher bits for prop idlong </span></span><br><span class="line">        inUseByte = buffer.get();</span><br><span class="line">        <span class="keyword">boolean</span> inUse = (inUseByte &amp; amp; <span class="number">0x1</span>)==Record.IN_USE.intValue();</span><br><span class="line">        <span class="keyword">if</span> (!inUse) &#123;</span><br><span class="line">            <span class="keyword">switch</span> (load) &#123;</span><br><span class="line">                <span class="keyword">case</span> NORMAL:</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> InvalidRecordException(<span class="string">"NodeRecord["</span> + id + <span class="string">"] not in use"</span>);</span><br><span class="line">                <span class="keyword">case</span> CHECK:</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">case</span> FORCE:</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">long</span> nextRel = buffer.getUnsignedInt();</span><br><span class="line">        <span class="keyword">long</span> nextProp = buffer.getUnsignedInt();</span><br><span class="line">        <span class="keyword">long</span> relModifier = (inUseByte &amp; amp; <span class="number">0xEL</span>)&lt;&lt;<span class="number">31</span>;</span><br><span class="line">        <span class="keyword">long</span> propModifier = (inUseByte &amp; amp; <span class="number">0xF0L</span>)&lt;&lt;<span class="number">28</span>;</span><br><span class="line">        <span class="keyword">long</span> lsbLabels = buffer.getUnsignedInt();</span><br><span class="line">        <span class="keyword">long</span> hsbLabels = buffer.get() &amp; <span class="number">0xFF</span>; </span><br><span class="line">        <span class="comment">// so that a negative byte won't fill the "extended" bits with ones.long labels = lsbLabels | (hsbLabels &amp;lt;&amp;lt; 32);byte extra = buffer.get();boolean dense = (extra &amp;amp; 0x1) &amp;gt; 0;NodeRecord nodeRecord = new NodeRecord( id, dense, longFromIntAndMod( nextRel, relModifier ),longFromIntAndMod( nextProp, propModifier ) );nodeRecord.setInUse( inUse );nodeRecord.setLabelField( labels, Collections.&amp;lt;DynamicRecord&amp;gt;emptyList() );return nodeRecord;&#125;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Relationship_的存储">Relationship 的存储</h3><p>下面是neo4j graph db 中，Relationship数据存储对应的文件：</p>
+<pre><code>neostore<span class="class">.relationshipgroupstore</span><span class="class">.db</span>
+
+neostore<span class="class">.relationshipgroupstore</span><span class="class">.db</span><span class="class">.id</span>
+
+neostore<span class="class">.relationshipstore</span><span class="class">.db</span>
+
+neostore<span class="class">.relationshipstore</span><span class="class">.db</span><span class="class">.id</span>
+
+neostore<span class="class">.relationshiptypestore</span><span class="class">.db</span>
+
+neostore<span class="class">.relationshiptypestore</span><span class="class">.db</span><span class="class">.id</span>
+
+neostore<span class="class">.relationshiptypestore</span><span class="class">.db</span><span class="class">.names</span>
+
+neostore<span class="class">.relationshiptypestore</span><span class="class">.db</span><span class="class">.names</span><span class="class">.id</span>
+</code></pre><p>neo4j 中, Relationship 的存储是由 RelationshipStore , RelationshipGroupStore, RelationshipTypeTokenStore和StringPropertyStore 4种类型的Store配合来完成的. 其中RelationshipStore 是Relationship最主要的存储结构；当一个Node 的关系数达到一定的阀值时，才会对关系分组(group), RelationshipGroupStore 用来保存关系分组数据；RelationshipTypeTokenStore和StringPropertyStore 配合用来存储关系的类型。</p>
+<p>关系的类型的字符串描述值是存在StringPropertyStore这样的DynamicStore 中，如果长度超过一个block ，则分block存储，并将其在StringPropertyStore中的第1个block 的 block_id 保存到 RelationshipTypeTokenStore类型文件相应record 的name_id字段中。<br><img src="/img/2015/06/27/14.png" alt=""></p>
+<p>ArrayPropertyStore的存储格式见&lt; 3.3.2 DynamicStore 类型&gt;，下面分别介绍一下RelationshipTypeTokenStore, RelationshipStore和RelationshipStore的文件存储格式。</p>
+<h4 id="RelationshipTypeTokenStore的主文件存储格式">RelationshipTypeTokenStore的主文件存储格式</h4><p><img src="/img/2015/06/27/15.png" alt=""></p>
+<p>类RelationshipTypeTokenStore对应的存储文件是neostore.relationshiptypestore.db，其对应的存储格式如上图所示:是一个长度为 RECORD_SIZE=5 Bytes 的 record 数组和和一个字符串描述符“RelationshipTypeStore v0.A.2”(文件类型描述TYPE_DESCRIPTOR和 neo4j 的 ALL_STORES_VERSION) 构成。访问时，可以通过 token_id 作为数组的下标进行访问。</p>
+<p>record 是有 1Byte的 in_use 和 4Bytes 的 name_id 构成。</p>
+<h4 id="RelationshipStore的文件存储格式">RelationshipStore的文件存储格式</h4><p>类RelationshipTypeTokenStore对应的存储文件是neostore.relationshipstore.db,其文件存储格式示意图如下，整个文件是有一个 RECORD_SIZE=34Bytes 的定长数组和一个字符串描述符“RelationshipStore v0.A.2”(文件类型描述TYPE_DESCRIPTOR和 neo4j 的 ALL_STORES_VERSION构成)。访问时，可以通过 node_id 作为数组的下标进行访问。</p>
+<p><img src="/img/2015/06/27/16.png" alt=""></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// record header size</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// directed|in_use(byte)+first_node(int)+second_node(int)+rel_type(int)+</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// first_prev_rel_id(int)+first_next_rel_id+second_prev_rel_id(int)+</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// second_next_rel_id+next_prop_id(int)+first-in-chain-markers(1)</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> RECORD_SIZE = <span class="number">34</span>;</span><br></pre></td></tr></table></figure>
+<p>下面介绍一下 relationship record 中每个字段的含义：</p>
+<ul>
+<li><code>in_use(1 Byte)</code> : 第 1 字节, 分成3部分.<ul>
+<li>第1 bit 表示 record 是否在 use;</li>
+<li>第2~4 bit 表示first_node的node_id的高3位；</li>
+<li>第 5~8 bit表示 next_prop_id 的property_id 的 高4位</li>
+</ul>
+</li>
+<li><code>first_node(4 Bytes)</code> : 第2~5字节是RelationShip的from_node 的node_id 的低32位. 加上inUse 字节的第 2~4 bit 作为高3位，构成一个完整的35位node_id。</li>
+<li><code>second_node(4 Bytes)</code> : 第6~9字节是RelationShip的to_node 的node_id 的低32位. 加上rel_type的第29~31 bit作为高3位，构成一个完整的35位node_id。</li>
+<li><code>rel_type(4 Bytes)</code> : 第 10~13 字节, 分成6部分;<ul>
+<li>第29~31 位是second_node 的node_id高3位;</li>
+<li>第26~28 位是first_next_rel_id 的 relationship_id高3位;</li>
+<li>第23~25 位是first_next_rel_id 的relationship_id高3位;</li>
+<li>第20~22 位是second_prev_rel_id 的relationship_id高3位;</li>
+<li>第17~19 位是second_next_rel_id 的relationship_id高3位;</li>
+<li>第 1~16 位 表示 RelationShipType;</li>
+</ul>
+</li>
+<li><code>first_prev_rel_id(4 Bytes)</code> : 第14~17字节是from_node 的排在本RelationShip 前面一个RelationShip的 relationship_id 的低32位. 加上rel_type的第 26~28 bit 作为高3位，构成一个完整的35位relationship_id。</li>
+<li><code>first_next_rel_id(4 Bytes)</code> : 第18~21字节是from_node 的排在本RelationShip 前面一个RelationShip的 relationship_id 的低32位. 加上rel_type的第 23~25 bit 作为高3位，构成一个完整的35位relationship_id。</li>
+<li><code>second_prev_rel_id(4 Bytes)</code> : 第22~25字节是from_node 的排在本RelationShip 前面一个RelationShip的 relationship_id 的低32位. 加上rel_type的第 20~22 bit 作为高3位，构成一个完整的35位relationship_id。</li>
+<li><code>second_next_rel_id(4 Bytes)</code>: 第26~29字节是from_node 的排在本RelationShip 前面一个RelationShip的 relationship_id 的低32位. 加上rel_type的第 17~19 bit 作为高3位，构成一个完整的35位relationship_id。</li>
+<li><code>next_prop_id(4 Bytes)</code> : 第30~33字节是本RelationShip第1个Property的property_id 的低32位. 加上in_use的第 5~8 bit 作为高3位，构成一个完整的36 位property_id。</li>
+<li><code>first-in-chain-markers(1 Byte)</code>: 目前只用了第1位和第2位，其作用笔者还没搞清楚。</li>
+</ul>
+<p><strong>3.7.2.1 RelationshipStore.java</strong><br>与neostore.relationshipstore.db文件相对应的类是RelationshipStore,负责RelationshipRecord从neostore.relationshipstore.db文件的读写。下面看一下 neostore.relationshipstore.db 中 getRecord 成员函数，可以帮助理解 Relationship Record 的存储格式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> RelationshipRecord <span class="title">getRecord</span><span class="params">( <span class="keyword">long</span> id, PersistenceWindow window,RecordLoad load )</span></span><br><span class="line"> </span><br><span class="line"></span>&#123;</span><br><span class="line"> </span><br><span class="line">Buffer buffer = window.getOffsettedBuffer( id );</span><br><span class="line"> </span><br><span class="line"><span class="comment">// [    ,   x] in use flag</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// [    ,xxx ] first node high order bits</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// [xxxx,    ] next prop high order bits</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> inUseByte = buffer.get();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">boolean</span> inUse = (inUseByte &amp; <span class="number">0x1</span>) == Record.IN_USE.intValue();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( !inUse )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">switch</span> ( load )</span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">case</span> NORMAL:</span><br><span class="line"> </span><br><span class="line"><span class="keyword">throw</span> <span class="keyword">new</span> InvalidRecordException( <span class="string">"RelationshipRecord["</span> + id + <span class="string">"] not in use"</span> );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">case</span> CHECK:</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> firstNode = buffer.getUnsignedInt();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> firstNodeMod = (inUseByte &amp; <span class="number">0xEL</span>) &lt;&lt; <span class="number">31</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> secondNode = buffer.getUnsignedInt();</span><br><span class="line"> </span><br><span class="line"><span class="comment">// [ xxx,    ][    ,    ][    ,    ][    ,    ] second node high order bits,     0x70000000</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// [    ,xxx ][    ,    ][    ,    ][    ,    ] first prev rel high order bits,  0xE000000</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// [    ,   x][xx  ,    ][    ,    ][    ,    ] first next rel high order bits,  0x1C00000</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// [    ,    ][  xx,x   ][    ,    ][    ,    ] second prev rel high order bits, 0x380000</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// [    ,    ][    , xxx][    ,    ][    ,    ] second next rel high order bits, 0x70000</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// [    ,    ][    ,    ][xxxx,xxxx][xxxx,xxxx] type</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> typeInt = buffer.getInt();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> secondNodeMod = (typeInt &amp; <span class="number">0x70000000L</span>) &lt;&lt; <span class="number">4</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">int</span> type = (<span class="keyword">int</span>)(typeInt &amp; <span class="number">0xFFFF</span>);</span><br><span class="line"> </span><br><span class="line">RelationshipRecord record = <span class="keyword">new</span> RelationshipRecord( id,</span><br><span class="line"> </span><br><span class="line">longFromIntAndMod( firstNode, firstNodeMod ),</span><br><span class="line"> </span><br><span class="line">longFromIntAndMod( secondNode, secondNodeMod ), type );</span><br><span class="line"> </span><br><span class="line">record.setInUse( inUse );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> firstPrevRel = buffer.getUnsignedInt();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> firstPrevRelMod = (typeInt &amp; <span class="number">0xE000000L</span>) &lt;&lt; <span class="number">7</span>;</span><br><span class="line"> </span><br><span class="line">record.setFirstPrevRel( longFromIntAndMod( firstPrevRel, firstPrevRelMod ) );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> firstNextRel = buffer.getUnsignedInt();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> firstNextRelMod = (typeInt &amp; <span class="number">0x1C00000L</span>) &lt;&lt; <span class="number">10</span>;</span><br><span class="line"> </span><br><span class="line">record.setFirstNextRel( longFromIntAndMod( firstNextRel, firstNextRelMod ) );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> secondPrevRel = buffer.getUnsignedInt();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> secondPrevRelMod = (typeInt &amp; <span class="number">0x380000L</span>) &lt;&lt; <span class="number">13</span>;</span><br><span class="line"> </span><br><span class="line">record.setSecondPrevRel( longFromIntAndMod( secondPrevRel, secondPrevRelMod ) );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> secondNextRel = buffer.getUnsignedInt();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> secondNextRelMod = (typeInt &amp; <span class="number">0x70000L</span>) &lt;&lt; <span class="number">16</span>;</span><br><span class="line"> </span><br><span class="line">record.setSecondNextRel( longFromIntAndMod( secondNextRel, secondNextRelMod ) );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> nextProp = buffer.getUnsignedInt();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">long</span> nextPropMod = (inUseByte &amp; <span class="number">0xF0L</span>) &lt;&lt; <span class="number">28</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">byte</span> extraByte = buffer.get();</span><br><span class="line"> </span><br><span class="line">record.setFirstInFirstChain( (extraByte &amp; <span class="number">0x1</span>) != <span class="number">0</span> );</span><br><span class="line"> </span><br><span class="line">record.setFirstInSecondChain( (extraByte &amp; <span class="number">0x2</span>) != <span class="number">0</span> );</span><br><span class="line"> </span><br><span class="line">record.setNextProp( longFromIntAndMod( nextProp, nextPropMod ) );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> record;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="RelationshipGroupStore类型的存储格式">RelationshipGroupStore类型的存储格式</h4><p>当Node的Relationship数量超过一个阀值时，neo4j 会对 Relationship 进行分组，以便提供性能。neo4j 中用来实现这一功能的类是 RelationshipGroupStore.<br><img src="/img/2015/06/27/17.png" alt=""><br>其对应的文件存储格式如下：<br>整个文件是有一个 RECORD_SIZE=20Bytes 的定长数组和一个字符串“RelationshipGroupStore v0.A.2”(文件类型描述TYPE_DESCRIPTOR和 neo4j 的 ALL_STORES_VERSION构成)。访问时，可以通过 id 作为数组的下标进行访问。数组下标为0的 record 前4 Bytes 保存Relationship分组的阀值。</p>
+<p>RelationshipGroupStore 的record 的格式如下：</p>
+<ul>
+<li><code>inUse(1 Byte)</code>:第1字节,共分成4部分<ul>
+<li><code>第1 bit</code>： 表示 record 是否在 use;</li>
+<li><code>第2~4 bit</code>： 表示 next 的高3位；</li>
+<li><code>第 5~7 bit</code>：表示 firstOut高3位</li>
+<li><code>第8 bit</code>：没有用。</li>
+</ul>
+</li>
+<li><code>highByte(1 Byte)</code>:第1字节,共分成4部分<ul>
+<li><code>第1 bit</code>：没有用;</li>
+<li><code>第2~4 bit</code>： 表示 firstIn 的高3位；</li>
+<li><code>第 5~7 bit</code>：表示 firstLoop高3位</li>
+<li><code>第8 bit</code>：没有用。 </li>
+</ul>
+</li>
+<li><code>next</code> :</li>
+<li><code>firstOut</code></li>
+<li><code>firstIn</code></li>
+<li><code>firstLoop</code></li>
+</ul>
+<h3 id="示例1:neo4j_exam">示例1:neo4j_exam</h3><p>下面看一个简单的例子，然后看一下几个主要的存储文件，有助于理解<3–neo4j存储结构>描述的neo4j 的存储格式。</3–neo4j存储结构></p>
+<h4 id="neo4j_exm_代码">neo4j_exm 代码</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br></pre></td><td class="code"><pre><span class="line">packagecom.wuzhu.neo4j_exam;</span><br><span class="line"></span><br><span class="line">        importjava.util.List;</span><br><span class="line"></span><br><span class="line">        importjava.util.ArrayList;</span><br><span class="line"></span><br><span class="line">        importjava.util.Iterator;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.graphdb.Direction;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.graphdb.GraphDatabaseService;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.graphdb.factory.GraphDatabaseFactory;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.graphdb.Node;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.graphdb.Relationship;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.graphdb.Path;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.graphdb.RelationshipType;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.graphdb.Transaction;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.graphdb.index.Index;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.graphdb.traversal.Evaluation;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.graphdb.traversal.Evaluator;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.graphdb.traversal.Evaluators;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.graphdb.traversal.Traverser;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.kernel.EmbeddedReadOnlyGraphDatabase;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.kernel.Traversal;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.kernel.Uniqueness;</span><br><span class="line"></span><br><span class="line">        importorg.neo4j.tooling.GlobalGraphOperations;</span><br><span class="line"></span><br><span class="line">        importcom.alibaba.fastjson.JSON;</span><br><span class="line"></span><br><span class="line">        publicclassNeo4jTest00</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">        GraphDatabaseService gds;</span><br><span class="line"></span><br><span class="line">        Node fromNode;</span><br><span class="line"></span><br><span class="line">        Node toNode;</span><br><span class="line"></span><br><span class="line">        Node companyNode;</span><br><span class="line"></span><br><span class="line">        Relationship relationship;</span><br><span class="line"></span><br><span class="line">        Relationship belongRelationship;</span><br><span class="line"></span><br><span class="line">        privatestaticenum UserRelationship implementsRelationshipType</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">        FELLOW,BELONG</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        publicvoidcreateDb()</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">        String DB_PATH="target/neo4j-test00.db";</span><br><span class="line"></span><br><span class="line">        GraphDatabaseFactory factory=newGraphDatabaseFactory();</span><br><span class="line"></span><br><span class="line">        gds=factory.newEmbeddedDatabase(DB_PATH);</span><br><span class="line"></span><br><span class="line">        GlobalGraphOperations ggo=GlobalGraphOperations.at(gds);</span><br><span class="line"></span><br><span class="line">        try&lt;/b&gt;(Transaction tx=gds.beginTx())</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">        fromNode=gds.createNode();</span><br><span class="line"></span><br><span class="line">        fromNode.setProperty("prop_key_table","prop_value_table_person");</span><br><span class="line"></span><br><span class="line">        fromNode.setProperty("prop_key_name","prop_value_name_mayu");</span><br><span class="line"></span><br><span class="line">        toNode=gds.createNode();</span><br><span class="line"></span><br><span class="line">        toNode.setProperty("prop_key_table","prop_value_table_person");</span><br><span class="line"></span><br><span class="line">        toNode.setProperty("prop_key_name","prop_value_name_liyanhong");</span><br><span class="line"></span><br><span class="line">        relationship=fromNode.createRelationshipTo(toNode,UserRelationship.FELLOW);</span><br><span class="line"></span><br><span class="line">        List&lt;String&gt;eventList=newArrayList&lt;String&gt;();</span><br><span class="line"></span><br><span class="line">//eventList.add("2013福布斯中国富豪榜:李彦宏第三、马化腾第五、马云第八 ");</span><br><span class="line"></span><br><span class="line">//eventList.add("李彦宏推轻应用马云入股浏览器 移动入口争夺暗战升级 ");</span><br><span class="line"></span><br><span class="line">        eventList.add("2013fubushi zhongguo fuhaobang:liyanhong no.3 mahuateng no.5 mayu no.8 ");</span><br><span class="line"></span><br><span class="line">        eventList.add("liyanhong tui qinyingyong,mayu rugu liulanqi; yidong rukou zhengduo anzhan shengji");</span><br><span class="line"></span><br><span class="line">        relationship.setProperty("prop_key_event",JSON.toJSONString(eventList));</span><br><span class="line"></span><br><span class="line">        companyNode=gds.createNode();</span><br><span class="line"></span><br><span class="line">        companyNode.setProperty("prop_key_table","company");</span><br><span class="line"></span><br><span class="line">        companyNode.setProperty("prop_key_name","alibaba corp");</span><br><span class="line"></span><br><span class="line">        belongRelationship=fromNode.createRelationshipTo(companyNode,UserRelationship.BELONG);</span><br><span class="line"></span><br><span class="line">        belongRelationship.setProperty("event","mayu ruhe zhuangkong alibaba? ");</span><br><span class="line"></span><br><span class="line">        tx.success();</span><br><span class="line"></span><br><span class="line">        Iterator&lt;Node&gt;iterator=ggo.getAllNodes().iterator();</span><br><span class="line"></span><br><span class="line">        while(iterator.hasNext())</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">        Node node=iterator.next();</span><br><span class="line"></span><br><span class="line">        Iterator&lt;String&gt;keysIterator=node.getPropertyKeys().iterator();</span><br><span class="line"></span><br><span class="line">        System.out.println("nodeId="+node.getId());</span><br><span class="line"></span><br><span class="line">        while(keysIterator.hasNext())</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">        String key=keysIterator.next();</span><br><span class="line"></span><br><span class="line">        System.out.println("node property : "+key+"-&gt;"+node.getProperty(key));</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Iterator&lt;Relationship&gt;relationshipsIterator=node.getRelationships().iterator();</span><br><span class="line"></span><br><span class="line">        while(relationshipsIterator.hasNext())</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">        Relationship relationships=relationshipsIterator.next();</span><br><span class="line"></span><br><span class="line">        System.out.println("关系："+relationships.getType());</span><br><span class="line"></span><br><span class="line">        Iterator&lt;String&gt;keysIterator2=relationships.getPropertyKeys().iterator();</span><br><span class="line"></span><br><span class="line">        while(keysIterator2.hasNext())</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">        String key=keysIterator2.next();</span><br><span class="line"></span><br><span class="line">        System.out.println("relationship property : "+key+"-&gt;"</span><br><span class="line"></span><br><span class="line">        +relationships.getProperty(key));</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        publicvoidremoveData()</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">        try(Transaction tx=gds.beginTx())</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">        belongRelationship.delete();</span><br><span class="line"></span><br><span class="line">        companyNode.delete();</span><br><span class="line"></span><br><span class="line">        tx.success();</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        publicvoidstopDb()</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">        gds.shutdown();</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        publicstaticvoidmain(String[]args)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">        Neo4jTest00 test00=newNeo4jTest00();</span><br><span class="line"></span><br><span class="line">        test00.createDb();</span><br><span class="line"></span><br><span class="line">        test00.removeData();</span><br><span class="line"></span><br><span class="line">        test00.stopDb();</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>上述程序执行后，会在target/neo4j-test00.db 下生成 neo4j 的 db 存储文件，</p>
+<p>下面我们看几个主要的存储文件，来帮助我们对 neo4j 的存储格式有个直观的认识。</p>
+<p>为了看文件的内容，笔者用二进制方式打开neo4j_exam的db存储文件，并用虚拟打印机输出到pdf 文件,并根据每个文件的格式，进行了着色。</p>
+<h4 id="neostore-nodestore-db-id_的内容">neostore.nodestore.db.id 的内容</h4><p>打开neo4j_exam的neostore.nodestore.db.id文件看到如下内容：<br><img src="/img/2015/06/27/18.jpg" alt=""><br>id 文件的header 部分： sticky 值是0， nextFreeId是3，目前已回收可复用的 ID 是 02。</p>
+<h4 id="neostore-nodestore-db_的内容">neostore.nodestore.db 的内容</h4><p><img src="/img/2015/06/27/19.jpg" alt=""><br>从neo4j_exam的neostore.nodestore.db文件内容可以看到，文件中保存了有 3 条node record 几率的数组和一个字符串“NodeStore v0.A.2”(文件类型描述TYPE_DESCRIPTOR和 neo4j 的 ALL_STORES_VERSION构成)。</p>
+<p>其中3 条 node record 的内容如下：</p>
+<ol>
+<li>node_id=0 (即数组下标为0) 的node record 是在使用的, nextRelId=0, nextPropId=1, labels=0, extra=0</li>
+<li>node_id=1 (即数组下标为0) 的node record 是在使用的, nextRelId=0, nextPropId=3, labels=0, extra=0</li>
+<li>node_id=2 (即数组下标为0) 的node record 是已经释放了, nextRelId=1, nextPropId=4, labels=0, extra=0 </li>
+</ol>
+<p>结合 2.6.1 的源代码，可以的看到，fromNode 的 node_id=0, toNode的node_id=1, companyNode 的 node_id=2.</p>
+<h4 id="neostore-relationshipstore-db_的内容">neostore.relationshipstore.db 的内容</h4><p><img src="/img/2015/06/27/20.jpg" alt=""><br>从neo4j_exam的neostore.relationshipstore.db文件内容可以看到，文件中保存了有 2 条 relationship record记录的数组和一个字符串“RelationshipStore v0.A.2”(文件类型描述TYPE_DESCRIPTOR和 neo4j 的 ALL_STORES_VERSION构成)。</p>
+<p>其中2 个 relationship record 的内容如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段</th>
+<th style="text-align:center">第1条记录</th>
+<th style="text-align:center">第2条记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">in_use</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">first_node</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">second_node</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">2</td>
+</tr>
+<tr>
+<td style="text-align:center">rel_type</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">first_prev_rel_id</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">2</td>
+</tr>
+<tr>
+<td style="text-align:center">first_next_rel_id</td>
+<td style="text-align:center">-1</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">second_prev_rel_id</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">second_next_rel_id</td>
+<td style="text-align:center">-1</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">next_prop_id</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">6</td>
+</tr>
+<tr>
+<td style="text-align:center">first-in-chain-markers</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">3</td>
+</tr>
+</tbody>
+</table>
+<h4 id="neostore-relationshiptypestore-db的内容">neostore.relationshiptypestore.db的内容</h4><p><img src="/img/2015/06/27/21.jpg" alt=""></p>
+<ul>
+<li>record[0].name_id=0×01</li>
+<li>record[1].name_id=0×02</li>
+</ul>
+<h4 id="neostore-relationshiptypestore-db-names_的内容">neostore.relationshiptypestore.db.names 的内容</h4><p><img src="/img/2015/06/27/22.jpg" alt=""></p>
+<ul>
+<li>record[1]=”FELLOW”</li>
+<li>record[2]=”BELONG”</li>
+</ul>
+<h4 id="neostore-propertystore-db的内容">neostore.propertystore.db的内容</h4><p><img src="/img/2015/06/27/23.jpg" alt=""><br>type=0xB 表示 SHORT_STRING, type=0×9 表示 STRING.</p>
+<p>因为 companyNode 节点和 belongRelationship 关系已经删除，所以其属性property[4], property[5] , property[7] 的 block_header (key,type,value)部分填充为0。</p>
+<h4 id="neostore-propertystore-db-strings的内容">neostore.propertystore.db.strings的内容</h4><p><img src="/img/2015/06/27/24.jpg" alt=""><br>打开neo4j_exam的neostore.nodestore.db.id文件看到如上内容：</p>
+<ul>
+<li>第0个block 的前4个Bytes 保存 block_size=0×80, 即 block_header_size=8 和 string_block_size=120</li>
+<li>第1个block 的保存例子中关系relationship的属性值一部分: &lt; [“2013fubushi zhongguo fuhaobang:liyanhong no.3 mahuateng no.5 mayu no.8 “,”liyanhong tui qinyingyong,mayu rugu liulanq &gt;, 其中 block_header的值如下：link_block=0, in_use=1, nr_of_bytes=0x78 , next_block=2</li>
+<li>第2个block 的保存例子中关系relationship的属性值一部分: &lt; i; yidong rukou zhengduo anzhan shengji”] &gt;, 其中 block_header的值如下：link_block=1, in_use=1, nr_of_bytes=0×28 , next_block=0xFFFFFFFF(即NULL)</li>
+</ul>
+<h4 id="neostore-propertystore-db-index的内容">neostore.propertystore.db.index的内容</h4><p><img src="/img/2015/06/27/25.jpg" alt=""></p>
+<ul>
+<li>record[0].name_id=01</li>
+<li>record[1].name_id=02</li>
+<li>record[2].name_id=03</li>
+<li>record[3].name_id=04</li>
+</ul>
+<h4 id="neostore-propertystore-db-index-keys的内容">neostore.propertystore.db.index.keys的内容</h4><p><img src="/img/2015/06/27/26.jpg" alt=""></p>
+<ul>
+<li>block[1]=”prop_key_table”</li>
+<li>block[2]=”prop_key_name”</li>
+<li>block[3]=”prop_key_event”</li>
+<li>block[4]=”event”</li>
+</ul>
+<hr>
+<p>原文链接:<a href="http://www.searchtb.com/2014/04/neo4j-底层存储结构分析1.html" target="_blank" rel="external">http://www.searchtb.com/2014/04/neo4j-底层存储结构分析1.html</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/06/29/MongoDB在Linux下的集群安装与配置/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          MongoDB在Linux下的集群安装与配置
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/06/24/如何在Git中撤销一切/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">&lt;转&gt;如何在Git中撤销一切</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="neo4j-底层存储结构分析" data-title="&lt;转&gt;Neo4j 底层存储结构分析" data-url="http://sunxiang0918.github.io/2015/06/27/neo4j-底层存储结构分析/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
