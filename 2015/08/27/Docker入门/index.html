@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Docker入门 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Docker入门Docker是一种新型的虚拟化技术,他释放了虚拟化的性能,极大的降低了云计算资源供应的成本,同时让应用的分发,测试,部署都变得非常的高效的容易!
+Docker简介Docker是一个开源项目,诞生于2013年初.使用的是Google的Go语言实现,遵循了Apache2.0协议.代码放在了GitHub上.它使用了Linux的LXC等技术,实现了轻量级的操作系统虚拟化.
+使用Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker入门">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/08/27/Docker入门/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="Docker入门Docker是一种新型的虚拟化技术,他释放了虚拟化的性能,极大的降低了云计算资源供应的成本,同时让应用的分发,测试,部署都变得非常的高效的容易!
+Docker简介Docker是一个开源项目,诞生于2013年初.使用的是Google的Go语言实现,遵循了Apache2.0协议.代码放在了GitHub上.它使用了Linux的LXC等技术,实现了轻量级的操作系统虚拟化.
+使用Docker">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/27/1.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/27/2.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/27/3.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/27/4.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/27/5.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/27/6.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/27/7.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/27/8.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/27/9.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/27/10.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/27/11.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/27/12.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/27/13.png">
+<meta property="og:updated_time" content="2015-08-27T15:27:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker入门">
+<meta name="twitter:description" content="Docker入门Docker是一种新型的虚拟化技术,他释放了虚拟化的性能,极大的降低了云计算资源供应的成本,同时让应用的分发,测试,部署都变得非常的高效的容易!
+Docker简介Docker是一个开源项目,诞生于2013年初.使用的是Google的Go语言实现,遵循了Apache2.0协议.代码放在了GitHub上.它使用了Linux的LXC等技术,实现了轻量级的操作系统虚拟化.
+使用Docker">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/GIT/" style="font-size: 12px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 16px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/大数据/" style="font-size: 14px;">大数据</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Docker入门" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/27/Docker入门/" class="article-date">
+  	<time datetime="2015-08-27T13:29:31.000Z" itemprop="datePublished">2015-08-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Docker入门
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker入门"><span class="toc-number">1.</span> <span class="toc-text">Docker入门</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker简介"><span class="toc-number">1.1.</span> <span class="toc-text">Docker简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Docker的好处"><span class="toc-number">1.2.</span> <span class="toc-text">使用Docker的好处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本概念"><span class="toc-number">1.3.</span> <span class="toc-text">基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#镜像"><span class="toc-number">1.3.1.</span> <span class="toc-text">镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#容器"><span class="toc-number">1.3.2.</span> <span class="toc-text">容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#仓库"><span class="toc-number">1.3.3.</span> <span class="toc-text">仓库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">1.4.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CentOS"><span class="toc-number">1.4.1.</span> <span class="toc-text">CentOS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ubuntu"><span class="toc-number">1.4.2.</span> <span class="toc-text">Ubuntu</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最简例子"><span class="toc-number">1.5.</span> <span class="toc-text">最简例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用命令"><span class="toc-number">1.6.</span> <span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建镜像"><span class="toc-number">1.7.</span> <span class="toc-text">创建镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Commit"><span class="toc-number">1.7.1.</span> <span class="toc-text">Commit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dockerfile"><span class="toc-number">1.7.2.</span> <span class="toc-text">Dockerfile</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#私有仓库"><span class="toc-number">1.8.</span> <span class="toc-text">私有仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可视化界面"><span class="toc-number">1.8.1.</span> <span class="toc-text">可视化界面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据管理"><span class="toc-number">1.9.</span> <span class="toc-text">数据管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据卷"><span class="toc-number">1.9.1.</span> <span class="toc-text">数据卷</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据卷容器"><span class="toc-number">1.9.2.</span> <span class="toc-text">数据卷容器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#数据卷备份"><span class="toc-number">1.9.2.1.</span> <span class="toc-text">数据卷备份</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据卷恢复"><span class="toc-number">1.9.2.2.</span> <span class="toc-text">数据卷恢复</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络"><span class="toc-number">1.10.</span> <span class="toc-text">网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#外部访问"><span class="toc-number">1.10.1.</span> <span class="toc-text">外部访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#垮物理机组网"><span class="toc-number">1.10.2.</span> <span class="toc-text">垮物理机组网</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#容器互联"><span class="toc-number">1.10.3.</span> <span class="toc-text">容器互联</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#容器固定IP"><span class="toc-number">1.10.4.</span> <span class="toc-text">容器固定IP</span></a></li></ol></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="Docker入门">Docker入门</h1><p>Docker是一种新型的虚拟化技术,他释放了虚拟化的性能,极大的降低了云计算资源供应的成本,同时让应用的分发,测试,部署都变得非常的高效的容易!</p>
+<h2 id="Docker简介">Docker简介</h2><p>Docker是一个开源项目,诞生于2013年初.使用的是Google的Go语言实现,遵循了Apache2.0协议.代码放在了<a href="https://github.com/docker/docker" target="_blank" rel="external">GitHub</a>上.<br>它使用了Linux的LXC等技术,实现了轻量级的操作系统虚拟化.</p>
+<h2 id="使用Docker的好处">使用Docker的好处</h2><ol>
+<li>更快速的交付和部署<br> 开发者可以使用一个标准的镜像来构建一套开发容器，开发完成之后，运维人员可以直接使用这个容器来部署代码。</li>
+<li>更高效的虚拟化<br> Docker 容器的启动可以在秒级实现，这相比传统的虚拟机方式要快得多。</li>
+<li>更轻松的迁移和扩展<br> Docker 容器几乎可以在任意的平台上运行，包括物理机、虚拟机、公有云、私有云、个人电脑、服务器等。 这种兼容性可以让用户把一个应用程序从一个平台直接迁移到另外一个。</li>
+<li>更简单的管理<br> 所有的修改都以增量的方式被分发和更新，从而实现自动化并且高效的管理。</li>
+</ol>
+<a id="more"></a>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">特性</th>
+<th style="text-align:center">Docker</th>
+<th style="text-align:center">虚拟机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">启动</td>
+<td style="text-align:center">秒级</td>
+<td style="text-align:center">分钟级</td>
+</tr>
+<tr>
+<td style="text-align:center">硬盘使用</td>
+<td style="text-align:center">一般为 MB</td>
+<td style="text-align:center">一般为 GB</td>
+</tr>
+<tr>
+<td style="text-align:center">性能</td>
+<td style="text-align:center">接近原生</td>
+<td style="text-align:center">弱于原生</td>
+</tr>
+<tr>
+<td style="text-align:center">系统支持量</td>
+<td style="text-align:center">单机支持上千个容器</td>
+<td style="text-align:center">一般几十个</td>
+</tr>
+</tbody>
+</table>
+<h2 id="基本概念">基本概念</h2><p>Docker包含了三个基本的概念:</p>
+<ul>
+<li>镜像(Image)</li>
+<li>容器(Container)</li>
+<li>仓库(Repository)</li>
+</ul>
+<p>理解了这三个概念,就理解了Docker的整个生命周期</p>
+<h3 id="镜像">镜像</h3><ol>
+<li>Docker镜像就是一个创建的只读模板</li>
+<li>里面仅安装了最小化的操作系统和用户需要的应用程序。</li>
+<li>镜像可以用来创建 Docker 容器。</li>
+</ol>
+<h3 id="容器">容器</h3><ol>
+<li>容器是从镜像创建的运行实例。</li>
+<li>每个容器都是相互隔离的、保证安全的平台。</li>
+<li>可以把镜像看成是一个类,而容器就是这个类的实例.</li>
+</ol>
+<h3 id="仓库">仓库</h3><ol>
+<li>仓库是集中存放镜像文件的场所。</li>
+<li>仓库有公有仓库和私有仓库之分</li>
+<li>我们可以把自己创建的镜像注册到仓库中,提供给他人使用</li>
+<li>Docker 仓库的概念跟 Git 类似，注册服务器可以理解为 GitHub 这样的托管服务。</li>
+</ol>
+<h2 id="安装">安装</h2><p>由于Linux内核的限制,Docker只能安装在kernel3.8以上<br>最新的ubuntu14.10和centos7都已经包含了docker最新的安装源.</p>
+<h3 id="CentOS">CentOS</h3><p>直接在终端输入: <code>sudo yum install docker</code> 即可<br>然后可以输入以下命令启动并注册Docker到系统中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo service docker start</span><br><span class="line">sudo chkconfig docker on</span><br></pre></td></tr></table></figure>
+<h3 id="Ubuntu">Ubuntu</h3><p>在终端中输入以下命令安装:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install apt-transport-https</span><br><span class="line">$ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:<span class="number">80</span> --recv-keys <span class="number">36</span>A1D7869245C8950F966E92D8576A8BA88D21E9</span><br><span class="line">$ sudo bash -c <span class="string">"echo deb https://get.docker.io/ubuntu docker main &gt; /etc/apt/sources.list.d/docker.list"</span></span><br><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install lxc-docker</span><br></pre></td></tr></table></figure>
+<h2 id="最简例子">最简例子</h2><p>这里演示一个最简单的docker的使用例子.就是运行一个tomcat8</p>
+<ol>
+<li>在命令行中输入:<code>docker search tomcat</code><br> <img src="/img/2015/08/27/1.png" alt=""><br> 它显示了在中央库中存在的tomcat镜像</li>
+<li>从中央仓库中下载tomcat8的镜像:<br> 在终端中输入:<code>docker pull tomcat:8.0</code><br> <img src="/img/2015/08/27/2.png" alt=""><br> 这显示的就是完成从中央仓库下载镜像</li>
+<li>查看当前本地docker有哪些镜像<br> <img src="/img/2015/08/27/3.png" alt=""><br> 它显示了当前有两个镜像,分别是什么,从哪下载的,镜像GUID是什么,大小是什么等等  </li>
+<li>从镜像中启动一个新的tomcat容器<br> <img src="/img/2015/08/27/4.png" alt=""><br> 命令是 <code>docker run -d -p 8888:8080 tomcat:8.0</code><br> <code>-d</code>表示后台运行, <code>-p</code>表示实体机上的端口与docker容器内的端口映射 <code>tomcat:8.0</code>表示镜像的名字</li>
+<li>使用 docker ps -a 查看容器的状态<br> <img src="/img/2015/08/27/5.png" alt=""><br> 表示了容器的GUID,镜像名字,执行命令,创建时间,状态,端口映射,容器名字等等</li>
+<li>这个时候就已经可以在浏览器中通过宿主机IP和端口8888来访问tomcat8的容器了.这样在一个什么都没有安装的新机器上,其实很简单的就完成了tomcat的安装.这就是docker的优势<br> <img src="/img/2015/08/27/6.png" alt=""></li>
+</ol>
+<h2 id="常用命令">常用命令</h2><p>以下就是Docker的一些常用的命令.便于我们平时的操作</p>
+<ul>
+<li><p><strong>RUN</strong>:这个命令是最常用的命令.用于使用镜像创建一个新容器，并在其中运行给定命令.当其中的命令执行完后,关闭容器.<br>  它的语法是:<code>docker run 参数 镜像名:版本号</code><br>  当执行这个命令后,docker会根据镜像,重新生成一个<em>新的容器</em>,并执行</p>
+<ul>
+<li><strong>-d</strong>:后台模式启动,这样就不会侵占当前当前的控制台</li>
+<li><strong>-rm</strong>:容器执行完毕后删除容器.这功能在调试的时候非常的有用,Docker的容器开销非常的小,以至于可以随用随删除</li>
+<li><strong>-ti</strong>:分配一个伪终端绑定到容器的标准输入上,并一直打开.这样就可以在实体机上操作容器的终端了.通常都是这样用的:docker run -ti tomcat:8.0 /bin/bash    这句话的意思就是启动一个新的tomcat容器,并进入它的终端</li>
+<li><strong>-p</strong>:绑定容器对外访问的端口,因为默认情况下容器在docker的虚拟环境下会有自己的一个随机的虚拟IP.外面是不能直接访问的.那么如果要访问容器的应用,就需要把外面的端口和容器内的端口映射起来.这样调用实体机的某一个端口相当于是在访问docker容器中的某个端口.比如:  -p 8888:8080   表示实体机的8888端口映射到容器中的8080端口.</li>
+<li><strong>-name</strong>:给容器指定一个名称,如果不指定,那么就是一个随机的名字.</li>
+</ul>
+</li>
+<li><p><strong>STOP</strong>:该命令是用来关闭容器的,使用非常的简单.<br>  它的语法是:<code>docker stop 容器GUID/容器名</code><br>  当执行这个命令后,docker会结束此容器.当然,如果这个容器不是后台执行的.那么直接在容器的终端中输入exit也是可以结束容器的</p>
+</li>
+<li><p><strong>START</strong>:与Stop相反,start命令是用来启动容器的.与run命令不同的是,start命令不会从镜像中创建一个新的容器.它只会把现有的处于停止或暂停状态的容器重新启动起来.<br>  它的语法是: <code>docker start 参数 容器GUID/容器名</code></p>
+</li>
+<li><p><strong>EXEC</strong>:这个命令是在某个正在运行的容器中执行某个命令.我们可以把这个命令作为进入容器环环境的一个方法.<br>  它的语法是:<code>docker exec 参数 容器GUID/容器名 执行的命令</code>.<br>  比如:<code>docker exec -ti c13 /bin/bash</code>.这个就是直接进入了容器的终端中,请注意用户那,已经是tomcat容器的上下文终端了.这个时候就可以做一系列的修改.</p>
+</li>
+<li><p><strong>EXPORT/IMPORT</strong>:这两个命令用于把当前执行的容器导出为快照,以及恢复快照为镜像.通过这两个命令就可以很方便的把自己对容器的修改分发给其他的人.<br>  它们的语法是:<code>docker export 容器GUID &gt; 文件名.tar</code>和<code>cat tar文件 | docker import 文件路径 镜像名字:版本</code></p>
+</li>
+<li><p><strong>RM</strong>:这个指令是删除一个容器.当容器执行完毕后,如果在启动的时候没有配置-rm 那么它默认是不会删除的.这样有可能容器会越来越多.这时可以使用<code>docker rm 容器guid</code>的方式来删除不要的容器.<br>  注意:只能删除已停止了的容器.如果没有配置数据卷,那么删除容器后,数据就会被清除</p>
+</li>
+<li><p><strong>PS</strong>:它可以查看当前docker中容器的情况.包括了容器的各种信息.<br>  它的语法是: <code>docker ps -a</code><br>  可以显示所有的容器,包括已停止了的.</p>
+</li>
+<li><p><strong>TOP</strong>:这个命令用于显示某个docker容器中所有进程的情况.方便我们分析.<br>  它的语法是:<code>docker top 容器guid</code><br>  <img src="/img/2015/08/27/7.png" alt=""></p>
+</li>
+<li><p><strong>SEARCH</strong>:这个命令是用来从仓库中搜寻镜像的.默认情况下,它会从中央仓库中去搜寻镜像文件.当然,你也可以指定从某个私服中去搜寻.<br>  它的语法是: <code>docker search 镜像关键字</code></p>
+</li>
+<li><p><strong>PULL</strong>:使用这个命令可以从仓库中下载镜像到本地.也是很常用的一个命令.<br>  它的语法是:<code>docker pull 镜像名:版本号</code><br>  注意:如果是从私服中下载,那么需要再镜像名前面加上私服的<code>url/</code>.</p>
+</li>
+<li><p><strong>PUSH</strong>:与PULL命令相反,你可以把你自己做好的镜像注册到仓库中提供给他人使用.<br>  它的语法是: <code>docker push 镜像名字</code><br>  同样,如果你要push到私服里.需要在镜像名字前使用<code>tags</code>命令增加私服的<code>url/</code></p>
+</li>
+<li><p><strong>IMAGES</strong>:使用这个命令可以列出你现在本地有哪一些的镜像文件可以使用.<br>  它的语法是:<code>docker images</code></p>
+</li>
+<li><p><strong>COMMIT</strong>:当我们对某个容器做修改之后.如果需要保留这些修改到镜像中.那么就可以是commit命令,提交修改到镜像.需要注意的是这个命令只会在原来的镜像基础上新创建一个镜像.镜像是只读的!<br>  它的语法是:<code>docker commit -m “提交的内容” 容器GUID 镜像名:版本</code><br>  如果成功它会返回镜像的guid.</p>
+</li>
+<li><p><strong>SAVE/LOAD</strong>:其实这个命令和import/export是一样的.区别就在于export/import操作的对象是容器.而save/load操作的对象是镜像.<br>  它们的语法是:<code>docker save -o 快照名.tar 镜像名:版本</code> <code>docker load &lt; 快照名.tar</code></p>
+</li>
+<li><p><strong>RMI</strong>:rmi命令和rm命令差不多.区别在于是用来删除无用的镜像的.<br>  它的语法是:<code>docker rmi 镜像名:版本</code></p>
+</li>
+</ul>
+<p>这些命令可以用下图来表示:<br><img src="/img/2015/08/27/8.png" alt=""></p>
+<h2 id="创建镜像">创建镜像</h2><p>我们平时使用的时候肯定不可能只会用到现成的镜像,这就涉及到我们需要自定义镜像了.而docker提供了两种创建镜像的方法.</p>
+<ol>
+<li>使用commit命令来提交对容器的修改,从而创建一个新的镜像.</li>
+<li>使用dockerfile文件来自动化的创建一个新的镜像,这个dockerfile文件就像是Maven中的pom.xml文件一样.是用来构建镜像的脚本语言</li>
+</ol>
+<h3 id="Commit">Commit</h3><p>这种方式非常简单,就是从镜像中先启动一个容器.然后进入容器,对这个容器做一些修改.而后就可以执行 <code>docker commit</code>命令把这个容器保存成一个新的镜像.<br>但是这种方式不适合自动化构建.比如在研发过程中编译新的版本的应用程序后,每次都启动容器,进入容器,做修改,然后保存.非常的麻烦.</p>
+<h3 id="Dockerfile">Dockerfile</h3><p>Dockerfile用于描述如何构建一个镜像.可以使用<code>docker build</code> 来使用dockerfile文件.<br>dockerfile的每一条指令都是docker的镜像的一层操作.我们可以把docker镜像想想成是一个固定镜像上不断叠加变化的层次结构.这就是docker存储所使用AUFS.并且一个镜像不能超过127层.<br>dockerfile的基本语法是:</p>
+<ul>
+<li>使用#来注释</li>
+<li>以FROM指令开头,告诉Docker使用哪一镜像作为基础.</li>
+<li>然后是MAINTAINER指令,表示维护者的信息</li>
+<li>RUN 开头的指令会在创建镜像的过程中在容器中执行.run的结果会作为下一条指令的输入.比如安装一个什么软件:<code>RUN yum install xxxx</code></li>
+<li>ENTRYPOINT指令用于设置在容器启动时执行的命令.每一个dockerfile中最多只能有一条这个指令.</li>
+<li>EXPOSE命令:设置一个端口在运行的镜像中暴露出来.这样就可以在容器外看到这个端口并与其通信.</li>
+<li>ENV指令:用于设置环境变量,这里设置的环境变量在以后运行的容器中都可见</li>
+<li>ADD指令:从src路径拷贝到容器的dest路径.注意的是src是相对于构建的源目录的相对路径.而dest是容器中的绝对路径.</li>
+<li>VOLUME指令:创建一个挂载点用于共享目录</li>
+<li>WORKDIR指令:配置RUN,CMD,ENTRYPOINT指定当前工作路径.可以设置多次,如果是相对路径,则是相对上一个WORKDIR指令的路径.</li>
+<li>CMD指令:同ENTRYPOINT指令差不多,用于容器启动时指定运行的命令.同样每一个dockerfile中只能有一个.它与ENTRYPOINT区别在于,执行”docker run 镜像名 命令”.的时候会替换掉CMD指令中指定的命令,而ENTRYPOINT不会.CMD可以为ENTRYPOINT提供参数，ENTRYPOINT本身也可以包含参数，但是你可以把那些可能需要变动的参数写到CMD里而把那些不需要变动的参数写到ENTRYPOINT里面.</li>
+</ul>
+<p>这里提供一个案例.在一个标准的centos镜像的基础上安装tomcat.然后部署我们的一个测试的war包进去.</p>
+<ol>
+<li>先创建一个dockertest的文件夹.在里面创建一个Dockerfile文件,注意大小写.然后写上:<br><img src="/img/2015/08/27/9.png" alt=""></li>
+<li>而后在dockertest文件夹下执行: <code>docker build -t 镜像名字:版本 .</code></li>
+<li>不要忘了最后的点号.那表示是在当前目录构建镜像.</li>
+<li>剩下的就是等待了.<br><img src="/img/2015/08/27/10.png" alt=""></li>
+</ol>
+<h2 id="私有仓库">私有仓库</h2><p>docker-registry 是官方提供的工具，可以用于构建私有的镜像仓库.<br>使用命令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run <span class="operator">-e</span> GUNICORN_OPTS=[<span class="string">"--preload"</span>] <span class="operator">-d</span> -p <span class="number">5000</span>:<span class="number">5000</span> -v /opt/data/registry:/tmp/registry registry</span><br></pre></td></tr></table></figure>
+<p>来启动私有注册中心.并指定仓库存放到实体机的<code>/opt/data/registry</code>目录</p>
+<h3 id="可视化界面">可视化界面</h3><p>如果觉得命令行不直观,这里还提供了一个简单的UI界面.直接使用docker下载镜像:<br><code>docker pull atcol/docker-registry-ui</code><br>然后运行:<code>docker run -d -p 8081:8080 -link registry容器的名字 atcol/docker-registry-ui</code> 就可以了.注意它依赖registry容器.</p>
+<h2 id="数据管理">数据管理</h2><p>容器既然是非常轻量的,推崇用后即删除.那么数据存放就必然不能存放到容器内部.否则一删除容器,数据就丢失了.<br>Docker内部为了维护容器以及容器之间的数据.使用了数据卷和数据卷容器两种方式</p>
+<h3 id="数据卷">数据卷</h3><p>数据卷是一个可供一个或多个容器使用的特殊目录，它绕过 UFS，可以提供很多有用的特性：</p>
+<ul>
+<li>数据卷可以在容器之间共享和重用</li>
+<li>对数据卷的修改会立马生效</li>
+<li>对数据卷的更新，不会影响镜像</li>
+<li>卷会一直存在，直到没有容器使用</li>
+</ul>
+<p>要创建一个数据卷很简单,在使用<code>docker run</code>命令的时候 使用<code>-v</code>参数即可.在一个run命令中可以有<strong>多个</strong>-v参数,用来指定多个数据卷.<br>比如:<code>sudo docker run -d -P --name web -v /webapp training/webapp python app.py</code><br>也可以直接指定实体机的某个目录作为容器中的某个数据卷:<br>比如:<code>sudo docker run -d -P --name web -v /src/webapp:/opt/webapp training/webapp python app.py</code><br>默认数据卷是 读写权限</p>
+<h3 id="数据卷容器">数据卷容器</h3><p>数据卷容器，其实就是一个正常的容器，专门用来提供数据卷供其它容器挂载的。<br>如果你有一些持续更新的数据需要在容器之间共享，最好创建数据卷容器。<br>然后使用run命令创建数据卷容器:<code>sudo docker run -d -v /dbdata --name dbdata 镜像名字 echo Data-only container for it</code><br>而后启动其他容器的时候 使用<code>—volumes-from</code>来挂载数据卷容器:<br><code>sudo docker run -d --volumes-from dbdata --name t1 sun/tomcat</code><br>如果要删除一个数据卷，必须在删除最后一个还挂载着它的容器时使用 <code>docker rm -v</code> 命令来指定同时删除关联的容器。</p>
+<h4 id="数据卷备份">数据卷备份</h4><p>使用 <code>--volumes-from</code> 标记来创建一个加载 dbdata 容器卷的容器，并从宿主机挂载当前到容器的 /backup 目录。命令如下：<br><code>sudo docker run --volumes-from dbdata -v $(pwd):/backup ubuntu tar cvf /backup/backup.tar /dbdata</code><br>容器启动后，使用了 tar 命令来将 dbdata 卷备份为本地的 /backup/backup.tar。</p>
+<h4 id="数据卷恢复">数据卷恢复</h4><p>如果要恢复数据到一个容器，首先创建一个带有数据卷的容器 dbdata2。<br><code>sudo docker run -v /dbdata --name dbdata2 ubuntu /bin/bash</code><br>然后创建另一个容器，挂载 dbdata2 的容器，并使用 untar 解压备份文件到挂载的容器卷中。<br><code>sudo docker run --volumes-from dbdata2 -v $(pwd):/backup busybox tar xvf /backup/backup.tar</code></p>
+<h2 id="网络">网络</h2><p>在安装好docker以后,你操作系统的网卡中会增加一个名叫 <code>dcoker0</code>的 <strong>虚拟网卡</strong>.它通常都有一个<code>172.17.xx.xx</code>的IP地址.这个就是整个docker网络的桥接地址.docker容器都是通过这个桥接网卡来上网的.<br>每一个docker容器启动后都会随机的分配一个和docker0同网段的虚拟ip作为容器的ip.注意是<strong>每一次启动后IP地址都会改变</strong><br>docker容器之间可以通过各自的虚拟ip进行互联.<br>docker容器外的机器除安装的宿主机外默认是不能访问容器内的ip地址的.</p>
+<h3 id="外部访问">外部访问</h3><p>如果要外部的机器访问容器内部.最简单的方式就是使用端口映射.把docker实体机的某个端口映射到docker容器内的某个端口上.这样直接访问实体机的ip:映射端口. 即可访问进容器.</p>
+<ul>
+<li><strong>-P</strong>: Docker 会随机映射一个 <code>49000~49900</code> 的端口到内部容器开放的网络端口。</li>
+<li><strong>-p</strong>: 则可以指定要映射的端口，并且，在一个指定端口上只可以绑定一个容器。<br>比如: <code>sudo docker run -d -p 5000:5000 training/webapp python app.py</code><br><code>sudo docker run -d -p 127.0.0.1::5000 training/webapp python app.py</code><br><code>sudo docker run -d -p 127.0.0.1:5000:5000/udp training/webapp python app.py</code><br>可以通过 <code>docker port 容器GUID 端口</code> 来查看容器的某个端口被映射成的实体机的哪个端口<br>-p命令可以在一个run命令中 多次使用,从而绑定多个内部端口.</li>
+</ul>
+<h3 id="垮物理机组网">垮物理机组网</h3><p>外部访问的另外一种方式就是直接把容器的IP暴露到真实的网络中.不通过nat转发.<br><img src="/img/2015/08/27/11.png" alt=""></p>
+<ol>
+<li>创建自己的网桥:<br>编辑 <code>/etc/network/interface</code> 文件<br><img src="/img/2015/08/27/12.png" alt=""><br>将Docker的默认网桥绑定到这个新建的br0上,这样就将这台机器上容器绑定到em1这个网卡所对应的物理网络上了.</li>
+</ol>
+<p>修改 <code>/etc/default/docker</code>文件.最后添加一行:<br><img src="/img/2015/08/27/13.png" alt=""></p>
+<p>在启动Docker的时候,使用-b参数将容器绑定到物理网络上,重启Docker服务后,再进入容器就可以看到它已经绑定到你的物理网络上了.<br>这样多台物理宿主机的容器之间也可以互联了.但是需要注意的是,这样就需要自己来保证容器的网络安全.</p>
+<h3 id="容器互联">容器互联</h3><p>除了端口映射和暴露容器到物理网络上外.容器之间的交互还有一种方式,就是使用容器的连接系统.该系统会在源和接收容器之间建立一个通信隧道,接收容器可以看到源容器指定的信息.<br>连接系统依赖容器的名字来执行,因此,首先需要在run的时候使用—name参数给容器起一个名字.<br>然后使用 —link参数让容器之间安全的进行交互.<br><code>sudo docker run -d -P --name web --link db:db training/webapp python app.py</code><br>这样在启动db:db容器的时候不需要指定-P或-p. docker会自动的处理两个容器间的网络互连.你在webapp中ping db容器,是可以获取到db容器的IP的.也就可以访问db容器expose出来的端口了.<br>这样处理的好处就是避免了安全问题,缺点就是docker容器之外是不能访问的.通常可以把数据库等底层的容器作为link源,不暴露出对外端口. web容器通过link使用db容器.然后发布对外的访问端口映射.</p>
+<h3 id="容器固定IP">容器固定IP</h3><p>默认情况下启动一个container，其会自动获取一个跟docker0同网段的IP，而且重启container其IP一般会发生变化，但有时候我们会需要固定的IP(比如FT就需要固定的IP,否则每一次启动ZK中都会增加IP信息)。<br>要实现这个需要在docker run的时候使用<strong>—net=none</strong>的方式关闭docker默认的桥接方式连接网络.而是手动的配置网络</p>
+<p>输入以下命令创建并进入一个tomcat容器<br><code>docker run -d -P --net=&#39;none&#39; tomcat:8.0</code><br>这个时候容器没有网卡</p>
+<p>然后安装pipework.这个是docker开发人员提供的一个网络配置工具.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">su root</span><br><span class="line">wget https://github.com/jpetazzo/pipework/archive/master.zip</span><br><span class="line">unzip master.zip </span><br><span class="line">cp pipework-master/pipework  /usr/<span class="built_in">local</span>/bin/</span><br><span class="line">chmod <span class="number">777</span> /usr/<span class="built_in">local</span>/bin/pipework</span><br></pre></td></tr></table></figure>
+<p>接下来使用 docker ps -a命令找到容器的名字.比如是nostalgic_almeida.<br>而后在实体机的终端上输入:<br><code>pipework docker0 nostalgic_almeida 172.17.42.111/24</code><br>这样就给这个容器指定了172.17.42.111这个固定IP.<br>Pipework有个缺陷，容器重启后IP设置会自动消失，需要重新设置。这个可以写一个脚本来处理.具体的参见:<a href="http://www.aixchina.net/club/thread-123383-1-1.html" target="_blank" rel="external">http://www.aixchina.net/club/thread-123383-1-1.html</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/08/09/Solr数据导入Handler/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">&lt;翻译&gt;Solr 数据导入Handler</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Docker入门" data-title="Docker入门" data-url="http://sunxiang0918.github.io/2015/08/27/Docker入门/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
