@@ -224,7 +224,7 @@
     <link href="http://sunxiang0918.github.io/2015/08/09/Solr%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5Handler/"/>
     <id>http://sunxiang0918.github.io/2015/08/09/Solr数据导入Handler/</id>
     <published>2015-08-08T16:00:00.000Z</published>
-    <updated>2015-08-14T15:59:00.000Z</updated>
+    <updated>2015-08-27T15:57:23.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Solr_数据导入Handler">Solr 数据导入Handler</h2><p>由于在我们新的全文检索引擎中使用了Solr作为底层,因此当时是想直接使用Solr提供的DataImportHandler来进行数据的导入,于是就有在它的官网上看了相关的内容,并且试着进行了翻译.虽然最后我们还是自己实现了一套数据导入,但是它的这篇文章写的确实非常的好.</p>
 <h2 id="Data_Import_Request_Handler">Data Import Request Handler</h2><p>大多数系统都会把他们的数据存储在关系型数据库或者XML文件中,并且还要对这些数据进行检索.<code>DataImportHandler</code>就是Solr提供的一个工具:可以通过配置的方式驱动工具全量(<code>full builds</code>)或增量的把数据导入到Solr中.</p>
 <p>除了这篇文章外,还可以参见<a href="https://wiki.apache.org/solr/DataImportHandlerFaq" target="_blank" rel="external">DataImportHandlerFaq</a>.如果想快速开始,可以浏览<a href="https://wiki.apache.org/solr/DIHQuickStart" target="_blank" rel="external">DIHQuickStart</a></p>

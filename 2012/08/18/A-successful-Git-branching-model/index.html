@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;转&gt; A successful Git branching model | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="A successful Git branching modelIn this post I present the development model that I’ve introduced for all of my projects (both at work and private) about a year ago, and which has turned out to be ver">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<转> A successful Git branching model">
+<meta property="og:url" content="http://sunxiang0918.github.io/2012/08/18/A-successful-Git-branching-model/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="A successful Git branching modelIn this post I present the development model that I’ve introduced for all of my projects (both at work and private) about a year ago, and which has turned out to be ver">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/08/18/1.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/08/18/2.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/08/18/3.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/08/18/4.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/08/18/5.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2012/08/18/6.png">
+<meta property="og:updated_time" content="2015-08-27T16:03:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<转> A successful Git branching model">
+<meta name="twitter:description" content="A successful Git branching modelIn this post I present the development model that I’ve introduced for all of my projects (both at work and private) about a year ago, and which has turned out to be ver">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/GIT/" style="font-size: 14px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 16px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/大数据/" style="font-size: 14px;">大数据</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-A-successful-Git-branching-model" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2012/08/18/A-successful-Git-branching-model/" class="article-date">
+  	<time datetime="2012-08-18T06:44:25.000Z" itemprop="datePublished">2012-08-18</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      &lt;转&gt; A successful Git branching model
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GIT/">GIT</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#A_successful_Git_branching_model"><span class="toc-number">1.</span> <span class="toc-text">A successful Git branching model</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Why_git?"><span class="toc-number">1.1.</span> <span class="toc-text">Why git?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Decentralized_but_centralized"><span class="toc-number">1.2.</span> <span class="toc-text">Decentralized but centralized</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The_main_branches"><span class="toc-number">1.3.</span> <span class="toc-text">The main branches</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Supporting_branches"><span class="toc-number">1.4.</span> <span class="toc-text">Supporting branches</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Feature_branches"><span class="toc-number">1.5.</span> <span class="toc-text">Feature branches</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating_a_feature_branch"><span class="toc-number">1.5.1.</span> <span class="toc-text">Creating a feature branch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Incorporating_a_finished_feature_on_develop"><span class="toc-number">1.5.2.</span> <span class="toc-text">Incorporating a finished feature on develop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Release_branches"><span class="toc-number">1.6.</span> <span class="toc-text">Release branches</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating_a_release_branch"><span class="toc-number">1.6.1.</span> <span class="toc-text">Creating a release branch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Finishing_a_release_branch"><span class="toc-number">1.6.2.</span> <span class="toc-text">Finishing a release branch</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hotfix_branches"><span class="toc-number">1.7.</span> <span class="toc-text">Hotfix branches</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating_the_hotfix_branch"><span class="toc-number">1.7.1.</span> <span class="toc-text">Creating the hotfix branch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Finishing_a_hotfix_branch"><span class="toc-number">1.7.2.</span> <span class="toc-text">Finishing a hotfix branch</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Summary"><span class="toc-number">1.8.</span> <span class="toc-text">Summary</span></a></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="A_successful_Git_branching_model">A successful Git branching model</h1><p>In this post I present the development model that I’ve introduced for all of my projects (both at work and private) about a year ago, and which has turned out to be very successful. I’ve been meaning to write about it for a while now, but I’ve never really found the time to do so thoroughly, until now. I won’t talk about any of the projects’ details, merely about the branching strategy and release management.<br><img src="/img/2012/08/18/1.png" alt=""></p>
+<p>It focuses around <a href="http://git-scm.com/" target="_blank" rel="external">Git</a> as the tool for the versioning of all of our source code.</p>
+<h2 id="Why_git?">Why git?</h2><p>For a thorough discussion on the pros and cons of Git compared to centralized source code control systems, <a href="http://whygitisbetterthanx.com/" target="_blank" rel="external">see</a> the <a href="http://git.or.cz/gitwiki/GitSvnComparsion" target="_blank" rel="external">web</a>. There are plenty of flame wars going on there. As a developer, I prefer Git above all other tools around today. Git really changed the way developers think of merging and branching. From the classic CVS/Subversion world I came from, merging/branching has always been considered a bit scary (“beware of merge conflicts, they bite you!”) and something you only do every once in a while.</p>
+<a id="more"></a>
+<p>But with Git, these actions are extremely cheap and simple, and they are considered one of the core parts of your daily workflow, really. For example, in CVS/Subversion books, branching and merging is first discussed in the later chapters (for advanced users), while in every Git book, it’s already covered in chapter 3 (basics).</p>
+<p>As a consequence of its simplicity and repetitive nature, branching and merging are no longer something to be afraid of. Version control tools are supposed to assist in branching/merging more than anything else.</p>
+<p>Enough about the tools, let’s head onto the development model. The model that I’m going to present here is essentially no more than a set of procedures that every team member has to follow in order to come to a managed software development process.</p>
+<h2 id="Decentralized_but_centralized">Decentralized but centralized</h2><p>The repository setup that we use and that works well with this branching model, is that with a central “truth” repo. Note that this repo is only <em>considered</em> to be the central one (since Git is a DVCS, there is no such thing as a central repo at a technical level). We will refer to this repo as origin, since this name is familiar to all Git users.<br><img src="/img/2012/08/18/2.png" alt=""></p>
+<p>Each developer pulls and pushes to origin. But besides the centralized push-pull relationships, each developer may also pull changes from other peers to form sub teams. For example, this might be useful to work together with two or more developers on a big new feature, before pushing the work in progress to origin prematurely. In the figure above, there are subteams of Alice and Bob, Alice and David, and Clair and David.</p>
+<p>Technically, this means nothing more than that Alice has defined a Git remote, named bob, pointing to Bob’s repository, and vice versa.</p>
+<h2 id="The_main_branches">The main branches</h2><p>At the core, the development model is greatly inspired by existing models out there. The central repo holds two main branches with an infinite lifetime:</p>
+<ul>
+<li>master</li>
+<li>develop<br>The <strong>master</strong> branch at <strong>origin</strong> should be familiar to every Git user. Parallel to the <strong>master</strong> branch, another branch exists called <strong>develop</strong>.<br><img src="/img/2012/08/18/3.png" alt=""></li>
+</ul>
+<p>We consider origin/master to be the main branch where the source code of HEAD always reflects a production-ready state.</p>
+<p>We consider origin/develop to be the main branch where the source code of HEAD always reflects a state with the latest delivered development changes for the next release. Some would call this the “integration branch”. This is where any automatic nightly builds are built from.</p>
+<p>When the source code in the <strong>develop</strong> branch reaches a stable point and is ready to be released, all of the changes should be merged back into <strong>master</strong> somehow and then tagged with a release number. How this is done in detail will be discussed further on.</p>
+<p>Therefore, each time when changes are merged back into <strong>master</strong>, this is a new production release by <em>definition</em>. We tend to be very strict at this, so that theoretically, we could use a Git hook script to automatically build and roll-out our software to our production servers everytime there was a commit on <strong>master</strong>.</p>
+<h2 id="Supporting_branches">Supporting branches</h2><p>Next to the main branches <strong>master</strong> and <strong>develop</strong>, our development model uses a variety of supporting branches to aid parallel development between team members, ease tracking of features, prepare for production releases and to assist in quickly fixing live production problems. Unlike the main branches, these branches always have a limited life time, since they will be removed eventually.</p>
+<p>The different types of branches we may use are:</p>
+<ul>
+<li>Feature branches</li>
+<li>Release branches</li>
+<li>Hotfix branches<br>Each of these branches have a specific purpose and are bound to strict rules as to which branches may be their originating branch and which branches must be their merge targets. We will walk through them in a minute.</li>
+</ul>
+<p>By no means are these branches “special” from a technical perspective. The branch types are categorized by how we use them. They are of course plain old Git branches.</p>
+<h2 id="Feature_branches">Feature branches</h2><p>May branch off from:<br>    develop<br>Must merge back into:<br>    develop<br>Branch naming convention:<br>    anything except master, develop, release-*, or hotfix-*</p>
+<p><img src="/img/2012/08/18/4.png" alt=""><br>Feature branches (or sometimes called topic branches) are used to develop new features for the upcoming or a distant future release. When starting development of a feature, the target release in which this feature will be incorporated may well be unknown at that point. The essence of a feature branch is that it exists as long as the feature is in development, but will eventually be merged back into develop (to definitely add the new feature to the upcoming release) or discarded (in case of a disappointing experiment).</p>
+<p>Feature branches typically exist in developer repos only, not in origin.</p>
+<h3 id="Creating_a_feature_branch">Creating a feature branch</h3><p>When starting work on a new feature, branch off from the develop branch.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b myfeature develop</span><br></pre></td></tr></table></figure>
+<p>Switched to a new branch “myfeature”</p>
+<h3 id="Incorporating_a_finished_feature_on_develop">Incorporating a finished feature on develop</h3><p>Finished features may be merged into the develop branch definitely add them to the upcoming release:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout develop</span><br><span class="line">Switched to branch <span class="string">'develop'</span></span><br><span class="line">$ git merge --no-ff myfeature</span><br><span class="line">Updating ea1b82a..<span class="number">05</span>e9557</span><br><span class="line">(Summary of changes)</span><br><span class="line">$ git branch <span class="operator">-d</span> myfeature</span><br><span class="line">Deleted branch myfeature (was <span class="number">05</span>e9557).</span><br><span class="line">$ git push origin develop</span><br></pre></td></tr></table></figure>
+<p>The —no-ff flag causes the merge to always create a new commit object, even if the merge could be performed with a fast-forward. This avoids losing information about the historical existence of a feature branch and groups together all commits that together added the feature. Compare:<br><img src="/img/2012/08/18/5.png" alt=""></p>
+<p>In the latter case, it is impossible to see from the Git history which of the commit objects together have implemented a feature—you would have to manually read all the log messages. Reverting a whole feature (i.e. a group of commits), is a true headache in the latter situation, whereas it is easily done if the —no-ff flag was used.</p>
+<p>Yes, it will create a few more (empty) commit objects, but the gain is much bigger that that cost.</p>
+<p>Unfortunately, I have not found a way to make —no-ff the default behaviour of git merge yet, but it really should be.</p>
+<h2 id="Release_branches">Release branches</h2><p>May branch off from:<br>    develop<br>Must merge back into:<br>    develop and master<br>Branch naming convention:<br>    release-*</p>
+<p>Release branches support preparation of a new production release. They allow for last-minute dotting of i’s and crossing t’s. Furthermore, they allow for minor bug fixes and preparing meta-data for a release (version number, build dates, etc.). By doing all of this work on a release branch, the develop branch is cleared to receive features for the next big release.</p>
+<p>The key moment to branch off a new release branch from develop is when develop (almost) reflects the desired state of the new release. At least all features that are targeted for the release-to-be-built must be merged in to develop at this point in time. All features targeted at future releases may not—they must wait until after the release branch is branched off.</p>
+<p>It is exactly at the start of a release branch that the upcoming release gets assigned a version number—not any earlier. Up until that moment, the develop branch reflected changes for the “next release”, but it is unclear whether that “next release” will eventually become 0.3 or 1.0, until the release branch is started. That decision is made on the start of the release branch and is carried out by the project’s rules on version number bumping.</p>
+<h3 id="Creating_a_release_branch">Creating a release branch</h3><p>Release branches are created from the develop branch. For example, say version 1.1.5 is the current production release and we have a big release coming up. The state of develop is ready for the “next release” and we have decided that this will become version 1.2 (rather than 1.1.6 or 2.0). So we branch off and give the release branch a name reflecting the new version number:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b release-<span class="number">1.2</span> develop</span><br><span class="line">Switched to a new branch <span class="string">"release-1.2"</span></span><br><span class="line">$ ./bump-version.sh <span class="number">1.2</span></span><br><span class="line">Files modified successfully, version bumped to <span class="number">1.2</span>.</span><br><span class="line">$ git commit <span class="operator">-a</span> -m <span class="string">"Bumped version number to 1.2"</span></span><br><span class="line">[release-<span class="number">1.2</span> <span class="number">74</span>d9424] Bumped version number to <span class="number">1.2</span></span><br><span class="line"><span class="number">1</span> files changed, <span class="number">1</span> insertions(+), <span class="number">1</span> deletions(-)</span><br></pre></td></tr></table></figure>
+<p>After creating a new branch and switching to it, we bump the version number. Here, bump-version.sh is a fictional shell script that changes some files in the working copy to reflect the new version. (This can of course be a manual change—the point being that some files change.) Then, the bumped version number is committed.</p>
+<p>This new branch may exist there for a while, until the release may be rolled out definitely. During that time, bug fixes may be applied in this branch (rather than on the develop branch). Adding large new features here is strictly prohibited. They must be merged into develop, and therefore, wait for the next big release.</p>
+<h3 id="Finishing_a_release_branch">Finishing a release branch</h3><p>When the state of the release branch is ready to become a real release, some actions need to be carried out. First, the release branch is merged into master (since every commit on master is a new release by definition, remember). Next, that commit on master must be tagged for easy future reference to this historical version. Finally, the changes made on the release branch need to be merged back into develop, so that future releases also contain these bug fixes.</p>
+<p>The first two steps in Git:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout master</span><br><span class="line">Switched to branch <span class="string">'master'</span></span><br><span class="line">$ git merge --no-ff release-<span class="number">1.2</span></span><br><span class="line">Merge made by recursive.</span><br><span class="line">(Summary of changes)</span><br><span class="line">$ git tag <span class="operator">-a</span> <span class="number">1.2</span></span><br></pre></td></tr></table></figure>
+<p>The release is now done, and tagged for future reference.</p>
+<blockquote>
+<p><strong>Edit</strong>: You might as well want to use the -s or -u <key> flags to sign your tag cryptographically.</key></p>
+</blockquote>
+<p>To keep the changes made in the release branch, we need to merge those back into develop, though. In Git:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout develop</span><br><span class="line">Switched to branch <span class="string">'develop'</span></span><br><span class="line">$ git merge --no-ff release-<span class="number">1.2</span></span><br><span class="line">Merge made by recursive.</span><br><span class="line">(Summary of changes)</span><br></pre></td></tr></table></figure>
+<p>This step may well lead to a merge conflict (probably even, since we have changed the version number). If so, fix it and commit.</p>
+<p>Now we are really done and the release branch may be removed, since we don’t need it anymore:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git branch <span class="operator">-d</span> release-<span class="number">1.2</span></span><br><span class="line">Deleted branch release-<span class="number">1.2</span> (was ff452fe).</span><br></pre></td></tr></table></figure>
+<h2 id="Hotfix_branches">Hotfix branches</h2><p>May branch off from:<br>    master<br>Must merge back into:<br>    develop and master<br>Branch naming convention:<br>    hotfix-*</p>
+<p><img src="/img/2012/08/18/6.png" alt="">    </p>
+<p>Hotfix branches are very much like release branches in that they are also meant to prepare for a new production release, albeit unplanned. They arise from the necessity to act immediately upon an undesired state of a live production version. When a critical bug in a production version must be resolved immediately, a hotfix branch may be branched off from the corresponding tag on the master branch that marks the production version.</p>
+<p>The essence is that work of team members (on the develop branch) can continue, while another person is preparing a quick production fix.</p>
+<h3 id="Creating_the_hotfix_branch">Creating the hotfix branch</h3><p>Hotfix branches are created from the master branch. For example, say version 1.2 is the current production release running live and causing troubles due to a severe bug. But changes on develop are yet unstable. We may then branch off a hotfix branch and start fixing the problem:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b hotfix-<span class="number">1.2</span>.<span class="number">1</span> master</span><br><span class="line">Switched to a new branch <span class="string">"hotfix-1.2.1"</span></span><br><span class="line">$ ./bump-version.sh <span class="number">1.2</span>.<span class="number">1</span></span><br><span class="line">Files modified successfully, version bumped to <span class="number">1.2</span>.<span class="number">1</span>.</span><br><span class="line">$ git commit <span class="operator">-a</span> -m <span class="string">"Bumped version number to 1.2.1"</span></span><br><span class="line">[hotfix-<span class="number">1.2</span>.<span class="number">1</span> <span class="number">41</span>e61bb] Bumped version number to <span class="number">1.2</span>.<span class="number">1</span></span><br><span class="line"><span class="number">1</span> files changed, <span class="number">1</span> insertions(+), <span class="number">1</span> deletions(-)</span><br></pre></td></tr></table></figure>
+<p>Don’t forget to bump the version number after branching off!</p>
+<p>Then, fix the bug and commit the fix in one or more separate commits.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git commit -m <span class="string">"Fixed severe production problem"</span></span><br><span class="line">[hotfix-<span class="number">1.2</span>.<span class="number">1</span> abbe5d6] Fixed severe production problem</span><br><span class="line"><span class="number">5</span> files changed, <span class="number">32</span> insertions(+), <span class="number">17</span> deletions(-)</span><br></pre></td></tr></table></figure>
+<h3 id="Finishing_a_hotfix_branch">Finishing a hotfix branch</h3><p>When finished, the bugfix needs to be merged back into master, but also needs to be merged back into develop, in order to safeguard that the bugfix is included in the next release as well. This is completely similar to how release branches are finished.</p>
+<p>First, update master and tag the release.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout master</span><br><span class="line">Switched to branch <span class="string">'master'</span></span><br><span class="line">$ git merge --no-ff hotfix-<span class="number">1.2</span>.<span class="number">1</span></span><br><span class="line">Merge made by recursive.</span><br><span class="line">(Summary of changes)</span><br><span class="line">$ git tag <span class="operator">-a</span> <span class="number">1.2</span>.<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p><strong>Edit</strong>: You might as well want to use the -s or -u <key> flags to sign your tag cryptographically.</key></p>
+<p>Next, include the bugfix in develop, too:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout develop</span><br><span class="line">Switched to branch <span class="string">'develop'</span></span><br><span class="line">$ git merge --no-ff hotfix-<span class="number">1.2</span>.<span class="number">1</span></span><br><span class="line">Merge made by recursive.</span><br><span class="line">(Summary of changes)</span><br></pre></td></tr></table></figure>
+<p>The one exception to the rule here is that, <strong>when a release branch currently exists, the hotfix changes need to be merged into that release branch, instead of</strong> develop. Back-merging the bugfix into the release branch will eventually result in the bugfix being merged into develop too, when the release branch is finished. (If work in develop immediately requires this bugfix and cannot wait for the release branch to be finished, you may safely merge the bugfix into develop now already as well.)</p>
+<p>Finally, remove the temporary branch:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git branch <span class="operator">-d</span> hotfix-<span class="number">1.2</span>.<span class="number">1</span></span><br><span class="line">Deleted branch hotfix-<span class="number">1.2</span>.<span class="number">1</span> (was abbe5d6).</span><br></pre></td></tr></table></figure>
+<h2 id="Summary">Summary</h2><p>While there is nothing really shocking new to this branching model, the “big picture” figure that this post began with has turned out to be tremendously useful in our projects. It forms an elegant mental model that is easy to comprehend and allows team members to develop a shared understanding of the branching and releasing processes.</p>
+<p>A high-quality PDF version of the figure is provided here. Go ahead and hang it on the wall for quick reference at any time.</p>
+<p><strong>Update</strong>: And for anyone who requested it: here’s the <a href="http://github.com/downloads/nvie/gitflow/Git-branching-model-src.key.zip" target="_blank" rel="external">gitflow-model.src.key</a> of the main diagram image (Apple Keynote).</p>
+<p><a href="http://nvie.com/files/Git-branching-model.pdf" target="_blank" rel="external">Git-branching-model.pdf</a></p>
+<p>If you want to get in touch, I’m <a href="http://twitter.com/nvie" target="_blank" rel="external">@nvie</a> on Twitter.</p>
+<hr>
+<p>原文链接:<a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="external">http://nvie.com/posts/a-successful-git-branching-model/</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2012/09/18/SOAP中Binding的四种样式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          SOAP中Binding的四种样式
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="A-successful-Git-branching-model" data-title="&lt;转&gt; A successful Git branching model" data-url="http://sunxiang0918.github.io/2012/08/18/A-successful-Git-branching-model/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
