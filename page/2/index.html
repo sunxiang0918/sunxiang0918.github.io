@@ -198,6 +198,69 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-MongoDB在Linux下的集群安装与配置" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/06/29/MongoDB在Linux下的集群安装与配置/" class="article-date">
+  	<time datetime="2015-06-29T13:24:24.000Z" itemprop="datePublished">2015-06-29</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/29/MongoDB在Linux下的集群安装与配置/">MongoDB在Linux下的集群安装与配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="MongoDB在Linux下的集群安装与配置">MongoDB在Linux下的集群安装与配置</h1><h2 id="一-MongoDB集群方式">一.MongoDB集群方式</h2><p><strong>Mongodb</strong>是时下流行的NoSql数据库.它拥有三种集群的搭建方式:<code>Replica Set</code> / <code>Sharding</code> / <code>Master-Slaver</code>.   分别为 副本集方式集群, 分片集群, 主从集群.<br>三种集群搭建方式首选<code>Replica Set</code>，只有真的是大数据，Sharding才能显现威力，毕竟备节点同步数据是需要时间的。Sharding可以将多片数据集中到路由节点上进行一些对比，然后将数据返回给客户端，但是效率还是比较低的说。  </p>
+<p>这里用最常用的 Replica的方式集群来做介绍</p>
+<h2 id="二-Replica_Set">二.Replica Set</h2><p><code>Replica Set</code>集群当中包含了多份数据，保证主节点挂掉了，备节点能继续提供数据服务，提供的前提就是数据需要和主节点一致。如下图：<br><img src="/img/2015/06/29/1.png" alt=""></p>
+<p><code>Mongodb(M)</code>表示主节点，<code>Mongodb(S)</code>表示备节点，<code>Mongodb(A)</code>表示仲裁节点。主备节点存储数据，仲裁节点不存储数据。客户端同时连接主节点与备节点，不连接仲裁节点。</p>
+<p>使用的时候 可以通过配置 让M负责写,S负责读.从而达到读写分离的效果</p>
+<p>仲裁节点是一种特殊的节点，它本身并<code>不存储数据</code>，主要的作用是决定哪一个备节点在主节点挂掉之后提升为主节点，所以客户端不需要连接此节点。这里虽然只有一个备节点，但是仍然需要一个仲裁节点来提升备节点级别。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/06/29/MongoDB在Linux下的集群安装与配置/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-neo4j-底层存储结构分析" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -735,66 +798,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2014/09/20/在MAC下使用beyondcompare比较JAVA-Class文件/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/07/28/DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析/" class="article-date">
-  	<time datetime="2014-07-28T01:51:28.000Z" itemprop="datePublished">2014-07-28</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/07/28/DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析/">DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析">DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析</h1><h2 id="问题现象:">问题现象:</h2><p>今天在做高级检索的时候,当用户在界面配置了高级检索的字段后,需要程序自动的把AI3_ADVANCEDSEARCH表删除后,重建.本来这个功能在XDA和xSpace上是能正常工作的.<br>这两个系统所使用的数据库是 MYSQL和ORACLE.一切正常.  现在TVBS使用的是DB2. 在做测试的时候发现.<strong>每当重建表的时候,整个重建的线程都卡住了</strong>.同时,<strong>使用DB2的SQL管理工具,对任意的表进行修改/删除/新建,都会卡住</strong>.这肯定是有问题的.</p>
-<h2 id="原因分析过程:">原因分析过程:</h2><ol>
-<li>最开始就怀疑是hibernate和DB2的配合的问题,于是打断点.一路跟踪到它卡住的地方.<br><img src="/img/2014/07/28/1.png" alt=""><br>就是这里,调用JDBC的statement.executeUpdate就会卡住. 这句是标准的JDBC的代码.其中statement的实例是DB2的驱动中的对象,于是<span style="background:yellow">怀疑是DB2的驱动问题</span>.于是从网上重新找驱动.
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DB2/">DB2</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hibernate/">Hibernate</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/07/28/DB2下使用Hibernate自动重建表导致整个DB2卡住的问题分析/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

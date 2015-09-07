@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;转&gt;Java HashMap工作原理 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Java中HashMap的工作原理其实以前就看过很多次了,也仔细的分析过它的源码.但是一直没有写一篇文章来记录一下,这篇文章写的非常的清楚,非常的透彻.是我见过讲的最详细的.值得保存下来.
+Java HashMap工作原理大部分Java开发者都在使用Map，特别是HashMap。HashMap是一种简单但强大的方式去存储和获取数据。但有多少开发者知道HashMap内部如何工作呢？几天前，我阅读了j">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<转>Java HashMap工作原理">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/09/02/Java-HashMap工作原理/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="Java中HashMap的工作原理其实以前就看过很多次了,也仔细的分析过它的源码.但是一直没有写一篇文章来记录一下,这篇文章写的非常的清楚,非常的透彻.是我见过讲的最详细的.值得保存下来.
+Java HashMap工作原理大部分Java开发者都在使用Map，特别是HashMap。HashMap是一种简单但强大的方式去存储和获取数据。但有多少开发者知道HashMap内部如何工作呢？几天前，我阅读了j">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/09/02/1.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/09/02/2.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/09/02/3.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/09/02/4.jpg">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/09/02/5.jpg">
+<meta property="og:updated_time" content="2015-09-07T15:17:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<转>Java HashMap工作原理">
+<meta name="twitter:description" content="Java中HashMap的工作原理其实以前就看过很多次了,也仔细的分析过它的源码.但是一直没有写一篇文章来记录一下,这篇文章写的非常的清楚,非常的透彻.是我见过讲的最详细的.值得保存下来.
+Java HashMap工作原理大部分Java开发者都在使用Map，特别是HashMap。HashMap是一种简单但强大的方式去存储和获取数据。但有多少开发者知道HashMap内部如何工作呢？几天前，我阅读了j">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/GIT/" style="font-size: 14px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 16px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 14px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Java-HashMap工作原理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/09/02/Java-HashMap工作原理/" class="article-date">
+  	<time datetime="2015-09-02T15:00:38.000Z" itemprop="datePublished">2015-09-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      &lt;转&gt;Java HashMap工作原理
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java_HashMap工作原理"><span class="toc-number">1.</span> <span class="toc-text">Java HashMap工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#内部存储"><span class="toc-number">1.1.</span> <span class="toc-text">内部存储</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自动调整大小"><span class="toc-number">1.2.</span> <span class="toc-text">自动调整大小</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程安全"><span class="toc-number">1.3.</span> <span class="toc-text">线程安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#键的不变性"><span class="toc-number">1.4.</span> <span class="toc-text">键的不变性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java_8_中的改进"><span class="toc-number">1.5.</span> <span class="toc-text">Java 8 中的改进</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存开销"><span class="toc-number">1.6.</span> <span class="toc-text">内存开销</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JAVA_7"><span class="toc-number">1.6.1.</span> <span class="toc-text">JAVA 7</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JAVA_8"><span class="toc-number">1.6.2.</span> <span class="toc-text">JAVA 8</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#性能问题"><span class="toc-number">1.7.</span> <span class="toc-text">性能问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#非对称HashMap_vs_均衡HashMap"><span class="toc-number">1.7.1.</span> <span class="toc-text">非对称HashMap vs 均衡HashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调整大小的开销"><span class="toc-number">1.7.2.</span> <span class="toc-text">调整大小的开销</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.8.</span> <span class="toc-text">结论</span></a></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <p>Java中HashMap的工作原理其实以前就看过很多次了,也仔细的分析过它的源码.但是一直没有写一篇文章来记录一下,这篇文章写的非常的清楚,非常的透彻.是我见过讲的最详细的.值得保存下来.</p>
+<h1 id="Java_HashMap工作原理">Java HashMap工作原理</h1><p>大部分Java开发者都在使用Map，特别是HashMap。HashMap是一种简单但强大的方式去存储和获取数据。但有多少开发者知道HashMap内部如何工作呢？几天前，我阅读了java.util.HashMap的大量源代码（包括Java 7 和Java 8），来深入理解这个基础的数据结构。在这篇文章中，我会解释java.util.HashMap的实现，描述Java 8实现中添加的新特性，并讨论性能、内存以及使用HashMap时的一些已知问题。</p>
+<h2 id="内部存储">内部存储</h2><p>Java HashMap类实现了Map<k, v="">接口。这个接口中的主要方法包括：</k,></p>
+<ul>
+<li>V put(K key, V value)</li>
+<li>V get(Object key)</li>
+<li>V remove(Object key)</li>
+<li>Boolean containsKey(Object key)</li>
+</ul>
+<p>HashMap使用了一个内部类Entry<k, v="">来存储数据。这个内部类是一个简单的键值对，并带有额外两个数据：</k,></p>
+<ul>
+<li>一个指向其他入口（译者注：引用对象）的引用，这样HashMap可以存储类似链接列表这样的对象。</li>
+<li>一个用来代表键的哈希值，存储这个值可以避免HashMap在每次需要时都重新生成键所对应的哈希值。</li>
+</ul>
+<a id="more"></a>
+<p>下面是Entry<k, v="">在Java 7下的一部分代码：</k,></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> K key;</span><br><span class="line">        V value;</span><br><span class="line">        Entry&lt;K,V&gt; next;</span><br><span class="line">        <span class="keyword">int</span> hash;</span><br><span class="line">…</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>HashMap将数据存储到多个单向Entry链表中（有时也被称为桶bucket或者容器orbins）。所有的列表都被注册到一个Entry数组中（Entry<k, v="">[]数组），这个内部数组的默认长度是16。</k,></p>
+<p>下面这幅图描述了一个HashMap实例的内部存储，它包含一个nullable对象组成的数组。每个对象都连接到另外一个对象，这样就构成了一个链表。</p>
+<p><img src="/img/2015/09/02/1.jpg" alt=""> </p>
+<p>所有具有相同哈希值的键都会被放到同一个链表（桶）中。具有不同哈希值的键最终可能会在相同的桶中。</p>
+<p>当用户调用 put(K key， V value) 或者 get(Object key) 时，程序会计算对象应该在的桶的索引。然后，程序会迭代遍历对应的列表，来寻找具有相同键的Entry对象（使用键的equals()方法）。</p>
+<p>对于调用get()的情况，程序会返回值所对应的Entry对象（如果Entry对象存在）。</p>
+<p>对于调用put(K key, V value)的情况，如果Entry对象已经存在，那么程序会将值替换为新值，否则，程序会在单向链表的表头创建一个新的Entry（从参数中的键和值）。</p>
+<p>桶（链表）的索引，是通过map的3个步骤生成的：</p>
+<ul>
+<li>首先获取键的<strong>散列码</strong>。</li>
+<li>程序<strong>重复</strong>散列码，来阻止针对键的糟糕的哈希函数，因为这有可能会将所有的数据都放到内部数组的相同的索引（桶）上。</li>
+<li>程序拿到重复后的散列码，并对其使用数组长度（最小是1）的<strong>位掩码（bit-mask）</strong>。这个操作可以保证索引不会大于数组的大小。你可以将其看做是一个经过计算的优化取模函数。</li>
+</ul>
+<p>下面是生成索引的源代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// the "rehash" function in JAVA 7 that takes the hashcode of the key</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(<span class="keyword">int</span> h)</span> </span>&#123;</span><br><span class="line">    h ^= (h &gt;&gt;&gt; <span class="number">20</span>) ^ (h &gt;&gt;&gt; <span class="number">12</span>);</span><br><span class="line">    <span class="keyword">return</span> h ^ (h &gt;&gt;&gt; <span class="number">7</span>) ^ (h &gt;&gt;&gt; <span class="number">4</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// the "rehash" function in JAVA 8 that directly takes the key</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h;</span><br><span class="line">    <span class="keyword">return</span> (key == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// the function that returns the index from the rehashed hash</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">indexFor</span><span class="params">(<span class="keyword">int</span> h, <span class="keyword">int</span> length)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> h &amp; (length-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了更有效地工作，内部数组的大小必须是2的幂值。让我们看一下为什么：</p>
+<p>假设数组的长度是17，那么掩码的值就是16（数组长度-1）。16的二进制表示是0…010000，这样对于任何值H来说，“H &amp; 16”的结果就是16或者0。这意味着长度为17的数组只能应用到两个桶上：一个是0，另外一个是16，这样不是很有效率。但是如果你将数组的长度设置为2的幂值，例如16，那么按位索引的工作变成“H &amp; 15”。15的二进制表示是0…001111，索引公式输出的值可以从0到15，这样长度为16的数组就可以被充分使用了。例如：</p>
+<ul>
+<li>如果H = 952，它的二进制表示是0..01110111000，对应的索引是0…01000 = 8</li>
+<li>如果H = 1576，它的二进制表示是0..011000101000，对应的索引是0…01000 = 8</li>
+<li>如果H = 12356146，它的二进制表示是0..0101111001000101000110010，对应的索引是0…00010 = 2</li>
+<li>如果H = 59843，它的二进制表示是0..01110100111000011，它对应的索引是0…00011 = 3</li>
+</ul>
+<p>这种机制对于开发者来说是透明的：如果他选择一个长度为37的HashMap，Map会自动选择下一个大于37的2的幂值（64）作为内部数组的长度。</p>
+<h2 id="自动调整大小">自动调整大小</h2><p>在获取索引后，get()、put()或者remove()方法会访问对应的链表，来查看针对指定键的Entry对象是否已经存在。在不做修改的情况下，这个机制可能会导致性能问题，因为这个方法需要迭代整个列表来查看Entry对象是否存在。假设内部数组的长度采用默认值16，而你需要存储2，000,000条记录。在最好的情况下，每个链表会有125,000个Entry对象（2,000,000/16）。get()、remove()和put()方法在每一次执行时，都需要进行125,000次迭代。为了避免这种情况，HashMap可以增加内部数组的长度，从而保证链表中只保留很少的Entry对象。</p>
+<p>当你创建一个HashMap时，你可以通过以下构造函数指定一个初始长度，以及一个loadFactor：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span></span></span><br></pre></td></tr></table></figure>
+<p>如果你不指定参数，那么默认的initialCapacity的值是16， loadFactor的默认值是0.75。initialCapacity代表内部数组的链表的长度。</p>
+<p>当你每次使用put(…)方法向Map中添加一个新的键值对时，该方法会检查是否需要增加内部数组的长度。为了实现这一点，Map存储了2个数据：</p>
+<ul>
+<li>Map的大小：它代表HashMap中记录的条数。我们在向HashMap中插入或者删除值时更新它。</li>
+<li>阀值：它等于内部数组的长度*loadFactor，在每次调整内部数组的长度时，该阀值也会同时更新。</li>
+</ul>
+<p>在添加新的Entry对象之前，put(…)方法会检查当前Map的大小是否大于阀值。如果大于阀值，它会创建一个新的数组，数组长度是当前内部数组的两倍。因为新数组的大小已经发生改变，所以索引函数（就是返回“键的哈希值 &amp; (数组长度-1)”的位运算结果）也随之改变。调整数组的大小会创建两个新的桶（链表），并且将所有现存Entry对象重新分配到桶上。调整数组大小的目标在于降低链表的大小，从而降低put()、remove()和get()方法的执行时间。对于具有相同哈希值的键所对应的所有Entry对象来说，它们会在调整大小后分配到相同的桶中。但是，如果两个Entry对象的键的哈希值不一样，但它们之前在同一个桶上，那么在调整以后，并不能保证它们依然在同一个桶上。</p>
+<p><img src="/img/2015/09/02/2.jpg" alt=""> </p>
+<p>这幅图片描述了调整前和调整后的内部数组的情况。在调整数组长度之前，为了得到Entry对象E，Map需要迭代遍历一个包含5个元素的链表。在调整数组长度之后，同样的get()方法则只需要遍历一个包含2个元素的链表，这样get()方法在调整数组长度后的运行速度提高了2倍。</p>
+<h2 id="线程安全">线程安全</h2><p>如果你已经非常熟悉HashMap，那么你肯定知道它不是线程安全的，但是为什么呢？例如假设你有一个Writer线程，它只会向Map中插入已经存在的数据，一个Reader线程，它会从Map中读取数据，那么它为什么不工作呢？</p>
+<p>因为在自动调整大小的机制下，如果线程试着去添加或者获取一个对象，Map可能会使用旧的索引值，这样就不会找到Entry对象所在的新桶。</p>
+<p>在最糟糕的情况下，当2个线程同时插入数据，而2次put()调用会同时出发数组自动调整大小。既然两个线程在同时修改链表，那么Map有可能在一个链表的内部循环中退出。如果你试着去获取一个带有内部循环的列表中的数据，那么get()方法永远不会结束。</p>
+<p><strong>HashTable</strong>提供了一个线程安全的实现，可以阻止上述情况发生。但是，既然所有的同步的CRUD操作都非常慢。例如，如果线程1调用get(key1)，然后线程2调用get(key2)，线程2调用get(key3)，那么在指定时间，只能有1个线程可以得到它的值，但是3个线程都可以同时访问这些数据。</p>
+<p>从Java 5开始，我们就拥有一个更好的、保证线程安全的HashMap实现：<strong>ConcurrentHashMap</strong>。对于ConcurrentMap来说，只有桶是同步的，这样如果多个线程不使用同一个桶或者调整内部数组的大小，它们可以同时调用get()、remove()或者put()方法。<strong>在一个多线程应用程序中，这种方式是更好的选择</strong>。</p>
+<h2 id="键的不变性">键的不变性</h2><p>为什么将字符串和整数作为HashMap的键是一种很好的实现？主要是因为它们是不可变的！如果你选择自己创建一个类作为键，但不能保证这个类是不可变的，那么你可能会在HashMap内部丢失数据。</p>
+<p>我们来看下面的用例：</p>
+<ul>
+<li>你有一个键，它的内部值是“1”。</li>
+<li>你向HashMap中插入一个对象，它的键就是“1”。</li>
+<li>HashMap从键（即“1”）的散列码中生成哈希值。</li>
+<li>Map在新创建的记录中存储这个哈希值。</li>
+<li>你改动键的内部值，将其变为“2”。</li>
+<li>键的哈希值发生了改变，但是HashMap并不知道这一点（因为存储的是旧的哈希值）。</li>
+<li>你试着通过修改后的键获取相应的对象。</li>
+<li>Map会计算新的键（即“2”）的哈希值，从而找到Entry对象所在的链表（桶）。<ul>
+<li>情况1： 既然你已经修改了键，Map会试着在错误的桶中寻找Entry对象，没有找到。</li>
+<li>情况2： 你很幸运，修改后的键生成的桶和旧键生成的桶是同一个。Map这时会在链表中进行遍历，已找到具有相同键的Entry对象。但是为了寻找键，Map首先会通过调用equals()方法来<strong>比较键的哈希值</strong>。因为修改后的键会生成不同的哈希值（旧的哈希值被存储在记录中），那么Map没有办法在链表中找到对应的Entry对象。</li>
+<li>下面是一个Java示例，我们向Map中插入两个键值对，然后我修改第一个键，并试着去获取这两个对象。你会发现从Map中返回的只有第二个对象，第一个对象已经“丢失”在HashMap中：</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MutableKeyTest</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">MyKey</span> </span>&#123;</span><br><span class="line">            Integer i;</span><br><span class="line"> </span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setI</span><span class="params">(Integer i)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">this</span>.i = i;</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="title">MyKey</span><span class="params">(Integer i)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">this</span>.i = i;</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">            <span class="annotation">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> i;</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">            <span class="annotation">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> MyKey) &#123;</span><br><span class="line">                    <span class="keyword">return</span> i.equals(((MyKey) obj).i);</span><br><span class="line">                &#125; <span class="keyword">else</span></span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        Map&lt;MyKey, String&gt; myMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        MyKey key1 = <span class="keyword">new</span> MyKey(<span class="number">1</span>);</span><br><span class="line">        MyKey key2 = <span class="keyword">new</span> MyKey(<span class="number">2</span>);</span><br><span class="line"> </span><br><span class="line">        myMap.put(key1, <span class="string">"test "</span> + <span class="number">1</span>);</span><br><span class="line">        myMap.put(key2, <span class="string">"test "</span> + <span class="number">2</span>);</span><br><span class="line"> </span><br><span class="line">        <span class="comment">// modifying key1</span></span><br><span class="line">        key1.setI(<span class="number">3</span>);</span><br><span class="line"> </span><br><span class="line">        String test1 = myMap.get(key1);</span><br><span class="line">        String test2 = myMap.get(key2);</span><br><span class="line"> </span><br><span class="line">        System.out.println(<span class="string">"test1= "</span> + test1 + <span class="string">" test2="</span> + test2);</span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码的输出是“test1=null test2=test 2”。如我们期望的那样，Map没有能力获取经过修改的键 1所对应的字符串1。</p>
+<h2 id="Java_8_中的改进">Java 8 中的改进</h2><p>在Java 8中，HashMap中的内部实现进行了很多修改。的确如此，Java 7使用了1000行代码来实现，而Java 8中使用了2000行代码。我在前面描述的大部分内容在Java 8中依然是对的，除了使用链表来保存Entry对象。在Java 8中，我们仍然使用数组，但它会被保存在Node中，Node中包含了和之前Entry对象一样的信息，并且也会使用链表：</p>
+<p>下面是在Java 8中Node实现的一部分代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">     <span class="keyword">final</span> <span class="keyword">int</span> hash;</span><br><span class="line">     <span class="keyword">final</span> K key;</span><br><span class="line">     V value;</span><br><span class="line">     Node&lt;K,V&gt; next;</span><br></pre></td></tr></table></figure>
+<p>那么和Java 7相比，到底有什么大的区别呢？好吧，Node可以被扩展成TreeNode。TreeNode是一个红黑树的数据结构，它可以存储更多的信息，这样我们可以在O(log(n))的复杂度下添加、删除或者获取一个元素。下面的示例描述了TreeNode保存的所有信息：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">LinkedHashMap</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> hash; <span class="comment">// inherited from Node&lt;K,V&gt;</span></span><br><span class="line">    <span class="keyword">final</span> K key; <span class="comment">// inherited from Node&lt;K,V&gt;</span></span><br><span class="line">    V value; <span class="comment">// inherited from Node&lt;K,V&gt;</span></span><br><span class="line">    Node&lt;K,V&gt; next; <span class="comment">// inherited from Node&lt;K,V&gt;</span></span><br><span class="line">    Entry&lt;K,V&gt; before, after;<span class="comment">// inherited from LinkedHashMap.Entry&lt;K,V&gt;</span></span><br><span class="line">    TreeNode&lt;K,V&gt; parent;</span><br><span class="line">    TreeNode&lt;K,V&gt; left;</span><br><span class="line">    TreeNode&lt;K,V&gt; right;</span><br><span class="line">    TreeNode&lt;K,V&gt; prev;</span><br><span class="line">    <span class="keyword">boolean</span> red;</span><br></pre></td></tr></table></figure>
+<p>红黑树是自平衡的二叉搜索树。它的内部机制可以保证它的长度总是log(n)，不管我们是添加还是删除节点。使用这种类型的树，最主要的好处是针对内部表中许多数据都具有相同索引（桶）的情况，这时对树进行搜索的复杂度是O(log(n))，而对于链表来说，执行相同的操作，复杂度是O(n)。</p>
+<p>如你所见，我们在树中确实存储了比链表更多的数据。根据继承原则，<strong>内部表中可以包含Node</strong>（链表）或者<strong>TreeNode（红黑树）</strong>。Oracle决定根据下面的规则来使用这两种数据结构：</p>
+<ul>
+<li><p>对于内部表中的指定索引（桶），如果node的数目多于8个，那么链表就会被转换成红黑树。</p>
+</li>
+<li><p>对于内部表中的指定索引（桶），如果node的数目小于6个，那么红黑树就会被转换成链表。</p>
+</li>
+</ul>
+<p><img src="/img/2015/09/02/3.jpg" alt=""> </p>
+<p>这张图片描述了在Java 8 HashMap中的内部数组，它既包含树（桶0），也包含链表（桶1，2和3）。桶0是一个树结构是因为它包含的节点大于8个。</p>
+<h2 id="内存开销">内存开销</h2><h3 id="JAVA_7">JAVA 7</h3><p>使用HashMap会消耗一些内存。在Java 7中，HashMap将键值对封装成Entry对象，一个Entry对象包含以下信息：</p>
+<ul>
+<li>指向下一个记录的引用</li>
+<li>一个预先计算的哈希值（整数）</li>
+<li>一个指向键的引用</li>
+<li>一个指向值的引用</li>
+</ul>
+<p>此外，Java 7中的HashMap使用了Entry对象的内部数组。假设一个Java 7 HashMap包含N个元素，它的内部数组的容量是CAPACITY，那么额外的内存消耗大约是：</p>
+<p><code>sizeOf(integer)* N + sizeOf(reference)* (3*N+C)</code></p>
+<p>其中：</p>
+<ul>
+<li>整数的大小是4个字节</li>
+<li>引用的大小依赖于JVM、操作系统以及处理器，但通常都是4个字节。</li>
+</ul>
+<p>这就意味着内存总开销通常是16 <em> N + 4 </em> CAPACITY字节。</p>
+<p>注意：在Map自动调整大小后，CAPACITY的值是下一个大于N的最小的2的幂值。</p>
+<p>注意：从Java 7开始，HashMap采用了延迟加载的机制。这意味着即使你为HashMap指定了大小，在我们第一次使用put()方法之前，记录使用的内部数组（耗费4*CAPACITY字节）也不会在内存中分配空间。</p>
+<h3 id="JAVA_8">JAVA 8</h3><p>在Java 8实现中，计算内存使用情况变得复杂一些，因为Node可能会和Entry存储相同的数据，或者在此基础上再增加6个引用和一个Boolean属性（指定是否是TreeNode）。</p>
+<p>如果所有的节点都只是Node，那么Java 8 HashMap消耗的内存和Java 7 HashMap消耗的内存是一样的。</p>
+<p>如果所有的节点都是TreeNode，那么Java 8 HashMap消耗的内存就变成：</p>
+<p><code>N * sizeOf(integer) + N * sizeOf(boolean) + sizeOf(reference)* (9*N+CAPACITY )</code></p>
+<p>在大部分标准JVM中，上述公式的结果是44 <em> N + 4 </em> CAPACITY 字节。</p>
+<h2 id="性能问题">性能问题</h2><h3 id="非对称HashMap_vs_均衡HashMap">非对称HashMap vs 均衡HashMap</h3><p>在最好的情况下，get()和put()方法都只有O(1)的复杂度。但是，如果你不去关心键的哈希函数，那么你的put()和get()方法可能会执行非常慢。put()和get()方法的高效执行，取决于数据被分配到内部数组（桶）的不同的索引上。如果键的哈希函数设计不合理，你会得到一个非对称的分区（不管内部数据的是多大）。所有的put()和get()方法会使用最大的链表，这样就会执行很慢，因为它需要迭代链表中的全部记录。在最坏的情况下（如果大部分数据都在同一个桶上），那么你的时间复杂度就会变为O(n)。</p>
+<p>下面是一个可视化的示例。第一张图描述了一个非对称HashMap，第二张图描述了一个均衡HashMap。</p>
+<p><img src="/img/2015/09/02/4.jpg" alt=""> </p>
+<p>在这个非对称HashMap中，在桶0上运行get()和put()方法会很花费时间。获取记录K需要花费6次迭代。</p>
+<p><img src="/img/2015/09/02/5.jpg" alt=""> </p>
+<p>在这个均衡HashMap中，获取记录K只需要花费3次迭代。这两个HashMap存储了相同数量的数据，并且内部数组的大小一样。唯一的区别是键的哈希函数，这个函数用来将记录分布到不同的桶上。</p>
+<p>下面是一个使用Java编写的极端示例，在这个示例中，我使用哈希函数将所有的数据放到相同的链表（桶），然后我添加了2,000,000条数据。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">MyKey</span> </span>&#123;</span><br><span class="line">            Integer i;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="title">MyKey</span><span class="params">(Integer i)</span></span>&#123;</span><br><span class="line">                <span class="keyword">this</span>.i =i;</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">            <span class="annotation">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">            <span class="annotation">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">            …</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">        &#125;</span><br><span class="line">        Date begin = <span class="keyword">new</span> Date();</span><br><span class="line">        Map &lt;MyKey,String&gt; myMap= <span class="keyword">new</span> HashMap&lt;&gt;(<span class="number">2_500_000</span>,<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">2_000_000</span>;i++)&#123;</span><br><span class="line">            myMap.put( <span class="keyword">new</span> MyKey(i), <span class="string">"test "</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        Date end = <span class="keyword">new</span> Date();</span><br><span class="line">        System.out.println(<span class="string">"Duration (ms) "</span>+ (end.getTime()-begin.getTime()));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我的机器配置是core i5-2500k @ 3.6G，在java 8u40下需要花费超过<strong>45分钟</strong>的时间来运行（我在45分钟后停止了进程）。如果我运行同样的代码， 但是我使用如下的hash函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   <span class="annotation">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> key = <span class="number">2097152</span>-<span class="number">1</span>;</span><br><span class="line">       <span class="keyword">return</span> key+<span class="number">2097152</span>*i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行它需要花费<strong>46秒</strong>，和之前比，这种方式好很多了！新的hash函数比旧的hash函数在处理哈希分区时更合理，因此调用put()方法会更快一些。如果你现在运行相同的代码，但是使用下面的hash函数，它提供了更好的哈希分区：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在只需要花费<strong>2秒</strong>！</p>
+<p>我希望你能够意识到哈希函数有多重要。如果在Java 7上面运行同样的测试，第一个和第二个的情况会更糟（因为Java 7中的put()方法复杂度是O(n)，而Java 8中的复杂度是O(log(n))。</p>
+<p>在使用HashMap时，你需要针对键找到一种哈希函数，可以<strong>将键扩散到最可能的桶上</strong>。为此，你需要<strong>避免哈希冲突</strong>。String对象是一个非常好的键，因为它有很好的哈希函数。Integer也很好，因为它的哈希值就是它自身的值。</p>
+<h3 id="调整大小的开销">调整大小的开销</h3><p>如果你需要存储大量数据，你应该在创建HashMap时指定一个初始的容量，这个容量应该接近你期望的大小。</p>
+<p>如果你不这样做，Map会使用默认的大小，即16，factorLoad的值是0.75。前11次调用put()方法会非常快，但是第12次（16<em>0.75）调用时会创建一个新的长度为32的内部数组（以及对应的链表/树），第13次到第22次调用put()方法会很快，但是第23次（32</em>0.75）调用时会重新创建（再一次）一个新的内部数组，数组的长度翻倍。然后内部调整大小的操作会在第48次、96次、192次…..调用put()方法时触发。如果数据量不大，重建内部数组的操作会很快，但是数据量很大时，花费的时间可能会从秒级到分钟级。通过初始化时指定Map期望的大小，你可以<strong>避免调整大小操作带来的消耗</strong>。</p>
+<p>但这里也有一个<strong>缺点</strong>：如果你将数组设置的非常大，例如2^28，但你只是用了数组中的2^26个桶，那么你将会浪费大量的内存（在这个示例中大约是2^30字节）。</p>
+<h2 id="结论">结论</h2><p>对于简单的用例，你没有必要知道HashMap是如何工作的，因为你不会看到O(1)、O(n)以及O(log(n))之间的区别。但是如果能够理解这一经常使用的数据结构背后的机制，总是有好处的。另外，对于Java开发者职位来说，这是一道典型的面试问题。</p>
+<p>对于大数据量的情况，了解HashMap如何工作以及理解键的哈希函数的重要性就变得非常重要。</p>
+<p>我希望这篇文章可以帮助你对HashMap的实现有一个深入的理解。</p>
+<hr>
+<p>原文链接： <a href="http://coding-geek.com/how-does-a-hashmap-work-in-java/" target="_blank" rel="external">coding-geek</a> 翻译： <a href="http://www.importnew.com/" target="_blank" rel="external">ImportNew.com</a> - <a href="http://www.importnew.com/author/wing011203" target="_blank" rel="external">Wing</a><br>译文链接： <a href="http://www.importnew.com/16599.html" target="_blank" rel="external">http://www.importnew.com/16599.html</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/09/07/使用TeamBition进行敏捷开发/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          使用TeamBition进行敏捷开发
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/08/27/Docker入门/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Docker入门</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Java-HashMap工作原理" data-title="&lt;转&gt;Java HashMap工作原理" data-url="http://sunxiang0918.github.io/2015/09/02/Java-HashMap工作原理/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
