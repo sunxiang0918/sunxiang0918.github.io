@@ -124,7 +124,7 @@ var _hmt = _hmt || [];
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/GIT/" style="font-size: 14px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 16px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/大数据/" style="font-size: 14px;">大数据</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/GIT/" style="font-size: 14px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 16px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 14px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
 					</div>
 				</section>
 				
@@ -197,6 +197,99 @@ var _hmt = _hmt || [];
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-使用TeamBition进行敏捷开发" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/09/07/使用TeamBition进行敏捷开发/" class="article-date">
+  	<time datetime="2015-09-07T13:30:27.000Z" itemprop="datePublished">2015-09-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/09/07/使用TeamBition进行敏捷开发/">使用TeamBition进行敏捷开发</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="使用TeamBition进行敏捷开发">使用TeamBition进行敏捷开发</h1><p>最近开始新的项目,由于人数也不多,需求也比较模糊,因此觉得可以试一试采用敏捷开发的模式来进行过程管理.于是研究了一下如何方便的进行这方面的管理.</p>
+<h2 id="SCRUM">SCRUM</h2><h3 id="基本概念">基本概念</h3><p>Scrum就是敏捷开发中的一种模型.它主要有三个基本的概念:</p>
+<ol>
+<li>角色</li>
+<li>工件</li>
+<li>活动</li>
+</ol>
+<h4 id="1-_角色">1. 角色</h4><ul>
+<li><strong>Product Owner(产品负责人)</strong>:负责维护产品订单的人，代表利益相关者的利益。</li>
+<li><strong>Scrum Master(Scrum管理者)</strong>:为Scrum过程负责的人，确保scrum的正确使用并使得Scrum的收益最大化。</li>
+<li><strong>Team(研发团队)</strong>:由负责自我管理开发产品的人组成的跨职能团队。</li>
+</ul>
+<p>他们的职责分别是:</p>
+<h5 id="Product_Owner">Product Owner</h5><ul>
+<li><strong>建立愿景</strong>:确认产品的项目愿景</li>
+<li><strong>定义产品路标</strong>:确定大得功能以及客户的期望</li>
+<li><strong>确定需求</strong>:生成故事描述</li>
+<li><strong>维护Product Backlog</strong>:确定功能优先级,确保对即将开始的迭代故事进行了足够的细化</li>
+<li><strong>客户验收</strong>:能让客户使用产品提供反馈</li>
+<li><strong>计划</strong>:确定交付时间,跟踪进度</li>
+<li><strong>协调</strong>:协调团队需要的资源</li>
+</ul>
+<h5 id="Scrum_Master">Scrum Master</h5><ul>
+<li><strong>确保流程的贯彻执行</strong>:对如何执行上达成一致,保证团队一致的执行流程</li>
+<li><strong>找到并去除障碍</strong>:找到任何妨碍目标达成的障碍,并设法调动资源去除障碍</li>
+<li><strong>保证内部沟通的顺畅</strong>:保证团队沟通顺利,高效</li>
+<li><strong>维持工作环境</strong>:确保整个项目中团队的工作节奏和工作进度.</li>
+<li><strong>团队提高</strong>:确保团队的人员是合适的,在团队中组织技能培训,通过激发创造性与推动授权来提升团队成员</li>
+</ul>
+<h5 id="Team">Team</h5><ul>
+<li><strong>协作</strong>:具有不同特长的团队成员,形成高度的自我管理能力,保持节奏的实现每一次Sprint目标</li>
+<li><strong>维护架构</strong>:保证架构的稳定性和持续性</li>
+<li><strong>掌握需求</strong>:团队有这人明白具体需求是什么,如何实现.</li>
+<li><strong>保证质量</strong>:通过代码标准,持续集成,配置管理,内外测试等保证产品的质量</li>
+<li><strong>设计方案</strong>:决定如何编写代码实现需求,包括单元测试和自动化测试</li>
+</ul>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/团队管理/">团队管理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/敏捷开发/">敏捷开发</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/09/07/使用TeamBition进行敏捷开发/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-Docker入门" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -780,72 +873,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/06/29/MongoDB在Linux下的集群安装与配置/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-neo4j-底层存储结构分析" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/06/27/neo4j-底层存储结构分析/" class="article-date">
-  	<time datetime="2015-06-27T13:08:13.000Z" itemprop="datePublished">2015-06-27</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/27/neo4j-底层存储结构分析/">&lt;转&gt;Neo4j 底层存储结构分析</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Neo4j_底层存储结构分析">Neo4j 底层存储结构分析</h1><h2 id="neo4j_中节点和关系的物理存储模型">neo4j 中节点和关系的物理存储模型</h2><h3 id="neo4j存储模型">neo4j存储模型</h3><p><img src="/img/2015/06/27/1.jpg" alt=""></p>
-<p>The node records contain only a pointer to their first property and their first relationship (in what is oftentermed the _relationship chain). From here, we can follow the (doubly) linked-list of relationships until we find the one we’re interested in, the  LIKES relationship from  Node 1 to  Node 2 in this case. Once we’ve found the relationship record of interest, we can simply read its properties if there are any via the same singly-linked list structure as node properties, or we can examine the node records that it relates via its start node and end node IDs. These IDs, multiplied by the node record size, of course give the immediate offset of both nodes in the node store file.</p>
-<p>上面的英文摘自<code>&lt;Graph Databases&gt;</code>(作者：IanRobinson) 一书，描述了 neo4j 的存储模型。Node和Relationship 的 Property 是用一个 Key-Value 的双向列表来保存的； Node 的 Relatsionship 是用一个双向列表来保存的，通过关系，可以方便的找到关系的 from-to Node. Node 节点保存第1个属性和第1个关系ID。</p>
-<p>通过上述存储模型，从一个Node-A开始，可以方便的遍历以该Node-A为起点的图。下面给个示例，来帮助理解上面的存储模型，存储文件的具体格式在第2章详细描述。</p>
-<h3 id="示例1">示例1</h3><p><img src="/img/2015/06/27/2.png" alt=""><br>在这个例子中，A~E表示Node 的编号，R1~R7 表示 <code>Relationship</code> 编号，P1~P10 表示<code>Property</code> 的编号。</p>
-<ul>
-<li>Node 的存储示例图如下,每个<code>Node</code> 保存了第1个<code>Property</code> 和 第1个<code>Relationship</code>：<br><img src="/img/2015/06/27/3.png" alt=""></li>
-<li>关系的存储示意图如下：<br><img src="/img/2015/06/27/4.png" alt=""><br>从示意图可以看出，从 Node-B 开始，可以通过关系的 next 指针，遍历Node-B 的所有关系，然后可以到达与其有关系的第1层Nodes,在通过遍历第1层Nodes的关系，可以达到第2层Nodes,…</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo4j/">Neo4j</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/06/27/neo4j-底层存储结构分析/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
