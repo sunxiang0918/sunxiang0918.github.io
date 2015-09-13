@@ -3,17 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>翔妖除魔的个人博客</title>
+  <title>Swift2.0 beta6 后异常处理的一些补充 | 翔妖除魔的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="翔妖除魔的个人博客">
-<meta property="og:url" content="http://sunxiang0918.github.io/index.html">
+  <meta name="description" content="Swift2.0 beta5 后异常处理的一些补充随着XCode7 GM在9月9号的推出,Swift2.0也要进入了GM了.随后的语法应该会逐渐的稳定下来了.其实在Swfit2.0 beta6后,Swift2对异常的处理又发生了一些变化,比如增加了一个try?关键字.因此,这篇文章就再罗列一下现在Swift2.0异常处理的各种场景与方式.
+首先是定义一个异常.Swift2.0中 所有的异常类都是遵">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift2.0 beta6 后异常处理的一些补充">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/09/13/Swift2-0-beta6-后异常处理的一些补充/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
-<meta property="og:description">
+<meta property="og:description" content="Swift2.0 beta5 后异常处理的一些补充随着XCode7 GM在9月9号的推出,Swift2.0也要进入了GM了.随后的语法应该会逐渐的稳定下来了.其实在Swfit2.0 beta6后,Swift2对异常的处理又发生了一些变化,比如增加了一个try?关键字.因此,这篇文章就再罗列一下现在Swift2.0异常处理的各种场景与方式.
+首先是定义一个异常.Swift2.0中 所有的异常类都是遵">
+<meta property="og:updated_time" content="2015-09-13T15:40:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="翔妖除魔的个人博客">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Swift2.0 beta6 后异常处理的一些补充">
+<meta name="twitter:description" content="Swift2.0 beta5 后异常处理的一些补充随着XCode7 GM在9月9号的推出,Swift2.0也要进入了GM了.随后的语法应该会逐渐的稳定下来了.其实在Swfit2.0 beta6后,Swift2对异常的处理又发生了一些变化,比如增加了一个try?关键字.因此,这篇文章就再罗列一下现在Swift2.0异常处理的各种场景与方式.
+首先是定义一个异常.Swift2.0中 所有的异常类都是遵">
   
     <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
   
@@ -196,9 +200,7 @@ var _hmt = _hmt || [];
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-Swift2-0-beta6-后异常处理的一些补充" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Swift2-0-beta6-后异常处理的一些补充" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2015/09/13/Swift2-0-beta6-后异常处理的一些补充/" class="article-date">
@@ -214,17 +216,30 @@ var _hmt = _hmt || [];
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/13/Swift2-0-beta6-后异常处理的一些补充/">Swift2.0 beta6 后异常处理的一些补充</a>
+    <h1 class="article-title" itemprop="name">
+      Swift2.0 beta6 后异常处理的一些补充
     </h1>
   
 
       </header>
       
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
     
     <div class="article-entry" itemprop="articleBody">
       
       
+      
+        
         <h1 id="Swift2-0_beta5_后异常处理的一些补充">Swift2.0 beta5 后异常处理的一些补充</h1><p>随着<code>XCode7 GM</code>在9月9号的推出,Swift2.0也要进入了GM了.随后的语法应该会逐渐的稳定下来了.其实在Swfit2.0 beta6后,Swift2对异常的处理又发生了一些变化,比如增加了一个<code>try?</code>关键字.<br>因此,这篇文章就再罗列一下现在Swift2.0异常处理的各种场景与方式.</p>
 <h2 id="首先是定义一个异常-">首先是定义一个异常.</h2><p>Swift2.0中 所有的异常类都是遵循<code>ErrorType</code>这个协议的.因此定义一个异常的最简单的方式就是使用枚举来实现一个这个协议:</p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">AppException</span> : <span class="title">ErrorType</span> </span>&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">IllegalArgumentException</span></span><br><span class="line">    <span class="keyword">case</span> <span class="type">IllegalFormatException</span>(coinsNeeded: <span class="type">Int</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -272,650 +287,62 @@ var _hmt = _hmt || [];
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/09/07/使用TeamBition进行敏捷开发/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用TeamBition进行敏捷开发</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
   
 </article>
 
 
-
-
-
-
-
-  
-    <article id="post-使用TeamBition进行敏捷开发" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/09/07/使用TeamBition进行敏捷开发/" class="article-date">
-  	<time datetime="2015-09-07T13:30:27.000Z" itemprop="datePublished">2015-09-07</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/07/使用TeamBition进行敏捷开发/">使用TeamBition进行敏捷开发</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="使用TeamBition进行敏捷开发">使用TeamBition进行敏捷开发</h1><p>最近开始新的项目,由于人数也不多,需求也比较模糊,因此觉得可以试一试采用敏捷开发的模式来进行过程管理.于是研究了一下如何方便的进行这方面的管理.</p>
-<h2 id="SCRUM">SCRUM</h2><h3 id="基本概念">基本概念</h3><p>Scrum就是敏捷开发中的一种模型.它主要有三个基本的概念:</p>
-<ol>
-<li>角色</li>
-<li>工件</li>
-<li>活动</li>
-</ol>
-<h4 id="1-_角色">1. 角色</h4><ul>
-<li><strong>Product Owner(产品负责人)</strong>:负责维护产品订单的人，代表利益相关者的利益。</li>
-<li><strong>Scrum Master(Scrum管理者)</strong>:为Scrum过程负责的人，确保scrum的正确使用并使得Scrum的收益最大化。</li>
-<li><strong>Team(研发团队)</strong>:由负责自我管理开发产品的人组成的跨职能团队。</li>
-</ul>
-<p>他们的职责分别是:</p>
-<h5 id="Product_Owner">Product Owner</h5><ul>
-<li><strong>建立愿景</strong>:确认产品的项目愿景</li>
-<li><strong>定义产品路标</strong>:确定大得功能以及客户的期望</li>
-<li><strong>确定需求</strong>:生成故事描述</li>
-<li><strong>维护Product Backlog</strong>:确定功能优先级,确保对即将开始的迭代故事进行了足够的细化</li>
-<li><strong>客户验收</strong>:能让客户使用产品提供反馈</li>
-<li><strong>计划</strong>:确定交付时间,跟踪进度</li>
-<li><strong>协调</strong>:协调团队需要的资源</li>
-</ul>
-<h5 id="Scrum_Master">Scrum Master</h5><ul>
-<li><strong>确保流程的贯彻执行</strong>:对如何执行上达成一致,保证团队一致的执行流程</li>
-<li><strong>找到并去除障碍</strong>:找到任何妨碍目标达成的障碍,并设法调动资源去除障碍</li>
-<li><strong>保证内部沟通的顺畅</strong>:保证团队沟通顺利,高效</li>
-<li><strong>维持工作环境</strong>:确保整个项目中团队的工作节奏和工作进度.</li>
-<li><strong>团队提高</strong>:确保团队的人员是合适的,在团队中组织技能培训,通过激发创造性与推动授权来提升团队成员</li>
-</ul>
-<h5 id="Team">Team</h5><ul>
-<li><strong>协作</strong>:具有不同特长的团队成员,形成高度的自我管理能力,保持节奏的实现每一次Sprint目标</li>
-<li><strong>维护架构</strong>:保证架构的稳定性和持续性</li>
-<li><strong>掌握需求</strong>:团队有这人明白具体需求是什么,如何实现.</li>
-<li><strong>保证质量</strong>:通过代码标准,持续集成,配置管理,内外测试等保证产品的质量</li>
-<li><strong>设计方案</strong>:决定如何编写代码实现需求,包括单元测试和自动化测试</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/团队管理/">团队管理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/敏捷开发/">敏捷开发</a></li></ul>
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-      
 
-      
-        <p class="article-more-link">
-          <a  href="/2015/09/07/使用TeamBition进行敏捷开发/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
 
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Swift2-0-beta6-后异常处理的一些补充" data-title="Swift2.0 beta6 后异常处理的一些补充" data-url="http://sunxiang0918.github.io/2015/09/13/Swift2-0-beta6-后异常处理的一些补充/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
 
 
 
-
-
-  
-    <article id="post-Java-HashMap工作原理" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/09/02/Java-HashMap工作原理/" class="article-date">
-  	<time datetime="2015-09-02T15:00:38.000Z" itemprop="datePublished">2015-09-02</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/02/Java-HashMap工作原理/">&lt;转&gt;Java HashMap工作原理</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Java中HashMap的工作原理其实以前就看过很多次了,也仔细的分析过它的源码.但是一直没有写一篇文章来记录一下,这篇文章写的非常的清楚,非常的透彻.是我见过讲的最详细的.值得保存下来.</p>
-<h1 id="Java_HashMap工作原理">Java HashMap工作原理</h1><p>大部分Java开发者都在使用Map，特别是HashMap。HashMap是一种简单但强大的方式去存储和获取数据。但有多少开发者知道HashMap内部如何工作呢？几天前，我阅读了java.util.HashMap的大量源代码（包括Java 7 和Java 8），来深入理解这个基础的数据结构。在这篇文章中，我会解释java.util.HashMap的实现，描述Java 8实现中添加的新特性，并讨论性能、内存以及使用HashMap时的一些已知问题。</p>
-<h2 id="内部存储">内部存储</h2><p>Java HashMap类实现了Map<K, V>接口。这个接口中的主要方法包括：</p>
-<ul>
-<li>V put(K key, V value)</li>
-<li>V get(Object key)</li>
-<li>V remove(Object key)</li>
-<li>Boolean containsKey(Object key)</li>
-</ul>
-<p>HashMap使用了一个内部类Entry<K, V>来存储数据。这个内部类是一个简单的键值对，并带有额外两个数据：</p>
-<ul>
-<li>一个指向其他入口（译者注：引用对象）的引用，这样HashMap可以存储类似链接列表这样的对象。</li>
-<li>一个用来代表键的哈希值，存储这个值可以避免HashMap在每次需要时都重新生成键所对应的哈希值。</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/09/02/Java-HashMap工作原理/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Docker入门" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/27/Docker入门/" class="article-date">
-  	<time datetime="2015-08-27T13:29:31.000Z" itemprop="datePublished">2015-08-27</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/27/Docker入门/">Docker入门</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Docker入门">Docker入门</h1><p>Docker是一种新型的虚拟化技术,他释放了虚拟化的性能,极大的降低了云计算资源供应的成本,同时让应用的分发,测试,部署都变得非常的高效的容易!</p>
-<h2 id="Docker简介">Docker简介</h2><p>Docker是一个开源项目,诞生于2013年初.使用的是Google的Go语言实现,遵循了Apache2.0协议.代码放在了<a href="https://github.com/docker/docker">GitHub</a>上.<br>它使用了Linux的LXC等技术,实现了轻量级的操作系统虚拟化.</p>
-<h2 id="使用Docker的好处">使用Docker的好处</h2><ol>
-<li>更快速的交付和部署<br> 开发者可以使用一个标准的镜像来构建一套开发容器，开发完成之后，运维人员可以直接使用这个容器来部署代码。</li>
-<li>更高效的虚拟化<br> Docker 容器的启动可以在秒级实现，这相比传统的虚拟机方式要快得多。</li>
-<li>更轻松的迁移和扩展<br> Docker 容器几乎可以在任意的平台上运行，包括物理机、虚拟机、公有云、私有云、个人电脑、服务器等。 这种兼容性可以让用户把一个应用程序从一个平台直接迁移到另外一个。</li>
-<li>更简单的管理<br> 所有的修改都以增量的方式被分发和更新，从而实现自动化并且高效的管理。</li>
-</ol>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/08/27/Docker入门/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Solr数据导入Handler" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/09/Solr数据导入Handler/" class="article-date">
-  	<time datetime="2015-08-08T16:00:00.000Z" itemprop="datePublished">2015-08-09</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/09/Solr数据导入Handler/">&lt;翻译&gt;Solr 数据导入Handler</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Solr_数据导入Handler">Solr 数据导入Handler</h2><p>由于在我们新的全文检索引擎中使用了Solr作为底层,因此当时是想直接使用Solr提供的DataImportHandler来进行数据的导入,于是就有在它的官网上看了相关的内容,并且试着进行了翻译.虽然最后我们还是自己实现了一套数据导入,但是它的这篇文章写的确实非常的好.</p>
-<h2 id="Data_Import_Request_Handler">Data Import Request Handler</h2><p>大多数系统都会把他们的数据存储在关系型数据库或者XML文件中,并且还要对这些数据进行检索.<code>DataImportHandler</code>就是Solr提供的一个工具:可以通过配置的方式驱动工具全量(<code>full builds</code>)或增量的把数据导入到Solr中.</p>
-<p>除了这篇文章外,还可以参见<a href="https://wiki.apache.org/solr/DataImportHandlerFaq">DataImportHandlerFaq</a>.如果想快速开始,可以浏览<a href="https://wiki.apache.org/solr/DIHQuickStart">DIHQuickStart</a></p>
-<h1 id="概况">概况</h1><h2 id="目标">目标</h2><ul>
-<li>能从关系型数据库中读取数据</li>
-<li>能通过配置从多个表以及列数据中构造Solr的文档(<code>Document</code>)</li>
-<li>能更新上述的Solr文档</li>
-<li>能根据配置提供全导入的功能</li>
-<li>能检测增量的数据新增与更新,并做增量导入(我们假设存在一个最后更新时间的时间戳字段来保证增量的工作)</li>
-<li>能自动的计划与调度全更新与增量更新</li>
-<li>能通过配置从xml/http/file 中读取数据并创建索引</li>
-<li>能提供插件机制来保证用户可以选择任何的数据源(ftp,scp等等)和格式(JSON,csv等等)进行索引工作.</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lucene/">Lucene</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Solr/">Solr</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/08/09/Solr数据导入Handler/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Swift-2-0-新特性" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/04/Swift-2-0-新特性/" class="article-date">
-  	<time datetime="2015-08-04T13:35:51.000Z" itemprop="datePublished">2015-08-04</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/04/Swift-2-0-新特性/">Swift 2.0 新特性</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Swift_2-0_新特性">Swift 2.0 新特性</h1><p><code>Swift2.0</code> 算是一个大得版本更新.新增或修改了很多的特性.出来这么久了,我也把我练手写的知乎日报全部转换成了<code>Swfit2.0</code>.其中还是遇到了一些问题.因此,趁有空,就尝试总结一下<code>Swift2.0</code>的一些新特性或新的变化.</p>
-<p>PS:本文写的时候采用的是 Swift2.0+Xcode7 beta4 的环境.</p>
-<h2 id="1-guard语句">1.guard语句</h2><p><code>Swift2.0</code>中新引入了一个关键字<code>guard</code>用于条件的判断处理.它和<code>if</code>语句比较类似,都是通过一个<code>boolean</code>值来决定流程的走向.但是与<code>if</code>语句不同的是.<code>guard</code>语句只会有一个代码块.没有像<code>if else</code>那样有多个<code>guard else</code>.</p>
-<p>那么<code>guard</code>到底有何作用呢?<code>guard</code>允许在一个代码周期中提前退出.也就是说,在<code>guard</code>关键字后接一个布尔表达式,只有当值为<code>false</code>的时候,才会执行<code>else</code>后的内容.如果值为<code>true</code>,那么就跳过这个<code>guard</code>代码块.</p>
-<p><code>guard</code>语句最常见的用法就是替代<code>if</code>做参数的合法性校验.<br>比如在以前:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">doSomeThing</span><span class="params">(a:String?,b:String?)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>	<span class="keyword">let</span> _a = a &#123;</span><br><span class="line">		<span class="keyword">if</span>	<span class="keyword">let</span> _b = b &#123;</span><br><span class="line">			<span class="built_in">print</span>(<span class="string">"<span class="subst">\(_a)</span>:<span class="subst">\(_b)</span>"</span>)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// print("\(_a):(_b)")  //这个地方不能访问_a和_b</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>向上面的例子那样,如果每一个参数都使用<code>if</code>语句来判断,那么这样的代码写起来非常的繁琐.读起来也不是很清晰.基于这种的情况,<code>Swift2.0</code>增加了<code>guard</code>关键字.把上面的代码改成使用<code>guard</code>的写法就会成这样:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">doSomeThing2</span><span class="params">(a:String?,b:String?)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    guard <span class="keyword">let</span> _a = a <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    guard <span class="keyword">let</span> _b = b <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"<span class="subst">\(_a)</span>:<span class="subst">\(_b)</span>"</span>)	<span class="comment">//这个地方是可以访问_a和_b</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样写比起以前使用<code>if</code>来做判断,代码的可读性更强了.并且<code>Optaion</code>类型的变量的解包可以在全局可见了.这在网络编程中解析JSON等是非常有用的.</p>
-<p><code>guard</code>除了用于入参的校验和可选类型的解包外.还可以用于抛出异常以及结合<code>available</code>做函数的检查:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">guard name != <span class="literal">nil</span> <span class="keyword">else</span> &#123;</span><br><span class="line">	throw <span class="type">IllegalArgumentException</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">guard #available(iOS <span class="number">8</span>, *) <span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/08/04/Swift-2-0-新特性/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-swift中多线程的使用方法" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/02/swift中多线程的使用方法/" class="article-date">
-  	<time datetime="2015-08-02T14:34:44.000Z" itemprop="datePublished">2015-08-02</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/02/swift中多线程的使用方法/">swift中多线程的使用方法</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="swift中多线程的使用方法">swift中多线程的使用方法</h1><h2 id="概述">概述</h2><p>多线程可能是每一个程序开发都会遇到的问题.在swift中,苹果并没有重新开发出一套线程框架,而是继续使用ObjectiveC原有的一套线程框架.<br>目前在swift中最常用的线程方案主要有<code>NSThread</code>,<code>GCD</code>,<code>NSOperation&amp;NSOperationQueue</code>三套方案.所以,接下来会分别的描述下这些方案的使用方法以及例子.</p>
-<h2 id="NSThread">NSThread</h2><p><code>NSThread</code>是苹果封装的一套完全面向对象的多线程框架.相比其他的两种方案,这种方案更轻量.你可以直接操作线程对象,很直观和方便.但是,由于<code>NSThread</code>只是一个轻量级的封装.所以需要自己管理线程的生命周期，线程同步。并且线程同步对数据的加锁会有一定的系统开销.因此这套方案使用的频率并不高.通常都是用来获取线程的信息<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/08/02/swift中多线程的使用方法/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Swift局部SCOPE" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/07/29/Swift局部SCOPE/" class="article-date">
-  	<time datetime="2015-07-29T02:06:40.000Z" itemprop="datePublished">2015-07-29</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/29/Swift局部SCOPE/">&lt;转&gt;Swift局部SCOPE</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="局部SCOPE">局部SCOPE</h1><p>C 系语言中在方法内部我们是可以任意添加成对的大括号 {} 来限定代码的作用范围的。这么做一般来说有两个好处，首先是超过作用域后里面的临时变量就将失效，这不仅可以使方法内的命名更加容易，也使得那些不被需要的引用的回收提前进行了，可以稍微提高一些代码的效率；另外，在合适的位置插入括号也利于方法的梳理，对于那些不太方便提取为一个单独方法，但是又应该和当前方法内的其他部分进行一些区分的代码，使用大括号可以将这样的结构进行一个相对自然的划分。</p>
-<p>举一个不失一般性的例子，虽然我个人不太喜欢使用代码手写 UI，但钟情于这么做的人还是不在少数。如果我们要在 Objective-C 中用代码构建 UI 的话，我们一般会选择在 -loadView 里写一些类似这样的代码：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-(<span class="keyword">void</span>)loadView &#123;</span><br><span class="line">    <span class="built_in">UIView</span> *view = [[<span class="built_in">UIView</span> alloc] initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">320</span>, <span class="number">480</span>)];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UILabel</span> *titleLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">            initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">30</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">    titleLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">    titleLabel<span class="variable">.text</span> = <span class="string">@"Title"</span>;</span><br><span class="line">    [view addSubview:titleLabel];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UILabel</span> *textLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">            initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">80</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">    textLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">    textLabel<span class="variable">.text</span> = <span class="string">@"Text"</span>;</span><br><span class="line">    [view addSubview:textLabel];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span><span class="variable">.view</span> = view;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/07/29/Swift局部SCOPE/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Swift2-0中字符串的设计" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/07/29/Swift2-0中字符串的设计/" class="article-date">
-  	<time datetime="2015-07-28T16:19:28.000Z" itemprop="datePublished">2015-07-29</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/29/Swift2-0中字符串的设计/">&lt;翻译&gt;Swift2.0中字符串的设计</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Swift2-0中字符串的设计">Swift2.0中字符串的设计</h1><p>Swift中提供了一个高性能的,兼容Unicode的字符串实现作为其标准库中的一部分.在Swift2中,<code>String</code>类型不再实现<code>CollectionType</code>协议.在以前<code>String</code>字符串是一个由<code>Character</code>字符组成的集合,其表现类似于一个数组.而现在,<code>String</code>则是提供了一个<code>characters</code>属性用来暴露字符集合.</p>
-<p>为什么会有这样的变化呢?尽管把字符串当做一个字符的集合看起来更自然.但是其实<code>String</code>字符串类型的操作与<code>Array</code>,<code>Set</code>或者<code>Dictionary</code>等集合一直都是完全不同的.但自从Swift2增加了协议扩展后,针对这些差异有必要进行一些根本性的变化了.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/07/29/Swift2-0中字符串的设计/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/07/25/hello-world/" class="article-date">
-  	<time datetime="2015-07-25T10:06:02.000Z" itemprop="datePublished">2015-07-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/25/hello-world/">Macos 通过安装Hexo 来搭建 GitHub Pages 博客系统</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>现在越来越多的人愿意使用独立的技术博客.如果自己搭建Wordpress等,需要涉及到服务器的问题.所以,很多人选择了GitHub提供的Pages来搭建个人博客,我也赶一回潮流.在MacOS 上 使用Hexo来搭建GitHubPages博客.</p>
-<h2 id="Hexo">Hexo</h2><p>hexo出自台湾大学生 <a href="http://twitter.com/tommy351">tommy351</a> 之手，是一个基于Node.js的静态博客程序，其编译上百篇文字只需要几秒。hexo生成的静态网页可以直接放到GitHub Pages，BAE，SAE等平台上。</p>
-<h3 id="安装Hexo">安装Hexo</h3><p>要安装<code>Hexo</code>需要先安装<code>Npm</code>以及<code>NodeJs</code>.<br>我在MacOS上,是使用<a href="http://brew.sh">Brew</a>安装的.</p>
-<ol>
-<li><p>安装<strong>NodeJS</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install node</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装<strong>Git</strong><br>由于我安装了XCode的,并且安装了<code>Command Line Tool</code>,因此,这一步可以省略了.否则还是在终端中输入:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install git</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/github/">github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/博客/">博客</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/其他/">其他</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/07/25/hello-world/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-  
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
-  
 </div>
       <footer id="footer">
   <div class="outer">
@@ -939,8 +366,8 @@ var _hmt = _hmt || [];
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
