@@ -124,7 +124,7 @@ var _hmt = _hmt || [];
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/GIT/" style="font-size: 14px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 16px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 10px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 14px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/GIT/" style="font-size: 14px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 16px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 12px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 16px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 12px;">集群</a>
 					</div>
 				</section>
 				
@@ -197,6 +197,66 @@ var _hmt = _hmt || [];
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-zookeeper-集群部署" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/09/20/zookeeper-集群部署/" class="article-date">
+  	<time datetime="2014-09-20T11:55:15.000Z" itemprop="datePublished">2014-09-20</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/09/20/zookeeper-集群部署/">zookeeper 集群部署</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="zookeeper_集群部署">zookeeper 集群部署</h1><p>在现在的软件系统中,通常都会搭建集群或者分布式环境了.而在这种情况下,通常都需要一个分布式程序协调者的服务.这最常用的就是zookeeper了.<br>在我们的系统中,会使用zookeeper来做<code>统一的配置管理</code>,集群<code>节点状态管理</code>,以及<code>分布式锁</code>的功能.<br>为了保证zookeeper本身的高可用性,那么这就需要对ZK进行集群.</p>
+<h2 id="安装环境">安装环境</h2><p>操作系统:Ubuntu 12.04 64位<br>JDK:1.7.0_55 64位<br>机器: <code>192.168.1.100</code> <code>192.168.1.101</code>  <code>192.168.1.101</code></p>
+<h2 id="安装步骤">安装步骤</h2>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zookeeper/">Zookeeper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/集群/">集群</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2014/09/20/zookeeper-集群部署/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-在MAC下使用beyondcompare比较JAVA-Class文件" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -797,78 +857,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2012/11/14/Lucene打分公式的数学推导/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-SOAP中Binding的四种样式" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2012/09/18/SOAP中Binding的四种样式/" class="article-date">
-  	<time datetime="2012-09-18T14:10:00.000Z" itemprop="datePublished">2012-09-18</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2012/09/18/SOAP中Binding的四种样式/">SOAP中Binding的四种样式</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="SOAP中Binding的四种样式">SOAP中Binding的四种样式</h1><p>在SOAP中由于在当初标准化过程比较短,并且采用了事实标准推动.导致了现在WSDL1.1中其实是有4种绑定的样式的.这四种样式生成的WSDL都有细微的差别.而了解它们之间的区别,对于我们生成或调用WebService是非常有帮助的.否则就有可能出现别人生成的WSDL,我们动态调用不了,又不晓得原因的情况.</p>
-<p>这四种样式分别是:</p>
-<ol>
-<li>RPC/Encoded</li>
-<li>RPC/Literal</li>
-<li>Document/Encoded</li>
-<li>Document/Literal(Wrapper)</li>
-</ol>
-<p>这四组样式其实可以分成<code>Style</code>和<code>Use</code>两个属性的排列组合.</p>
-<ul>
-<li><code>RPC Style</code>指定包含Web服务调用的XML节点，该节点以Web服务调用方法命名，XML节点依次包含方法调用的各个参数。</li>
-<li><code>Document Style</code>指定内直接包含消息，该消息没有SOAP格式限制。服务器的应用层负责将XML文档映射成内存对象（参数、方法调用等等）</li>
-<li><code>Encoded Use</code>表示XML的消息使用类型属性引用抽象数据类型，使用Section 5编码（SOAP规范第五章定义的编码）进行xml的序列化和反序列化。</li>
-<li><code>Literal Use</code>表示XML的消息使用类型属性或者Element元素引用具体的Schema定义，也就是说，根据具体的Schema将内存对象序列化成XML消息。</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2012/09/18/SOAP中Binding的四种样式/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

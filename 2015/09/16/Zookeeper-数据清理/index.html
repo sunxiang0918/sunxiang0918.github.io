@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Zookeeper 数据清理 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Zookeeper 数据清理问题现象:情况是这样的,我在自己的笔记本上安装了Zookeeper,并使用了默认的配置作为开发的时候使用.因为平时会关机等等,所以重启zookeeper的次数也是比较频繁的.突然最近发现系统磁盘空间就不够用了.这不查不知道,一查吓一跳,zookeeper的data数据文件夹占了大概5个G的空间,而我zookeeper里面其实也没有什么东西,怎么会这么大呢?于是有了这篇文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zookeeper 数据清理">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/09/16/Zookeeper-数据清理/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="Zookeeper 数据清理问题现象:情况是这样的,我在自己的笔记本上安装了Zookeeper,并使用了默认的配置作为开发的时候使用.因为平时会关机等等,所以重启zookeeper的次数也是比较频繁的.突然最近发现系统磁盘空间就不够用了.这不查不知道,一查吓一跳,zookeeper的data数据文件夹占了大概5个G的空间,而我zookeeper里面其实也没有什么东西,怎么会这么大呢?于是有了这篇文">
+<meta property="og:updated_time" content="2015-09-16T16:18:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zookeeper 数据清理">
+<meta name="twitter:description" content="Zookeeper 数据清理问题现象:情况是这样的,我在自己的笔记本上安装了Zookeeper,并使用了默认的配置作为开发的时候使用.因为平时会关机等等,所以重启zookeeper的次数也是比较频繁的.突然最近发现系统磁盘空间就不够用了.这不查不知道,一查吓一跳,zookeeper的data数据文件夹占了大概5个G的空间,而我zookeeper里面其实也没有什么东西,怎么会这么大呢?于是有了这篇文">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/GIT/" style="font-size: 14px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 16px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 12px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 16px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 12px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Zookeeper-数据清理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/09/16/Zookeeper-数据清理/" class="article-date">
+  	<time datetime="2015-09-16T15:31:16.000Z" itemprop="datePublished">2015-09-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Zookeeper 数据清理
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zookeeper/">Zookeeper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/集群/">集群</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        
+        <h1 id="Zookeeper_数据清理">Zookeeper 数据清理</h1><h2 id="问题现象:">问题现象:</h2><p>情况是这样的,我在自己的笔记本上安装了<code>Zookeeper</code>,并使用了默认的配置作为开发的时候使用.<br>因为平时会关机等等,所以重启<code>zookeeper</code>的次数也是比较频繁的.突然最近发现系统磁盘空间就不够用了.<br>这不查不知道,一查吓一跳,<code>zookeeper</code>的data数据文件夹占了大概<strong>5个G</strong>的空间,而我zookeeper里面其实也没有什么东西,怎么会这么大呢?于是有了这篇文章的诞生.</p>
+<h2 id="问题分析:">问题分析:</h2><p>首先我就在网上找了一圈,都说使用<code>zk/bin</code>里面的<code>zkClean.sh</code>就可以了.<br>其调用语法是:<code>./zkClean.sh -n 3</code> 这样就可以保留最近的三个Log文件.<br>但是我执行了后,发现然并卵.点反应都没有.一个文件都没有删除掉..<br>然后又找了一篇文章:<a href="http://nileader.blog.51cto.com/1381108/932156" target="_blank" rel="external">ZooKeepr日志清理</a>.按照里面说的第一种方法,直接删除data文件夹里面的数据.只保留最近的3个.结果删除以后,数据都没了…说明这个方法里面肯定有什么猫腻是没有发现的.</p>
+<a id="more"></a>
+<p>于是,仔细的分析<code>zkClean.sh</code>这个脚本. 发现它其实是调用的<code>org.apache.zookeeper.server.PurgeTxnLog</code>这个类中的方法来执行清理工作的.于是找到这个类的源文件.分析其中的代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">purge</span><span class="params">(File dataDir, File snapDir, <span class="keyword">int</span> num)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (num &lt; <span class="number">3</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"count should be greater than 3"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        FileTxnSnapLog txnLog = <span class="keyword">new</span> FileTxnSnapLog(dataDir, snapDir);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// found any valid recent snapshots?</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// files to exclude from deletion</span></span><br><span class="line">        Set&lt;File&gt; exc=<span class="keyword">new</span> HashSet&lt;File&gt;();</span><br><span class="line">        List&lt;File&gt; snaps = txnLog.findNRecentSnapshots(num);</span><br><span class="line">        <span class="keyword">if</span> (snaps.size() == <span class="number">0</span>) </span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        File snapShot = snaps.get(snaps.size() -<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (File f: snaps) &#123;</span><br><span class="line">            exc.add(f);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">long</span> zxid = Util.getZxidFromName(snapShot.getName(),<span class="string">"snapshot"</span>);</span><br><span class="line">        exc.addAll(Arrays.asList(txnLog.getSnapshotLogs(zxid)));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Set&lt;File&gt; exclude=exc;</span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">MyFileFilter</span> <span class="keyword">implements</span> <span class="title">FileFilter</span></span>&#123;</span><br><span class="line">            <span class="keyword">private</span> <span class="keyword">final</span> String prefix;</span><br><span class="line">            MyFileFilter(String prefix)&#123;</span><br><span class="line">                <span class="keyword">this</span>.prefix=prefix;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">accept</span><span class="params">(File f)</span></span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(!f.getName().startsWith(prefix) || exclude.contains(f))</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// add all non-excluded log files</span></span><br><span class="line">        List&lt;File&gt; files=<span class="keyword">new</span> ArrayList&lt;File&gt;(</span><br><span class="line">                Arrays.asList(txnLog.getDataDir().listFiles(<span class="keyword">new</span> MyFileFilter(<span class="string">"log."</span>))));</span><br><span class="line">        <span class="comment">// add all non-excluded snapshot files to the deletion list</span></span><br><span class="line">        files.addAll(Arrays.asList(txnLog.getSnapDir().listFiles(<span class="keyword">new</span> MyFileFilter(<span class="string">"snapshot."</span>))));</span><br><span class="line">        <span class="comment">// remove the old files</span></span><br><span class="line">        <span class="keyword">for</span>(File f: files)</span><br><span class="line">        &#123;</span><br><span class="line">            System.out.println(<span class="string">"Removing file: "</span>+</span><br><span class="line">                DateFormat.getDateTimeInstance().format(f.lastModified())+</span><br><span class="line">                <span class="string">"\t"</span>+f.getPath());</span><br><span class="line">            <span class="keyword">if</span>(!f.delete())&#123;</span><br><span class="line">                System.err.println(<span class="string">"Failed to remove "</span>+f.getPath());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>通过断点发现,在我这的环境中执行到<code>Util.getZxidFromName(snapShot.getName(),&quot;snapshot&quot;);</code>这句的时候,返回的<code>zxid</code>为<code>-1</code>.也就是没有找到<code>snapshot</code>的文件.所以剩下的所有文件都被加入到了<code>exclude</code>这个排除删除的变量中.因此,最后需要删除的队列<code>files</code>里面的东西其实是空的,也就是什么文件都不删除.</p>
+<p>为什么没有找到<code>snapshot</code>的文件呢?仔细看了下我这的<code>zookeeper/data</code>文件夹.其中确实没有名为<code>snapshot.*</code>的文件,全是<code>log.*</code>的文件.</p>
+<p>翻看<code>zookeeper</code>的官方文档.里面其实写的很清楚了.<br>在<code>zookeeper</code>中, <code>dataDir</code>里面存储的是<code>snapshot</code>文件,也就是快照文件,作用就类似于我们数据库的<code>dump</code>文件.里面存放了所有的<code>zk</code>数据.<br>而<code>dataLogDir</code>文件夹里面存储的是<code>log</code>文件.也就是事务日志文件.每对zk中的数据做一次修改并保存.都会往这个文件中记录一条数据.<br>也就是说,当<code>zookeeper</code>启动的时候,它其实是通过一个<code>snapshot</code>快照文件加上一堆的<code>log</code>事务日志文件的叠加来还原zk中的数据的.</p>
+<p>那么,<code>snapshot</code>文件是从哪儿来得呢?为什么我的机器上没有<code>snapshot</code>文件呢?<br><code>zookeeper</code>的<a href="http://zookeeper.apache.org/doc/r3.3.3/zookeeperAdmin.html" target="_blank" rel="external">官方文档</a>中说的比较清楚,它有一个配置项叫做<code>snapCount</code>这个是用来控制生成快照文件的,默认值是<code>100000</code>.它的意思是当有<code>snapCount/2+rand.nextInt(snapCount/2)</code>条事务日志记入到<code>log</code>文件中的时候,那么就做一次快照.也就是在默认情况下五万至十万条事务的时候会做一次快照,之所以用随机数是为了避免在集群中,所有服务器在同一时间做快照的操作.<br>分析到这,原因就显而易见了.由于我是自己机器上做测试用的,量都比较小.半年了都还没有提交到五万次事务.所以它就一直不会生成快照文件,所以也就在清理日志文件的时候不会清理任何的<code>log</code>了.</p>
+<p>除了这个问题,还有一个问题就是为什么会生成这么多的<code>log.*</code>文件.而且每一个文件都是64MB大小.<br>其实这个是因为<code>zookeeper</code>在开始写事务日志的时候,server每次都会新生成一个指定大小的<code>log</code>文件,本意是预分配空间,使磁盘空间更连续,最小化磁盘寻道的次数.<br>默认配置大小就是<code>64M</code>.因此,当系统每次重启的时候都会新生成一个<code>64M</code>大小的<code>log.*</code>文件了.完全没有写满就重启<code>zookeeper</code>.大大的浪费了空间.因此,我们需要调整这个大小.<br>控制这个大小的配置是<code>preAllocSize</code>,单位是<code>KB</code>.我们可以粗略的计算一下所需要的空间.比如我们五万次事务提交一次镜像.而每一次的事务大概是150个字节.那么总大小就应该是:<code>150*50000/1024/1024=7</code>,也就是7MB左右.</p>
+<p>这样修改了这两个参数后,重新启动<code>zookeeper</code>.写一个简易的程序不断的对<code>zk</code>做写入的测试.结果证明了上面的分析.<code>data</code>文件夹中开始出现<code>snapshot</code>文件了.而且在不重启的情况下,<code>log</code>文件的数量也是在可控的范围内.这个时候再通过<code>zkClean.sh</code>就可以清除掉多余的日志文件了.</p>
+<p>到此,问题解决.</p>
+<h2 id="其他补充:">其他补充:</h2><p>除了使用<code>zkClean.sh</code>文件手工的删除外.还可以在<code>zoo.cfg</code>文件中配置<code>autopurge.snapRetainCount</code>和<code>autopurge.purgeInterval</code>两个参数.<br>第一个参数指明了需要保留的快照数量,默认值和最小值是<code>3</code>.<br>第二个参数是两次清楚数据的时间间隔,单位是小时.如果设置为<code>0</code>,那么就不开启自动清理.</p>
+<p>除此之外,建议把<code>data</code>和<code>dataLog</code>两个文件夹分开.不要存放到一起,因为<code>data</code>文件存放的其实是快照,对磁盘的性能要求不高.而<code>dataLog</code>文件夹里面存放的是事务日志文件,每执行一次事务,都会写数据到这个文件夹中去.因此对磁盘的要求是非常高的. 再者,他<code>org.apache.zookeeper.server.PurgeTxnLog</code>这个类的处理逻辑其实有一定的问题.首先它会把MacOS系统里面的<code>.DS_Store</code>文件计算进去,这个获取最新的文件的时候有可能是会出问题的.其二就是他在查找最新的几个文件的时候是没有单独的过滤<code>snapshot</code>文件的.如果没有区分<code>data</code>和<code>dataLog</code>文件夹,<code>snapshot</code>和<code>log</code>文件都混在一起,那么最后获取的处理就会找不到<code>snapshot</code>文件.那么又会照成什么都不能删除的情况.</p>
+<h2 id="问题总结:">问题总结:</h2><ol>
+<li>修改配置中的<code>snapCount</code>,根据自己业务的需要,适当的修改这个数值.比如我们系统修改成<code>5000</code>比较合适.</li>
+<li>修改配置中的<code>preAllocSize</code>,根据自己业务的需要,适当的修改这个数值.比如我们系统修改成<code>1000</code>比较合适.</li>
+<li>修改配置中的<code>dataDir</code>和<code>dataLogDir</code>.分开存放事务日志和快照文件</li>
+<li>修改配置中的<code>autopurge.snapRetainCount</code>和<code>autopurge.purgeInterval</code>.增加自动删除多余日志的检测.</li>
+</ol>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/09/13/Swift2-0-beta6-后异常处理的一些补充/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Swift2.0 beta5 后异常处理的一些补充</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Zookeeper-数据清理" data-title="Zookeeper 数据清理" data-url="http://sunxiang0918.github.io/2015/09/16/Zookeeper-数据清理/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
