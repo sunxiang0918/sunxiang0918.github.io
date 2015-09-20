@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Cron表达式语法 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Cron表达式语法最近的项目里面涉及到了定时任务的处理.因此,引入了最常用的Quartz+Spring的框架来实现.而Cron表达式是Quartz最主要的支持方式.所以这里记录一下Cron表达式的用法.
+Quartz VS. UnixUnix中也是支持Cron计划任务的. 但是和Quartz的Cron定时任务还稍微有一点区别.
+
+细粒度的差别 Quartz的格式支持到秒级别的计划,而Unix的Cr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cron表达式语法">
+<meta property="og:url" content="http://sunxiang0918.github.io/2013/07/16/Cron表达式语法/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="Cron表达式语法最近的项目里面涉及到了定时任务的处理.因此,引入了最常用的Quartz+Spring的框架来实现.而Cron表达式是Quartz最主要的支持方式.所以这里记录一下Cron表达式的用法.
+Quartz VS. UnixUnix中也是支持Cron计划任务的. 但是和Quartz的Cron定时任务还稍微有一点区别.
+
+细粒度的差别 Quartz的格式支持到秒级别的计划,而Unix的Cr">
+<meta property="og:updated_time" content="2015-09-20T13:55:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cron表达式语法">
+<meta name="twitter:description" content="Cron表达式语法最近的项目里面涉及到了定时任务的处理.因此,引入了最常用的Quartz+Spring的框架来实现.而Cron表达式是Quartz最主要的支持方式.所以这里记录一下Cron表达式的用法.
+Quartz VS. UnixUnix中也是支持Cron计划任务的. 但是和Quartz的Cron定时任务还稍微有一点区别.
+
+细粒度的差别 Quartz的格式支持到秒级别的计划,而Unix的Cr">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/GIT/" style="font-size: 14px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 16px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 12px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 16px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 12px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Cron表达式语法" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2013/07/16/Cron表达式语法/" class="article-date">
+  	<time datetime="2013-07-16T05:21:46.000Z" itemprop="datePublished">2013-07-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Cron表达式语法
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Cron表达式语法"><span class="toc-number">1.</span> <span class="toc-text">Cron表达式语法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quartz_VS-_Unix"><span class="toc-number">1.1.</span> <span class="toc-text">Quartz VS. Unix</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本语法"><span class="toc-number">1.2.</span> <span class="toc-text">基本语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">1.3.</span> <span class="toc-text">例子</span></a></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="Cron表达式语法">Cron表达式语法</h1><p>最近的项目里面涉及到了定时任务的处理.因此,引入了最常用的<code>Quartz</code>+<code>Spring</code>的框架来实现.<br>而<code>Cron</code>表达式是<code>Quartz</code>最主要的支持方式.所以这里记录一下<code>Cron</code>表达式的用法.</p>
+<h2 id="Quartz_VS-_Unix">Quartz VS. Unix</h2><p><code>Unix</code>中也是支持<code>Cron</code>计划任务的. 但是和<code>Quartz</code>的<code>Cron</code>定时任务还稍微有一点区别.</p>
+<ol>
+<li>细粒度的差别<br> <code>Quartz</code>的格式支持到秒级别的计划,而<code>Unix</code>的<code>Cron</code>计划仅支持到分钟级</li>
+<li>表达式中支持的域数量不同<br> <code>Quartz</code>支持七个域(秒,分,时,日,月,周,年). <code>Unix</code>支持五个域(分,时,日,月,周)</li>
+<li>命令稍有不同<br> <code>Unix</code>中,要执行的操作是放在cron表达式中的.而<code>Quartz</code>使用<code>cron</code>表达式仅仅用来表示执行的计划,执行的操作是放在<code>Job</code>中的</li>
+</ol>
+<a id="more"></a>    
+<h2 id="基本语法">基本语法</h2><p>上面已经说了,<code>Quartz</code>支持了七个域. 在一个它的表达式中是由6个或7个字符加空格分隔符组成的.七个域分别如下:</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>必填</th>
+<th>允许值</th>
+<th>特殊符号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>秒</td>
+<td>是</td>
+<td>0-59</td>
+<td>, - * /</td>
+</tr>
+<tr>
+<td>分</td>
+<td>是</td>
+<td>0-59</td>
+<td>, - * /</td>
+</tr>
+<tr>
+<td>时</td>
+<td>是</td>
+<td>0-23</td>
+<td>, - * /</td>
+</tr>
+<tr>
+<td>日</td>
+<td>是</td>
+<td>1-31</td>
+<td>, - * ? / L W C</td>
+</tr>
+<tr>
+<td>月</td>
+<td>是</td>
+<td>1-12</td>
+<td>, - * /</td>
+</tr>
+<tr>
+<td>周</td>
+<td>是</td>
+<td>1-7</td>
+<td>, - * ? / L C #</td>
+</tr>
+<tr>
+<td>年</td>
+<td>否</td>
+<td>空 或 1970-2099</td>
+<td>, - * /</td>
+</tr>
+</tbody>
+</table>
+<p><strong>特殊字符:</strong></p>
+<ol>
+<li><p><strong>,</strong> 逗号<br> 这个是用来列举一系列的值的.比如在秒域上的<code>10,15,20</code>.意味着<strong>第10秒</strong>,<strong>第15秒</strong>,<strong>第20秒</strong>触发</p>
+</li>
+<li><p><strong>-</strong> 横杠符<br> 这个是用来指定一个范围的,比如,在分钟域上的 10-20 表示 10分到20分的10分钟.需要注意的是,范围是不能回卷的,比如像20-10这样的是不允许的.</p>
+</li>
+<li><p><strong>*</strong> 星号<br> 这个符号是用来表示某个域上的所有值的.比如在小时域上的星号就表示每一个小时.</p>
+</li>
+<li><p><strong>/</strong> 斜杠符<br> 斜杠是用来表示一个值的增幅的. 比如在秒域上的<code>0/20</code>就表示<code>0</code>,<code>20</code>,<code>40</code> 这几个值. 也就是<code>a/b</code>表示从<code>a</code>开始每次增加<code>b</code>值.</p>
+</li>
+<li><p><strong>?</strong> 问号<br> 问号只能用在<code>日</code>和<code>周</code>域上,并且两个域上不能同时使用问号.<br> 问号的意思表示没有值,或者说是不关心该域上的是什么值.它与星号是有区别的,星号表示的是每一个值,而问号是不指定该域的值.这其实主要是用在<code>日</code>和<code>周</code>两个域的冲突上的. 当设置了<code>日</code>后就应该在<code>周</code>域上设置成<code>?</code>,反之亦然.</p>
+</li>
+<li><p><strong>L</strong> 字母<br> <code>L</code>字母同样只能用在<code>日</code>和<code>周</code>域上,它是<code>last</code>的缩写.但是在两个域上表示的意思是不一样的.</p>
+<ul>
+<li>在<code>日</code>域上的时候,表示的是<code>一个月的最后一天</code>,对于<code>1月</code>那就是31,对于<code>2月</code>那就是28或29.</li>
+<li>在<code>周</code>域上的时候,表示的是<code>7</code>或<code>SAT</code>(注意,0表示周日,7表示周六).而如果在L前面再加上一个0-7的数字的话,就表示的是该月最后的一个周几.比如<code>0L</code>就表示该月最后一个周日.<code>6L</code>表示该月最后一个周五.</li>
+</ul>
+</li>
+<li><p><strong>W</strong> 字母<br> <code>W</code>字母只可用于<code>日</code>域上.用来指定给定日期最近的一个工作日(周一到周五).什么意思呢?例如:<br> 在<code>日</code>域上设置为10W,那么其意思就是<code>距离该月10号最近的一个工作日</code>.因此,如果10号是周四,那么它就会在当天出发,如果10号是周六,那么它就会在9号周五的时候触发.而如果10号是周天,那么他就会在11号周一的时候触发.需要特别注意的是<code>1W</code>,如果他是周六.那么它不会在上一个月的最后一天触发,而是会在当月的3号,也就是周一触发.因为它是不能跨月的.而<code>LW</code>则表示<code>这个月最后一个工作日</code></p>
+</li>
+<li><p><strong>C</strong> 字母<br> <code>C</code>字母只能用在<code>日</code>和<code>周</code>域上,它是<code>calendar</code>的缩写.它表示为基于相关的日历所计算出的值(如果有的话).如果没有关联的日历,那么它就等同于包含全部的日历.比如在<code>日</code>域上的<code>4C</code>表示这个月的第4天或之后日历中的第一天,比如在<code>周</code>域上的<code>1C</code>表示这个月的第一周或之后日历中的第一天. 这个地方的日历表示的是<code>Quartz</code>中的<code>Calendar</code>对象. 它允许用户自定义一个日历出来,使用这个你就能创建一个排除所有节假日的日历了. 假设<code>10号</code>是放假.那么<code>10C</code>在你自定义的日历上就表示的<code>11号</code></p>
+</li>
+<li><p><strong>#</strong> 井号<br> 井号用于<code>周</code>域上.表示<code>该月第几个周几</code>. 它的语法是 <code>a#b</code>:该月第b个周a.<br> 比如:<code>4#2</code>表示该月第二个周三.需要注意的是,如果该月没有这个日期,那么它就不会触发任务,但是不会报错的.比如<code>7#5</code>表示本月第5个周六. 如果这个月没有5个周,那么就不会执行.</p>
+</li>
+</ol>
+<h2 id="例子">例子</h2><p>这里列举了一些常见的表达式的例子.可以通过这些举一反三.</p>
+<ol>
+<li><p>分钟的 Cron 表达式</p>
+<p> 每天的从 5:00 PM 至 5:59 PM 中的每分钟触发 <code>0 * 17 * * ?</code></p>
+<p> 每天的从 11:00 PM 至 11:55 PM 中的每五分钟触发 <code>0 0/5 23 * * ?</code></p>
+<p> 每天的从 3:00 至 3:55 PM 和 6:00 PM 至 6:55 PM 之中的每五分钟触发 <code>0 0/5 15,18 * * ?</code></p>
+<p> 每天的从 5:00 AM 至 5:05 AM 中的每分钟触发 <code>0 0-5 5 * * ?</code></p>
+</li>
+<li><p>日上的 Cron 表达式</p>
+<p> 每天的 3:00 AM <code>0 0 3 * * ?</code></p>
+<p> 每天的 3:00 AM (另一种写法) <code>0 0 3 ? * *</code></p>
+<p> 每天的 12:00 PM (中午) <code>0 0 12 * * ?</code></p>
+<p> 在 2005 中每天的 10:15 AM <code>0 15 10 * * ? 2005</code></p>
+</li>
+<li><p>周和月的 Cron 表达式</p>
+<p> 在每个周一,二, 三和周四的 10:15 AM <code>0 15 10 ? * 1-6</code></p>
+<p> 每月 15 号的 10:15 AM <code>0 15 10 15 * ?</code></p>
+<p> 每月最后一天的 10:15 AM <code>0 15 10 L * ?</code></p>
+<p> 每月最后一个周五的 10:15 AM <code>0 15 10 ? * 6L</code></p>
+<p> 在 2002, 2003, 2004, 和 2005 年中的每月最后一个周五的 10:15 AM <code>0 15 10 ? * 6L 2002-2005</code></p>
+<p> 每月第三个周五的 10:15 AM <code>0 15 10 ? * 6#3</code></p>
+<p> 每月从第一天算起每五天的 12:00 PM (中午) <code>0 0 12 1/5 * ?</code></p>
+<p> 每一个 11 月 11 号的 11:11 AM <code>0 11 11 11 11 ?</code></p>
+<p> 三月份每个周三的 2:10 PM 和 2:44 PM <code>0 10,44 14 ? 3 4</code></p>
+</li>
+<li><p>更多的例子</p>
+<p> 每天中午十二点触发  <code>0 0 12 * * ?</code></p>
+<p> 每天早上 10：15 触发    <code>0 15 10 ? * *</code></p>
+<p> 每天早上 10：15 触发    <code>0 15 10 * * ?</code> </p>
+<p> 每天早上 10：15 触发    <code>0 15 10 * * ? *</code> </p>
+<p> 2005 年的每天早上 10：15 触发    <code>0 15 10 * * ? 2005</code> </p>
+<p> 每天从下午 2 点开始到 2 点 59 分每分钟一次触发    <code>0 * 14 * * ?</code> </p>
+<p> 每天从下午 2 点开始到 2：55 分结束每 5 分钟一次触发    <code>0 0/5 14 * * ?</code> </p>
+<p> 每天的下午 2 点至 2：55 和 6 点至 6 点 55 分两个时间段内每 5 分钟一次触发     <code>0 0/5 14,18 * * ?</code> </p>
+<p> 每天 14:00 至 14:05 每分钟一次触发    <code>0 0-5 14 * * ?</code> </p>
+<p> 三月的每周三的 14：10 和 14：44 触发    <code>0 10,44 14 ? 3 4</code> </p>
+<p> 每个周一、周二、周三、周四、周五的 10：15 触发    <code>0 15 10 ? * 1-6</code> </p>
+<p> 每月 15 号的 10：15 触发    <code>0 15 10 15 * ?</code> </p>
+<p> 每月的最后一天的 10：15 触发    <code>0 15 10 L * ?</code> </p>
+<p> 每月最后一个周五的 10：15 触发    <code>0 15 10 ? * 6L</code> </p>
+<p> 每月最后一个周五的 10：15 触发    <code>0 15 10 ? * 6L</code></p>
+<p> 2002 年至 2005 年的每月最后一个周五的10：15 触发    <code>0 15 10 ? * 6L 2002-2005</code></p>
+<p> 每月的第三个周五的 10：15 触发        <code>0 15 10 ? * 6#3</code> </p>
+</li>
+</ol>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/05/18/Jboss4控制台加锁/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Jboss4控制台加锁
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JBOSS4关闭时不断开数据库连接问题分析</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Cron表达式语法" data-title="Cron表达式语法" data-url="http://sunxiang0918.github.io/2013/07/16/Cron表达式语法/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

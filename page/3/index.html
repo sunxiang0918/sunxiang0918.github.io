@@ -677,6 +677,70 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-Cron表达式语法" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2013/07/16/Cron表达式语法/" class="article-date">
+  	<time datetime="2013-07-16T05:21:46.000Z" itemprop="datePublished">2013-07-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/07/16/Cron表达式语法/">Cron表达式语法</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Cron表达式语法">Cron表达式语法</h1><p>最近的项目里面涉及到了定时任务的处理.因此,引入了最常用的<code>Quartz</code>+<code>Spring</code>的框架来实现.<br>而<code>Cron</code>表达式是<code>Quartz</code>最主要的支持方式.所以这里记录一下<code>Cron</code>表达式的用法.</p>
+<h2 id="Quartz_VS-_Unix">Quartz VS. Unix</h2><p><code>Unix</code>中也是支持<code>Cron</code>计划任务的. 但是和<code>Quartz</code>的<code>Cron</code>定时任务还稍微有一点区别.</p>
+<ol>
+<li>细粒度的差别<br> <code>Quartz</code>的格式支持到秒级别的计划,而<code>Unix</code>的<code>Cron</code>计划仅支持到分钟级</li>
+<li>表达式中支持的域数量不同<br> <code>Quartz</code>支持七个域(秒,分,时,日,月,周,年). <code>Unix</code>支持五个域(分,时,日,月,周)</li>
+<li>命令稍有不同<br> <code>Unix</code>中,要执行的操作是放在cron表达式中的.而<code>Quartz</code>使用<code>cron</code>表达式仅仅用来表示执行的计划,执行的操作是放在<code>Job</code>中的</li>
+</ol>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2013/07/16/Cron表达式语法/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-JBOSS4关闭时不断开数据库连接问题分析" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -797,66 +861,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2012/11/14/影响Lucene对文档打分的四种方式/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Lucene打分公式的数学推导" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2012/11/14/Lucene打分公式的数学推导/" class="article-date">
-  	<time datetime="2012-11-14T13:58:12.000Z" itemprop="datePublished">2012-11-14</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2012/11/14/Lucene打分公式的数学推导/">&lt;转&gt;Lucene打分公式的数学推导</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Lucene打分公式的数学推导">Lucene打分公式的数学推导</h1><p>在进行Lucene的搜索过程解析之前，有必要单独的一张把Lucene score公式的推导，各部分的意义阐述一下。因为Lucene的搜索过程，很重要的一个步骤就是逐步的计算各部分的分数。</p>
-<p>Lucene的打分公式非常复杂，如下：<br><img src="/img/2012/11/14/1.png" alt=""></p>
-<p>在推导之前，先逐个介绍每部分的意义：<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lucene/">Lucene</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2012/11/14/Lucene打分公式的数学推导/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
