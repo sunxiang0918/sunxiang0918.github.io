@@ -124,7 +124,7 @@ var _hmt = _hmt || [];
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/GIT/" style="font-size: 14px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 16px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 12px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 16px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 12px;">集群</a>
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 11.67px;">Docker</a> <a href="/tags/GIT/" style="font-size: 13.33px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.67px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.67px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.67px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 15px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18.33px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.67px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 16.67px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
 					</div>
 				</section>
 				
@@ -197,6 +197,68 @@ var _hmt = _hmt || [];
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-基于内容地址的Docker-Registry2-0" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/09/20/基于内容地址的Docker-Registry2-0/" class="article-date">
+  	<time datetime="2015-09-20T14:18:58.000Z" itemprop="datePublished">2015-09-20</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/09/20/基于内容地址的Docker-Registry2-0/">&lt;翻译&gt;基于内容地址的Docker Registry2.0</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="基于内容地址的Docker_Registry2-0">基于内容地址的Docker Registry2.0</h1><p>由于最近在项目中需要使用<code>Docker</code>,并且需要持续集成,因此就研究了一下Docker的<code>Registry</code>.突然发现<code>V1</code>版本的<a href="https://github.com/docker/docker-registry">Registry</a>已经被官方打为<strong>废弃</strong>了.新的第二个版本的<a href="https://github.com/docker/distribution">Registry</a>已经开始提供服务.因此就着重的研究了一下这个,无奈现在相关的文档还非常的少.找到一篇日文的文章感觉还不错,因此就翻译了一下.先申明下我日语也就是玩票的性质,肯定有很多不正确的地方,还望海涵.</p>
+<hr>
+<h2 id="Content_Addressable_DockerイメージとRegistry2-0">Content Addressable DockerイメージとRegistry2.0</h2><p>Docker1.6已经出了.它增加了很多新的功能,比如:容器与镜像的标记(具体更多的信息可以看RancherOS的<a href="http://rancher.com/docker-labels/">“Adding Label Support to Docker 1.6”</a>),日志记录的多种驱动等等.这次的Release更新中,我最感兴趣的就是Docker的Image开始基于内容进行寻址(Content-addressable) (<a href="https://github.com/docker/docker/pull/11109">#11109</a>)</p>
+<p>到目前为止,Docker Registry通过镜像的名字与Tag与Image进行交互(比如:<code>tcnksm/golang:1.2</code>).而Tag是由镜像的作者自己定义的.这就不能保证在相同的Tag下的镜像内容是完全相同的(在GIG中由于使用了commit的哈希值,因此标签不会出现这种情况.)</p>
+<p>与<code>Docker1.6</code>同时发布的<code>Registry2.0</code>(<a href="https://github.com/docker/distribution">docker/distribution</a>)为镜像使用了一种不重复的ID(<code>digest</code>)来确保同一ID值所引用的镜像的内容始终是相同的(immutable image references)</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/09/20/基于内容地址的Docker-Registry2-0/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-Zookeeper-数据清理" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -788,65 +850,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/07/29/Swift局部SCOPE/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Swift2-0中字符串的设计" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/07/29/Swift2-0中字符串的设计/" class="article-date">
-  	<time datetime="2015-07-28T16:19:28.000Z" itemprop="datePublished">2015-07-29</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/29/Swift2-0中字符串的设计/">&lt;翻译&gt;Swift2.0中字符串的设计</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Swift2-0中字符串的设计">Swift2.0中字符串的设计</h1><p>Swift中提供了一个高性能的,兼容Unicode的字符串实现作为其标准库中的一部分.在Swift2中,<code>String</code>类型不再实现<code>CollectionType</code>协议.在以前<code>String</code>字符串是一个由<code>Character</code>字符组成的集合,其表现类似于一个数组.而现在,<code>String</code>则是提供了一个<code>characters</code>属性用来暴露字符集合.</p>
-<p>为什么会有这样的变化呢?尽管把字符串当做一个字符的集合看起来更自然.但是其实<code>String</code>字符串类型的操作与<code>Array</code>,<code>Set</code>或者<code>Dictionary</code>等集合一直都是完全不同的.但自从Swift2增加了协议扩展后,针对这些差异有必要进行一些根本性的变化了.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/07/29/Swift2-0中字符串的设计/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

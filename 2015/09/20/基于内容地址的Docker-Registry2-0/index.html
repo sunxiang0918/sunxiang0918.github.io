@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;翻译&gt;基于内容地址的Docker Registry2.0 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="基于内容地址的Docker Registry2.0由于最近在项目中需要使用Docker,并且需要持续集成,因此就研究了一下Docker的Registry.突然发现V1版本的Registry已经被官方打为废弃了.新的第二个版本的Registry已经开始提供服务.因此就着重的研究了一下这个,无奈现在相关的文档还非常的少.找到一篇日文的文章感觉还不错,因此就翻译了一下.先申明下我日语也就是玩票的性质,肯">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<翻译>基于内容地址的Docker Registry2.0">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/09/20/基于内容地址的Docker-Registry2-0/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="基于内容地址的Docker Registry2.0由于最近在项目中需要使用Docker,并且需要持续集成,因此就研究了一下Docker的Registry.突然发现V1版本的Registry已经被官方打为废弃了.新的第二个版本的Registry已经开始提供服务.因此就着重的研究了一下这个,无奈现在相关的文档还非常的少.找到一篇日文的文章感觉还不错,因此就翻译了一下.先申明下我日语也就是玩票的性质,肯">
+<meta property="og:updated_time" content="2015-09-20T15:45:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<翻译>基于内容地址的Docker Registry2.0">
+<meta name="twitter:description" content="基于内容地址的Docker Registry2.0由于最近在项目中需要使用Docker,并且需要持续集成,因此就研究了一下Docker的Registry.突然发现V1版本的Registry已经被官方打为废弃了.新的第二个版本的Registry已经开始提供服务.因此就着重的研究了一下这个,无奈现在相关的文档还非常的少.找到一篇日文的文章感觉还不错,因此就翻译了一下.先申明下我日语也就是玩票的性质,肯">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 11.67px;">Docker</a> <a href="/tags/GIT/" style="font-size: 13.33px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.67px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.67px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.67px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 15px;">Lucene</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18.33px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.67px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 16.67px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-基于内容地址的Docker-Registry2-0" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/09/20/基于内容地址的Docker-Registry2-0/" class="article-date">
+  	<time datetime="2015-09-20T14:18:58.000Z" itemprop="datePublished">2015-09-20</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      &lt;翻译&gt;基于内容地址的Docker Registry2.0
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基于内容地址的Docker_Registry2-0"><span class="toc-number">1.</span> <span class="toc-text">基于内容地址的Docker Registry2.0</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Content_Addressable_DockerイメージとRegistry2-0"><span class="toc-number">1.1.</span> <span class="toc-text">Content Addressable DockerイメージとRegistry2.0</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#尝试"><span class="toc-number">1.1.1.</span> <span class="toc-text">尝试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dockerfile"><span class="toc-number">1.1.2.</span> <span class="toc-text">Dockerfile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#镜像的更新"><span class="toc-number">1.1.3.</span> <span class="toc-text">镜像的更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#机制"><span class="toc-number">1.1.4.</span> <span class="toc-text">机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Registry不同的话?"><span class="toc-number">1.1.5.</span> <span class="toc-text">Registry不同的话?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Registry2-0"><span class="toc-number">1.1.6.</span> <span class="toc-text">Registry2.0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#References"><span class="toc-number">1.1.7.</span> <span class="toc-text">References</span></a></li></ol></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="基于内容地址的Docker_Registry2-0">基于内容地址的Docker Registry2.0</h1><p>由于最近在项目中需要使用<code>Docker</code>,并且需要持续集成,因此就研究了一下Docker的<code>Registry</code>.突然发现<code>V1</code>版本的<a href="https://github.com/docker/docker-registry" target="_blank" rel="external">Registry</a>已经被官方打为<strong>废弃</strong>了.新的第二个版本的<a href="https://github.com/docker/distribution" target="_blank" rel="external">Registry</a>已经开始提供服务.因此就着重的研究了一下这个,无奈现在相关的文档还非常的少.找到一篇日文的文章感觉还不错,因此就翻译了一下.先申明下我日语也就是玩票的性质,肯定有很多不正确的地方,还望海涵.</p>
+<hr>
+<h2 id="Content_Addressable_DockerイメージとRegistry2-0">Content Addressable DockerイメージとRegistry2.0</h2><p>Docker1.6已经出了.它增加了很多新的功能,比如:容器与镜像的标记(具体更多的信息可以看RancherOS的<a href="http://rancher.com/docker-labels/" target="_blank" rel="external">“Adding Label Support to Docker 1.6”</a>),日志记录的多种驱动等等.这次的Release更新中,我最感兴趣的就是Docker的Image开始基于内容进行寻址(Content-addressable) (<a href="https://github.com/docker/docker/pull/11109" target="_blank" rel="external">#11109</a>)</p>
+<p>到目前为止,Docker Registry通过镜像的名字与Tag与Image进行交互(比如:<code>tcnksm/golang:1.2</code>).而Tag是由镜像的作者自己定义的.这就不能保证在相同的Tag下的镜像内容是完全相同的(在GIG中由于使用了commit的哈希值,因此标签不会出现这种情况.)</p>
+<p>与<code>Docker1.6</code>同时发布的<code>Registry2.0</code>(<a href="https://github.com/docker/distribution" target="_blank" rel="external">docker/distribution</a>)为镜像使用了一种不重复的ID(<code>digest</code>)来确保同一ID值所引用的镜像的内容始终是相同的(immutable image references)</p>
+<a id="more"></a>
+<h3 id="尝试">尝试</h3><p>DockerHub已经开始支持<code>Registry2.0</code>,因此可以马上使用这个功能.但是,这次是尝试自己搭建一个私有的注册环境来尝试它的新功能(环境是在OSX上使用 boot2docker)</p>
+<p>首先需要安装Registry.与V1相同,Docker已经提供了相应的镜像.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -p <span class="number">5000</span>:<span class="number">5000</span> registry:<span class="number">2.0</span></span><br></pre></td></tr></table></figure>
+<p>准备一个简单的<code>Dockerfile</code>文件来构建我们的<code>tcnksm/test-digest</code>镜像.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FROM busybox</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker build -t $(boot2docker ip):<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest:latest .</span><br></pre></td></tr></table></figure>
+<p>然后通过<code>images</code>命令来验证是否正确.使用<code>--digests</code>参数会在结果中显示<code>digest</code>信息.与Git的不同,<code>build</code>的过程是不会生成<code>digest</code>的值的.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker images --digests</span><br><span class="line">REPOSITORY                               TAG                 DIGEST              IMAGE ID            CREATED             VIRTUAL SIZE</span><br><span class="line"><span class="number">192.168</span>.<span class="number">59.103</span>:<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest   latest              &lt;none&gt;              <span class="number">8</span>c2e06607696        <span class="number">3</span> days ago          <span class="number">2.433</span> MB</span><br></pre></td></tr></table></figure>
+<p>通过<code>push</code>向<code>Registry</code>进行推送.<code>push</code>的过程会生成<code>digest</code>值.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker push $(boot2docker ip):<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest:latest</span><br><span class="line">...</span><br><span class="line">Digest: sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6<span class="built_in">fc</span>775b24d5ae26477c96fb5eaa4</span><br></pre></td></tr></table></figure>
+<p>为了替换本地生成的不带<code>digest</code>的镜像.我们可以在<code>pull</code>的时候,使用<code>NAME@DIGEST</code>的方式来代替原来<code>NAME:TAG</code>的方式.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi $(boot2docker ip):<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest:latest</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull $(boot2docker ip):<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest@sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6<span class="built_in">fc</span>775b24d5ae26477c96fb5eaa4</span><br></pre></td></tr></table></figure>
+<p>这个时候再使用<code>images</code>命令来确认一下.这次的镜像信息中就带有<code>digest</code>信息了.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker images --digests</span><br><span class="line">REPOSITORY                               TAG                 DIGEST                                                                    IMAGE ID            CREATED             VIRTUAL SIZE</span><br><span class="line"><span class="number">192.168</span>.<span class="number">59.103</span>:<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest   &lt;none&gt;              sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6<span class="built_in">fc</span>775b24d5ae26477c96fb5eaa4   <span class="number">8</span>c2e06607696        <span class="number">3</span> days ago          <span class="number">2.433</span> MB</span><br></pre></td></tr></table></figure>
+<h3 id="Dockerfile">Dockerfile</h3><p><code>Dockerfile</code>的<code>FROM</code>语句现在也可以使用<code>digest</code>来指定镜像的名字.如果发现通过原来的镜像捕捉任何的东西就更新成为新的镜像,那么这样的操作可以被避免(気がついたら元のイメージ更新されていて完成イメージが意図しないものになっていたということが避けられる．)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FROM <span class="number">192.168</span>.<span class="number">59.103</span>:<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest@sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6<span class="built_in">fc</span>775b24d5ae26477c96fb5eaa4</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker build .</span><br><span class="line">Step <span class="number">0</span> : FROM <span class="number">192.168</span>.<span class="number">59.103</span>:<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest@sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6<span class="built_in">fc</span>775b24d5ae26477c96fb5eaa4</span><br><span class="line">---&gt; <span class="number">8</span>c2e06607696</span><br><span class="line">Successfully built <span class="number">8</span>c2e06607696</span><br></pre></td></tr></table></figure>
+<h3 id="镜像的更新">镜像的更新</h3><p>可以通过编辑<code>Dockerfile</code>文件然后通过<code>build</code>命令来构建新的镜像.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FROM busybox</span><br><span class="line">MAINTAINER tcnksm</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker build -t $(boot2docker ip):<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest:latest .</span><br></pre></td></tr></table></figure>
+<p>然后执行<code>Registry</code>的<code>push</code>操作,于是现在的<code>digest</code>会被改变.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker push $(boot2docker ip):<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest:latest</span><br><span class="line">...</span><br><span class="line">Digest: sha256:<span class="number">4675</span>f7a9d45932e3043058ef032680d76e8aacccda94b74374efe156e2940ee5</span><br></pre></td></tr></table></figure>
+<h3 id="机制">机制</h3><p>简单的说明一下机制.<code>digest</code>不是本地生成的,而是通过<code>push</code>操作,在<code>Registry</code>一方生成的.</p>
+<p>当客户端推送镜像到<code>Registry</code>时会同时附带<code>Image Manifest</code>(也就是签名).<code>Image Manifest</code>也就是Docker镜像内容的一些JSON话的定义.在Golang中的结构就如下所示,包含了镜像的名字,FSLayer的信息等等(manifest的具体定义参见<a href="https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-1.md" target="_blank" rel="external">这里</a>)</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> ManifestData <span class="keyword">struct</span> &#123;</span><br><span class="line">    Name          <span class="typename">string</span>             <span class="string">`json:"name"`</span></span><br><span class="line">    Tag           <span class="typename">string</span>             <span class="string">`json:"tag"`</span></span><br><span class="line">    Architecture  <span class="typename">string</span>             <span class="string">`json:"architecture"`</span></span><br><span class="line">    FSLayers      []*FSLayer         <span class="string">`json:"fsLayers"`</span></span><br><span class="line">    History       []*ManifestHistory <span class="string">`json:"history"`</span></span><br><span class="line">    SchemaVersion <span class="typename">int</span>                <span class="string">`json:"schemaVersion"`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>你可以调用他的API来查看<code>Manifest</code>中的内容.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl $(boot2docker ip):<span class="number">5000</span>/v2/tcnksm/<span class="built_in">test</span>-digest/manifests/latest</span><br></pre></td></tr></table></figure>
+<p>因此,<code>Registry</code>是通过下面的函数来根据<code>Manifest</code>的元数据来生成<code>digest</code>的(<a href="https://github.com/docker/distribution/blob/master/registry/handlers/images.go" target="_blank" rel="external">registry/handlers/images.go</a>)</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// PutImageManifest validates and stores and image in the registry.</span></span><br><span class="line"><span class="keyword">func</span> (imh *imageManifestHandler) PutImageManifest(w http.ResponseWriter, r *http.Request)</span><br></pre></td></tr></table></figure>
+<p>在客户端调用的时候通过消息头<code>Docker-Content-Digest</code>发送给对方(<a href="https://github.com/docker/distribution/blob/master/docs/spec/api.md#put-manifest" target="_blank" rel="external">API doc</a>)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">202</span> Accepted</span><br><span class="line">Location: &lt;url&gt;</span><br><span class="line">Content-Length: <span class="number">0</span></span><br><span class="line">Docker-Content-Digest: &lt;digest&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Registry不同的话?">Registry不同的话?</h3><p>如果发送的<code>Manifest</code>内容是相同的话,那么推送到不同的Registry其实是会生成相同的<code>digest</code>的.<code>digest</code>对于<code>Registry</code>来说是全局唯一的.</p>
+<p>所以通过上面的方式制作的镜像,如果推送到<code>DockerHub</code>中的话,是会得到相同的<code>digest</code>的.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker build -t tcnksm/<span class="built_in">test</span>-digest:latest .</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker push tcnksm/<span class="built_in">test</span>-digest:latest</span><br><span class="line">...</span><br><span class="line">Digest: sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6<span class="built_in">fc</span>775b24d5ae26477c96fb5eaa4</span><br></pre></td></tr></table></figure>
+<h3 id="Registry2-0">Registry2.0</h3><p><a href="http://blog.docker.com/2015/04/faster-and-better-image-distribution-with-registry-2-0-and-engine-1-6/" target="_blank" rel="external">Faster and Better Image Distribution with Registry 2.0 and Engine 1.6 | Docker Blog</a></p>
+<p><a href="https://github.com/docker/distribution" target="_blank" rel="external">docker/distribution</a>是一个新的Registr的实现.尝试用来解决现在版本的一些API或安全性的问题.现在的V1版本是使用<code>Pythone</code>来实现的,而新的<code>V2</code>版本则是使用Go语言来实现的.</p>
+<p>新的特征有:</p>
+<ul>
+<li>重新定义了镜像的<code>Manifest</code>(<a href="https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-1.md" target="_blank" rel="external">Image Manifest Version 2, Schema 1</a>) - 可以参阅 <a href="https://github.com/docker/docker/issues/8093" target="_blank" rel="external">#8093</a>,主要是改善了安全方面的问题</li>
+<li>新的API(<a href="https://github.com/docker/distribution/blob/master/docs/spec/api.md" target="_blank" rel="external">Docker Registry HTTP API V2</a>,<a href="https://github.com/docker/distribution/blob/master/docs/spec/api.md#detail" target="_blank" rel="external">#Detail</a>) - 使用<code>Manifest V2</code>来改善URI,如果在<code>Push/Pull</code>的过程中程序死掉或异常终止,那么当再开启的时候,会继续执行.(详细的实现的话,目前我还没有看到由Go语言接口实现的客户端实现到底是怎么做的).</li>
+<li>后端的存储插件化(<a href="https://github.com/docker/distribution/blob/master/docs/storagedrivers.md" target="_blank" rel="external">Docker-Registry Storage Driver</a>) - 在新版本中,可以选择内存,文件系统,S3,Azure Blob Storage来作为镜像的存储.重新定义了一套Go语言的接口,允许你自己实现不同的存储.</li>
+<li>webhook的实现(<a href="https://github.com/docker/distribution/blob/master/docs/notifications.md" target="_blank" rel="external">Notifications</a>) - <code>Push/Pull</code>到某个endpoint的时候,可以发送相应的事件通知.</li>
+</ul>
+<p>目前<code>dist</code>命令还只有一些基本框架而已(<a href="https://github.com/docker/distribution/tree/master/cmd/dist" target="_blank" rel="external">dist</a>).这对Docker镜像的pull/push操作只能使用命令行.作为Docker镜像的下载与运行来说,现在不是分离的了,这点有点讨厌.它试图全部都在这里进行解决.</p>
+<h3 id="References">References</h3><ul>
+<li><a href="https://docs.docker.com/registry/overview/" target="_blank" rel="external">Docker Registry 2.0</a></li>
+<li><a href="https://github.com/docker/distribution/blob/master/docs/spec/auth/token.md" target="_blank" rel="external">Docker Registry v2 authentication via central service</a></li>
+<li><a href="https://github.com/docker/distribution/blob/master/docs/deploying.md" target="_blank" rel="external">Deploying a registry service</a></li>
+<li><a href="https://github.com/kelseyhightower/docker-registry-osx-setup-guide" target="_blank" rel="external">kelseyhightower/docker-registry-osx-setup-guide</a></li>
+</ul>
+<hr>
+<p>原文链接: <a href="http://deeeet.com/writing/2015/04/20/docker-1_6_distribution/" target="_blank" rel="external">http://deeeet.com/writing/2015/04/20/docker-1_6_distribution/</a><br>翻译: <a href="sunxiang0918.cn">翔妖除魔</a></p>
+<hr>
+<p>补充一点我自己的看法.</p>
+<p>对于V1的问题主要有:</p>
+<ul>
+<li>性能:<ul>
+<li>随机ID重复Push  (docker的id是 客户端随机生成的.)</li>
+<li>metadata,layer,metadata,layer (链表结构,不能随机读取)</li>
+<li>python实现</li>
+</ul>
+</li>
+<li>安全        <ul>
+<li>随机image id</li>
+<li>无法对内容进行校验</li>
+<li>无法确定layer来源</li>
+</ul>
+</li>
+<li>其他<ul>
+<li>相同TAG两次下载 镜像可能是不一样的    </li>
+</ul>
+</li>
+</ul>
+<p>而V2的好处就在于 ID是更具内容使用SHA256算出来的.</p>
+<ul>
+<li><p>Digest(V2中的image Id):</p>
+<ul>
+<li>内容可校验</li>
+<li>算法可插拔</li>
+<li>cache友好</li>
+<li>服务器端计算,加强安全</li>
+<li>统一了存储</li>
+</ul>
+</li>
+<li><p>Manifest:</p>
+<ul>
+<li>包含所有layer信息</li>
+<li>signature强化校验</li>
+<li>V1兼容</li>
+</ul>
+</li>
+<li><p>性能:</p>
+<ul>
+<li>Go实现</li>
+<li>并行pull</li>
+<li>减少了auth流程</li>
+</ul>
+</li>
+<li><p>其他:</p>
+<ul>
+<li>Notification机制</li>
+<li>后端存储插件化</li>
+<li>全新API</li>
+<li>更复杂的鉴权方式</li>
+</ul>
+</li>
+<li><p>存在问题:</p>
+<ul>
+<li>API缺失:   delete, search,list 没有</li>
+<li>push/pull 速度有待优化 (gzip解压压缩)</li>
+<li>镜像格式和V1 <strong>不兼容</strong></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/09/16/Zookeeper-数据清理/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Zookeeper 数据清理</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="基于内容地址的Docker-Registry2-0" data-title="&lt;翻译&gt;基于内容地址的Docker Registry2.0" data-url="http://sunxiang0918.github.io/2015/09/20/基于内容地址的Docker-Registry2-0/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
