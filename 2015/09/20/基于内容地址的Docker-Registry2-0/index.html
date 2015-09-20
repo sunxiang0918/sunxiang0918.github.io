@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://sunxiang0918.github.io/2015/09/20/基于内容地址的Docker-Registry2-0/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
 <meta property="og:description" content="基于内容地址的Docker Registry2.0由于最近在项目中需要使用Docker,并且需要持续集成,因此就研究了一下Docker的Registry.突然发现V1版本的Registry已经被官方打为废弃了.新的第二个版本的Registry已经开始提供服务.因此就着重的研究了一下这个,无奈现在相关的文档还非常的少.找到一篇日文的文章感觉还不错,因此就翻译了一下.先申明下我日语也就是玩票的性质,肯">
-<meta property="og:updated_time" content="2015-09-20T15:45:53.000Z">
+<meta property="og:updated_time" content="2015-09-20T15:48:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<翻译>基于内容地址的Docker Registry2.0">
 <meta name="twitter:description" content="基于内容地址的Docker Registry2.0由于最近在项目中需要使用Docker,并且需要持续集成,因此就研究了一下Docker的Registry.突然发现V1版本的Registry已经被官方打为废弃了.新的第二个版本的Registry已经开始提供服务.因此就着重的研究了一下这个,无奈现在相关的文档还非常的少.找到一篇日文的文章感觉还不错,因此就翻译了一下.先申明下我日语也就是玩票的性质,肯">
@@ -244,7 +244,7 @@ var _hmt = _hmt || [];
         
         <h1 id="基于内容地址的Docker_Registry2-0">基于内容地址的Docker Registry2.0</h1><p>由于最近在项目中需要使用<code>Docker</code>,并且需要持续集成,因此就研究了一下Docker的<code>Registry</code>.突然发现<code>V1</code>版本的<a href="https://github.com/docker/docker-registry" target="_blank" rel="external">Registry</a>已经被官方打为<strong>废弃</strong>了.新的第二个版本的<a href="https://github.com/docker/distribution" target="_blank" rel="external">Registry</a>已经开始提供服务.因此就着重的研究了一下这个,无奈现在相关的文档还非常的少.找到一篇日文的文章感觉还不错,因此就翻译了一下.先申明下我日语也就是玩票的性质,肯定有很多不正确的地方,还望海涵.</p>
 <hr>
-<h2 id="Content_Addressable_DockerイメージとRegistry2-0">Content Addressable DockerイメージとRegistry2.0</h2><p>Docker1.6已经出了.它增加了很多新的功能,比如:容器与镜像的标记(具体更多的信息可以看RancherOS的<a href="http://rancher.com/docker-labels/" target="_blank" rel="external">“Adding Label Support to Docker 1.6”</a>),日志记录的多种驱动等等.这次的Release更新中,我最感兴趣的就是Docker的Image开始基于内容进行寻址(Content-addressable) (<a href="https://github.com/docker/docker/pull/11109" target="_blank" rel="external">#11109</a>)</p>
+<h2 id="Content_Addressable_DockerイメージとRegistry2-0"><a href="http://deeeet.com/writing/2015/04/20/docker-1_6_distribution/" target="_blank" rel="external">Content Addressable DockerイメージとRegistry2.0</a></h2><p>Docker1.6已经出了.它增加了很多新的功能,比如:容器与镜像的标记(具体更多的信息可以看RancherOS的<a href="http://rancher.com/docker-labels/" target="_blank" rel="external">“Adding Label Support to Docker 1.6”</a>),日志记录的多种驱动等等.这次的Release更新中,我最感兴趣的就是Docker的Image开始基于内容进行寻址(Content-addressable) (<a href="https://github.com/docker/docker/pull/11109" target="_blank" rel="external">#11109</a>)</p>
 <p>到目前为止,Docker Registry通过镜像的名字与Tag与Image进行交互(比如:<code>tcnksm/golang:1.2</code>).而Tag是由镜像的作者自己定义的.这就不能保证在相同的Tag下的镜像内容是完全相同的(在GIG中由于使用了commit的哈希值,因此标签不会出现这种情况.)</p>
 <p>与<code>Docker1.6</code>同时发布的<code>Registry2.0</code>(<a href="https://github.com/docker/distribution" target="_blank" rel="external">docker/distribution</a>)为镜像使用了一种不重复的ID(<code>digest</code>)来确保同一ID值所引用的镜像的内容始终是相同的(immutable image references)</p>
 <a id="more"></a>
