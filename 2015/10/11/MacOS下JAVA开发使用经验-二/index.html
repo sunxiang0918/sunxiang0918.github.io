@@ -26,7 +26,7 @@
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/10/11/11.jpg">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/10/11/12.jpg">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/10/11/13.jpg">
-<meta property="og:updated_time" content="2015-10-11T15:45:49.000Z">
+<meta property="og:updated_time" content="2015-10-11T15:50:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MacOS下JAVA开发使用经验(二)">
 <meta name="twitter:description" content="MacOS下JAVA开发使用经验(二)上一篇文章/)写了最常用的一些工具,接下来再介绍一下提高开发生产力的工具.
@@ -263,6 +263,7 @@ var _hmt = _hmt || [];
 <p><img src="/img/2015/10/11/1.png" alt=""></p>
 <h3 id="Beyond_Compare">Beyond Compare</h3><p>这个是我们搞IT的大杀器.以前只有在Windows上有,当时为了这一个软件,我不得不装上了虚拟机.<br>不得不说,用过这么多文件比较工具,这个始终是神话般的存在.什么<code>DiffMerge</code> <code>FileMerge</code> <code>Araxis Merge</code> <code>Kaleidoscope</code> 都弱爆了.<br>这个工具可以配合你的<code>sourceTree</code>等代码管理工具使用,直接清晰地对比和合并代码.同时也可以和<code>JD</code>反编译工具配合直接对比<code>class</code>文件的差异(这个可以参考我的<a href="http://sunxiang0918.cn/2014/09/20/在MAC下使用beyondcompare比较JAVA-Class文件/" target="_blank" rel="external">另一篇文章</a>).</p>
 <p><img src="/img/2015/10/11/2.png" alt=""></p>
+<a id="more"></a>
 <h3 id="Dash">Dash</h3><p>这个又是<code>Mac Only</code>的一个福利,是一款功能单一却精准的API文档浏览器,以及代码片段管理工具.它采用了单窗口的模式,最方便的提供了API查询的需求.我们平时写东西的时候,最常用的就是查看源码和API了,IDE提供了源码的查看,而<code>Dash</code>则提供了<code>API查询</code>的功能. 它可以和绝大多数的IDE合作,包括我们JAVA最常用的<code>Intellij</code> <code>eclipse</code>.只需要在需要查看API的代码上按住<code>Command+Shift+左键</code>(这个可以自己设置),那么就会自动的跳转到它的界面上并显示这段代码的API.不需要我们到处去翻了.<br>它基本上集成了绝大多数的API文档,包括<code>JDK</code> <code>Spring</code> <code>Hibernate</code>等等,同时也支持三方的推送,只要是符合标准的url地址,都可以添加到它里面进行管理.</p>
 <p><img src="/img/2015/10/11/3.png" alt=""></p>
 <h3 id="JD-GUI">JD-GUI</h3><p>这个是Mac下的可视化的<code>Java</code>反编译工具.使用很简单,直接双击打开界面后,把<code>class</code>文件或者文件夹直接拖入他的窗口就可以了.然后就会自动的反编译好,如果是一个文件夹的话,他还支持代码间的跳转.这对有些时候来说有奇效.</p>
@@ -300,6 +301,7 @@ var _hmt = _hmt || [];
 <li>目录浏览和跳转,在命令行中输入d会列出你再这个会话里面访问过的目录列表,并且前面还有序号.接下来你只需要输入序号,就可以直接跳转到当前目录了.这样就可以直达很多地方,非常的方便.以前需要一步一步的<code>cd</code>.</li>
 <li>支持直接输入<code>..</code>或<code>...</code>,或者直接输入当前目录的名字,基本上再也不需要cd命令了.以前经常不小心在<code>cd ..</code>中间没有加上空格.命令不起作用.这个就再也不会出现这种情况了.</li>
 <li>智能跳转,在安装了autojump之后,配合zsh,会自动记录你访问过的目录.然后它自动的构建一个遍历树结构.以后你直接通过 j+目录名 就可以直接进行目录的跳转了.大多数情况下还是比较靠谱的.比如你访问过<code>/Application/tomcat/bin</code>.  那么你直接输入<code>j tbin</code>它就能自动的跳转到那去,非常的方便.</li>
+<li><code>ctrl+r</code>可以搜索你以前输入过的命令,并重新执行. 比如你以前输入过<code>nano ~/.zshrc</code>.那么现在你只要点击<code>ctrl+r</code>后,输入<code>zsh</code> 就可以直接显示出<code>nano ~/.zshrc</code>,一个回车就重复执行了.</li>
 </ul>
 </li>
 </ol>
