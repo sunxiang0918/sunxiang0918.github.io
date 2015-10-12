@@ -1,5 +1,5 @@
 ---
-title: MacOS下JAVA开发使用经验
+title: MacOS下JAVA开发使用经验(一)
 date: 2015-09-21 21:38:36
 tags:
 - JAVA
@@ -7,7 +7,7 @@ tags:
 comments: true
 ---
 
-#MacOS下JAVA开发使用经验
+#MacOS下JAVA开发使用经验(一)
 
 我是大概在2007年左右接触到MACOS的.当时先是折腾了半年的`Ubuntu`,然后在一个偶然的机会发现了`MacOS 10.4.6`,看到界面截图,简直是惊为天人.刚好那个时候苹果开始使用Intel的CPU.让我们有机会品尝了一下黑苹果的滋味.虽然在我的`HP DV2621`笔记本上装黑苹果又卡又热,但是还是让我深深的喜欢上了这个系统.到2009年,实在是憋不住了,买了我人生中的第一台macbook `mb990`.然后毕业后到公司上班也申请一直使用苹果系统.反正我是搞JAVA的,到是和操作系统关系不大,反而我到是觉得搞JAVA开发,Mac比Win还好用些,这么多年来也是越用越顺手.这里分享下我平时使用的一些经验或软件吧~
 
@@ -152,8 +152,4 @@ curl -fsSL https://raw.github.com/supermarin/Alcatraz/master/Scripts/install.sh 
 MacOS上的虚拟机软件,我对比过VMware.觉得这个软件无论是在速度还是系统占用上都有优势.
 现在虚拟机其实很少使用了,主要就是打开一些非要用IE打开的奇葩网页.然后就是虚拟机上安装一些Linux系统或Oracle数据库来瞎折腾.这样不会影响到实体机.
 ![](/img/2015/09/21/23.png)
-
-...未完待续...
-...To Be Continue...
-。。。つづく。。。
 
