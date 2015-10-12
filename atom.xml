@@ -90,7 +90,7 @@
     <link href="http://sunxiang0918.github.io/2015/10/03/Redis%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"/>
     <id>http://sunxiang0918.github.io/2015/10/03/Redis集群部署/</id>
     <published>2015-10-03T06:24:35.000Z</published>
-    <updated>2015-10-12T14:25:09.000Z</updated>
+    <updated>2015-10-12T14:27:09.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Redis集群部署">Redis集群部署</h1><p>Redis作为目前最常用的内存NOSQL数据库,使用的场景非常的广泛.但是在3.0以前官方一直都是没有集群的方案的.相当于是一个单机内存数据库.为了其高可用,集群的部署是非常有必要的.因此,各种第三方厂商都推出了自己的集群方案.使用的最多的就是<code>豌豆荚</code>开源的<code>Codis</code>,<code>Twitter</code>开源的<code>Twemproxy</code>,<code>Netflix</code>的<code>Dynamo</code>.</p>
 <p>目前Redis是<code>3.0.4</code>版本,其中已经自带了<code>Redis Cluster</code>.但是官方的方案有一些架构上的问题.</p>
 <ul>
@@ -124,8 +124,7 @@
 </li>
 </ol>
 <p>当出现:<code>Can I set the above configuration? (type &#39;yes&#39; to accept):</code>的时候,输入<code>yes</code>.然后他就会自动的通知各个节点,自发组成集群.</p>
-<p>到此,redis集群的官方方案就部署好了.<br>如果安装过程中出现:<code>/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/rubygems/core_ext/kernel_require.rb:55:in</code>require’: cannot load such file — redis (LoadError)<code>.那是ruby缺少</code>redis<code>的依赖.
-在控制台输入</code>gem install redis`即可.</p>
+<p>到此,redis集群的官方方案就部署好了.<br>如果安装过程中出现:<code>/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/rubygems/core_ext/kernel_require.rb:55:in require&#39;: cannot load such file -- redis (LoadError)</code>.那是ruby缺少<code>redis</code>的依赖.<br>在控制台输入<code>gem install redis</code>即可.</p>
 <h2 id="codis集群方案的部署">codis集群方案的部署</h2><p>Codis 是一个分布式 Redis 解决方案, 对于上层的应用来说, 连接到 Codis Proxy 和连接原生的 Redis Server 没有明显的区别.上层应用可以像使用单机的 Redis 一样使用, Codis 底层会处理请求的转发, 不停机的数据迁移等工作, 所有后边的一切事情, 对于前面的客户端来说是透明的, 可以简单的认为后边连接的是一个内存无限大的 Redis 服务.</p>
 <p>Codis 由四部分组成:</p>
 <ul>
@@ -138,7 +137,7 @@
 <p>codis-config 是 Codis 的管理工具, 支持包括, 添加/删除 Redis 节点, 添加/删除 Proxy 节点, 发起数据迁移等操作. codis-config 本身还自带了一个 http server, 会启动一个 dashboard, 用户可以直接在浏览器上观察 Codis 集群的运行状态.</p>
 <p>codis-server 是 Codis 项目维护的一个 Redis 分支, 基于 2.8.21 开发, 加入了 slot 的支持和原子的数据迁移指令. Codis 上层的 codis-proxy 和 codis-config 只能和这个版本的 Redis 交互才能正常运行.</p>
 <p>Codis 依赖 ZooKeeper 来存放数据路由表和 codis-proxy 节点的元信息, codis-config 发起的命令都会通过 ZooKeeper 同步到各个存活的 codis-proxy.</p>
-<p>需要注意的是,codis的proxy是无状态的,当一个分片的master挂掉的时候,codis不会自动的将某个slave升级成master.不过他提供了一个解决方案:<a href="https://github.com/ngaut/codis-ha" target="_blank" rel="external">codis-ha</a>.这是一个通过codis开放的api实现自动切换主从的工具。该工具会在检测到master挂掉的时候将其下线并选择其中一个slave提升为master继续提供服务。但是只是在每一个分片是一主一从两台的情况下才有效.否则,该分片内其他slave实例是不会自动改变状态的，这些slave仍将试图从旧的master上同步数据，因而会导致分片内新的master和其他slave之间的数据不一致。因为redis的slave of命令切换master时会丢弃slave上的全部数据，从新master完整同步，会消耗master资源。因此建议在知情的情况下手动操作。使用 codis-config server add <group_id> <redis_addr> slave 命令刷新这些节点的状态即可。codis-ha不会自动刷新其他slave的状态。</redis_addr></group_id></p>
+<p>需要注意的是,codis的proxy是无状态的,当一个分片的master挂掉的时候,codis不会自动的将某个slave升级成master.不过他提供了一个解决方案:<a href="https://github.com/ngaut/codis-ha" target="_blank" rel="external">codis-ha</a>.这是一个通过codis开放的api实现自动切换主从的工具。该工具会在检测到master挂掉的时候将其下线并选择其中一个slave提升为master继续提供服务。但是只是在每一个分片是一主一从两台的情况下才有效.否则,该分片内其他slave实例是不会自动改变状态的，这些slave仍将试图从旧的master上同步数据，因而会导致分片内新的master和其他slave之间的数据不一致。因为redis的slave of命令切换master时会丢弃slave上的全部数据，从新master完整同步，会消耗master资源。因此建议在知情的情况下手动操作。使用 <code>codis-config server add &lt;group_id&gt; &lt;redis_addr&gt; slave</code> 命令刷新这些节点的状态即可。codis-ha不会自动刷新其他slave的状态。</p>
 <hr>
 <ol>
 <li><p>由于codis是由GO语言写的,因此,要运行codis首先需要的就是安装<code>go</code>语言环境.</p>
@@ -160,16 +159,12 @@
 <li>开始启动<code>Codis Redis</code>.执行<code>./bin/codis-server</code>,就启动的.这个就和官网的一样. 配置文件也可以跟在后面.比如:<code>./bin/codis-server redis.config</code></li>
 <li><p>添加 <strong>Redis Server Group</strong> , 每一个 <strong>Server Group</strong> 作为一个 Redis 服务器组存在, 只允许有一个 <strong>master</strong>, 可以有<strong>多个 slave</strong>, <strong>group id</strong> 仅<strong>支持大于等于1的整数</strong>.这个步骤可以通过<code>dashboard</code>来增加,也可以使用命令行.比如:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">bin/codis-config server add <span class="number">1</span> localhost:<span class="number">6379</span> master</span><br><span class="line">bin/codis-config server add <span class="number">1</span> localhost:<span class="number">6380</span> slave</span><br><span class="line">bin/codis-config server add <span class="number">2</span> localhost:<span class="number">6479</span> master</span><br><span class="line">bin/codis-config server add <span class="number">2</span> localhost:<span class="number">6480</span> slave</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
 <p>这样就增加了4个节点,并且分成两片,每片一主一从.</p>
-<ol>
+</li>
 <li><p>设置 server group 服务的 slot 范围 Codis 采用 Pre-sharding 的技术来实现数据的分片, 默认分成 1024 个 slots (0-1023), 对于每个key来说, 通过以下公式确定所属的 Slot Id : SlotId = crc32(key) % 1024 每一个 slot 都会有一个且必须有一个特定的 server group id 来表示这个 slot 的数据由哪个 server group 来提供.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ bin/codis-config slot range-set <span class="number">0</span> <span class="number">511</span> <span class="number">1</span> online</span><br><span class="line">$ bin/codis-config slot range-set <span class="number">512</span> <span class="number">1023</span> <span class="number">2</span> online</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
 <p>同样,可以在界面上进行操作</p>
-<ol>
+</li>
 <li><p>启动 codis-proxy (注意,如果zk的session时间设置太短的话,proxy可能启动不起来.)</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/codis-proxy -c config.ini -L ./<span class="built_in">log</span>/proxy.log  --cpu=<span class="number">8</span> --addr=<span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">19000</span> --http-addr=<span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">11000</span></span><br></pre></td></tr></table></figure>
 </li>
