@@ -86,11 +86,125 @@
   </entry>
   
   <entry>
+    <title><![CDATA[Redis集群部署]]></title>
+    <link href="http://sunxiang0918.github.io/2015/10/03/Redis%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"/>
+    <id>http://sunxiang0918.github.io/2015/10/03/Redis集群部署/</id>
+    <published>2015-10-03T06:24:35.000Z</published>
+    <updated>2015-10-12T14:23:08.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="Redis集群部署">Redis集群部署</h1><p>Redis作为目前最常用的内存NOSQL数据库,使用的场景非常的广泛.但是在3.0以前官方一直都是没有集群的方案的.相当于是一个单机内存数据库.为了其高可用,集群的部署是非常有必要的.因此,各种第三方厂商都推出了自己的集群方案.使用的最多的就是<code>豌豆荚</code>开源的<code>Codis</code>,<code>Twitter</code>开源的<code>Twemproxy</code>,<code>Netflix</code>的<code>Dynamo</code>.</p>
+<p>目前Redis是<code>3.0.4</code>版本,其中已经自带了<code>Redis Cluster</code>.但是官方的方案有一些架构上的问题.</p>
+<ul>
+<li>首先,官方方案是完全的去中心化的,依靠自己Server的网络通信来进行同步.那么,在节点比较多的情况下,性能上是有影响的.</li>
+<li>其二,一个redis进程既负责读写数据又负责集群交互，虽然设计者已经尽可能简化了代码和逻辑，但还是让redis从一个内存NoSQL变成了一个分布式NoSQL.</li>
+<li>其三,官方方案没有采用一致性哈希,而是预分配slot的形式来进行分片.新节点的加入不是自动的,依赖于外部的ruby脚本.</li>
+<li>其四,集群版本和单机版本数据不兼容,客户端不兼容.它的集群分发依赖于客户端的驱动. 目前只有JAVA的<code>Jedis Driver</code>支持了<code>Redis Cluster</code>的连接.而<code>spring-data-redis</code>目前也还没有支持官方方案.因此我们不能直接调用.</li>
+<li>其五,集群至少要分三片,加上主从备份.也就是说至少需要6个节点才能组建<code>Redis</code>集群.</li>
+</ul>
+<p>从上面可以看出,目前官方的方案.并不适合我们.它现在还不稳定,开源社区的支持也比较少.<br>从其他三方的方案中进行对比,最后选择<code>Codis</code>作为我们<code>Redis</code>集群部署的方案.</p>
+<a id="more"></a>
+<h2 id="官方集群方案的部署">官方集群方案的部署</h2><p>虽然目前我们不会使用官方的方案,但是不排除以后会使用.毕竟是官方的东西,应该要靠谱些.</p>
+<ol>
+<li><p>下载 并编译最新的Redis. 由于Redis是C写的.并且网上只有源码.因此,最好是直接下载源码到<code>类unix</code>机器上,然后调用 <code>sudo make</code> 命令自动的编译出可运行的版本.</p>
+</li>
+<li><p>最少集群6个节点,因此在我的磁盘上建立一个<code>redis-test</code>文件夹.然后建立6个子文件夹,作为6个节点.</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir redis-test</span><br><span class="line"><span class="built_in">cd</span> redis-test</span><br><span class="line">mkdir <span class="number">7000</span> <span class="number">7001</span> <span class="number">7002</span> <span class="number">7003</span> <span class="number">7004</span> <span class="number">7005</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后拷贝6分编译好的redis到各个目录中去.</p>
+</li>
+<li><p>修改redis.conf文件.</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">port <span class="number">7005</span> </span><br><span class="line">pidfile /Volumes/EXCHANGE/redis-test/<span class="number">7000</span>/redis.pid </span><br><span class="line">cluster-enabled yes  </span><br><span class="line"><span class="comment"># 和端口对应  </span></span><br><span class="line">cluster-config-file nodes.conf  </span><br><span class="line">cluster-node-timeout <span class="number">5000</span>  </span><br><span class="line">appendonly yes</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改好后,进入每一个的src文件夹,执行<code>./redis-server ../redis.conf</code> 启动6个服务.</p>
+</li>
+<li><p>随便找一个节点的src目录,找到<code>redis-trib.rb</code>文件.然后执行:</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./redis-trib.rb create --replicas <span class="number">1</span> <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7000</span> <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7001</span> <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7002</span> <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7003</span> <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7004</span> <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7005</span></span><br></pre></td></tr></table></figure>
+<p> 其中的<code>--replicas 1</code>指的是从服务的数量.</p>
+<p> 执行了这句后,会显示出集群的分布情况.</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; Creating cluster</span><br><span class="line">Connecting to node <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7000</span>: OK</span><br><span class="line">Connecting to node <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7001</span>: OK</span><br><span class="line">Connecting to node <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7002</span>: OK</span><br><span class="line">Connecting to node <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7003</span>: OK</span><br><span class="line">Connecting to node <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7004</span>: OK</span><br><span class="line">Connecting to node <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7005</span>: OK</span><br><span class="line">&gt;&gt;&gt; Performing <span class="built_in">hash</span> slots allocation on <span class="number">6</span> nodes...</span><br><span class="line">Using <span class="number">3</span> masters:</span><br><span class="line"><span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7000</span></span><br><span class="line"><span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7001</span></span><br><span class="line"><span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7002</span></span><br><span class="line">Adding replica <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7003</span> to <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7000</span></span><br><span class="line">Adding replica <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7004</span> to <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7001</span></span><br><span class="line">Adding replica <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7005</span> to <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7002</span></span><br><span class="line">M: d450eaf8b29ccc57c5ab851868a0e23b41d0f50c <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7000</span></span><br><span class="line">   slots:<span class="number">0</span>-<span class="number">5460</span> (<span class="number">5461</span> slots) master</span><br><span class="line">M: b4f505a8bfbc58dcd65c0a106f284ae1fe3efe1b <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7001</span></span><br><span class="line">   slots:<span class="number">5461</span>-<span class="number">10922</span> (<span class="number">5462</span> slots) master</span><br><span class="line">M: e81eea0243d2976daca5b349ec0bc2d109ac81d0 <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7002</span></span><br><span class="line">   slots:<span class="number">10923</span>-<span class="number">16383</span> (<span class="number">5461</span> slots) master</span><br><span class="line">S: <span class="number">52</span>a634c534ca5db005dbc31494676e08454ebfa4 <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7003</span></span><br><span class="line">   replicates d450eaf8b29ccc57c5ab851868a0e23b41d0f50c</span><br><span class="line">S: <span class="number">270</span>c10d1f3b85438b74b8fd5c9d91a3e0ce8a0da <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7004</span></span><br><span class="line">   replicates b4f505a8bfbc58dcd65c0a106f284ae1fe3efe1b</span><br><span class="line">S: e6eae15e4883<span class="built_in">cd</span>408fe889e85565a38f6e030de7 <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7005</span></span><br><span class="line">   replicates e81eea0243d2976daca5b349ec0bc2d109ac81d0</span><br><span class="line">Can I <span class="built_in">set</span> the above configuration? (<span class="built_in">type</span> <span class="string">'yes'</span> to accept): yes</span><br><span class="line">&gt;&gt;&gt; Nodes configuration updated</span><br><span class="line">&gt;&gt;&gt; Assign a different config epoch to each node</span><br><span class="line">&gt;&gt;&gt; Sending CLUSTER MEET messages to join the cluster</span><br><span class="line">Waiting <span class="keyword">for</span> the cluster to join...</span><br><span class="line">&gt;&gt;&gt; Performing Cluster Check (using node <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7000</span>)</span><br><span class="line">M: d450eaf8b29ccc57c5ab851868a0e23b41d0f50c <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7000</span></span><br><span class="line">   slots:<span class="number">0</span>-<span class="number">5460</span> (<span class="number">5461</span> slots) master</span><br><span class="line">M: b4f505a8bfbc58dcd65c0a106f284ae1fe3efe1b <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7001</span></span><br><span class="line">   slots:<span class="number">5461</span>-<span class="number">10922</span> (<span class="number">5462</span> slots) master</span><br><span class="line">M: e81eea0243d2976daca5b349ec0bc2d109ac81d0 <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7002</span></span><br><span class="line">   slots:<span class="number">10923</span>-<span class="number">16383</span> (<span class="number">5461</span> slots) master</span><br><span class="line">M: <span class="number">52</span>a634c534ca5db005dbc31494676e08454ebfa4 <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7003</span></span><br><span class="line">   slots: (<span class="number">0</span> slots) master</span><br><span class="line">   replicates d450eaf8b29ccc57c5ab851868a0e23b41d0f50c</span><br><span class="line">M: <span class="number">270</span>c10d1f3b85438b74b8fd5c9d91a3e0ce8a0da <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7004</span></span><br><span class="line">   slots: (<span class="number">0</span> slots) master</span><br><span class="line">   replicates b4f505a8bfbc58dcd65c0a106f284ae1fe3efe1b</span><br><span class="line">M: e6eae15e4883<span class="built_in">cd</span>408fe889e85565a38f6e030de7 <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7005</span></span><br><span class="line">   slots: (<span class="number">0</span> slots) master</span><br><span class="line">   replicates e81eea0243d2976daca5b349ec0bc2d109ac81d0</span><br><span class="line">[OK] All nodes agree about slots configuration.</span><br><span class="line">&gt;&gt;&gt; Check <span class="keyword">for</span> open slots...</span><br><span class="line">&gt;&gt;&gt; Check slots coverage...</span><br><span class="line">[OK] All <span class="number">16384</span> slots covered.</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>当出现<span class="symbol">:`Can</span> <span class="constant">I </span>set the above configuration? (type <span class="string">'yes'</span> to accept)<span class="symbol">:`</span>的时候,输入`yes`.然后他就会自动的通知各个节点,自发组成集群.
+
+到此,redis集群的官方方案就部署好了.
+如果安装过程中出现<span class="symbol">:`/System/Library/Frameworks/Ruby</span>.framework/<span class="constant">Versions/</span><span class="number">2.0</span>/usr/lib/ruby/<span class="number">2.0</span>.<span class="number">0</span>/rubygems/core_ext/kernel_require.<span class="symbol">rb:</span><span class="number">55</span><span class="symbol">:in</span> `require<span class="string">': cannot load such file -- redis (LoadError)`.那是ruby缺少`redis`的依赖.
+在控制台输入`gem install redis`即可.</span>
+</code></pre><h2 id="codis集群方案的部署">codis集群方案的部署</h2><p>Codis 是一个分布式 Redis 解决方案, 对于上层的应用来说, 连接到 Codis Proxy 和连接原生的 Redis Server 没有明显的区别.上层应用可以像使用单机的 Redis 一样使用, Codis 底层会处理请求的转发, 不停机的数据迁移等工作, 所有后边的一切事情, 对于前面的客户端来说是透明的, 可以简单的认为后边连接的是一个内存无限大的 Redis 服务.</p>
+<p>Codis 由四部分组成:</p>
+<ul>
+<li>Codis Proxy (codis-proxy)</li>
+<li>Codis Manager (codis-config)</li>
+<li>Codis Redis (codis-server)</li>
+<li>ZooKeeper</li>
+</ul>
+<p>codis-proxy 是客户端连接的 Redis 代理服务, codis-proxy 本身实现了 Redis 协议, 表现得和一个原生的 Redis 没什么区别 (就像 Twemproxy), 对于一个业务来说, 可以部署多个 codis-proxy, codis-proxy 本身是无状态的.</p>
+<p>codis-config 是 Codis 的管理工具, 支持包括, 添加/删除 Redis 节点, 添加/删除 Proxy 节点, 发起数据迁移等操作. codis-config 本身还自带了一个 http server, 会启动一个 dashboard, 用户可以直接在浏览器上观察 Codis 集群的运行状态.</p>
+<p>codis-server 是 Codis 项目维护的一个 Redis 分支, 基于 2.8.21 开发, 加入了 slot 的支持和原子的数据迁移指令. Codis 上层的 codis-proxy 和 codis-config 只能和这个版本的 Redis 交互才能正常运行.</p>
+<p>Codis 依赖 ZooKeeper 来存放数据路由表和 codis-proxy 节点的元信息, codis-config 发起的命令都会通过 ZooKeeper 同步到各个存活的 codis-proxy.</p>
+<p>需要注意的是,codis的proxy是无状态的,当一个分片的master挂掉的时候,codis不会自动的将某个slave升级成master.不过他提供了一个解决方案:<a href="https://github.com/ngaut/codis-ha" target="_blank" rel="external">codis-ha</a>.这是一个通过codis开放的api实现自动切换主从的工具。该工具会在检测到master挂掉的时候将其下线并选择其中一个slave提升为master继续提供服务。但是只是在每一个分片是一主一从两台的情况下才有效.否则,该分片内其他slave实例是不会自动改变状态的，这些slave仍将试图从旧的master上同步数据，因而会导致分片内新的master和其他slave之间的数据不一致。因为redis的slave of命令切换master时会丢弃slave上的全部数据，从新master完整同步，会消耗master资源。因此建议在知情的情况下手动操作。使用 codis-config server add <group_id> <redis_addr> slave 命令刷新这些节点的状态即可。codis-ha不会自动刷新其他slave的状态。</redis_addr></group_id></p>
+<hr>
+<ol>
+<li><p>由于codis是由GO语言写的,因此,要运行codis首先需要的就是安装<code>go</code>语言环境.</p>
+<p> 在类<code>unix</code>机器上都有现成的安装包可以安装.<br> 比如<code>Macos</code> 在终端中输入<code>brew install go</code> 即可. (安装过程中需要访问<code>https://go.googlesource.com/tools.git</code>,方法你懂的)</p>
+</li>
+<li><p>设置GO的workspace路径.在<code>~/.bash_profiler</code>下增加<code>export GOPATH=&quot;/Volumes/WORKSPACE/openSourceWorkspace/GoWorkspace&quot;</code> 注意$GOPATH是本机所有go项目（包括项目依赖的第三方库）的所在目录，而非单纯codis的所在目录。</p>
+</li>
+<li>执行下面的命令下载codis源码并编译.它会自动的下载源码以及依赖包.</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">go get -u <span class="operator">-d</span> github.com/wandoulabs/codis</span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$GOPATH</span>/src/github.com/wandoulabs/codis</span><br><span class="line">./bootstrap.sh</span><br><span class="line">make gotest</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>执行完命令后,会在codis/bin下生成三个文件<code>codis-config</code> <code>codis-proxy</code> <code>codis-server</code>. <code>assets</code>文件夹里面存放的是<code>dashboard</code>服务所需要的静态文件.</p>
+</li>
+<li><p>默认情况下 这些命令都会读取<code>config.ini</code>里面的配置.配置很简单,按照里面的注释改就可以了.</p>
+</li>
+<li>启动ZK.</li>
+<li>启动<code>dashboard</code>,执行 <code>./bin/codis-config dashboard</code>,就会启动dashboard</li>
+<li>初始化 slots , 执行 <code>./bin/codis-config slot init</code>，该命令会在zookeeper上创建slot相关信息.</li>
+<li>开始启动<code>Codis Redis</code>.执行<code>./bin/codis-server</code>,就启动的.这个就和官网的一样. 配置文件也可以跟在后面.比如:<code>./bin/codis-server redis.config</code></li>
+<li><p>添加 <strong>Redis Server Group</strong> , 每一个 <strong>Server Group</strong> 作为一个 Redis 服务器组存在, 只允许有一个 <strong>master</strong>, 可以有<strong>多个 slave</strong>, <strong>group id</strong> 仅<strong>支持大于等于1的整数</strong>.这个步骤可以通过<code>dashboard</code>来增加,也可以使用命令行.比如:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">bin/codis-config server add <span class="number">1</span> localhost:<span class="number">6379</span> master</span><br><span class="line">bin/codis-config server add <span class="number">1</span> localhost:<span class="number">6380</span> slave</span><br><span class="line">bin/codis-config server add <span class="number">2</span> localhost:<span class="number">6479</span> master</span><br><span class="line">bin/codis-config server add <span class="number">2</span> localhost:<span class="number">6480</span> slave</span><br></pre></td></tr></table></figure>
+<p>这样就增加了4个节点,并且分成两片,每片一主一从.</p>
+</li>
+<li><p>设置 server group 服务的 slot 范围 Codis 采用 Pre-sharding 的技术来实现数据的分片, 默认分成 1024 个 slots (0-1023), 对于每个key来说, 通过以下公式确定所属的 Slot Id : SlotId = crc32(key) % 1024 每一个 slot 都会有一个且必须有一个特定的 server group id 来表示这个 slot 的数据由哪个 server group 来提供.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ bin/codis-config slot range-set <span class="number">0</span> <span class="number">511</span> <span class="number">1</span> online</span><br><span class="line">$ bin/codis-config slot range-set <span class="number">512</span> <span class="number">1023</span> <span class="number">2</span> online</span><br></pre></td></tr></table></figure>
+<p>同样,可以在界面上进行操作</p>
+</li>
+<li><p>启动 codis-proxy (注意,如果zk的session时间设置太短的话,proxy可能启动不起来.)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/codis-proxy -c config.ini -L ./<span class="built_in">log</span>/proxy.log  --cpu=<span class="number">8</span> --addr=<span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">19000</span> --http-addr=<span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">11000</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>到此就集群完毕.</p>
+<hr>
+<p>接下来就是客户端的调用了.<br>由于codis依赖了zk作为服务的发现方.因此,整个集群的节点状态都是在zk中有的.</p>
+<p>它自身也提供了一个JAVA的实现,叫<a href="https://github.com/wandoulabs/codis/tree/master/extern/jodis" target="_blank" rel="external">jodis</a>.通过这个,就可以关联<code>jedis Driver</code>.并且获取当前可用的<code>codis-server</code>.<br>不过目前这个jodis还没有提供与spring的集成.这个需要我们自己来开发.    </p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="Redis集群部署">Redis集群部署</h1><p>Redis作为目前最常用的内存NOSQL数据库,使用的场景非常的广泛.但是在3.0以前官方一直都是没有集群的方案的.相当于是一个单机内存数据库.为了其高可用,集群的部署是非常有必要的.因此,各种第三方厂商都推出了自己的集群方案.使用的最多的就是<code>豌豆荚</code>开源的<code>Codis</code>,<code>Twitter</code>开源的<code>Twemproxy</code>,<code>Netflix</code>的<code>Dynamo</code>.</p>
+<p>目前Redis是<code>3.0.4</code>版本,其中已经自带了<code>Redis Cluster</code>.但是官方的方案有一些架构上的问题.</p>
+<ul>
+<li>首先,官方方案是完全的去中心化的,依靠自己Server的网络通信来进行同步.那么,在节点比较多的情况下,性能上是有影响的.</li>
+<li>其二,一个redis进程既负责读写数据又负责集群交互，虽然设计者已经尽可能简化了代码和逻辑，但还是让redis从一个内存NoSQL变成了一个分布式NoSQL.</li>
+<li>其三,官方方案没有采用一致性哈希,而是预分配slot的形式来进行分片.新节点的加入不是自动的,依赖于外部的ruby脚本.</li>
+<li>其四,集群版本和单机版本数据不兼容,客户端不兼容.它的集群分发依赖于客户端的驱动. 目前只有JAVA的<code>Jedis Driver</code>支持了<code>Redis Cluster</code>的连接.而<code>spring-data-redis</code>目前也还没有支持官方方案.因此我们不能直接调用.</li>
+<li>其五,集群至少要分三片,加上主从备份.也就是说至少需要6个节点才能组建<code>Redis</code>集群.</li>
+</ul>
+<p>从上面可以看出,目前官方的方案.并不适合我们.它现在还不稳定,开源社区的支持也比较少.<br>从其他三方的方案中进行对比,最后选择<code>Codis</code>作为我们<code>Redis</code>集群部署的方案.</p>]]>
+    
+    </summary>
+    
+      <category term="Kafka" scheme="http://sunxiang0918.github.io/tags/Kafka/"/>
+    
+      <category term="大数据" scheme="http://sunxiang0918.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+      <category term="集群" scheme="http://sunxiang0918.github.io/tags/%E9%9B%86%E7%BE%A4/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[Kafka集群部署]]></title>
     <link href="http://sunxiang0918.github.io/2015/09/28/Kafka%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"/>
     <id>http://sunxiang0918.github.io/2015/09/28/Kafka集群部署/</id>
     <published>2015-09-28T14:12:16.000Z</published>
-    <updated>2015-10-12T14:16:31.000Z</updated>
+    <updated>2015-10-12T14:21:17.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Kafka集群">Kafka集群</h1><p>Kafka作为新一代的消息系统,最初是由LinkedIn公司开发,之后开源成为Apache的顶级项目.<br>它与传统的消息系统相比,有以下不同:</p>
 <ul>
 <li>它被设计为一个分布式系统，易于向外扩展；</li>
@@ -3344,79 +3458,6 @@ neostore<span class="class">.relationshiptypestore</span><span class="class">.db
     </summary>
     
       <category term="GIT" scheme="http://sunxiang0918.github.io/tags/GIT/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[<转>Swift扩展的三个微妙细节]]></title>
-    <link href="http://sunxiang0918.github.io/2015/05/18/Swift%E6%89%A9%E5%B1%95%E7%9A%84%E4%B8%89%E4%B8%AA%E5%BE%AE%E5%A6%99%E7%BB%86%E8%8A%82/"/>
-    <id>http://sunxiang0918.github.io/2015/05/18/Swift扩展的三个微妙细节/</id>
-    <published>2015-05-18T13:55:14.000Z</published>
-    <updated>2015-07-31T14:08:35.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="Swift扩展的三个微妙细节">Swift扩展的三个微妙细节</h1><p>每当我初次翻看某文档时，我都走马观花似的快速阅过，还一边点着头一边喃喃自语说：“好！懂了，就这么回事！”，可是过后当我真正要运用到这些我以为已经理解了的知识点时，却发现实际情况和我想的往往不一样，每当这时我就懵了，心想：“哇哦…怎么回事？这和我想的完全不一样啊！文档里有说这事吗？”。</p>
-<p>最近的几次讨论促使我扪心自问是否真正的理解了Swift中的扩展。我阅读过关于扩展的文档，并且我“认为”我自己对这块内容已经是理解的相当透彻了。可是这几次讨论，加上自己私下通过敲代码的验证，让我发现了我原先不曾注意到几个微妙的细节。</p>
-<p>更新：这篇文章刚一发表，Swift社区就出手襄助并帮助我弄明白了我最根本的纠结点在哪。为此，我写了另一篇文章“<a href="http://www.andrewcbancroft.com/2015/04/24/clarifying-swift-access-control-hint-swift-isnt-c-sharp/" target="_blank" rel="external">阐明Swift访问控制</a>”进一步说明我之前的误解。为了避免犯我曾今犯过的错误，我建议大家去读一读。</p>
-<h2 id="三个关于扩展的微妙细节">三个关于扩展的微妙细节</h2><p>对下面列出的三个细节的思考严重挑战了我之前对Swift扩展的理解：</p>
-<ol>
-<li>Swift扩展对它所扩展类型的<strong>visibility</strong>。比如，扩展能访问被<code>private</code>所修饰的内容吗?</li>
-<li>定义扩展的位置是否对扩展的<strong>visibility</strong>有影响。比如我这有一个类型我想写个扩展，把扩展写在同一个源文件里和把扩展写在另一个文件里有什么区别吗？</li>
-<li>扩展里“成员”的默认访问修饰符以及是否给他们添加修饰对这个扩展作为一个类型的公共接口的影响。</li>
-</ol>
-<a id="more"></a>
-<p>在我开始之前，假设我有一个公共结构体<code>Person</code>。这个结构体有一些私有属性，<code>name</code>，<code>gender</code>，和<code>age</code>。用一个枚举把<code>Gender</code>封装了一下。这个结构体看起来如下：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">struct</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    private <span class="keyword">var</span> name: <span class="type">String</span></span><br><span class="line">    private <span class="keyword">var</span> gender: <span class="type">Gender</span></span><br><span class="line">    private <span class="keyword">var</span> age: <span class="type">Int</span></span><br><span class="line"> </span><br><span class="line">    public <span class="keyword">init</span>(name: <span class="type">String</span>, gender: <span class="type">Gender</span>, age: <span class="type">Int</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.name = name</span><br><span class="line">        <span class="keyword">self</span>.gender = gender</span><br><span class="line">        <span class="keyword">self</span>.age = age</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    public <span class="func"><span class="keyword">func</span> <span class="title">howOldArdYou</span><span class="params">()</span></span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> formattedAge()</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 私有方法，用于下面分析扩展的`visibility`...</span></span><br><span class="line">    private <span class="func"><span class="keyword">func</span> <span class="title">formattedAge</span><span class="params">()</span></span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> <span class="keyword">self</span>.gender &#123;</span><br><span class="line">        <span class="keyword">case</span> .<span class="type">Male</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"I'm <span class="subst">\(<span class="keyword">self</span>.age)</span>."</span></span><br><span class="line">        <span class="keyword">case</span> .<span class="type">Female</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"Not telling."</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    public <span class="class"><span class="keyword">enum</span> <span class="title">Gender</span> </span>&#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="type">Male</span></span><br><span class="line">        <span class="keyword">case</span> <span class="type">Female</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>现在，就让我们给<code>Person</code>写个扩展，通过实践来弄清楚刚刚提到的三个小细节…</p>
-<h2 id="扩展对类型的访问能力">扩展对类型的访问能力</h2><p>当我提出第一个细节时，关于扩展对被扩展类型的访问能力时，我问了一个问题：“扩展能访问到被<code>private</code>修饰的内容吗?”。答案一开始出乎我的预料：能…扩展能访问到。</p>
-<p>然而，这里就要考虑到第二个细节所涉及的问题，那就是：在哪里定义这个扩展是绝对有影响的。</p>
-<h3 id="定义在同一个文件里">定义在同一个文件里</h3><p>如果扩展和类型是在写同一个源文件里，则扩展能访问到在类型中被<code>priavte</code>所修饰的内容。</p>
-<p>举个栗子，在Person.swift里定义一个<code>Person</code>的扩展就会允许这个扩展访问被<code>private</code>修饰的变量和方法</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getAge</span><span class="params">()</span></span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> age <span class="comment">// 尽管age是 --private--， 但编译成功</span></span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getFormattedAge</span><span class="params">()</span></span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> formattedAge() <span class="comment">// 尽管 formattedAge是 --private--，但编译成功</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>“这谁知道？！什么？？为啥？”，我当时就没想明白…</p>
-<p>至于为什么把扩展写在同一个源文件里头会这样，我自己的推理是其实可以在写类型的时候，就把扩展的implementation当作类型的一部分给写了，这样的最终效果是一样的。</p>
-<p>我在我要“扩展”的类型的源文件里，所以无论是我把要新添加的功能当作这个类型的扩展写下来，或是就在这个类型里面定义我原本打算写在扩展里的功能是没有区别的，都是一样的效果。</p>
-<p>所以，站在编译器的角度来看，编译器可能会说：“好吧，我看到这里写了一个扩展，但是真没这个必要，因为扩展和类型都在同一个源文件里…，所以开发者完全可以把扩展里的这些代码直接写在类型里面…，所以他／她能够访问到被<code>private</code>修饰的代码段。”</p>
-<p>更新:我上面的写的推理恰恰说明了我压根就没搞明白Swift访问控制机制。所以我建议大家读一读我后来写的“<a href="http://www.andrewcbancroft.com/2015/04/24/clarifying-swift-access-control-hint-swift-isnt-c-sharp/" target="_blank" rel="external">阐明Swfit控制机制</a>”这篇文章，里面有更多的细节。</p>
-<h3 id="定义在不同文件里">定义在不同文件里</h3><p>把扩展写在另一个文件里，则扩展无法访问类型中那些被<code>private</code>修饰的内容了。</p>
-<p>按照上文我自己推理的逻辑来反过来想，定义在不同文件中就访问不了私有属性对我来说也是说的通的。</p>
-<p>大多数情况下，你都会给那些你没有源代码的类型扩展，在这种情况下，扩展就只能访问那些被<code>public</code>修饰的内容了。<br><img src="/img/2015/05/18/1.png" alt=""></p>
-<h2 id="默认情况下的扩展访问控制">默认情况下的扩展访问控制</h2><p>对最后一个细节的验证也让我更深的体会。<a href="https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/AccessControl.html#//apple_ref/doc/uid/TP40014097-CH41-ID25" target="_blank" rel="external">苹果官方文档</a>说了，但是直到我动手验证了一番，我才算领会到了默认访问控制修饰符给扩展所造成的微妙的影响。</p>
-<h3 id="没有明确声明访问修饰赋时的默认访问">没有明确声明访问修饰赋时的默认访问</h3><p>简单的说，当你声明一个扩展但没有特别明确指明访问修饰符时（默认情况下），这个扩展的默认访问等级取决于被扩展的那个类型的访问等级。</p>
-<ul>
-<li>如果类型是<code>public</code>或者是<code>internal</code>，那么扩展的implementation的“成员”就默认为<code>internal</code>。这里让我没想到是，除非你特别声明，那么给<code>public</code>类型的扩展的成员变量在默认情况下也是<code>internal</code>。</li>
-<li>如果类型是<code>private</code>，那么默认情况下扩展的implementation中的“成员”也是<code>private</code></li>
-</ul>
-<p>下面就是在我们不明确的声明添加什么访问修饰的前提下，来看扩展会是一个什么反应（为了能访问私有属性变量和方法，我在Person.swift里定义了这个扩展）：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">struct</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getAge</span><span class="params">()</span></span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> age</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getFormattedAge</span><span class="params">()</span></span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> formattedAge()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>像上面这段代码用默认的访问修饰符时就会允许在同一个模块中的实例访问扩展里的API。但是，如果被扩展的类型的实例是在另一个模块（比如在测试模块）,则无法访问扩展中任何新增的公共API。</p>
-<p>同一模块</p>
-<p><img src="/img/2015/05/18/2.png" alt=""></p>
-<p>不同模块（测试）</p>
-<p><img src="/img/2015/05/18/3.png" alt=""><br>因为某些原因，我一直都以为如果给一个是<code>public</code>的类型添加扩展，那么扩展里的成员也理应是<code>public</code>。我不知道为什么我会这么想，但是幸好我的验证把这点捋清楚了。</p>
-<h3 id="正常声明扩展，但给扩展的implementation添加public修饰">正常声明扩展，但给扩展的implementation添加public修饰</h3><p>给扩展的implementation的成员添加了<code>public</code>访问控制修饰，那么不管是在同一模块还是不同模块（test target）都能访问这些成员。</p>
-<p>只要成员被<code>public</code>修饰，那么在同一个源文件里声明扩展还是在另一个文件里声明扩展已经无所谓了…但是，正如前文所讲，只有在同一个源文件中声明的扩展才能够访问那些被<code>private</code>修饰的类型成员变量。</p>
-<p>在不同（左）和同一个（右）源文件中声明的扩展</p>
-<p><img src="/img/2015/05/18/4.png" alt=""></p>
-<p>在不同模块中也能访问公共的扩展成员变量</p>
-<p><img src="/img/2015/05/18/5.png" alt=""><br>这里请注意，在我写<code>extension Person {...}</code>时，我没有给这个扩展添加任何的修饰，我只是给这个扩展的成员添加了<code>public</code>。即便如此，新添加的方法仍然可以在不同的模块中被访问到。</p>
-<p>也就是说，没有必要写<code>public extension Person {...}</code>。因为<code>Person</code>已经是<code>public</code>了，所以基于<code>Person</code>的扩展也就很自然的延用了类型本身的访问等级。</p>
-<p>总结<br>对我来说，这篇文章所提到的三个关于Swift扩展的细节已足以让我敲敲代码去验证一番了。我希望这里所作的分析能够为那些尝试理解Swfit扩展的朋友扫清一些障碍。</p>
-<hr>
-<p>原文链接:<a href="http://www.devtf.cn/?p=460" target="_blank" rel="external">http://www.devtf.cn/?p=460</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="Swift扩展的三个微妙细节">Swift扩展的三个微妙细节</h1><p>每当我初次翻看某文档时，我都走马观花似的快速阅过，还一边点着头一边喃喃自语说：“好！懂了，就这么回事！”，可是过后当我真正要运用到这些我以为已经理解了的知识点时，却发现实际情况和我想的往往不一样，每当这时我就懵了，心想：“哇哦…怎么回事？这和我想的完全不一样啊！文档里有说这事吗？”。</p>
-<p>最近的几次讨论促使我扪心自问是否真正的理解了Swift中的扩展。我阅读过关于扩展的文档，并且我“认为”我自己对这块内容已经是理解的相当透彻了。可是这几次讨论，加上自己私下通过敲代码的验证，让我发现了我原先不曾注意到几个微妙的细节。</p>
-<p>更新：这篇文章刚一发表，Swift社区就出手襄助并帮助我弄明白了我最根本的纠结点在哪。为此，我写了另一篇文章“<a href="http://www.andrewcbancroft.com/2015/04/24/clarifying-swift-access-control-hint-swift-isnt-c-sharp/">阐明Swift访问控制</a>”进一步说明我之前的误解。为了避免犯我曾今犯过的错误，我建议大家去读一读。</p>
-<h2 id="三个关于扩展的微妙细节">三个关于扩展的微妙细节</h2><p>对下面列出的三个细节的思考严重挑战了我之前对Swift扩展的理解：</p>
-<ol>
-<li>Swift扩展对它所扩展类型的<strong>visibility</strong>。比如，扩展能访问被<code>private</code>所修饰的内容吗?</li>
-<li>定义扩展的位置是否对扩展的<strong>visibility</strong>有影响。比如我这有一个类型我想写个扩展，把扩展写在同一个源文件里和把扩展写在另一个文件里有什么区别吗？</li>
-<li>扩展里“成员”的默认访问修饰符以及是否给他们添加修饰对这个扩展作为一个类型的公共接口的影响。</li>
-</ol>]]>
-    
-    </summary>
-    
-      <category term="Swift" scheme="http://sunxiang0918.github.io/tags/Swift/"/>
     
   </entry>
   
