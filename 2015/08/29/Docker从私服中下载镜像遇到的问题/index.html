@@ -3,24 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>JBOSS4关闭时不断开数据库连接问题分析 | 翔妖除魔的个人博客</title>
+  <title>Docker从私服中下载镜像遇到的问题 | 翔妖除魔的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="JBOSS4作为windows服务关闭时不断开数据库连接问题分析问题现象:现场发现,每次重启媒资服务,Oracle的数据库连接会增加约20个的JDBC连接.这样就会导致数据库连接越来越多.
-问题分析接到这个问题, 使用1select program,i.* from v$session i where program = &apos;JDBC Thin Client’
-这个SQL语句查询到 确实每次重启都有">
+  <meta name="description" content="Docker从私服中下载镜像遇到的问题由于从docker1.3.2版本开始默认docker registry使用的是https,并且在centos7和centos6.5中默认开启了SSL安全.因此 如果你的私服搭建到centos7上的话.那么其他的机器如果要从这个私服pull镜像的话,很可能会报错:If this private registry supports only HTTP or HTT">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JBOSS4关闭时不断开数据库连接问题分析">
-<meta property="og:url" content="http://sunxiang0918.github.io/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/index.html">
+<meta property="og:title" content="Docker从私服中下载镜像遇到的问题">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/08/29/Docker从私服中下载镜像遇到的问题/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
-<meta property="og:description" content="JBOSS4作为windows服务关闭时不断开数据库连接问题分析问题现象:现场发现,每次重启媒资服务,Oracle的数据库连接会增加约20个的JDBC连接.这样就会导致数据库连接越来越多.
-问题分析接到这个问题, 使用1select program,i.* from v$session i where program = &apos;JDBC Thin Client’
-这个SQL语句查询到 确实每次重启都有">
-<meta property="og:updated_time" content="2015-07-29T03:05:37.000Z">
+<meta property="og:description" content="Docker从私服中下载镜像遇到的问题由于从docker1.3.2版本开始默认docker registry使用的是https,并且在centos7和centos6.5中默认开启了SSL安全.因此 如果你的私服搭建到centos7上的话.那么其他的机器如果要从这个私服pull镜像的话,很可能会报错:If this private registry supports only HTTP or HTT">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/08/29/1.jpg">
+<meta property="og:updated_time" content="2015-10-14T08:01:44.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JBOSS4关闭时不断开数据库连接问题分析">
-<meta name="twitter:description" content="JBOSS4作为windows服务关闭时不断开数据库连接问题分析问题现象:现场发现,每次重启媒资服务,Oracle的数据库连接会增加约20个的JDBC连接.这样就会导致数据库连接越来越多.
-问题分析接到这个问题, 使用1select program,i.* from v$session i where program = &apos;JDBC Thin Client’
-这个SQL语句查询到 确实每次重启都有">
+<meta name="twitter:title" content="Docker从私服中下载镜像遇到的问题">
+<meta name="twitter:description" content="Docker从私服中下载镜像遇到的问题由于从docker1.3.2版本开始默认docker registry使用的是https,并且在centos7和centos6.5中默认开启了SSL安全.因此 如果你的私服搭建到centos7上的话.那么其他的机器如果要从这个私服pull镜像的话,很可能会报错:If this private registry supports only HTTP or HTT">
   
     <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
   
@@ -203,11 +198,11 @@ var _hmt = _hmt || [];
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap"><article id="post-JBOSS4关闭时不断开数据库连接问题分析" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Docker从私服中下载镜像遇到的问题" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/" class="article-date">
-  	<time datetime="2013-04-21T01:43:10.000Z" itemprop="datePublished">2013-04-21</time>
+      <a href="/2015/08/29/Docker从私服中下载镜像遇到的问题/" class="article-date">
+  	<time datetime="2015-08-29T13:54:24.000Z" itemprop="datePublished">2015-08-29</time>
 </a>
     </div>
   
@@ -220,7 +215,7 @@ var _hmt = _hmt || [];
         
   
     <h1 class="article-title" itemprop="name">
-      JBOSS4关闭时不断开数据库连接问题分析
+      Docker从私服中下载镜像遇到的问题
     </h1>
   
 
@@ -229,7 +224,7 @@ var _hmt = _hmt || [];
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JBOSS/">JBOSS</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
 	</div>
 
         
@@ -242,48 +237,21 @@ var _hmt = _hmt || [];
       
       
       
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker从私服中下载镜像遇到的问题"><span class="toc-number">1.</span> <span class="toc-text">Docker从私服中下载镜像遇到的问题</span></a></li></ol>
+          <hr/>
+        </div>
         
-        <h1 id="JBOSS4作为windows服务关闭时不断开数据库连接问题分析">JBOSS4作为windows服务关闭时不断开数据库连接问题分析</h1><h2 id="问题现象:">问题现象:</h2><p>现场发现,每次重启媒资服务,Oracle的数据库连接会增加约20个的JDBC连接.这样就会导致数据库连接越来越多.</p>
-<h2 id="问题分析">问题分析</h2><p>接到这个问题, 使用<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> program,i.* <span class="keyword">from</span> v$<span class="keyword">session</span> i <span class="keyword">where</span> program = <span class="string">'JDBC Thin Client’</span></span></span><br></pre></td></tr></table></figure></p>
-<p>这个SQL语句查询到 确实每次重启都有 大约20个 名为<code>&#39;JDBC Thin Client’</code> 的数据库连接没有释放. </p>
-<ol>
-<li>于是,想办法给JDBC的连接加上了名字. 具体办法是:修改<code>Oracle-DS.xml</code> 增加一行配置<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">connection-property</span> <span class="attribute">name</span>=<span class="value">"v$session.program"</span>&gt;</span>DCMP DB Connection<span class="tag">&lt;/<span class="title">connection-property</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>这样就可以给我们的服务的数据库连接增加名字.</p>
-<a id="more"></a>
-<ol>
-<li><p>通过给<code>DCMP</code>与<code>统计服务</code>增加名字. 并不断的重启服务器发现.这个问题是概率性的,并且大概率发生在<strong>统计服务</strong>上.</p>
-</li>
-<li><p>通过分析启动的日志,发现当我们<strong>停止</strong>服务器的时候,日志中并没有出现停止服务应该有的一些<strong>shutdown的日志</strong>.而是硬生生的就停止服务了. 通过对比 使用<strong>Windows服务</strong>启停统计与使用<strong>run.bat批处理</strong>启停统计. 发现, 问题的根源在于我们注册的Windows服务上.使用run.bat命令行启停统计,一切正常, 在日志中会出现一系列的shutdown日志.</p>
-</li>
-<li><p>既然是JBoss Windows服务出现的问题,那么分析 相关的几个配置. <code>service.bat</code>   修改这个配置,让shutdown事件打印出日志.发现当windows服务调用<strong>JBOSS的shutdown</strong>的时候,会报错:   <code>&quot;Shutting down MAMSpace_DCMP_Service [2015-04-10 19:27:10] 系统找不到指定的路径&quot;</code>  </p>
-</li>
-<li><p>那么问题就肯定在于JBOSS的 shutdown命令的问题了. 分析 JBOSS <code>shutdown.bat</code>  发现其中的JAVA_HOME <strong>没有修改过</strong> 指向的是默认的: <code>“C:\Program Files (x86)\Java\jdk1.5.0_17”</code>   我们的java并没有安装在那个地方.修改为正确的<code>”..\jre”</code>. 再次启停.</p>
-</li>
-<li><p>停止日志报错: </p>
-<blockquote>
-<p>“java.lang.NoClassDefFoundError: org/jboss/system/server/ServerImplMBean at org.jboss.Shutdown.main(Shutdown.java:116)”   </p>
-</blockquote>
-<p>经过网上的查询分析.发现是JBOSS4的一个<strong>BUG</strong>.<a href="https://issues.jboss.org/browse/JBAS-3894" target="_blank" rel="external">https://issues.jboss.org/browse/JBAS-3894</a> 这个问题在JBOSS5中被修正. </p>
-</li>
-<li><p>但是由于我们不能更新JBOSS版本,只有想其他的办法,经过分析JBOSS的相关源码.他缺少的是一个<code>jbossall-client.jar</code>的依赖.于是从网上找到一个这个jar包.放入 <code>JBOSS/client/jbossall-client.jar</code>.  然后再次启停.</p>
-</li>
-<li><p>发现报错:   <code>Failed to connect to server localhost:1099</code>    基本上能发现问题了. 是因为统计服务的默认<code>1099</code>端口被改成了<code>21099</code>.<br>因此需要修改<strong>shutdown.bat</strong>调用的时候的 <strong>默认端口</strong>.   经过分析,发现调用shutdown.bat的地方是在<strong>service.bat</strong>中. 默认传参是 <code>shutdown -S</code>    修改成   <code>shutdown -s 127.0.0.1:21099</code>   后. 再次实现. 问题解决</p>
-</li>
-</ol>
-<h2 id="问题总结">问题总结</h2><p>要解决这个问题,主要需要有以下的几个步骤:</p>
-<ol>
-<li><p>修改 <code>&quot;JBOSS\bin\shutdown.bat&quot;</code> 文件,把 JAVA_HOME 修改为<code>&quot;..\jre&quot;</code><br>  “set JAVA_HOME=..\jre”</p>
-</li>
-<li><p>拷贝<code>jbossall-client.jar</code>到<code>JBOSS/client/jbossall-client.jar</code></p>
-</li>
-<li><p>修改<code>service.bat</code>中的命令为默认端口. 这个端口号在 <code>&quot;JBOSS/server/default/conf/jboss-service.xml&quot;</code>文件中的</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">mbean</span> <span class="attribute">code</span>=<span class="value">"org.jboss.naming.NamingService"</span></span><br><span class="line">      <span class="attribute">name</span>=<span class="value">"jboss:service=Naming"</span></span><br><span class="line">      <span class="attribute">xmbean-dd</span>=<span class="value">"resource:xmdesc/NamingService-xmbean.xml"</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>节点下.<br><code>call shutdown -s 127.0.0.1:21099</code></p>
-<p><strong>问题解决</strong></p>
+        
+        <h1 id="Docker从私服中下载镜像遇到的问题">Docker从私服中下载镜像遇到的问题</h1><p>由于从docker1.3.2版本开始默认docker registry使用的是https,并且在centos7和centos6.5中默认开启了SSL安全.因此 如果你的私服搭建到centos7上的话.那么其他的机器如果要从这个私服pull镜像的话,很可能会报错:<br><code>If this private registry supports only HTTP or HTTPS with an unknown CA certificate, please add</code>—insecure-registry 192.168.112.136:5000<code>to the daemon&#39;s arguments. In the case of HTTPS, if you have access to the registry&#39;s CA certificate, no need for the flag; simply place the CA certificate at /etc/docker/certs.d/192.168.112.136:5000/ca.crt</code></p>
+<p>那么解决的办法就是在连接私服的客户端上,修改docker-server的配置.<br>具体位置在:ubuntu的 <code>/etc/init/docker.conf</code><br>           centos的 <code>/etc/default/docker</code></p>
+<p>增加一个:<code>--insecure-registry 192.168.112.136:5000</code> 即可. 其中的IP就是私服的IP</p>
+<p>具体如下:</p>
+<ul>
+<li>$ sudo vi /etc/init/docker.conf</li>
+</ul>
+<p><img src="/img/2015/08/29/1.jpg" alt=""></p>
+<p>修改完之后，重启Docker服务即可</p>
 
       
     </div>
@@ -293,18 +261,18 @@ var _hmt = _hmt || [];
     
 <nav id="article-nav">
   
-    <a href="/2013/07/16/Cron表达式语法/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/09/02/Java-HashMap工作原理/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          Cron表达式语法
+          &lt;转&gt;Java HashMap工作原理
         
       </div>
     </a>
   
   
-    <a href="/2012/11/14/影响Lucene对文档打分的四种方式/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">&lt;转&gt;影响Lucene对文档打分的四种方式</div>
+    <a href="/2015/08/27/Docker入门/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Docker入门</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -333,7 +301,7 @@ var _hmt = _hmt || [];
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="JBOSS4关闭时不断开数据库连接问题分析" data-title="JBOSS4关闭时不断开数据库连接问题分析" data-url="http://sunxiang0918.github.io/2013/04/21/JBOSS4关闭时不断开数据库连接问题分析/"></div>
+	<div class="ds-thread" data-thread-key="Docker从私服中下载镜像遇到的问题" data-title="Docker从私服中下载镜像遇到的问题" data-url="http://sunxiang0918.github.io/2015/08/29/Docker从私服中下载镜像遇到的问题/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
