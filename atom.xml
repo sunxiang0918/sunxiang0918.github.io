@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2015-10-18T08:53:23.000Z</updated>
+  <updated>2015-10-18T09:03:22.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://sunxiang0918.github.io/2015/10/18/3DTouch%E5%B0%9D%E9%B2%9C/"/>
     <id>http://sunxiang0918.github.io/2015/10/18/3DTouch尝鲜/</id>
     <published>2015-10-18T07:50:40.000Z</published>
-    <updated>2015-10-18T08:53:23.000Z</updated>
+    <updated>2015-10-18T09:03:22.000Z</updated>
     <content type="html"><![CDATA[<h1 id="3DTouch尝鲜">3DTouch尝鲜</h1><p>随着IOS9和iphone6S的推出,苹果新提供了3D Touch功能,让以往平面的操作,扩展到了3维.<br>让我们对应用的操作增加了新的方式.<br>目前最常用的3DTouch方式就是快捷菜单已经内容浏览了.于是我也把我练手的一个<code>知乎日报</code>的<a href="http://git.oschina.net/xycm/ZhiHuDaily-Swift" target="_blank" rel="external">DEMO</a>程序增加上了3DTouch.</p>
 <p>由于在xcode的模拟器上是没有办法模拟出3DTouch的操作,因此如果想在模拟器上开发这个功能的话,需要参考github上的一位大神的<a href="https://github.com/DeskConnect/SBShortcutMenuSimulator" target="_blank" rel="external">解决方案</a>,当然这种方案只能模拟快捷菜单,其他的3DTouch的操作是没法模拟的,最好的方式还是去买一个iphone6S.</p>
 <h2 id="快捷菜单">快捷菜单</h2><p>所谓的快捷菜单就是 在应用的图标上重按,然后会出现几个快捷项.直接点击这些菜单项就可以执行某些操作.</p>
@@ -55,6 +55,8 @@
 <p>也就是我们可以从启动的<code>launchOptions</code>获取<code>key</code>为<code>UIApplicationLaunchOptionsShortcutItemKey</code>的项,如果没有就说明不是3DTouch启动的,否则就是点击某一个<code>快捷菜单</code>启动的.</p>
 <p>当这两个地方都处理了后, 3DTouch的快捷菜单功能就算是完成了.</p>
 <h2 id="内容预览">内容预览</h2><p>3DTouch在应用中还有一个常用的功能,就是内容预览.通过轻按(peek)和重按(pop)来进行一系列的操作.</p>
+<p><img src="/img/2015/10/18/2.PNG" alt=""></p>
+<p><img src="/img/2015/10/18/3.PNG" alt=""></p>
 <p>首先需要的是判断3DTouch是否在这个Controller上开启,决定这个的是<code>UIForceTouchCapability</code>:</p>
 <ul>
 <li>UIForceTouchCapabilityUnknown        //3D Touch检测失败</li>

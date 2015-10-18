@@ -14,7 +14,9 @@
 <meta property="og:description" content="3DTouch尝鲜随着IOS9和iphone6S的推出,苹果新提供了3D Touch功能,让以往平面的操作,扩展到了3维.让我们对应用的操作增加了新的方式.目前最常用的3DTouch方式就是快捷菜单已经内容浏览了.于是我也把我练手的一个知乎日报的DEMO程序增加上了3DTouch.
 由于在xcode的模拟器上是没有办法模拟出3DTouch的操作,因此如果想在模拟器上开发这个功能的话,需要参考git">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/10/18/1.gif">
-<meta property="og:updated_time" content="2015-10-18T08:53:23.000Z">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/10/18/2.PNG">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/10/18/3.PNG">
+<meta property="og:updated_time" content="2015-10-18T09:03:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="3DTouch尝鲜">
 <meta name="twitter:description" content="3DTouch尝鲜随着IOS9和iphone6S的推出,苹果新提供了3D Touch功能,让以往平面的操作,扩展到了3维.让我们对应用的操作增加了新的方式.目前最常用的3DTouch方式就是快捷菜单已经内容浏览了.于是我也把我练手的一个知乎日报的DEMO程序增加上了3DTouch.
@@ -275,6 +277,8 @@ var _hmt = _hmt || [];
 <p>也就是我们可以从启动的<code>launchOptions</code>获取<code>key</code>为<code>UIApplicationLaunchOptionsShortcutItemKey</code>的项,如果没有就说明不是3DTouch启动的,否则就是点击某一个<code>快捷菜单</code>启动的.</p>
 <p>当这两个地方都处理了后, 3DTouch的快捷菜单功能就算是完成了.</p>
 <h2 id="内容预览">内容预览</h2><p>3DTouch在应用中还有一个常用的功能,就是内容预览.通过轻按(peek)和重按(pop)来进行一系列的操作.</p>
+<p><img src="/img/2015/10/18/2.PNG" alt=""></p>
+<p><img src="/img/2015/10/18/3.PNG" alt=""></p>
 <p>首先需要的是判断3DTouch是否在这个Controller上开启,决定这个的是<code>UIForceTouchCapability</code>:</p>
 <ul>
 <li>UIForceTouchCapabilityUnknown        //3D Touch检测失败</li>
