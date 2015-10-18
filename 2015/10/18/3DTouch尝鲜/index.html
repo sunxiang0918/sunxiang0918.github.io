@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>3DTouch尝鲜 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="3DTouch尝鲜随着IOS9和iphone6S的推出,苹果新提供了3D Touch功能,让以往平面的操作,扩展到了3维.让我们对应用的操作增加了新的方式.目前最常用的3DTouch方式就是快捷菜单已经内容浏览了.于是我也把我练手的一个知乎日报的DEMO程序增加上了3DTouch.
+由于在xcode的模拟器上是没有办法模拟出3DTouch的操作,因此如果想在模拟器上开发这个功能的话,需要参考git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3DTouch尝鲜">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/10/18/3DTouch尝鲜/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="3DTouch尝鲜随着IOS9和iphone6S的推出,苹果新提供了3D Touch功能,让以往平面的操作,扩展到了3维.让我们对应用的操作增加了新的方式.目前最常用的3DTouch方式就是快捷菜单已经内容浏览了.于是我也把我练手的一个知乎日报的DEMO程序增加上了3DTouch.
+由于在xcode的模拟器上是没有办法模拟出3DTouch的操作,因此如果想在模拟器上开发这个功能的话,需要参考git">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/10/18/1.gif">
+<meta property="og:updated_time" content="2015-10-18T08:53:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="3DTouch尝鲜">
+<meta name="twitter:description" content="3DTouch尝鲜随着IOS9和iphone6S的推出,苹果新提供了3D Touch功能,让以往平面的操作,扩展到了3维.让我们对应用的操作增加了新的方式.目前最常用的3DTouch方式就是快捷菜单已经内容浏览了.于是我也把我练手的一个知乎日报的DEMO程序增加上了3DTouch.
+由于在xcode的模拟器上是没有办法模拟出3DTouch的操作,因此如果想在模拟器上开发这个功能的话,需要参考git">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 14px;">Docker</a> <a href="/tags/GIT/" style="font-size: 14px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 12px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 16px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 12px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 12px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 16px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-3DTouch尝鲜" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/10/18/3DTouch尝鲜/" class="article-date">
+  	<time datetime="2015-10-18T07:50:40.000Z" itemprop="datePublished">2015-10-18</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      3DTouch尝鲜
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        
+        <h1 id="3DTouch尝鲜">3DTouch尝鲜</h1><p>随着IOS9和iphone6S的推出,苹果新提供了3D Touch功能,让以往平面的操作,扩展到了3维.<br>让我们对应用的操作增加了新的方式.<br>目前最常用的3DTouch方式就是快捷菜单已经内容浏览了.于是我也把我练手的一个<code>知乎日报</code>的<a href="http://git.oschina.net/xycm/ZhiHuDaily-Swift" target="_blank" rel="external">DEMO</a>程序增加上了3DTouch.</p>
+<p>由于在xcode的模拟器上是没有办法模拟出3DTouch的操作,因此如果想在模拟器上开发这个功能的话,需要参考github上的一位大神的<a href="https://github.com/DeskConnect/SBShortcutMenuSimulator" target="_blank" rel="external">解决方案</a>,当然这种方案只能模拟快捷菜单,其他的3DTouch的操作是没法模拟的,最好的方式还是去买一个iphone6S.</p>
+<h2 id="快捷菜单">快捷菜单</h2><p>所谓的快捷菜单就是 在应用的图标上重按,然后会出现几个快捷项.直接点击这些菜单项就可以执行某些操作.</p>
+<p><img src="/img/2015/10/18/1.gif" alt=""></p>
+<a id="more"></a>
+<h3 id="UI设置">UI设置</h3><p>要实现这些个快捷菜单就需要在程序启动或配置info.plist程序的时候给程序增加上<code>UIMutableApplicationShortcutItem</code>.<br>这个其实就是<code>UIApplicationShortcutItem</code>的一个子类.<code>UIApplicationShortcutItem</code>就是IOS用来表示快捷菜单的类,并且一个程序最多只能有4个快捷菜单项.<br>他有几个重要的属性:</p>
+<ul>
+<li>UIApplicationShortcutItemType,事件的唯一标识,用来表示你到底点击了哪个操作</li>
+<li>UIApplicationShortcutItemTitle,标题,在没有子标题的情况下可以自动换行</li>
+<li>UIApplicationShortcutItemSubtitle,子标题,在标题下方较小字体显示</li>
+<li>UIApplicationShortcutItemIconType,枚举选取系统中的一个图标</li>
+<li>UIApplicationShortcutItemIconFile,自定义一个图标文件,以单色35*35的大小展示</li>
+<li>UIApplicationShortcutItemUserInfo,自定义字典,可以放入自定义的属性.</li>
+</ul>
+<p>因此,要给我的程序增加<code>最新日报</code> <code>每日瞎扯</code>的话,就需要这样操作:</p>
+<ol>
+<li>info.plist配置方式:</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">key</span>&gt;</span>UIApplicationShortcutItems<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">array</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dict</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">key</span>&gt;</span>UIApplicationShortcutItemType<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">string</span>&gt;</span>newNews<span class="tag">&lt;/<span class="title">string</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">key</span>&gt;</span>UIApplicationShortcutItemTitle<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">string</span>&gt;</span>最新日报<span class="tag">&lt;/<span class="title">string</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">key</span>&gt;</span>UIApplicationShortcutItemIconType<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">string</span>&gt;</span>Share<span class="tag">&lt;/<span class="title">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">dict</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dict</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">key</span>&gt;</span>UIApplicationShortcutItemType<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">string</span>&gt;</span>xiaCheNews<span class="tag">&lt;/<span class="title">string</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">key</span>&gt;</span>UIApplicationShortcutItemTitle<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">string</span>&gt;</span>每日瞎扯<span class="tag">&lt;/<span class="title">string</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">key</span>&gt;</span>UIApplicationShortcutItemIconType<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">string</span>&gt;</span>Compose<span class="tag">&lt;/<span class="title">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">array</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>编程方式:</li>
+</ol>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">application</span><span class="params">(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">	...</span><br><span class="line">	...</span><br><span class="line">	<span class="comment">// 增加Icon 3DTouch的功能</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//添加icon 3d Touch</span></span><br><span class="line">        <span class="comment">//先建立图标</span></span><br><span class="line">        <span class="keyword">let</span> firstItemIcon:<span class="type">UIApplicationShortcutIcon</span> = <span class="type">UIApplicationShortcutIcon</span>(type: .<span class="type">Share</span>)</span><br><span class="line">        <span class="comment">//然后创建按钮项,通过Type可以确定是哪一个按钮,</span></span><br><span class="line">        <span class="keyword">let</span> firstItem = <span class="type">UIMutableApplicationShortcutItem</span>(type: <span class="string">"1"</span>, localizedTitle: <span class="string">"最新日报"</span>, localizedSubtitle: <span class="literal">nil</span>, icon: firstItemIcon, userInfo: <span class="literal">nil</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">let</span> secondItemIcon:<span class="type">UIApplicationShortcutIcon</span> = <span class="type">UIApplicationShortcutIcon</span>(type: .<span class="type">Compose</span>)</span><br><span class="line">        <span class="keyword">let</span> secondItem = <span class="type">UIMutableApplicationShortcutItem</span>(type: <span class="string">"2"</span>, localizedTitle: <span class="string">"每日瞎扯"</span>, localizedSubtitle: <span class="literal">nil</span>, icon: secondItemIcon, userInfo: <span class="literal">nil</span>)</span><br><span class="line">        </span><br><span class="line">        application.shortcutItems = [firstItem,secondItem]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="事件处理">事件处理</h3><p>UI解决了后,接下来需要做的就是处理快捷菜单的事件了.<br>在<code>IOS9</code>中<code>UIApplication</code>增加了一个回调方法:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">application</span><span class="params">(application: UIApplication, performActionForShortcutItem shortcutItem: UIApplicationShortcutItem, completionHandler: <span class="params">(Bool)</span></span></span> -&gt; <span class="type">Void</span>)</span><br></pre></td></tr></table></figure>
+<p>当接收到快捷菜单的点击后,会调用这个方法.因此我们的事件处理就可以放到这里面:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// MARK: - 3D Touch的操作</span></span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">application</span><span class="params">(application: UIApplication, performActionForShortcutItem shortcutItem: UIApplicationShortcutItem, completionHandler: <span class="params">(Bool)</span></span></span> -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">        <span class="comment">//这个方法就是激活了3DTouch时触发的操作.</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">let</span> handledShortCutItem = handleShortCutItem(shortcutItem)</span><br><span class="line">        completionHandler(handledShortCutItem)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span><br><span class="line">    这个方法用处处理3DTouch的操作</span><br><span class="line">    </span><br><span class="line">    - parameter shortcutItem: 3DTouch的按钮</span><br><span class="line">    </span><br><span class="line">    - returns: 是否执行成功</span><br><span class="line">    */</span></span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">handleShortCutItem</span><span class="params">(shortcutItem: UIApplicationShortcutItem)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">var</span> handled = <span class="literal">false</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//找到根视图</span></span><br><span class="line">        <span class="keyword">let</span> launchImageViewController = window!.rootViewController <span class="keyword">as</span>? <span class="type">LaunchImageViewController</span></span><br><span class="line">        <span class="comment">//打开根视图</span></span><br><span class="line">        <span class="keyword">let</span> rootNavigationViewController = launchImageViewController!.viewController <span class="keyword">as</span>? <span class="type">UINavigationController</span></span><br><span class="line">        <span class="keyword">let</span> pkRevealController = rootNavigationViewController?.viewControllers.first <span class="keyword">as</span>? <span class="type">PKRevealController</span></span><br><span class="line">        <span class="keyword">let</span> rootViewController = pkRevealController?.frontViewController</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> shortcutItem.type == <span class="string">"1"</span> &#123; <span class="comment">//最新日报</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment">//然后打开最新的日报</span></span><br><span class="line">            rootViewController?.performSegueWithIdentifier(<span class="string">"pushSegue"</span>, sender: <span class="string">"newNews"</span>)</span><br><span class="line">            </span><br><span class="line">            handled = <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> shortcutItem.type == <span class="string">"2"</span> &#123; <span class="comment">//每日瞎扯</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment">//然后打开每日瞎扯</span></span><br><span class="line">            rootViewController?.performSegueWithIdentifier(<span class="string">"pushSegue"</span>, sender: <span class="string">"xiacheNews"</span>)</span><br><span class="line">            </span><br><span class="line">            handled = <span class="literal">true</span></span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> handled</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是<code>completionHandler</code><br>在API中说明如果我们的应用程序不在后台而是重新启动的时候,应该设置为false,并且这时的回调是:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">application</span><span class="params">(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?)</span></span> -&gt; <span class="type">Bool</span></span><br></pre></td></tr></table></figure>
+<p>因此我们还需要再在<code>didFinishLaunchingWithOptions</code>中增加相应的逻辑:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">application</span><span class="params">(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line"><span class="comment">// 增加3DTouch启动程序时的处理</span></span><br><span class="line">        <span class="comment">// 从启动项中获取是否是从3DTouch中启动的</span></span><br><span class="line">        <span class="keyword">let</span> launchShortcutItem:<span class="type">UIApplicationShortcutItem</span>? = launchOptions?[<span class="type">UIApplicationLaunchOptionsShortcutItemKey</span> <span class="keyword">as</span> <span class="type">NSObject</span>] <span class="keyword">as</span>? <span class="type">UIApplicationShortcutItem</span></span><br><span class="line">        <span class="keyword">if</span>  launchShortcutItem != <span class="literal">nil</span>&#123;</span><br><span class="line">            <span class="comment">//说明是使用3DTouch启动的,那么当页面启动的时候就需要直接跳转到新闻详细中</span></span><br><span class="line">            <span class="comment">//这里的逻辑是这样的,在启动的时候设置一个标志,是否需要跳转,然后在LaunchImageViewController中会判断是否有这个标志.如果有</span></span><br><span class="line">            <span class="comment">//就进行界面的跳转</span></span><br><span class="line">            <span class="type">LaunchImageViewController</span>.jumpTo = launchShortcutItem?.type == <span class="string">"1"</span> ? <span class="string">"newNews"</span> : <span class="string">"xiacheNews"</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也就是我们可以从启动的<code>launchOptions</code>获取<code>key</code>为<code>UIApplicationLaunchOptionsShortcutItemKey</code>的项,如果没有就说明不是3DTouch启动的,否则就是点击某一个<code>快捷菜单</code>启动的.</p>
+<p>当这两个地方都处理了后, 3DTouch的快捷菜单功能就算是完成了.</p>
+<h2 id="内容预览">内容预览</h2><p>3DTouch在应用中还有一个常用的功能,就是内容预览.通过轻按(peek)和重按(pop)来进行一系列的操作.</p>
+<p>首先需要的是判断3DTouch是否在这个Controller上开启,决定这个的是<code>UIForceTouchCapability</code>:</p>
+<ul>
+<li>UIForceTouchCapabilityUnknown        //3D Touch检测失败</li>
+<li>UIForceTouchCapabilityUnavailable        //3D Touch不可用</li>
+<li>UIForceTouchCapabilityAvailable        //3D Touch可用</li>
+</ul>
+<p>所以在程序中我们可以这样写:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">    检测页面是否处于3DTouch</span><br><span class="line">    */</span></span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">check3DTouch</span><span class="params">()</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">self</span>.traitCollection.forceTouchCapability == <span class="type">UIForceTouchCapability</span>.<span class="type">Available</span> &#123;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">self</span>.registerForPreviewingWithDelegate(<span class="keyword">self</span>, sourceView: <span class="keyword">self</span>.view)</span><br><span class="line">            <span class="comment">//长按停止</span></span><br><span class="line">            <span class="keyword">self</span>.longPress.enabled = <span class="literal">false</span></span><br><span class="line">            </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">self</span>.longPress.enabled = <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>当我们想给某一个controller增加内容预览功能的时候,就需要给这个controller实现<code>UIViewControllerPreviewingDelegate</code>协议.</p>
+<p>这个协议有两个方法,分别是<code>peek</code>操作时触发以及<code>pop</code>操作触发:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 轻按</span></span><br><span class="line">public <span class="func"><span class="keyword">func</span> <span class="title">previewingContext</span><span class="params">(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint)</span></span> -&gt; <span class="type">UIViewController</span>?</span><br><span class="line"></span><br><span class="line"><span class="comment">//重按</span></span><br><span class="line">public <span class="func"><span class="keyword">func</span> <span class="title">previewingContext</span><span class="params">(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController)</span></span></span><br></pre></td></tr></table></figure>
+<p>那么轻按预览的逻辑就很好处理了.<br>在<code>public func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -&gt; UIViewController?</code>这个方法中,根据<code>location</code>找到轻按的内容项是哪一个,然后在程序中找到对应的详细内容.然后构造一个UIViewController进行返回.</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">    轻按进入浮动页面</span><br><span class="line">    </span><br><span class="line">    - parameter previewingContext:</span><br><span class="line">    - parameter location:</span><br><span class="line">    </span><br><span class="line">    - returns:</span><br><span class="line">    */</span></span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">previewingContext</span><span class="params">(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint)</span></span> -&gt; <span class="type">UIViewController</span>? &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">let</span> cellPosition = mainTableView.convertPoint(location, fromView: view)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">let</span> touchedIndexPath = mainTableView.indexPathForRowAtPoint(cellPosition) &#123;</span><br><span class="line">            </span><br><span class="line">            mainTableView.deselectRowAtIndexPath(touchedIndexPath, animated: <span class="literal">true</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">let</span> aStoryboard = <span class="type">UIStoryboard</span>(name: <span class="string">"Main"</span>, bundle:<span class="type">NSBundle</span>.mainBundle())</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">let</span> newsDetailViewController = aStoryboard.instantiateViewControllerWithIdentifier(<span class="string">"newsDetailViewController"</span>) <span class="keyword">as</span>? <span class="type">NewsDetailViewController</span>  &#123;</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span>  newsDetailViewController.newsListControl == <span class="literal">nil</span> &#123;</span><br><span class="line">                    newsDetailViewController.newsListControl = <span class="keyword">self</span>.newsListControl</span><br><span class="line">                    newsDetailViewController.mainViewController = <span class="keyword">self</span></span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                newsDetailViewController.newsLocation = (touchedIndexPath.section,touchedIndexPath.row)</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">let</span> cellFrame = mainTableView.cellForRowAtIndexPath(touchedIndexPath)!.frame</span><br><span class="line">                previewingContext.sourceRect = view.convertRect(cellFrame, fromView: mainTableView)</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">return</span> newsDetailViewController</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="type">UIViewController</span>()</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>在我的程序中就是找到轻按的新闻列表行.然后找到具体是哪一篇新闻,然后从<code>storyBoard</code>中获取出新闻详细的ViewController.然后传入新闻详细的参数,最后返回. 这样就完成了轻按显示详细的目的.</p>
+<p>而重案的话就更好处理了,在方法<code>public func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController)</code>中的<code>viewControllerToCommit</code>表示的就是你轻按激活的预览View.如果你想直接放大显示这个View的话,就直接调用<code>self.showViewController(viewControllerToCommit, sender: self)</code>即可.比如我程序中的:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">    重按进入文章详情页</span><br><span class="line">    </span><br><span class="line">    - parameter previewingContext:</span><br><span class="line">    - parameter viewControllerToCommit:</span><br><span class="line">    */</span></span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">previewingContext</span><span class="params">(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController)</span></span> &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">self</span>.showViewController(viewControllerToCommit, sender: <span class="keyword">self</span>)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>当然,你还可以增加些其他的操作.</p>
+<p>更高级的操作比如内容预览上的Action等,等我后面增加到我的程序中后再来补充.</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/10/11/MacOS下JAVA开发使用经验-二/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MacOS下JAVA开发使用经验(二)</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="3DTouch尝鲜" data-title="3DTouch尝鲜" data-url="http://sunxiang0918.github.io/2015/10/18/3DTouch尝鲜/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
