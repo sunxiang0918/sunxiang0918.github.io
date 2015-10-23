@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;转&gt; 为 Key-Value 数据库实现MVCC 事务 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="为 Key-Value 数据库实现MVCC 事务ACID 是软件领域使用最广泛的技术之一，它是关系数据库的基石，是企业级中间件不可或缺的部分，但通常通过黑盒的方式提供。但是在许多情况下，这种古老的事务方式已经不能够适应现代大规模系统和NoSQL数据库的需要了，现代系统要求更高的性能要求，更大的数据量，更高的可用性。在这种情况下，传统的事务模型被定制的事务或者半事务模型所取代，而在这些模型中事务性并">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<转> 为 Key-Value 数据库实现MVCC 事务">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/10/23/为-Key-Value-数据库实现MVCC-事务/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="为 Key-Value 数据库实现MVCC 事务ACID 是软件领域使用最广泛的技术之一，它是关系数据库的基石，是企业级中间件不可或缺的部分，但通常通过黑盒的方式提供。但是在许多情况下，这种古老的事务方式已经不能够适应现代大规模系统和NoSQL数据库的需要了，现代系统要求更高的性能要求，更大的数据量，更高的可用性。在这种情况下，传统的事务模型被定制的事务或者半事务模型所取代，而在这些模型中事务性并">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/10/23/1.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/10/23/2.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/10/23/3.png">
+<meta property="og:updated_time" content="2015-10-23T03:21:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<转> 为 Key-Value 数据库实现MVCC 事务">
+<meta name="twitter:description" content="为 Key-Value 数据库实现MVCC 事务ACID 是软件领域使用最广泛的技术之一，它是关系数据库的基石，是企业级中间件不可或缺的部分，但通常通过黑盒的方式提供。但是在许多情况下，这种古老的事务方式已经不能够适应现代大规模系统和NoSQL数据库的需要了，现代系统要求更高的性能要求，更大的数据量，更高的可用性。在这种情况下，传统的事务模型被定制的事务或者半事务模型所取代，而在这些模型中事务性并">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 13.33px;">Docker</a> <a href="/tags/GIT/" style="font-size: 13.33px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.67px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.67px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.67px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.67px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 15px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 11.67px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 16.67px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.67px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18.33px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-为-Key-Value-数据库实现MVCC-事务" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/10/23/为-Key-Value-数据库实现MVCC-事务/" class="article-date">
+  	<time datetime="2015-10-23T03:12:50.000Z" itemprop="datePublished">2015-10-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      &lt;转&gt; 为 Key-Value 数据库实现MVCC 事务
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        
+        <h1 id="为_Key-Value_数据库实现MVCC_事务">为 Key-Value 数据库实现MVCC 事务</h1><p>ACID 是软件领域使用最广泛的技术之一，它是关系数据库的基石，是企业级中间件不可或缺的部分，但通常通过黑盒的方式提供。但是在许多情况下，这种古老的事务方式已经不能够适应现代大规模系统和NoSQL数据库的需要了，现代系统要求更高的性能要求，更大的数据量，更高的可用性。在这种情况下，传统的事务模型被定制的事务或者半事务模型所取代，而在这些模型中事务性并不像以往那样被看重。</p>
+<p>在本文中我们会讨论一下key-value数据库的无锁事务操作，这种技术可以广泛应用于任何一种数据库系统。在GridDynamics中，我们就用这种技术在Oracle Coherence上实现了一个轻量级的非标准的事务机制。在第一部分我们会通过几个重要的用例来了解两种简单的方法，在第二部分我们会研究更多更通用的方法，比如说PostgreSQL的MVCC实现。</p>
+<h2 id="原子性缓存切换，读提交隔离">原子性缓存切换，读提交隔离</h2><p>让我们从一个简单易于实现的方法开始，这个方法适用于读远多于写的系统。比如说电子商务系统中每天要进行的数据更新，一些管理性操作例如无效货品的修复以及缓存更新。</p>
+<p>最简单的例子是把所有数据都加载进缓存里，然后通过一个代理接口来执行诸如 get() 和 put() 这样的操作。这个接口会与两个缓存打交道，A和B，按照以下逻辑运行（图 1）：</p>
+<ul>
+<li>任何时候只能有一个缓存处于可用状态，代理接口会把所有的请求路由给它（图1.1）。</li>
+<li>更新数据的时候把新数据加载到目前不可用的缓存中（图1.2）。</li>
+<li>更新进程切换标志哪个缓存可用的标记（图1.3），代理接口开始把新的读请求分发到新标记为可用的缓存。</li>
+<li>缓存切换阶段的事务可以依据不用的持久性和隔离性要求来分别处理。如果允许“不可重复读” ，那么切换很简单，老数据会被立刻清理掉。否则，代理接口会维护一个仍未结束的事务列表，并把属于这个列表中的每一个请求都路由到原来的缓存中。只有当列表中的所有事物都提交或者放弃之后老数据才会被清空。<a id="more"></a>
+</li>
+</ul>
+<p><img src="/img/2015/10/23/1.png" alt=""><br>Fig.1 Cache Switch</p>
+<p>相同的技术也可用于部分更新。依据存储方式的不同也有多种实现方法，我们来看一个有三个缓存简单例子。这个例子中的框架遇上一个类似，但是代理接口按照以下逻辑运行（图 2）：</p>
+<ul>
+<li>用户请求被路由到主缓存（”PRIMARY”缓存）（图 2.1）</li>
+<li>新增数据和更新数据加载进2号缓存（“NEW”缓存），删除项的key放入3号缓存（”DELETE”缓存）（图2.2）</li>
+<li>提交进程（特指写事务）切换全局标示，这个标示会告诉代理接口先去”NEW”和”DELETE”缓存去查找所请求的数据，如果在这两个区域中没有发现再去”PRIMARY”缓存查找（图2.3）。换句话说，在这一步所有的请求都被改派到了更新过的数据中查找。</li>
+<li>提交进程将 NEW 和 DELETE 区域的变化传递给PRIMARY。也即在PRIMARY缓存区以非原子的方式更新、增加、删除数据项（图2.4）。</li>
+<li>最后，所有的提交进程把全局标识切换回来，所有的请求仍然路由到 PRIMARY 缓存区域（图2.5）。</li>
+<li>在第4步，可以把老数据拷贝到另一个缓存区，这样就可以支持回滚操作。即使是全量更新也可以用这种方法。</li>
+</ul>
+<p><img src="/img/2015/10/23/2.png" alt=""><br>Fig.2 Partial Cache Switch</p>
+<p>从上面的两个例子我们可以看出，专用于读的数据快照避免了数据更新的干扰，大大降低了复杂性。在一个写密集型的环境中就不容易做到这一点了。在下一节我们会讨论一种非常好的方法可以完美的解决这个问题。</p>
+<p>MVCC 事务，可重复读隔离</p>
+<p>事物间的隔离可以通过给数据项加上版本号来实现。有许多方法能做到这一点，下面我们会介绍一种与PostgreSQL  的事务处理方法非常相似的办法。</p>
+<p>正如前面所说，每个事务可以对应于一个部分数据快照。在同一时间，每一个数据项都有他自己的生命周期 - 从加入缓存到移出缓存或者被更新（被新版本所取代）。所以可以通过给每条数据打两个时间戳来实现隔离，每个事物通过开始时间（两个时间戳之一，译者注）来找出在事务开始时处于可见状态的数据。但在实践中常用一个单调递增的计数来代替时间戳：</p>
+<ul>
+<li>当新事务开始的时候：<ul>
+<li>它会获得一个全局唯一且单调递增的事务ID ，也叫 XID。</li>
+<li>进程里保存着所有事务的XID.</li>
+</ul>
+</li>
+<li>缓存里的每个数据项有两个额外标记，xmin 和 xmax。按照以下规则赋值：<ul>
+<li>当数据项被某个事务建立的时候， xmin 设置为该事务的XID ，xmax 无值。</li>
+<li>当数据被某个事务移除的时候，xmin 不变，xmax 设置为该事务的XID。数据并没有真的从缓存中清除，只是被标记为已删除。</li>
+<li>当数据被某个事务更新的时候，老数据仍然保存在缓存里，xmax 被赋值为事务的XID，同时增加一条新的数据，新数据的 xmin 也赋值为XID 并且xmax 为空。换句话说更新操作等于一次删除加一次增加。</li>
+</ul>
+</li>
+<li>如果以下两个条件成立，那么数据对于某次事务是可见的：<ul>
+<li>xmin 有值并且小于或等于当前事务ID。</li>
+<li>xmax 为空，或者等于未提交事务（放弃的或者还未完成的）的XID ，或者大于当前事务ID。</li>
+</ul>
+</li>
+<li>xmin 和 xmax 可以存储两个位标记，表明事务是否放弃或者提交，这样才能进行上面的检查（xmax 是否等于未提交事务的ID）。<br>逻辑如下图所示：</li>
+</ul>
+<p><img src="/img/2015/10/23/3.png" alt=""><br>Fig.3 PostgeSQL-like MVCC</p>
+<p>这种方法的缺点是废弃数据的移除有些繁琐。因为不同事务看到的数据版本不同，决定何时将数据标为不可见或者移除是比较复杂的。不过也有两种以上的方法能够做到，第一种是PostgreSQL中使用的，第二种是Oracle使用的：</p>
+<ul>
+<li>所有的版本都存储在同一个key-value空间中，对版本数量没有限制（也即可以储存任意多的版本，译者注）。由一个后台进程来回收老版本数据，这个回收可以按计划调度执行也可以再读或者写的时候触发。</li>
+<li>主key-value 空间只储存最新的版本，之前的版本储存在另外的地方，且储存老版本的空间大小是固定的。 最新的版本会指向之前的版本，但是却不能够由此上溯到之前的任意版本， 因为存储老版本数据的区域大小是固定的， 太早的版本会被移除。如果某个事务不能够找到指定版本的数据就会失败。 </li>
+</ul>
+<hr>
+<p><strong>原文链接:</strong><a href="http://my.oschina.net/juliashine/blog/111624" target="_blank" rel="external">http://my.oschina.net/juliashine/blog/111624</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/10/18/3DTouch尝鲜/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">3DTouch尝鲜</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="为-Key-Value-数据库实现MVCC-事务" data-title="&lt;转&gt; 为 Key-Value 数据库实现MVCC 事务" data-url="http://sunxiang0918.github.io/2015/10/23/为-Key-Value-数据库实现MVCC-事务/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

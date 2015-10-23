@@ -124,7 +124,7 @@ var _hmt = _hmt || [];
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 14px;">Docker</a> <a href="/tags/GIT/" style="font-size: 14px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 12px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 12px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 12px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 12px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 16px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 12px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 12px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 16px;">集群</a>
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 13.33px;">Docker</a> <a href="/tags/GIT/" style="font-size: 13.33px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.67px;">Hibernate</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.67px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.67px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.67px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 15px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 11.67px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 16.67px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.67px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18.33px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15px;">集群</a>
 					</div>
 				</section>
 				
@@ -197,6 +197,72 @@ var _hmt = _hmt || [];
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-为-Key-Value-数据库实现MVCC-事务" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/10/23/为-Key-Value-数据库实现MVCC-事务/" class="article-date">
+  	<time datetime="2015-10-23T03:12:50.000Z" itemprop="datePublished">2015-10-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/23/为-Key-Value-数据库实现MVCC-事务/">&lt;转&gt; 为 Key-Value 数据库实现MVCC 事务</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="为_Key-Value_数据库实现MVCC_事务">为 Key-Value 数据库实现MVCC 事务</h1><p>ACID 是软件领域使用最广泛的技术之一，它是关系数据库的基石，是企业级中间件不可或缺的部分，但通常通过黑盒的方式提供。但是在许多情况下，这种古老的事务方式已经不能够适应现代大规模系统和NoSQL数据库的需要了，现代系统要求更高的性能要求，更大的数据量，更高的可用性。在这种情况下，传统的事务模型被定制的事务或者半事务模型所取代，而在这些模型中事务性并不像以往那样被看重。</p>
+<p>在本文中我们会讨论一下key-value数据库的无锁事务操作，这种技术可以广泛应用于任何一种数据库系统。在GridDynamics中，我们就用这种技术在Oracle Coherence上实现了一个轻量级的非标准的事务机制。在第一部分我们会通过几个重要的用例来了解两种简单的方法，在第二部分我们会研究更多更通用的方法，比如说PostgreSQL的MVCC实现。</p>
+<h2 id="原子性缓存切换，读提交隔离">原子性缓存切换，读提交隔离</h2><p>让我们从一个简单易于实现的方法开始，这个方法适用于读远多于写的系统。比如说电子商务系统中每天要进行的数据更新，一些管理性操作例如无效货品的修复以及缓存更新。</p>
+<p>最简单的例子是把所有数据都加载进缓存里，然后通过一个代理接口来执行诸如 get() 和 put() 这样的操作。这个接口会与两个缓存打交道，A和B，按照以下逻辑运行（图 1）：</p>
+<ul>
+<li>任何时候只能有一个缓存处于可用状态，代理接口会把所有的请求路由给它（图1.1）。</li>
+<li>更新数据的时候把新数据加载到目前不可用的缓存中（图1.2）。</li>
+<li>更新进程切换标志哪个缓存可用的标记（图1.3），代理接口开始把新的读请求分发到新标记为可用的缓存。</li>
+<li>缓存切换阶段的事务可以依据不用的持久性和隔离性要求来分别处理。如果允许“不可重复读” ，那么切换很简单，老数据会被立刻清理掉。否则，代理接口会维护一个仍未结束的事务列表，并把属于这个列表中的每一个请求都路由到原来的缓存中。只有当列表中的所有事物都提交或者放弃之后老数据才会被清空。
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/10/23/为-Key-Value-数据库实现MVCC-事务/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-3DTouch尝鲜" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -788,80 +854,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Java-HashMap工作原理" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/09/02/Java-HashMap工作原理/" class="article-date">
-  	<time datetime="2015-09-02T15:00:38.000Z" itemprop="datePublished">2015-09-02</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/02/Java-HashMap工作原理/">&lt;转&gt;Java HashMap工作原理</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Java中HashMap的工作原理其实以前就看过很多次了,也仔细的分析过它的源码.但是一直没有写一篇文章来记录一下,这篇文章写的非常的清楚,非常的透彻.是我见过讲的最详细的.值得保存下来.</p>
-<h1 id="Java_HashMap工作原理">Java HashMap工作原理</h1><p>大部分Java开发者都在使用Map，特别是HashMap。HashMap是一种简单但强大的方式去存储和获取数据。但有多少开发者知道HashMap内部如何工作呢？几天前，我阅读了java.util.HashMap的大量源代码（包括Java 7 和Java 8），来深入理解这个基础的数据结构。在这篇文章中，我会解释java.util.HashMap的实现，描述Java 8实现中添加的新特性，并讨论性能、内存以及使用HashMap时的一些已知问题。</p>
-<h2 id="内部存储">内部存储</h2><p>Java HashMap类实现了Map<K, V>接口。这个接口中的主要方法包括：</p>
-<ul>
-<li>V put(K key, V value)</li>
-<li>V get(Object key)</li>
-<li>V remove(Object key)</li>
-<li>Boolean containsKey(Object key)</li>
-</ul>
-<p>HashMap使用了一个内部类Entry<K, V>来存储数据。这个内部类是一个简单的键值对，并带有额外两个数据：</p>
-<ul>
-<li>一个指向其他入口（译者注：引用对象）的引用，这样HashMap可以存储类似链接列表这样的对象。</li>
-<li>一个用来代表键的哈希值，存储这个值可以避免HashMap在每次需要时都重新生成键所对应的哈希值。</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/09/02/Java-HashMap工作原理/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 </div>
