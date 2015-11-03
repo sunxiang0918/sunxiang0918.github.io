@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2015-11-03T11:59:38.000Z</updated>
+  <updated>2015-11-03T15:30:29.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -14,6 +14,107 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Hbase分布式部署]]></title>
+    <link href="http://sunxiang0918.github.io/2015/11/03/Hbase%E5%88%86%E5%B8%83%E5%BC%8F%E9%83%A8%E7%BD%B2/"/>
+    <id>http://sunxiang0918.github.io/2015/11/03/Hbase分布式部署/</id>
+    <published>2015-11-03T15:12:39.000Z</published>
+    <updated>2015-11-03T15:30:29.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="Hbase分布式部署">Hbase分布式部署</h1><p>HBase的安装首先是有两个先决条件的,第一个就是需要zookeeper的支持,另外一个就是需要HDFS的支持了.<br>因此,安装Hbase的头两部就是安装<code>zookeeper</code>和<code>hadoop</code></p>
+<p>这两个东西的安装可以参考我以前的博文:<a href="http://sunxiang0918.cn/2015/11/03/Hadoop全分布式部署/" target="_blank" rel="external">Hadoop全分布式部署</a>以及<a href="http://sunxiang0918.cn/2014/09/20/zookeeper-集群部署/" target="_blank" rel="external">zookeeper 集群部署</a>.这里就不再复述了.</p>
+<h2 id="环境">环境</h2><p>环境: centos7 + hadoop2.6.2 + hbase1.1.2</p>
+<p>虚拟机三台:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">hostname</th>
+<th style="text-align:center">ip地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">master</td>
+<td style="text-align:center">10.211.55.15</td>
+</tr>
+<tr>
+<td style="text-align:center">slave01</td>
+<td style="text-align:center">10.211.55.12</td>
+</tr>
+<tr>
+<td style="text-align:center">slave02</td>
+<td style="text-align:center">10.211.55.14</td>
+</tr>
+</tbody>
+</table>
+<h2 id="安装步骤">安装步骤</h2><ol>
+<li>首先还是需要把<code>hbase-1.1.2-bin.tar.gz</code>拷贝到几台机器上.然后使用<code>tar -xvf</code>命令解压,并重命名为hbase.  当前路径也就是 <code>/home/hadoop/hbase</code></li>
+</ol>
+<a id="more"></a>
+<ol>
+<li><p>配置<code>conf/hbase-site.xml</code></p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">	<span class="pi">&lt;?xml version="1.0"?&gt;</span>  </span><br><span class="line">	<span class="pi">&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="title">configuration</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="title">property</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="title">name</span>&gt;</span>hbase.rootdir<span class="tag">&lt;/<span class="title">name</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="title">value</span>&gt;</span>hdfs://master:9000/hbase<span class="tag">&lt;/<span class="title">value</span>&gt;</span>      </span><br><span class="line">    <span class="tag">&lt;<span class="title">description</span>&gt;</span>区域服务器使用存储HBase数据库数据的目录,服务器名称不能填IP，不然会报错<span class="tag">&lt;/<span class="title">description</span>&gt;</span>          </span><br><span class="line">  <span class="tag">&lt;/<span class="title">property</span>&gt;</span>              </span><br><span class="line">  <span class="tag">&lt;<span class="title">property</span>&gt;</span>                </span><br><span class="line">     <span class="tag">&lt;<span class="title">name</span>&gt;</span>hbase.cluster.distributed<span class="tag">&lt;/<span class="title">name</span>&gt;</span>                 </span><br><span class="line">     <span class="tag">&lt;<span class="title">value</span>&gt;</span>true<span class="tag">&lt;/<span class="title">value</span>&gt;</span>                     </span><br><span class="line">     <span class="tag">&lt;<span class="title">description</span>&gt;</span>指定HBase运行的模式： false: 单机模式或者为分布式模式   true: 全分布模式 <span class="tag">&lt;/<span class="title">description</span>&gt;</span>             </span><br><span class="line">  <span class="tag">&lt;/<span class="title">property</span>&gt;</span>                                                   </span><br><span class="line">  <span class="tag">&lt;<span class="title">property</span>&gt;</span>                                                     </span><br><span class="line">    <span class="tag">&lt;<span class="title">name</span>&gt;</span>hbase.zookeeper.quorum<span class="tag">&lt;/<span class="title">name</span>&gt;</span>                                                       </span><br><span class="line">    <span class="tag">&lt;<span class="title">value</span>&gt;</span> master,slave01, slave02 <span class="tag">&lt;/<span class="title">value</span>&gt;</span>                                                           </span><br><span class="line">    <span class="tag">&lt;<span class="title">description</span>&gt;</span>ZooKeeper集群服务器的位置<span class="tag">&lt;/<span class="title">description</span>&gt;</span>                                                                 </span><br><span class="line">  <span class="tag">&lt;/<span class="title">property</span>&gt;</span>                                                                  </span><br><span class="line"><span class="tag">&lt;/<span class="title">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p> 完整的配置可以看<a href="http://hbase.apache.org/book.html#config.files" target="_blank" rel="external">此处</a></p>
+</li>
+<li><p>配置数据服务器的地址<br> 也就是修改<code>/conf/regionservers</code>,把三台机器的host都写进去</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">master</span><br><span class="line">slave01</span><br><span class="line">slave02</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置HBase的JDK<br> 修改<code>/conf/hbase-env.sh</code>文件.<br> 打开注释 <code>export JAVA_HOME=xxxxxxx</code> 这里指向JDK的目录,要求是JDK1.7+</p>
+</li>
+<li><p>配置ZK的使用方式.默认情况下是使用的hbase内置的ZK,这个在集群下是不行的.因此我们需要给他改成使用外部的集群的ZK.<br> 修改<code>/conf/hbase-env.sh</code>文件最后面.<br> 打开注释 <code>export HBASE_MANAGES_ZK=false</code> 这里的false指的就是使用外部的Zookeeper</p>
+</li>
+<li><p>所有其他的机器都这样配置</p>
+</li>
+<li><p>在主节点上 启动,验证<br> 配置好上面的这些东西后,就可以在主节点上启动hbase了.<br> 直接在<code>bin</code>中 输入 <code>./start-hbase.sh</code> 即可启动.</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">	starting master, logging to /home/hadoop/hbase/bin/../logs/hbase-hadoop-master-master.out</span><br><span class="line">slave01: starting regionserver, logging to /home/hadoop/hbase/bin/../logs/hbase-hadoop-regionserver-slave01.out</span><br><span class="line">slave02: starting regionserver, logging to /home/hadoop/hbase/bin/../logs/hbase-hadoop-regionserver-slave02.out</span><br><span class="line">master: starting regionserver, logging to /home/hadoop/hbase/bin/../logs/hbase-hadoop-regionserver-master.out</span><br></pre></td></tr></table></figure>
+<p> 出现上面的东西 就说明是启动完成了.<br> 这个时候使用<code>jps</code>命令 应该可以看到有一个 <code>HMaster</code> 和 <code>HRegionServer</code> 服务.<br> 而在其他的从节点上 应该看得到<code>HRegionServer</code>服务.</p>
+<p> 这个时候随便在某一台机器上输入 <code>./hbase shell</code> 进入hbase的终端,并输入<code>status</code>的话,应该可以看到集群的状态:</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">	[hadoop@master bin]$ ./hbase shell</span><br><span class="line"><span class="number">2015</span>-<span class="number">11</span>-<span class="number">03</span> <span class="number">23</span>:<span class="number">02</span>:<span class="number">05</span>,<span class="number">690</span> WARN  [main] util.NativeCodeLoader: Unable to load native-hadoop library <span class="keyword">for</span> your platform... using <span class="built_in">builtin</span>-java classes <span class="built_in">where</span> applicable</span><br><span class="line">HBase Shell; enter <span class="string">'help&lt;RETURN&gt;'</span> <span class="keyword">for</span> list of supported commands.</span><br><span class="line">Type <span class="string">"exit&lt;RETURN&gt;"</span> to leave the HBase Shell</span><br><span class="line">Version <span class="number">1.1</span>.<span class="number">2</span>, rcc2b70cf03e3378800661ec5cab11eb43fafe0<span class="built_in">fc</span>, Wed Aug <span class="number">26</span> <span class="number">20</span>:<span class="number">11</span>:<span class="number">27</span> PDT <span class="number">2015</span></span><br><span class="line">hbase(main):<span class="number">001</span>:<span class="number">0</span>&gt; status</span><br><span class="line"><span class="number">3</span> servers, <span class="number">0</span> dead, <span class="number">0.6667</span> average load</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code><span class="label">同时也可以通过在浏览器中输入: `http://master:</span><span class="number">16010</span><span class="escape">` </span>打开<span class="escape">`H</span>Base<span class="escape">`的</span>管理页面.也是可以的
+</code></pre><p>到此,最简单的HBASE集群就搭建成功了.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="Hbase分布式部署">Hbase分布式部署</h1><p>HBase的安装首先是有两个先决条件的,第一个就是需要zookeeper的支持,另外一个就是需要HDFS的支持了.<br>因此,安装Hbase的头两部就是安装<code>zookeeper</code>和<code>hadoop</code></p>
+<p>这两个东西的安装可以参考我以前的博文:<a href="http://sunxiang0918.cn/2015/11/03/Hadoop全分布式部署/">Hadoop全分布式部署</a>以及<a href="http://sunxiang0918.cn/2014/09/20/zookeeper-集群部署/">zookeeper 集群部署</a>.这里就不再复述了.</p>
+<h2 id="环境">环境</h2><p>环境: centos7 + hadoop2.6.2 + hbase1.1.2</p>
+<p>虚拟机三台:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">hostname</th>
+<th style="text-align:center">ip地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">master</td>
+<td style="text-align:center">10.211.55.15</td>
+</tr>
+<tr>
+<td style="text-align:center">slave01</td>
+<td style="text-align:center">10.211.55.12</td>
+</tr>
+<tr>
+<td style="text-align:center">slave02</td>
+<td style="text-align:center">10.211.55.14</td>
+</tr>
+</tbody>
+</table>
+<h2 id="安装步骤">安装步骤</h2><ol>
+<li>首先还是需要把<code>hbase-1.1.2-bin.tar.gz</code>拷贝到几台机器上.然后使用<code>tar -xvf</code>命令解压,并重命名为hbase.  当前路径也就是 <code>/home/hadoop/hbase</code></li>
+</ol>]]>
+    
+    </summary>
+    
+      <category term="Hbase" scheme="http://sunxiang0918.github.io/tags/Hbase/"/>
+    
+      <category term="大数据" scheme="http://sunxiang0918.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+      <category term="集群" scheme="http://sunxiang0918.github.io/tags/%E9%9B%86%E7%BE%A4/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Hadoop全分布式部署]]></title>
@@ -2372,82 +2473,6 @@
     </summary>
     
       <category term="Swift" scheme="http://sunxiang0918.github.io/tags/Swift/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Macos 通过安装Hexo 来搭建 GitHub Pages 博客系统]]></title>
-    <link href="http://sunxiang0918.github.io/2015/07/25/hello-world/"/>
-    <id>http://sunxiang0918.github.io/2015/07/25/hello-world/</id>
-    <published>2015-07-25T10:06:02.000Z</published>
-    <updated>2015-07-25T10:06:02.000Z</updated>
-    <content type="html"><![CDATA[<p>现在越来越多的人愿意使用独立的技术博客.如果自己搭建Wordpress等,需要涉及到服务器的问题.所以,很多人选择了GitHub提供的Pages来搭建个人博客,我也赶一回潮流.在MacOS 上 使用Hexo来搭建GitHubPages博客.</p>
-<h2 id="Hexo">Hexo</h2><p>hexo出自台湾大学生 <a href="http://twitter.com/tommy351" target="_blank" rel="external">tommy351</a> 之手，是一个基于Node.js的静态博客程序，其编译上百篇文字只需要几秒。hexo生成的静态网页可以直接放到GitHub Pages，BAE，SAE等平台上。</p>
-<h3 id="安装Hexo">安装Hexo</h3><p>要安装<code>Hexo</code>需要先安装<code>Npm</code>以及<code>NodeJs</code>.<br>我在MacOS上,是使用<a href="http://brew.sh" target="_blank" rel="external">Brew</a>安装的.</p>
-<ol>
-<li><p>安装<strong>NodeJS</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install node</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装<strong>Git</strong><br>由于我安装了XCode的,并且安装了<code>Command Line Tool</code>,因此,这一步可以省略了.否则还是在终端中输入:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install git</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-</li>
-<li><p>安装<strong>npm</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install npm</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装<strong>hexo</strong><br>这个就使用nodeJS的安装程序了.<br>同样在终端输入:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo</span><br></pre></td></tr></table></figure>
-<p>这个步骤比较慢.因为你懂的</p>
-</li>
-<li><p>这个时候可以验证一下是否安装好了.<br>在终端中输入:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    $ node -v</span><br><span class="line">v0.<span class="number">12.7</span></span><br><span class="line">$ npm -v</span><br><span class="line">    <span class="number">2.12</span>.<span class="number">1</span></span><br><span class="line">    $ hexo -v</span><br><span class="line">    hexo: <span class="number">3.1</span>.<span class="number">1</span></span><br><span class="line">os: Darwin <span class="number">14.4</span>.<span class="number">0</span> darwin x64</span><br><span class="line">http_parser: <span class="number">2.3</span></span><br><span class="line">node: <span class="number">0.12</span>.<span class="number">7</span></span><br><span class="line">v8: <span class="number">3.28</span>.<span class="number">71.19</span></span><br><span class="line">uv: <span class="number">1.6</span>.<span class="number">1</span></span><br><span class="line">zlib: <span class="number">1.2</span>.<span class="number">8</span></span><br><span class="line">modules: <span class="number">14</span></span><br><span class="line">openssl: <span class="number">1.0</span>.<span class="number">1</span>p</span><br></pre></td></tr></table></figure>
-<p>这样就说明安装完成了.<br>但是如果是显示的: <code>hexo: command not found</code>. 说明环境变量没有设置.我也不知道为什么.但是只要补上环境变量就可以了.</p>
-<blockquote>
-<p><strong>hexo环境变量的设置:</strong> 在<code>~/</code> 用户的根目录下创建一个目录:<code>.bash_profile</code>.其中的内容为:<code>export PATH=&quot;/usr/local/Cellar/node/0.12.7/libexec/npm/lib/node_modules/hexo/bi$</code>  其中的路径就是hexo的安装路径</p>
-</blockquote>
-</li>
-</ol>
-<h3 id="使用Hexo创建博客">使用Hexo创建博客</h3><p>当安装完成后,就可以开始创建博客了.</p>
-<ol>
-<li><p>在本地创建博客文件夹<br>这一步的目的是在你的本地创建一个博客的文件夹.以后博客的source以及编译后的静态文件都会在这个目录中.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/</span><br><span class="line">$ mkdir blog</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<ol>
-<li><p>初始化博客文件夹<br>这一步是用于初始化hexo的一些文件的</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    $ <span class="built_in">cd</span> ~/  </span><br><span class="line">    $ hexo init blog  </span><br><span class="line">    $ <span class="built_in">cd</span> blog  </span><br><span class="line">    $ ls  </span><br><span class="line">    _config.yml	node_modules	public		<span class="built_in">source</span></span><br><span class="line">db.json		package.json	scaffolds	themes</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>初始化上下文</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>上面的步骤完成后,就完成了hexo的初始化的过程了.<br>接着就可以开始关注于博客的编写了.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"新博客的名字"</span></span><br></pre></td></tr></table></figure>
-<p>这样就在<code>_posts</code>文件夹里面新增加了一个<strong>md</strong>文件.直接对这一篇文档进行内容的编写就可以了.</p>
-<p>而后,就在命令行中执行 <code>$ hexo generate</code> 就可以生成新的静态文件.新生成的文件全部放在<code>public</code>文件夹中的.</p>
-<h3 id="使用Hexo部署博客到github">使用Hexo部署博客到github</h3><p>要使用github的pages功能的话,就需要创建一个 <code>xxxx.github.io</code>的<strong>repository</strong>. 其中<code>xxxx</code>表示的是你的github账号.这样github就会为你分配一个<code>xxxx.github.io</code>的地址.以后你的博客的访问地址也就是这个了.</p>
-<p>有了这个地址以后,就要开始使用hexo部署了.<br>修改博客文件夹下的<code>_config.yml</code></p>
-<p>主要是:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: https://github.com/xxxx/xxxx.github.io.git</span><br></pre></td></tr></table></figure></p>
-<p>这个部分.<br>而后就在命令行中输入:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>而后他就会自动的部署到你的github的pages中了.<br>如果报错说 未找到部署类型的话. 就需要安装<code>hexo-deployer-git</code></p>
-<p>同样是在博客的目录中执行:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-<hr>
-<h3 id="后续">后续</h3><p>这样就搭建完毕了, 后续我会慢慢的把以前记录到 evernote的东西 精选一些转过来. </p>
-]]></content>
-    <summary type="html">
-    <![CDATA[这篇文章记录了如何使用Hexo和github搭建个人博客]]>
-    
-    </summary>
-    
-      <category term="Hexo" scheme="http://sunxiang0918.github.io/tags/Hexo/"/>
-    
-      <category term="github" scheme="http://sunxiang0918.github.io/tags/github/"/>
-    
-      <category term="博客" scheme="http://sunxiang0918.github.io/tags/%E5%8D%9A%E5%AE%A2/"/>
-    
-      <category term="其他" scheme="http://sunxiang0918.github.io/categories/%E5%85%B6%E4%BB%96/"/>
     
   </entry>
   
