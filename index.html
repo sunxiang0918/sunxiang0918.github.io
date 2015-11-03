@@ -249,6 +249,7 @@ var _hmt = _hmt || [];
 </table>
 <h1 id="安装步骤:">安装步骤:</h1><h2 id="安装虚拟机,_保证机器能上网">安装虚拟机, 保证机器能上网</h2><ol>
 <li>修改hosts文件,把机器都加上</li>
+<li>修改机器的hostname文件: <code>sudo nano /etc/hostname</code>,需要注意的是这个文件是必须要改的,否则默认安装出来的centos都叫localhost. 这个在组建集群后,是会有问题的.</li>
 </ol>
 <h2 id="在机器上安装JDK-">在机器上安装JDK.</h2><ol>
 <li>如果已经安装了openJDK,不想要的话,可以先删除:<ol>

@@ -30,9 +30,7 @@ slave02
 
 安装步骤:安装虚拟机, 保证机器能上网
 修改hosts文件,把机器都加上
-
-在机器上安装JDK.
-如果已经安装了openJDK">
+修改机器的hostname文件: sudo nano">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hadoop全分布式部署">
 <meta property="og:url" content="http://sunxiang0918.github.io/2015/11/03/Hadoop全分布式部署/index.html">
@@ -62,10 +60,8 @@ slave02
 
 安装步骤:安装虚拟机, 保证机器能上网
 修改hosts文件,把机器都加上
-
-在机器上安装JDK.
-如果已经安装了openJDK">
-<meta property="og:updated_time" content="2015-11-03T09:25:23.000Z">
+修改机器的hostname文件: sudo nano">
+<meta property="og:updated_time" content="2015-11-03T11:59:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hadoop全分布式部署">
 <meta name="twitter:description" content="Hadoop全分布式部署步骤环境环境: centos7 +hadoop2.6.2虚拟机三台:
@@ -93,9 +89,7 @@ slave02
 
 安装步骤:安装虚拟机, 保证机器能上网
 修改hosts文件,把机器都加上
-
-在机器上安装JDK.
-如果已经安装了openJDK">
+修改机器的hostname文件: sudo nano">
   
     <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
   
@@ -348,6 +342,7 @@ var _hmt = _hmt || [];
 </table>
 <h1 id="安装步骤:">安装步骤:</h1><h2 id="安装虚拟机,_保证机器能上网">安装虚拟机, 保证机器能上网</h2><ol>
 <li>修改hosts文件,把机器都加上</li>
+<li>修改机器的hostname文件: <code>sudo nano /etc/hostname</code>,需要注意的是这个文件是必须要改的,否则默认安装出来的centos都叫localhost. 这个在组建集群后,是会有问题的.</li>
 </ol>
 <h2 id="在机器上安装JDK-">在机器上安装JDK.</h2><ol>
 <li>如果已经安装了openJDK,不想要的话,可以先删除:<ol>
