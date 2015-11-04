@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2015-11-03T15:30:29.000Z</updated>
+  <updated>2015-11-04T15:14:05.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -14,6 +14,78 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Hive1.2的部署]]></title>
+    <link href="http://sunxiang0918.github.io/2015/11/04/Hive1-2%E7%9A%84%E9%83%A8%E7%BD%B2/"/>
+    <id>http://sunxiang0918.github.io/2015/11/04/Hive1-2的部署/</id>
+    <published>2015-11-04T14:55:26.000Z</published>
+    <updated>2015-11-04T15:14:05.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="Hive1-2的部署">Hive1.2的部署</h1><h2 id="简介">简介</h2><p>hive是基于Hadoop的一个数据仓库工具，可以将结构化的数据文件映射为一张数据库表，并提供简单的sql查询功能，可以将sql语句转换为MapReduce任务进行运行。 其优点是学习成本低，可以通过类SQL语句快速实现简单的MapReduce统计，不必开发专门的MapReduce应用，十分适合数据仓库的统计分析。</p>
+<p>听起来HBase与Hive有些类似，概念也有点模糊，那我们先了解下他们之间有什么区别：</p>
+<p>HBase是一种分布式、面向列的NoSQL数据库，基于HDFS存储，以表的形式存储数据，表由行和列组成，列划分到列族中。HBase不提供类SQL查询语言，要想像SQL这样查询数据，可以使用Phonix，让SQL查询转换成hbase的扫描和对应的操作，也可以使用现在说讲Hive仓库工具，让HBase作为Hive存储。</p>
+<p>Hive是运行在Hadoop之上的数据仓库，将结构化的数据文件映射为一张数据库表，提供简单类SQL查询语言，称为HQL，并将SQL语句转换成MapReduce任务运算。有利于利用SQL语言查询、分析数据，适于处理不频繁变动的数据。Hive底层可以是HBase或者HDFS存储的文件。</p>
+<p>两者都是基于Hadoop上不同的技术，相互结合使用，可处理企业中不同类型的业务，利用Hive处理非结构化离线分析统计，利用HBase处理在线查询。</p>
+<p>由于HDFS不能存储元数据,因此Hive需要一个辅助的关系数据库来保存它的元数据信息.<br>可以使用它本地的derby数据库,也可以使用本地或远程的MYSQL数据库来存储.通常我们都是存放在MYSQL中的.</p>
+<a id="more"></a>
+<h2 id="部署">部署</h2><p>由于Hive是运行在Hadoop之上的数据仓库.它的所有数据都是存放在Hadoop兼容的存储上的.因此它本身的集群其实就是启动N多个相同的Hive节点就可以了.也就是说,我们可以完全安装修改一台的Hive.然后直接把整个Hive文件夹拷贝到其他机器上即可.</p>
+<ol>
+<li>在MYSQL中创建一个独立的database.命名为<code>hive</code></li>
+<li>解压<code>apache-hive-1.2.1-bin.tar.gz</code>到/home/hadoop/下 然后改名为<code>hive</code></li>
+<li><p>修改环境变量  </p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> HADOOP_HOME=/home/hadoop/hadoop  </span><br><span class="line"><span class="built_in">export</span> HIVE_HOME=/home/hadoop/hive  </span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$HIVE_HOME</span>/bin  </span><br><span class="line"><span class="built_in">export</span> CLASS_PATH=<span class="variable">$CALSSPATH</span>:<span class="variable">$HIVE_HOME</span>/lib</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>hive/conf</code>下 拷贝 <code>hive_env.sh.template</code> 改名成 <code>hive_env.sh</code></p>
+</li>
+<li><p>修改这个文件里面的HADOOP_HOME和HIVE_CONF_DIR</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Set HADOOP_HOME to point to a specific hadoop install directory</span></span><br><span class="line"><span class="built_in">export</span> HADOOP_HOME=/home/hadoop/hadoop-<span class="number">2.6</span>.<span class="number">0</span></span><br><span class="line">	<span class="comment">#Hive Configuration Directory can be controlled by:</span></span><br><span class="line"><span class="built_in">export</span> HIVE_CONF_DIR=/home/hadoop/apache-hive-<span class="number">1.2</span>.<span class="number">0</span>-bin/conf</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在hive/conf下 拷贝 hive-default.xml.template 改名成 hive-site.xml</p>
+</li>
+<li><p>修改里面的所有内容为:(因为会先自动的加载hive-default.xml里面的所有内容,所以hive-site里面的内容就是自定义的配置)</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">configuration</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="title">property</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">name</span>&gt;</span>javax.jdo.option.ConnectionURL<span class="tag">&lt;/<span class="title">name</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">value</span>&gt;</span>jdbc:mysql://10.211.55.2:3306/hive<span class="tag">&lt;/<span class="title">value</span>&gt;</span> </span><br><span class="line">   <span class="tag">&lt;/<span class="title">property</span>&gt;</span> </span><br><span class="line">   <span class="tag">&lt;<span class="title">property</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">name</span>&gt;</span>javax.jdo.option.ConnectionDriverName<span class="tag">&lt;/<span class="title">name</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">value</span>&gt;</span>com.mysql.jdbc.Driver<span class="tag">&lt;/<span class="title">value</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">description</span>&gt;</span>驱动名<span class="tag">&lt;/<span class="title">description</span>&gt;</span> </span><br><span class="line">   <span class="tag">&lt;/<span class="title">property</span>&gt;</span> </span><br><span class="line">   <span class="tag">&lt;<span class="title">property</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">name</span>&gt;</span>javax.jdo.option.ConnectionUserName<span class="tag">&lt;/<span class="title">name</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">value</span>&gt;</span>root<span class="tag">&lt;/<span class="title">value</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">description</span>&gt;</span>用户名<span class="tag">&lt;/<span class="title">description</span>&gt;</span> </span><br><span class="line">   <span class="tag">&lt;/<span class="title">property</span>&gt;</span> </span><br><span class="line">   <span class="tag">&lt;<span class="title">property</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">name</span>&gt;</span>javax.jdo.option.ConnectionPassword<span class="tag">&lt;/<span class="title">name</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">value</span>&gt;</span>admin<span class="tag">&lt;/<span class="title">value</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">description</span>&gt;</span>密码<span class="tag">&lt;/<span class="title">description</span>&gt;</span> </span><br><span class="line">   <span class="tag">&lt;/<span class="title">property</span>&gt;</span> </span><br><span class="line">   <span class="tag">&lt;<span class="title">property</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">name</span>&gt;</span>hive.metastore.warehouse.dir<span class="tag">&lt;/<span class="title">name</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">value</span>&gt;</span>/home/hadoop/hive/warehouse<span class="tag">&lt;/<span class="title">value</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">description</span>&gt;</span>数据路径（相对hdfs）<span class="tag">&lt;/<span class="title">description</span>&gt;</span> </span><br><span class="line">   <span class="tag">&lt;/<span class="title">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>放入mysql的驱动到 hive/lib中 比如: <code>mysql-connector-java-5.1.31-bin.jar</code></p>
+</li>
+<li>找到一个叫<code>jline-2.12.jar</code>的文件，复制他，去hadoop主目录将<code>hadoop/yarn/lib</code>下的<code>jline0.9.94.jar</code>替换成刚刚复制的,否则会出现包冲突.</li>
+<li>切换到hive/bin,输入 <code>bin/hive --service metastore</code><br>当显示<code>Starting Hive Metastore Server</code>就表示启动成功了.</li>
+</ol>
+<h2 id="验证">验证</h2><p>启动以后,在终端中输入<code>JPS</code>.可以 看到一个 <code>RunJar</code>的服务,这就表示启动成功了.</p>
+<p>然后再输入<code>./hive</code>可以进入hive的命令行.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@HMaster0 ~]<span class="comment"># hive</span></span><br><span class="line">Logging initialized usingconfiguration <span class="keyword">in</span> file:/opt/apache-hive-<span class="number">1.2</span>.<span class="number">0</span>-bin/conf/hive-log4j.properties</span><br><span class="line">hive&gt; show databases;</span><br><span class="line">OK</span><br><span class="line">default</span><br><span class="line">Time taken: <span class="number">0.986</span> seconds,Fetched: <span class="number">1</span> row(s)</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>创建一个测试库</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; create database <span class="built_in">test</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建一个hive_test的表,并指定字段分隔符为tab建</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; create table hive_<span class="built_in">test</span>(id int,name string) row format delimited fields terminated by <span class="string">'\t'</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从本地文件中导入数据到Hive表中</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; load data <span class="built_in">local</span> inpath <span class="string">'/home/hadoop/hive/examples/files/kv1.txt'</span> overwrite into table hive_<span class="built_in">test</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行最简单的查询</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select * from hive_<span class="built_in">test</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>到此,Hive的最简单的安装就结束了.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="Hive1-2的部署">Hive1.2的部署</h1><h2 id="简介">简介</h2><p>hive是基于Hadoop的一个数据仓库工具，可以将结构化的数据文件映射为一张数据库表，并提供简单的sql查询功能，可以将sql语句转换为MapReduce任务进行运行。 其优点是学习成本低，可以通过类SQL语句快速实现简单的MapReduce统计，不必开发专门的MapReduce应用，十分适合数据仓库的统计分析。</p>
+<p>听起来HBase与Hive有些类似，概念也有点模糊，那我们先了解下他们之间有什么区别：</p>
+<p>HBase是一种分布式、面向列的NoSQL数据库，基于HDFS存储，以表的形式存储数据，表由行和列组成，列划分到列族中。HBase不提供类SQL查询语言，要想像SQL这样查询数据，可以使用Phonix，让SQL查询转换成hbase的扫描和对应的操作，也可以使用现在说讲Hive仓库工具，让HBase作为Hive存储。</p>
+<p>Hive是运行在Hadoop之上的数据仓库，将结构化的数据文件映射为一张数据库表，提供简单类SQL查询语言，称为HQL，并将SQL语句转换成MapReduce任务运算。有利于利用SQL语言查询、分析数据，适于处理不频繁变动的数据。Hive底层可以是HBase或者HDFS存储的文件。</p>
+<p>两者都是基于Hadoop上不同的技术，相互结合使用，可处理企业中不同类型的业务，利用Hive处理非结构化离线分析统计，利用HBase处理在线查询。</p>
+<p>由于HDFS不能存储元数据,因此Hive需要一个辅助的关系数据库来保存它的元数据信息.<br>可以使用它本地的derby数据库,也可以使用本地或远程的MYSQL数据库来存储.通常我们都是存放在MYSQL中的.</p>]]>
+    
+    </summary>
+    
+      <category term="Hive" scheme="http://sunxiang0918.github.io/tags/Hive/"/>
+    
+      <category term="大数据" scheme="http://sunxiang0918.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+      <category term="集群" scheme="http://sunxiang0918.github.io/tags/%E9%9B%86%E7%BE%A4/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Hbase分布式部署]]></title>
@@ -2415,60 +2487,6 @@
     <![CDATA[<h1 id="局部SCOPE">局部SCOPE</h1><p>C 系语言中在方法内部我们是可以任意添加成对的大括号 {} 来限定代码的作用范围的。这么做一般来说有两个好处，首先是超过作用域后里面的临时变量就将失效，这不仅可以使方法内的命名更加容易，也使得那些不被需要的引用的回收提前进行了，可以稍微提高一些代码的效率；另外，在合适的位置插入括号也利于方法的梳理，对于那些不太方便提取为一个单独方法，但是又应该和当前方法内的其他部分进行一些区分的代码，使用大括号可以将这样的结构进行一个相对自然的划分。</p>
 <p>举一个不失一般性的例子，虽然我个人不太喜欢使用代码手写 UI，但钟情于这么做的人还是不在少数。如果我们要在 Objective-C 中用代码构建 UI 的话，我们一般会选择在 -loadView 里写一些类似这样的代码：</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-(<span class="keyword">void</span>)loadView &#123;</span><br><span class="line">    <span class="built_in">UIView</span> *view = [[<span class="built_in">UIView</span> alloc] initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">320</span>, <span class="number">480</span>)];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UILabel</span> *titleLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">            initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">30</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">    titleLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">    titleLabel<span class="variable">.text</span> = <span class="string">@"Title"</span>;</span><br><span class="line">    [view addSubview:titleLabel];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UILabel</span> *textLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">            initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">80</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">    textLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">    textLabel<span class="variable">.text</span> = <span class="string">@"Text"</span>;</span><br><span class="line">    [view addSubview:textLabel];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span><span class="variable">.view</span> = view;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]>
-    
-    </summary>
-    
-      <category term="Swift" scheme="http://sunxiang0918.github.io/tags/Swift/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[<翻译>Swift2.0中字符串的设计]]></title>
-    <link href="http://sunxiang0918.github.io/2015/07/29/Swift2-0%E4%B8%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%AE%BE%E8%AE%A1/"/>
-    <id>http://sunxiang0918.github.io/2015/07/29/Swift2-0中字符串的设计/</id>
-    <published>2015-07-28T16:19:28.000Z</published>
-    <updated>2015-07-28T16:22:27.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="Swift2-0中字符串的设计">Swift2.0中字符串的设计</h1><p>Swift中提供了一个高性能的,兼容Unicode的字符串实现作为其标准库中的一部分.在Swift2中,<code>String</code>类型不再实现<code>CollectionType</code>协议.在以前<code>String</code>字符串是一个由<code>Character</code>字符组成的集合,其表现类似于一个数组.而现在,<code>String</code>则是提供了一个<code>characters</code>属性用来暴露字符集合.</p>
-<p>为什么会有这样的变化呢?尽管把字符串当做一个字符的集合看起来更自然.但是其实<code>String</code>字符串类型的操作与<code>Array</code>,<code>Set</code>或者<code>Dictionary</code>等集合一直都是完全不同的.但自从Swift2增加了协议扩展后,针对这些差异有必要进行一些根本性的变化了.</p>
-<a id="more"></a>
-<h2 id="Different_Than_the_Sum_of_Its_Parts">Different Than the Sum of Its Parts</h2><h4 id="每一个部分和的不同计算">每一个部分和的不同计算</h4><p>当你给一个集合增加一个元素的时候,你期望的是这个集合将包含这个元素.换句话说,当你给一个数组增加一个值后,这个数组将会包含这个值.这同样适用于<code>Set</code>和<code>Dictionary</code>.但是,当你给字符串增加一个组合标记字符(<em>combining mark character</em>)的时候,这个字符串内容本身会发生变化.</p>
-<p>比如以字符串<code>cafe</code>为例,它由<code>c</code>,<code>a</code>,<code>f</code>,<code>e</code>四个字符组成:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> letters: [<span class="type">Character</span>] = [<span class="string">"c"</span>, <span class="string">"a"</span>, <span class="string">"f"</span>, <span class="string">"e"</span>]</span><br><span class="line"><span class="keyword">var</span> string: <span class="type">String</span> = <span class="type">String</span>(letters)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(letters.<span class="built_in">count</span>) <span class="comment">// 4</span></span><br><span class="line"><span class="built_in">print</span>(string) <span class="comment">// cafe</span></span><br><span class="line"><span class="built_in">print</span>(string.characters.<span class="built_in">count</span>) <span class="comment">// 4</span></span><br></pre></td></tr></table></figure>
-<p>这个时候如果你给字符串增加一个组合重音字符<code>U+0301</code>也就是<code>´</code>.这个字符串仍然只有四个字符,但是最后一个字符现在变成了<code>é</code>:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> acuteAccent: <span class="type">Character</span> = <span class="string">"\u&#123;0301&#125;"</span> <span class="comment">// ´ COMBINING ACUTE ACCENT' (U+0301)</span></span><br><span class="line"></span><br><span class="line">string.append(acuteAccent)</span><br><span class="line"><span class="built_in">print</span>(string.characters.<span class="built_in">count</span>) <span class="comment">// 4</span></span><br><span class="line"><span class="built_in">print</span>(string.characters.last!) <span class="comment">// é</span></span><br></pre></td></tr></table></figure>
-<p>这个时候,这个字符串的<code>characters</code>属性中并没有包含原来的小写字符<code>e</code>,并且也没有包含新加的组合重音字符<code>´</code>.相反的,现在字符串包含了加上了重音符的小写字符<code>é</code>:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string.characters.<span class="built_in">contains</span>(<span class="string">"e"</span>) <span class="comment">// false</span></span><br><span class="line">string.characters.<span class="built_in">contains</span>(<span class="string">"´"</span>) <span class="comment">// false</span></span><br><span class="line">string.characters.<span class="built_in">contains</span>(<span class="string">"é"</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<p>如果其他的集合操作也像字符串那样.那么,它们的结果就会有令人出乎意料的表现.比如把<code>UIColor.redColor()</code>和<code>UIColor.greenColor()</code>放入到一个<code>Set</code>集合中,那么这个时候集合中就应该会包含一个<code>UIColor.yellowColor()</code></p>
-<h2 id="Judged_by_the_Contents_of_Its_Characters">Judged by the Contents of Its Characters</h2><h4 id="判断字符内容的相等">判断字符内容的相等</h4><p>另外一个字符串与集合不同的地方在于他们判断相等的方式.</p>
-<ul>
-<li>两个数组只有当他们有相同数量的元素,并且每一个相同下标的元素都相同,那么这两个数组才相等.</li>
-<li>两个Set只有当他们有相同数量的元素,并且在一个Set中的所有元素都在第二个Set中都存在,那么这两个Set才相等.</li>
-<li>两个Dictonary只有当他们有相同的<code>Key</code>和<code>Value</code>Set,那么这两个字典才相等.</li>
-</ul>
-<p>但是,<code>String</code>字符串的相等是基于一种<em>规则相等(canonically equivalent)</em>的方式.当字符拥有相同的语义和表现的时候,我们就认为字符是<em>规则相等</em>的.这个时候,两个字符背后的<code>Unicode</code>有可能是不一样的.</p>
-<p>比如朝鲜的文字系统,它是由24个字母,<em>Jamo</em>,元音以及辅音组成的.当我们写字的时候会把这些元素进行组合.比如,字<code>가</code>([ga])是由两个字符<code>ᄀ</code>([g])和<code>ᅡ</code>([a])组成.这在Swift中,无论两个字符串是由分解的字符或者是由预组合的字符序列组成的.只要他们的语义和表现是相同的,那么就认为它们是相同的:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> decomposed = <span class="string">"\u&#123;1100&#125;\u&#123;1161&#125;"</span> <span class="comment">// ᄀ + ᅡ</span></span><br><span class="line"><span class="keyword">let</span> precomposed = <span class="string">"\u&#123;AC00&#125;"</span> <span class="comment">// 가</span></span><br><span class="line"></span><br><span class="line">decomposed == precomposed <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<p>这再次说明,字符串的这种行为与Swift中其他的集合类型是完全不同的.否则如果一个数组中有<code>🐟</code>和<code>🍚</code>两个值,那么他们就是被认为是与<code>🍣</code>相等的.</p>
-<h2 id="Depends_on_Your_Point_of_View">Depends on Your Point of View</h2><h4 id="选择何种表现取决于你的使用">选择何种表现取决于你的使用</h4><p>字符串并不是一个集合,但是它确实又提供了一些与<code>CollectionType</code>协议相同的表现</p>
-<ul>
-<li><code>characters</code>是一个<code>Character</code>字符值或扩展字元簇(<em><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Strings/Articles/stringsClusters.html" target="_blank" rel="external">extended grapheme clusters</a></em>)的集合.</li>
-<li><code>unicodeScalars</code> 是一个Unicode纯量(<em><a href="http://www.unicode.org/glossary/#unicode_scalar_value" target="_blank" rel="external">Unicode scalar values</a></em>)的集合</li>
-<li><code>uft8</code> 是一个UTF-8字符集编码的集合</li>
-<li><code>uft16</code> 是一个UTF-16字符集编码的集合</li>
-</ul>
-<p>如果我们把前面<code>café</code>这个例子中的[c,a,f,e]和[´]这几个字符,用字符串中的这几个属性来表示.那么他们就应该是如下表所示:<br><img src="/img/2015/07/29/1.png" alt=""></p>
-<ul>
-<li><code>characters</code>属性表示的是扩展字元簇.它与用户所直观看到的字符是相近的(由c,a,f,é四个字符组成).这是因为一个字符串必须能迭代整个串中的每一个位置(每一个位置都被成为一个代码点(<em>code point</em>)),以便能在<code>O(n)</code>时间复杂度上执行存取该属性的操作,并获取字符串的边界.当处理一个包含了人类可读的文字或者高度地域敏感的Unicode编码算法,比如用作<code>localizedStandardCompare(_:)</code>方法的入参或者<code>localizedLowercaseString</code>属性的值的时候,应该使用这种逐个字符的处理方式.</li>
-<li><code>unicodeScalars</code>属性暴露了字符串中基本Unicode纯量的存储.当一个原始的字符串是由预组合字符(<em> precomposed character</em>)<code>é</code>组成,而不是由分解成的两个字符<code>e</code>+<code>´</code>组成,那么你应该更倾向于使用这个API来进行更底层的字符串数据的操作.</li>
-<li><code>utf8</code>和<code>utf16</code>属性分别被用来提供UTF-8与UTF-16的代码点的操作.这些值通常被用于在写入真正的文件系统的时候转换成某些特定的编码.UTF-8编码通常被用作许多POSIX字符串API的处理.而UTF-16则是更多的用于<code>Cocoa&amp;Cocoa Touch</code>框架,以计算字符串的长度与偏移量.</li>
-</ul>
-<p>有关如何在Swift中使用字符串以及字符的更多信息,可以阅读<a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/StringsAndCharacters.html#//apple_ref/doc/uid/TP40014097-CH7-ID285" target="_blank" rel="external">The Swift Programming Language</a>和<a href="https://developer.apple.com/library/prerelease/ios//documentation/Swift/Reference/Swift_String_Structure/index.html#//apple_ref/swift/struct/s:SS" target="_blank" rel="external">Swift Standard Library Reference</a>.</p>
-<hr>
-<p>原文链接:<a href="https://developer.apple.com/swift/blog/?id=30" target="_blank" rel="external">Strings in Swift 2</a><br>翻译:<a href="http://sunxiang0918.github.io/">翔妖除魔</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="Swift2-0中字符串的设计">Swift2.0中字符串的设计</h1><p>Swift中提供了一个高性能的,兼容Unicode的字符串实现作为其标准库中的一部分.在Swift2中,<code>String</code>类型不再实现<code>CollectionType</code>协议.在以前<code>String</code>字符串是一个由<code>Character</code>字符组成的集合,其表现类似于一个数组.而现在,<code>String</code>则是提供了一个<code>characters</code>属性用来暴露字符集合.</p>
-<p>为什么会有这样的变化呢?尽管把字符串当做一个字符的集合看起来更自然.但是其实<code>String</code>字符串类型的操作与<code>Array</code>,<code>Set</code>或者<code>Dictionary</code>等集合一直都是完全不同的.但自从Swift2增加了协议扩展后,针对这些差异有必要进行一些根本性的变化了.</p>]]>
     
     </summary>
     
