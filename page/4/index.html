@@ -124,7 +124,7 @@ var _hmt = _hmt || [];
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 12.86px;">Docker</a> <a href="/tags/GIT/" style="font-size: 12.86px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.43px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.43px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.43px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.43px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.43px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 14.29px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 11.43px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 17.14px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.43px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18.57px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15.71px;">集群</a>
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 14.29px;">Docker</a> <a href="/tags/GIT/" style="font-size: 12.86px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.43px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.43px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.43px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.43px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.43px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 14.29px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 11.43px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 17.14px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.43px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18.57px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15.71px;">集群</a>
 					</div>
 				</section>
 				
@@ -197,6 +197,66 @@ var _hmt = _hmt || [];
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-GIT-两个仓库的合并" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/13/GIT-两个仓库的合并/" class="article-date">
+  	<time datetime="2015-01-13T05:47:18.000Z" itemprop="datePublished">2015-01-13</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/13/GIT-两个仓库的合并/">GIT 两个仓库的合并</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="GIT_两个仓库的合并">GIT 两个仓库的合并</h1><p>情况是这样的,以前我们的全文检索引擎是按照模块提交到不同的Git仓库上的. 现在做新的检索引擎准备按照springframe那样,按照模块还是提交到一个Git仓库中,便于版本的维护.<br>这就牵涉到,需要把以前的一些模块仓库,合并到一起来.因为我们还是想保留以前的提交记录等等.而不是直接新建一个仓库,然后把代码都拷贝到一起.这样就会丢失以前的提交记录.</p>
+<h2 id="操作过程是这样的:">操作过程是这样的:</h2><ol>
+<li><p>先在<a href="https://www.sourcetreeapp.com/">sourcetree</a>中 <code>clone</code>新的仓库.比如:<a href="http://127.0.0.1/a.git">http://127.0.0.1/a.git</a></p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GIT/">GIT</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/01/13/GIT-两个仓库的合并/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-象印VD-10电饭煲使用说明" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -777,70 +837,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2014/05/18/Jboss4控制台加锁/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Cron表达式语法" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2013/07/16/Cron表达式语法/" class="article-date">
-  	<time datetime="2013-07-16T05:21:46.000Z" itemprop="datePublished">2013-07-16</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/07/16/Cron表达式语法/">Cron表达式语法</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Cron表达式语法">Cron表达式语法</h1><p>最近的项目里面涉及到了定时任务的处理.因此,引入了最常用的<code>Quartz</code>+<code>Spring</code>的框架来实现.<br>而<code>Cron</code>表达式是<code>Quartz</code>最主要的支持方式.所以这里记录一下<code>Cron</code>表达式的用法.</p>
-<h2 id="Quartz_VS-_Unix">Quartz VS. Unix</h2><p><code>Unix</code>中也是支持<code>Cron</code>计划任务的. 但是和<code>Quartz</code>的<code>Cron</code>定时任务还稍微有一点区别.</p>
-<ol>
-<li>细粒度的差别<br> <code>Quartz</code>的格式支持到秒级别的计划,而<code>Unix</code>的<code>Cron</code>计划仅支持到分钟级</li>
-<li>表达式中支持的域数量不同<br> <code>Quartz</code>支持七个域(秒,分,时,日,月,周,年). <code>Unix</code>支持五个域(分,时,日,月,周)</li>
-<li>命令稍有不同<br> <code>Unix</code>中,要执行的操作是放在cron表达式中的.而<code>Quartz</code>使用<code>cron</code>表达式仅仅用来表示执行的计划,执行的操作是放在<code>Job</code>中的</li>
-</ol>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2013/07/16/Cron表达式语法/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

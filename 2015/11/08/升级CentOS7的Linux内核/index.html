@@ -12,14 +12,14 @@
 由于我需要试验docker1.9中的新功能.而它的新功能需要vxlan的相关功能.而这个在3.16以上版本才正确.因此,就需要给CentOS7升级内核.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="升级CentOS7的Linux内核">
-<meta property="og:url" content="http://sunxiang0918.github.io/2015/11/09/升级CentOS7的Linux内核/index.html">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/11/08/升级CentOS7的Linux内核/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
 <meta property="og:description" content="升级CentOS7的Linux内核默认刚安装的CentOS7的内核是3.10的.
 这个可以在 终端中输入:
 12uname -r3.10.0-229.el7.x86_64
 来确认.
 由于我需要试验docker1.9中的新功能.而它的新功能需要vxlan的相关功能.而这个在3.16以上版本才正确.因此,就需要给CentOS7升级内核.">
-<meta property="og:updated_time" content="2015-11-09T08:05:46.000Z">
+<meta property="og:updated_time" content="2015-11-09T11:05:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="升级CentOS7的Linux内核">
 <meta name="twitter:description" content="升级CentOS7的Linux内核默认刚安装的CentOS7的内核是3.10的.
@@ -137,7 +137,7 @@ var _hmt = _hmt || [];
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 12.86px;">Docker</a> <a href="/tags/GIT/" style="font-size: 12.86px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.43px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.43px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.43px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.43px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.43px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 14.29px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 11.43px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 17.14px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.43px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18.57px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15.71px;">集群</a>
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 14.29px;">Docker</a> <a href="/tags/GIT/" style="font-size: 12.86px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.43px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.43px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.43px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.43px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.43px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 14.29px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 11.43px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 17.14px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.43px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18.57px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15.71px;">集群</a>
 					</div>
 				</section>
 				
@@ -212,8 +212,8 @@ var _hmt = _hmt || [];
       <div class="body-wrap"><article id="post-升级CentOS7的Linux内核" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/11/09/升级CentOS7的Linux内核/" class="article-date">
-  	<time datetime="2015-11-09T07:56:29.000Z" itemprop="datePublished">2015-11-09</time>
+      <a href="/2015/11/08/升级CentOS7的Linux内核/" class="article-date">
+  	<time datetime="2015-11-08T07:56:29.000Z" itemprop="datePublished">2015-11-08</time>
 </a>
     </div>
   
@@ -281,6 +281,15 @@ var _hmt = _hmt || [];
     
 <nav id="article-nav">
   
+    <a href="/2015/11/09/Docker1-9新特性-跨物理机的多容器网络连接/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Docker1.9新特性-跨物理机的多容器网络连接
+        
+      </div>
+    </a>
+  
   
     <a href="/2015/11/04/Hive1-2的部署/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">Hive1.2的部署</div>
@@ -312,7 +321,7 @@ var _hmt = _hmt || [];
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="升级CentOS7的Linux内核" data-title="升级CentOS7的Linux内核" data-url="http://sunxiang0918.github.io/2015/11/09/升级CentOS7的Linux内核/"></div>
+	<div class="ds-thread" data-thread-key="升级CentOS7的Linux内核" data-title="升级CentOS7的Linux内核" data-url="http://sunxiang0918.github.io/2015/11/08/升级CentOS7的Linux内核/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
