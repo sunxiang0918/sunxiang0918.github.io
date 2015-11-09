@@ -3,17 +3,30 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: Neo4j | 翔妖除魔的个人博客</title>
+  <title>升级CentOS7的Linux内核 | 翔妖除魔的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="翔妖除魔的个人博客">
-<meta property="og:url" content="http://sunxiang0918.github.io/tags/Neo4j/index.html">
+  <meta name="description" content="升级CentOS7的Linux内核默认刚安装的CentOS7的内核是3.10的.
+这个可以在 终端中输入:
+12uname -r3.10.0-229.el7.x86_64
+来确认.
+由于我需要试验docker1.9中的新功能.而它的新功能需要vxlan的相关功能.而这个在3.16以上版本才正确.因此,就需要给CentOS7升级内核.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="升级CentOS7的Linux内核">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/11/09/升级CentOS7的Linux内核/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
-<meta property="og:description">
+<meta property="og:description" content="升级CentOS7的Linux内核默认刚安装的CentOS7的内核是3.10的.
+这个可以在 终端中输入:
+12uname -r3.10.0-229.el7.x86_64
+来确认.
+由于我需要试验docker1.9中的新功能.而它的新功能需要vxlan的相关功能.而这个在3.16以上版本才正确.因此,就需要给CentOS7升级内核.">
+<meta property="og:updated_time" content="2015-11-09T08:05:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="翔妖除魔的个人博客">
-<meta name="twitter:description">
+<meta name="twitter:title" content="升级CentOS7的Linux内核">
+<meta name="twitter:description" content="升级CentOS7的Linux内核默认刚安装的CentOS7的内核是3.10的.
+这个可以在 终端中输入:
+12uname -r3.10.0-229.el7.x86_64
+来确认.
+由于我需要试验docker1.9中的新功能.而它的新功能需要vxlan的相关功能.而这个在3.16以上版本才正确.因此,就需要给CentOS7升级内核.">
   
     <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
   
@@ -196,53 +209,128 @@ var _hmt = _hmt || [];
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-升级CentOS7的Linux内核" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/06/27/neo4j-底层存储结构分析/" class="archive-article-date">
-  	<time datetime="2015-06-27T13:08:13.000Z" itemprop="datePublished">6月 27</time>
+    <div class="article-meta">
+      <a href="/2015/11/09/升级CentOS7的Linux内核/" class="article-date">
+  	<time datetime="2015-11-09T07:56:29.000Z" itemprop="datePublished">2015-11-09</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/27/neo4j-底层存储结构分析/">&lt;转&gt;Neo4j 底层存储结构分析</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      升级CentOS7的Linux内核
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo4j/">Neo4j</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
 	</div>
 
-          
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
+      </div>
+      
     
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        
+        <h1 id="升级CentOS7的Linux内核">升级CentOS7的Linux内核</h1><p>默认刚安装的CentOS7的内核是3.10的.</p>
+<p>这个可以在 终端中输入:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uname -r</span><br><span class="line"><span class="number">3.10</span>.<span class="number">0</span>-<span class="number">229</span>.el7.x86_64</span><br></pre></td></tr></table></figure>
+<p>来确认.</p>
+<p>由于我需要试验docker1.9中的新功能.而它的新功能需要<code>vxlan</code>的相关功能.而这个在3.16以上版本才正确.因此,就需要给CentOS7升级内核.</p>
+<a id="more"></a>
+<h2 id="步骤">步骤</h2><ol>
+<li><p>首先在命令行中输入:<code>uname -r</code> 来确定你现在的版本是什么</p>
+</li>
+<li><p>而后输入:<code>rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org</code> 导入Key</p>
+</li>
+<li><p>输入:<code>rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm</code>来安装elrepo的yum源</p>
+</li>
+<li><p>在这个源中,保留了内核的最新两个版本.应用名字叫:<code>kernel-ml</code>.因此 我们输入:<code>yum --enablerepo=elrepo-kernel install kernel-ml -y</code>.就可以安装最新的内核了.</p>
+</li>
+<li><p>而后输入<code>awk -F\&#39; &#39;$1==&quot;menuentry &quot; {print $2}&#39; /etc/grub2.cfg</code> 可以查看启动CentOS的顺序.</p>
+</li>
+<li><p>如果想自动的进入第一个内核就是最新的话,可以输入:<code>grub2-set-default 0</code></p>
+</li>
+<li><p>这样,重启的话.系统就会是最新的内核了.</p>
+</li>
+</ol>
+<p>PS: 如果不想安装最新的内核版本.而是想选一个早先的版本的话.可以访问这个地址:<a href="dfw.mirror.rackspace.com">dfw.mirror.rackspace.com</a>.他里面有很多版本的镜像.找到你想要的版本的rpm.直接下载下来.然后上传到Centos中.然后执行<code>yum localinstall xxxx.rpm -y</code> 就可以本地安装内核了. 剩下的操作和在线的是一样的.</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/11/04/Hive1-2的部署/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hive1.2的部署</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="升级CentOS7的Linux内核" data-title="升级CentOS7的Linux内核" data-url="http://sunxiang0918.github.io/2015/11/09/升级CentOS7的Linux内核/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
 
 </div>
       <footer id="footer">
@@ -268,9 +356,9 @@ var _hmt = _hmt || [];
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false
 	}

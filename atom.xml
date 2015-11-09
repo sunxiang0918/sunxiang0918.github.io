@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2015-11-04T15:14:05.000Z</updated>
+  <updated>2015-11-09T08:05:46.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -14,6 +14,49 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[升级CentOS7的Linux内核]]></title>
+    <link href="http://sunxiang0918.github.io/2015/11/09/%E5%8D%87%E7%BA%A7CentOS7%E7%9A%84Linux%E5%86%85%E6%A0%B8/"/>
+    <id>http://sunxiang0918.github.io/2015/11/09/升级CentOS7的Linux内核/</id>
+    <published>2015-11-09T07:56:29.000Z</published>
+    <updated>2015-11-09T08:05:46.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="升级CentOS7的Linux内核">升级CentOS7的Linux内核</h1><p>默认刚安装的CentOS7的内核是3.10的.</p>
+<p>这个可以在 终端中输入:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uname -r</span><br><span class="line"><span class="number">3.10</span>.<span class="number">0</span>-<span class="number">229</span>.el7.x86_64</span><br></pre></td></tr></table></figure>
+<p>来确认.</p>
+<p>由于我需要试验docker1.9中的新功能.而它的新功能需要<code>vxlan</code>的相关功能.而这个在3.16以上版本才正确.因此,就需要给CentOS7升级内核.</p>
+<a id="more"></a>
+<h2 id="步骤">步骤</h2><ol>
+<li><p>首先在命令行中输入:<code>uname -r</code> 来确定你现在的版本是什么</p>
+</li>
+<li><p>而后输入:<code>rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org</code> 导入Key</p>
+</li>
+<li><p>输入:<code>rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm</code>来安装elrepo的yum源</p>
+</li>
+<li><p>在这个源中,保留了内核的最新两个版本.应用名字叫:<code>kernel-ml</code>.因此 我们输入:<code>yum --enablerepo=elrepo-kernel install kernel-ml -y</code>.就可以安装最新的内核了.</p>
+</li>
+<li><p>而后输入<code>awk -F\&#39; &#39;$1==&quot;menuentry &quot; {print $2}&#39; /etc/grub2.cfg</code> 可以查看启动CentOS的顺序.</p>
+</li>
+<li><p>如果想自动的进入第一个内核就是最新的话,可以输入:<code>grub2-set-default 0</code></p>
+</li>
+<li><p>这样,重启的话.系统就会是最新的内核了.</p>
+</li>
+</ol>
+<p>PS: 如果不想安装最新的内核版本.而是想选一个早先的版本的话.可以访问这个地址:<a href="dfw.mirror.rackspace.com">dfw.mirror.rackspace.com</a>.他里面有很多版本的镜像.找到你想要的版本的rpm.直接下载下来.然后上传到Centos中.然后执行<code>yum localinstall xxxx.rpm -y</code> 就可以本地安装内核了. 剩下的操作和在线的是一样的.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="升级CentOS7的Linux内核">升级CentOS7的Linux内核</h1><p>默认刚安装的CentOS7的内核是3.10的.</p>
+<p>这个可以在 终端中输入:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uname -r</span><br><span class="line"><span class="number">3.10</span>.<span class="number">0</span>-<span class="number">229</span>.el7.x86_64</span><br></pre></td></tr></table></figure>
+<p>来确认.</p>
+<p>由于我需要试验docker1.9中的新功能.而它的新功能需要<code>vxlan</code>的相关功能.而这个在3.16以上版本才正确.因此,就需要给CentOS7升级内核.</p>]]>
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://sunxiang0918.github.io/tags/Linux/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Hive1.2的部署]]></title>
@@ -2452,41 +2495,6 @@
     <summary type="html">
     <![CDATA[<h1 id="swift中多线程的使用方法">swift中多线程的使用方法</h1><h2 id="概述">概述</h2><p>多线程可能是每一个程序开发都会遇到的问题.在swift中,苹果并没有重新开发出一套线程框架,而是继续使用ObjectiveC原有的一套线程框架.<br>目前在swift中最常用的线程方案主要有<code>NSThread</code>,<code>GCD</code>,<code>NSOperation&amp;NSOperationQueue</code>三套方案.所以,接下来会分别的描述下这些方案的使用方法以及例子.</p>
 <h2 id="NSThread">NSThread</h2><p><code>NSThread</code>是苹果封装的一套完全面向对象的多线程框架.相比其他的两种方案,这种方案更轻量.你可以直接操作线程对象,很直观和方便.但是,由于<code>NSThread</code>只是一个轻量级的封装.所以需要自己管理线程的生命周期，线程同步。并且线程同步对数据的加锁会有一定的系统开销.因此这套方案使用的频率并不高.通常都是用来获取线程的信息<br>]]>
-    
-    </summary>
-    
-      <category term="Swift" scheme="http://sunxiang0918.github.io/tags/Swift/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[<转>Swift局部SCOPE]]></title>
-    <link href="http://sunxiang0918.github.io/2015/07/29/Swift%E5%B1%80%E9%83%A8SCOPE/"/>
-    <id>http://sunxiang0918.github.io/2015/07/29/Swift局部SCOPE/</id>
-    <published>2015-07-29T02:06:40.000Z</published>
-    <updated>2015-07-29T03:02:02.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="局部SCOPE">局部SCOPE</h1><p>C 系语言中在方法内部我们是可以任意添加成对的大括号 {} 来限定代码的作用范围的。这么做一般来说有两个好处，首先是超过作用域后里面的临时变量就将失效，这不仅可以使方法内的命名更加容易，也使得那些不被需要的引用的回收提前进行了，可以稍微提高一些代码的效率；另外，在合适的位置插入括号也利于方法的梳理，对于那些不太方便提取为一个单独方法，但是又应该和当前方法内的其他部分进行一些区分的代码，使用大括号可以将这样的结构进行一个相对自然的划分。</p>
-<p>举一个不失一般性的例子，虽然我个人不太喜欢使用代码手写 UI，但钟情于这么做的人还是不在少数。如果我们要在 Objective-C 中用代码构建 UI 的话，我们一般会选择在 -loadView 里写一些类似这样的代码：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-(<span class="keyword">void</span>)loadView &#123;</span><br><span class="line">    <span class="built_in">UIView</span> *view = [[<span class="built_in">UIView</span> alloc] initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">320</span>, <span class="number">480</span>)];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UILabel</span> *titleLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">            initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">30</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">    titleLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">    titleLabel<span class="variable">.text</span> = <span class="string">@"Title"</span>;</span><br><span class="line">    [view addSubview:titleLabel];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UILabel</span> *textLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">            initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">80</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">    textLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">    textLabel<span class="variable">.text</span> = <span class="string">@"Text"</span>;</span><br><span class="line">    [view addSubview:textLabel];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span><span class="variable">.view</span> = view;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>在这里只添加了两个 view，就已经够让人心烦的了。真实的界面当然会比这个复杂很多，想想看如果有十来个 view 的话，这段代码会变成什么样子吧。我们需要考虑对各个子 view 的命名，以确保它们的意义明确。如果我们在上面的代码中把某个配置 textLabel 的代码写错成了 titleLabel 的话，编译器也不会给我们任何警告。这种 bug 是非常难以发现的，因此在类似这种一大堆代码但是又不太可能进行重用的时候，我更推荐使用局部 scope 将它们分隔开来。比如上面的代码建议加上括号重写为以下形式，这样至少编译器会提醒我们一些低级错误，我们也可能更专注于每个代码块：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">-(<span class="keyword">void</span>)loadView &#123;</span><br><span class="line">    <span class="built_in">UIView</span> *view = [[<span class="built_in">UIView</span> alloc] initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">320</span>, <span class="number">480</span>)];</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">UILabel</span> *titleLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">                initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">30</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">        titleLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">        titleLabel<span class="variable">.text</span> = <span class="string">@"Title"</span>;</span><br><span class="line">        [view addSubview:titleLabel];    </span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">UILabel</span> *textLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">                initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">80</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">        textLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">        textLabel<span class="variable">.text</span> = <span class="string">@"Text"</span>;</span><br><span class="line">        [view addSubview:textLabel];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span><span class="variable">.view</span> = view;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在 Swift 中，直接使用大括号的写法是不支持的，因为这和闭包的定义产生了冲突。如果我们想类似地使用局部 scope 来分隔代码的话，一个不错的选择是定义一个接受 ()-&gt;() 作为函数的全局方法，然后执行它：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">local</span><span class="params">(closure: <span class="params">()</span></span></span>-&gt;()) &#123;</span><br><span class="line">    closure()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在使用时，可以利用尾随闭包的特性模拟局部 scope：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="func"><span class="keyword">func</span> <span class="title">loadView</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">let</span> view = <span class="type">UIView</span>(frame: <span class="type">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">320</span>, <span class="number">480</span>))</span><br><span class="line"></span><br><span class="line">    local &#123;</span><br><span class="line">        <span class="keyword">let</span> titleLabel = <span class="type">UILabel</span>(frame: <span class="type">CGRectMake</span>(<span class="number">150</span>, <span class="number">30</span>, <span class="number">20</span>, <span class="number">40</span>))</span><br><span class="line">        titleLabel.textColor = <span class="type">UIColor</span>.redColor()</span><br><span class="line">        titleLabel.text = <span class="string">"Title"</span></span><br><span class="line">        view.addSubview(titleLabel)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    local &#123;</span><br><span class="line">        <span class="keyword">let</span> textLabel = <span class="type">UILabel</span>(frame: <span class="type">CGRectMake</span>(<span class="number">150</span>, <span class="number">80</span>, <span class="number">20</span>, <span class="number">40</span>))</span><br><span class="line">        textLabel.textColor = <span class="type">UIColor</span>.redColor()</span><br><span class="line">        textLabel.text = <span class="string">"Text"</span></span><br><span class="line">        view.addSubview(textLabel)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span>.view = view</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在 Objective-C 中还有一个很棒的技巧是使用 GNU C 的<a href="https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html#Statement-Exprs" target="_blank" rel="external">声明扩展</a>来在限制局部作用域的时候同时进行赋值，运用得当的话，可以使代码更加紧凑和整洁。比如上面的 titleLabel 如果我们需要保留一个引用的话，在 Objective-C 中可以写为：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">self</span><span class="variable">.titleLabel</span> = (&#123;</span><br><span class="line">    <span class="built_in">UILabel</span> *label = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">            initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">30</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">    label<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">    label<span class="variable">.text</span> = <span class="string">@"Title"</span>;</span><br><span class="line">    [view addSubview:label];</span><br><span class="line">    label;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>Swift 里当然没有 GNU C 的扩展，但是使用匿名的闭包的话，写出类似的代码也不是难事：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">titleLabel = &#123;</span><br><span class="line">    <span class="keyword">let</span> label = <span class="type">UILabel</span>(frame: <span class="type">CGRectMake</span>(<span class="number">150</span>, <span class="number">30</span>, <span class="number">20</span>, <span class="number">40</span>))</span><br><span class="line">    label.textColor = <span class="type">UIColor</span>.redColor()</span><br><span class="line">    label.text = <span class="string">"Title"</span></span><br><span class="line">    <span class="keyword">self</span>.view.addSubview(label)</span><br><span class="line">    <span class="keyword">return</span> label</span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure>
-<p>这也是一种隔离代码的很好的方式。</p>
-<hr>
-<p>原文链接:<a href="http://swifter.tips/local-scope/" target="_blank" rel="external">http://swifter.tips/local-scope/</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="局部SCOPE">局部SCOPE</h1><p>C 系语言中在方法内部我们是可以任意添加成对的大括号 {} 来限定代码的作用范围的。这么做一般来说有两个好处，首先是超过作用域后里面的临时变量就将失效，这不仅可以使方法内的命名更加容易，也使得那些不被需要的引用的回收提前进行了，可以稍微提高一些代码的效率；另外，在合适的位置插入括号也利于方法的梳理，对于那些不太方便提取为一个单独方法，但是又应该和当前方法内的其他部分进行一些区分的代码，使用大括号可以将这样的结构进行一个相对自然的划分。</p>
-<p>举一个不失一般性的例子，虽然我个人不太喜欢使用代码手写 UI，但钟情于这么做的人还是不在少数。如果我们要在 Objective-C 中用代码构建 UI 的话，我们一般会选择在 -loadView 里写一些类似这样的代码：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-(<span class="keyword">void</span>)loadView &#123;</span><br><span class="line">    <span class="built_in">UIView</span> *view = [[<span class="built_in">UIView</span> alloc] initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">320</span>, <span class="number">480</span>)];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UILabel</span> *titleLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">            initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">30</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">    titleLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">    titleLabel<span class="variable">.text</span> = <span class="string">@"Title"</span>;</span><br><span class="line">    [view addSubview:titleLabel];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UILabel</span> *textLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">            initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">80</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">    textLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">    textLabel<span class="variable">.text</span> = <span class="string">@"Text"</span>;</span><br><span class="line">    [view addSubview:textLabel];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span><span class="variable">.view</span> = view;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]>
     
     </summary>
     
