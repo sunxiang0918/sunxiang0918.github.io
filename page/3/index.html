@@ -198,6 +198,74 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Swift-2-0-新特性" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/04/Swift-2-0-新特性/" class="article-date">
+  	<time datetime="2015-08-04T13:35:51.000Z" itemprop="datePublished">2015-08-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/04/Swift-2-0-新特性/">Swift 2.0 新特性</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Swift_2-0_新特性">Swift 2.0 新特性</h1><p><code>Swift2.0</code> 算是一个大得版本更新.新增或修改了很多的特性.出来这么久了,我也把我练手写的知乎日报全部转换成了<code>Swfit2.0</code>.其中还是遇到了一些问题.因此,趁有空,就尝试总结一下<code>Swift2.0</code>的一些新特性或新的变化.</p>
+<p>PS:本文写的时候采用的是 Swift2.0+Xcode7 beta4 的环境.</p>
+<h2 id="1-guard语句">1.guard语句</h2><p><code>Swift2.0</code>中新引入了一个关键字<code>guard</code>用于条件的判断处理.它和<code>if</code>语句比较类似,都是通过一个<code>boolean</code>值来决定流程的走向.但是与<code>if</code>语句不同的是.<code>guard</code>语句只会有一个代码块.没有像<code>if else</code>那样有多个<code>guard else</code>.</p>
+<p>那么<code>guard</code>到底有何作用呢?<code>guard</code>允许在一个代码周期中提前退出.也就是说,在<code>guard</code>关键字后接一个布尔表达式,只有当值为<code>false</code>的时候,才会执行<code>else</code>后的内容.如果值为<code>true</code>,那么就跳过这个<code>guard</code>代码块.</p>
+<p><code>guard</code>语句最常见的用法就是替代<code>if</code>做参数的合法性校验.<br>比如在以前:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">doSomeThing</span><span class="params">(a:String?,b:String?)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>	<span class="keyword">let</span> _a = a &#123;</span><br><span class="line">		<span class="keyword">if</span>	<span class="keyword">let</span> _b = b &#123;</span><br><span class="line">			<span class="built_in">print</span>(<span class="string">"<span class="subst">\(_a)</span>:<span class="subst">\(_b)</span>"</span>)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// print("\(_a):(_b)")  //这个地方不能访问_a和_b</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>向上面的例子那样,如果每一个参数都使用<code>if</code>语句来判断,那么这样的代码写起来非常的繁琐.读起来也不是很清晰.基于这种的情况,<code>Swift2.0</code>增加了<code>guard</code>关键字.把上面的代码改成使用<code>guard</code>的写法就会成这样:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">doSomeThing2</span><span class="params">(a:String?,b:String?)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    guard <span class="keyword">let</span> _a = a <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    guard <span class="keyword">let</span> _b = b <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"<span class="subst">\(_a)</span>:<span class="subst">\(_b)</span>"</span>)	<span class="comment">//这个地方是可以访问_a和_b</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样写比起以前使用<code>if</code>来做判断,代码的可读性更强了.并且<code>Optaion</code>类型的变量的解包可以在全局可见了.这在网络编程中解析JSON等是非常有用的.</p>
+<p><code>guard</code>除了用于入参的校验和可选类型的解包外.还可以用于抛出异常以及结合<code>available</code>做函数的检查:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">guard name != <span class="literal">nil</span> <span class="keyword">else</span> &#123;</span><br><span class="line">	throw <span class="type">IllegalArgumentException</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">guard #available(iOS <span class="number">8</span>, *) <span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/04/Swift-2-0-新特性/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-swift中多线程的使用方法" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -773,68 +841,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/05/18/Swift扩展的三个微妙细节/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-74个Swift标准库函数" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/25/74个Swift标准库函数/" class="article-date">
-  	<time datetime="2015-03-25T14:33:03.000Z" itemprop="datePublished">2015-03-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/25/74个Swift标准库函数/">&lt;转&gt;74个Swift标准库函数</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="74个Swift标准库函数">74个Swift标准库函数</h1><blockquote>
-<p>本文译自 <a href="http://practicalswift.com/2014/06/14/the-swift-standard-library-list-of-built-in-functions/">Swift Standard Library: Documented and undocumented built-in functions in the Swift standard library – the complete list with all 74 functions</a>。我不是原作者，我只是勤劳的翻译工：）文中作者没有提及他是如何发现这么多未在文档中体现的内置函数的，估计是反编译的结果。我测试了好多个都能用，而且Xcode还会给出语法提示：）</p>
-</blockquote>
-<p>Swift包含了74个内置函数，但在<code>The Swift Programming Langage</code>一书中只介绍了其中的7个，其它的都没有在文档中体现。</p>
-<p>这篇文章列举出了所有的内置Swift函数。文中所谓的<code>内置函数</code>是指无需引入任何模块（比如说Fundation等）即可以直接使用的函数。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/03/25/74个Swift标准库函数/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
