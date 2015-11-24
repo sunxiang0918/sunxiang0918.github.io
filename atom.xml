@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2015-11-24T04:06:46.000Z</updated>
+  <updated>2015-11-24T04:08:48.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://sunxiang0918.github.io/2015/11/24/Swift%E4%B8%AD%E4%BD%BF%E7%94%A8NSUserDefaults%E4%BF%9D%E5%AD%98%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AF%B9%E8%B1%A1/"/>
     <id>http://sunxiang0918.github.io/2015/11/24/Swift中使用NSUserDefaults保存自定义对象/</id>
     <published>2015-11-24T03:32:07.000Z</published>
-    <updated>2015-11-24T04:06:46.000Z</updated>
+    <updated>2015-11-24T04:08:48.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Swift中使用NSUserDefaults保存自定义对象">Swift中使用NSUserDefaults保存自定义对象</h1><p>NSUserDefaults适合存储轻量级的本地客户端数据,比如保存一些系统的基本配置等东西,使用NSUserDefaults是首选,它非常的简单,不依赖其他的什么东西,屏蔽了Plist文件的读写等等.</p>
 <p>但是NSUserDefaults支持的数据格式比较有限,只支持了<code>Int</code>、<code>Float</code>、<code>Double</code>，<code>String</code>，<code>NSDate</code>，<code>NSArray</code>，<code>NSDictionary</code>，<code>Bool</code>.不支持自定义对象的存取.</p>
 <p>这个特性对于简单的数值来说还算比较容易.只需要简单的操作(一个Value 一个Key ),例如，想要保存一个NSString的对象，代码实现为：</p>
