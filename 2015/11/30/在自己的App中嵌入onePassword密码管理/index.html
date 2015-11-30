@@ -13,12 +13,12 @@
 <meta property="og:description" content="在自己的App中嵌入onePassword密码管理1Password是一个密码管理软件,它可以方便和安全的管理你的密码.它提供反钓鱼保护功能和卓越的密码管理,并具有自动生成强密码功能.所有的机密资料,包括密码,身份卡和信用卡,都是保存在一个安全的地方.在OSX和IOS系统上非常的流行.在我的博文MacOS下JAVA开发使用经验(一))也有介绍.自从我的账号被CSDN泄露的干干净净以后的一段时间里,">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/30/1.PNG">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/30/2.PNG">
-<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/30/3.PNG">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/30/3.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/30/4.PNG">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/30/5.PNG">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/30/6.PNG">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/30/7.PNG">
-<meta property="og:updated_time" content="2015-11-30T14:45:49.000Z">
+<meta property="og:updated_time" content="2015-11-30T14:49:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在自己的App中嵌入onePassword密码管理">
 <meta name="twitter:description" content="在自己的App中嵌入onePassword密码管理1Password是一个密码管理软件,它可以方便和安全的管理你的密码.它提供反钓鱼保护功能和卓越的密码管理,并具有自动生成强密码功能.所有的机密资料,包括密码,身份卡和信用卡,都是保存在一个安全的地方.在OSX和IOS系统上非常的流行.在我的博文MacOS下JAVA开发使用经验(一))也有介绍.自从我的账号被CSDN泄露的干干净净以后的一段时间里,">
@@ -261,7 +261,7 @@ var _hmt = _hmt || [];
 <p> 效果如图:</p>
 <p> <img src="/img/2015/11/30/1.PNG" alt=""><br> <img src="/img/2015/11/30/2.PNG" alt=""></p>
 </li>
-<li><p>如果更想进一步,只有当判断到安装了<code>1Password</code>程序,按钮才出现的话.可以调用<code>view?.onePasswordButton.hidden = !OnePasswordExtension.sharedExtension().isAppExtensionAvailable()</code>.这个方法会判断系统中是否有应用程序能处理<code>org-appextension-feature-password-management</code>这个特性.如果有程序可以执行,那么就返回<code>true</code>. 需要注意的是:在IOS9中你需要给<code>Info.plist</code>文件中增加一行记录:<br> <img src="/img/2015/11/30/3.PNG" alt=""><br> 更多的信息可以参见<a href="https://developer.apple.com/videos/wwdc/2015/?id=703" target="_blank" rel="external">Privacy and Your Apps session</a></p>
+<li><p>如果更想进一步,只有当判断到安装了<code>1Password</code>程序,按钮才出现的话.可以调用<code>view?.onePasswordButton.hidden = !OnePasswordExtension.sharedExtension().isAppExtensionAvailable()</code>.这个方法会判断系统中是否有应用程序能处理<code>org-appextension-feature-password-management</code>这个特性.如果有程序可以执行,那么就返回<code>true</code>. 需要注意的是:在IOS9中你需要给<code>Info.plist</code>文件中增加一行记录:<br> <img src="/img/2015/11/30/3.png" alt=""><br> 更多的信息可以参见<a href="https://developer.apple.com/videos/wwdc/2015/?id=703" target="_blank" rel="external">Privacy and Your Apps session</a></p>
 </li>
 </ol>
 <h2 id="使用1Password进行新用户的注册">使用1Password进行新用户的注册</h2><p>同使用1Password进行用户登陆差不多,新用户的注册也是很简单的.</p>
