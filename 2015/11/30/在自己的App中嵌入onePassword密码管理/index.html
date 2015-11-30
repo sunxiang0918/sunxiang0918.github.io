@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>在自己的App中嵌入onePassword密码管理 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在自己的App中嵌入onePassword密码管理1Password是一个密码管理软件,它可以方便和安全的管理你的密码.它提供反钓鱼保护功能和卓越的密码管理,并具有自动生成强密码功能.所有的机密资料,包括密码,身份卡和信用卡,都是保存在一个安全的地方.在OSX和IOS系统上非常的流行.在我的博文MacOS下JAVA开发使用经验(一)/#1Password)也有介绍.自从我的账号被CSDN泄露的干干">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在自己的App中嵌入onePassword密码管理">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/11/30/在自己的App中嵌入onePassword密码管理/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="在自己的App中嵌入onePassword密码管理1Password是一个密码管理软件,它可以方便和安全的管理你的密码.它提供反钓鱼保护功能和卓越的密码管理,并具有自动生成强密码功能.所有的机密资料,包括密码,身份卡和信用卡,都是保存在一个安全的地方.在OSX和IOS系统上非常的流行.在我的博文MacOS下JAVA开发使用经验(一)/#1Password)也有介绍.自从我的账号被CSDN泄露的干干">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/30/3.PNG">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/30/4.PNG">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/30/5.PNG">
+<meta property="og:updated_time" content="2015-11-30T14:36:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在自己的App中嵌入onePassword密码管理">
+<meta name="twitter:description" content="在自己的App中嵌入onePassword密码管理1Password是一个密码管理软件,它可以方便和安全的管理你的密码.它提供反钓鱼保护功能和卓越的密码管理,并具有自动生成强密码功能.所有的机密资料,包括密码,身份卡和信用卡,都是保存在一个安全的地方.在OSX和IOS系统上非常的流行.在我的博文MacOS下JAVA开发使用经验(一)/#1Password)也有介绍.自从我的账号被CSDN泄露的干干">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 14.29px;">Docker</a> <a href="/tags/GIT/" style="font-size: 12.86px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.43px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.43px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.43px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.43px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.43px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 14.29px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 11.43px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 17.14px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.43px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18.57px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15.71px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-在自己的App中嵌入onePassword密码管理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/11/30/在自己的App中嵌入onePassword密码管理/" class="article-date">
+  	<time datetime="2015-11-30T11:36:31.000Z" itemprop="datePublished">2015-11-30</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      在自己的App中嵌入onePassword密码管理
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#在自己的App中嵌入onePassword密码管理"><span class="toc-number">1.</span> <span class="toc-text">在自己的App中嵌入onePassword密码管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#导入1PasswordExtension扩展"><span class="toc-number">1.1.</span> <span class="toc-text">导入1PasswordExtension扩展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用1Password进行登陆框的填充"><span class="toc-number">1.2.</span> <span class="toc-text">使用1Password进行登陆框的填充</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用1Password进行新用户的注册"><span class="toc-number">1.3.</span> <span class="toc-text">使用1Password进行新用户的注册</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用1Password进行密码的修改"><span class="toc-number">1.4.</span> <span class="toc-text">使用1Password进行密码的修改</span></a></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="在自己的App中嵌入onePassword密码管理">在自己的App中嵌入onePassword密码管理</h1><p><a href="https://agilebits.com/onepassword/" target="_blank" rel="external">1Password</a>是一个密码管理软件,它可以方便和安全的管理你的密码.它提供反钓鱼保护功能和卓越的密码管理,并具有自动生成强密码功能.所有的机密资料,包括密码,身份卡和信用卡,都是保存在一个安全的地方.在OSX和IOS系统上非常的流行.在我的博文<a href="http://sunxiang0918.cn/2015/09/21/MacOS下JAVA开发使用经验(一" target="_blank" rel="external">MacOS下JAVA开发使用经验(一)</a>/#1Password)也有介绍.<br>自从我的账号被CSDN泄露的干干净净以后的一段时间里,我的其他账号是不是的就会收到更改密码的邮件.于是,一下狠心购买了<code>1Password</code>,并且把我所有的差不多200多个账号的密码通过<code>1Password</code>都给改成了14位的随机字符,以后就不用担心一个密码丢失导致其他的账号也丢失了(1Password自己本身在它的网上没有所谓的用户名密码,密码是通过加密文件整体在WIFI或iCloud中同步的.).但是这就带来了一个麻烦,就是我的密码都变成了类似于这样的<code>RxCa9vdBUB3fCU</code>的字符串.当使用safari这些的时候还好,它有浏览器的插件可以自动填充.遇到一些App,就只能手动的输入了(类似于光大银行和QQ不允许粘贴密码).这相当的麻烦,又容易出错.因此,自己开发APP的时候,就特别的注意了在输入密码的地方要与<code>1Password</code>的整合,这点网易系的APP就做的比较好,<code>网易云音乐</code>和<code>考拉海淘</code>就是支持了<code>1Password</code>的.<br>要在自己的App中引入<code>1Password</code>其实也不麻烦,可以说是相当的简单.<code>1Password</code>在<code>GitHub</code>上开源了App与它的软件交互的扩展<a href="https://github.com/AgileBits/onepassword-app-extension" target="_blank" rel="external">1PasswordExtension</a>.我们通过这个扩展就可以在自己的App中嵌入<code>1Password</code>的密码管理了.</p>
+<a id="more"></a>
+<h2 id="导入1PasswordExtension扩展">导入1PasswordExtension扩展</h2><p>这个可以使用<code>cocoaPods</code>. 在项目的<code>Pods</code>文件中增加<code>pod &#39;1PasswordExtension&#39;</code>,然后执行<code>pod install</code>即可.由于它已经兼容了<code>swift</code>了,所以不需要特别的再链接OC的头文件了.</p>
+<h2 id="使用1Password进行登陆框的填充">使用1Password进行登陆框的填充</h2><p>这个过程也非常的简单.</p>
+<ol>
+<li>在登录的页面上增加一个按钮,<code>1PasswordExtension</code>内置好了它的图片,你可以直接使用.</li>
+<li>给这个按钮增加点击的事件.</li>
+<li><p>在Controller类中增加事件的实现,调用<code>public func findLoginForURLString(URLString: String, forViewController viewController: UIViewController, sender: AnyObject?, completion: (([NSObject : AnyObject]?, NSError?) -&gt; Void)?)</code>方法:</p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">OnePasswordExtension</span>.sharedExtension().findLoginForURLString(<span class="string">""</span>, forViewController: <span class="keyword">self</span>, sender: sender) &#123; (_loginDictionary, error) -&gt; <span class="type">Void</span> <span class="keyword">in</span></span><br><span class="line">			   <span class="comment">//loginDictionary中即用调用1Password后,用户选择的用户名和密码</span></span><br><span class="line">               guard <span class="keyword">let</span> loginDictionary = _loginDictionary <span class="keyword">else</span> &#123;</span><br><span class="line">                   <span class="keyword">return</span></span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">if</span> loginDictionary.<span class="built_in">count</span> == <span class="number">0</span> &#123;</span><br><span class="line">               		<span class="comment">//如果用户点的是取消,这里就是0</span></span><br><span class="line">                   <span class="keyword">if</span> error!.code != <span class="type">Int</span>(<span class="type">AppExtensionErrorCodeCancelledByUser</span>) &#123;</span><br><span class="line">                       <span class="comment">//<span class="doctag"><span class="keyword">TODO</span></span></span></span><br><span class="line">                   &#125;</span><br><span class="line">                   <span class="keyword">return</span></span><br><span class="line">               &#125;</span><br><span class="line">               </span><br><span class="line">               <span class="comment">//把用户名和密码赋值给输入框即可.更进一步的可以直接激活登录操作</span></span><br><span class="line">               view?.userNameField.text = loginDictionary[<span class="type">AppExtensionUsernameKey</span>] <span class="keyword">as</span>? <span class="type">String</span></span><br><span class="line">               view?.passwordField.text = loginDictionary[<span class="type">AppExtensionPasswordKey</span>] <span class="keyword">as</span>? <span class="type">String</span></span><br><span class="line">               </span><br><span class="line">           &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>效果如图:
+
+![](<span class="regexp">/img/</span><span class="number">2015</span><span class="regexp">/11/</span><span class="number">30</span>/<span class="number">1.</span>PNG)
+![](<span class="regexp">/img/</span><span class="number">2015</span><span class="regexp">/11/</span><span class="number">30</span>/<span class="number">2.</span>PNG)
+</code></pre><ol>
+<li>如果更想进一步,只有当判断到安装了<code>1Password</code>程序,按钮才出现的话.可以调用<code>view?.onePasswordButton.hidden = !OnePasswordExtension.sharedExtension().isAppExtensionAvailable()</code>.这个方法会判断系统中是否有应用程序能处理<code>org-appextension-feature-password-management</code>这个特性.如果有程序可以执行,那么就返回<code>true</code>. 需要注意的是:在IOS9中你需要给<code>Info.plist</code>文件中增加一行记录:<br> <img src="/img/2015/11/30/3.PNG" alt=""><br> 更多的信息可以参见<a href="https://developer.apple.com/videos/wwdc/2015/?id=703" target="_blank" rel="external">Privacy and Your Apps session</a></li>
+</ol>
+<h2 id="使用1Password进行新用户的注册">使用1Password进行新用户的注册</h2><p>同使用1Password进行用户登陆差不多,新用户的注册也是很简单的.</p>
+<ol>
+<li>在登录的页面上增加一个按钮,<code>1PasswordExtension</code>内置好了它的图片,你可以直接使用.</li>
+<li>给这个按钮增加点击的事件.</li>
+<li><p>在Controller类中增加事件的实现,调用<code>public func storeLoginForURLString(URLString: String, loginDetails loginDetailsDictionary: [NSObject : AnyObject]?, passwordGenerationOptions: [NSObject : AnyObject]?, forViewController viewController: UIViewController, sender: AnyObject?, completion: (([NSObject : AnyObject]?, NSError?) -&gt; Void)?)</code>方法</p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//构造1Password新注册用户页面的一些信息</span></span><br><span class="line"><span class="keyword">let</span> newLoginDetails:[<span class="type">String</span>: <span class="type">AnyObject</span>] = [</span><br><span class="line">		<span class="type">AppExtensionTitleKey</span>: <span class="string">"ACME"</span>,</span><br><span class="line">		<span class="type">AppExtensionUsernameKey</span>: <span class="keyword">self</span>.usernameTextField.text!,</span><br><span class="line">		<span class="type">AppExtensionPasswordKey</span>: <span class="keyword">self</span>.passwordTextField.text!,</span><br><span class="line">		<span class="type">AppExtensionNotesKey</span>: <span class="string">"Saved with the ACME app"</span>,</span><br><span class="line">		<span class="type">AppExtensionSectionTitleKey</span>: <span class="string">"ACME Browser"</span>,</span><br><span class="line">		<span class="type">AppExtensionFieldsKey</span>: [</span><br><span class="line">			<span class="string">"firstname"</span> : <span class="keyword">self</span>.firstnameTextField.text!,</span><br><span class="line">			<span class="string">"lastname"</span> : <span class="keyword">self</span>.lastnameTextField.text!</span><br><span class="line">			<span class="comment">// Add as many string fields as you please.</span></span><br><span class="line">		]</span><br><span class="line">	]</span><br><span class="line"></span><br><span class="line">	<span class="comment">//设置密码生成规则</span></span><br><span class="line">	<span class="keyword">let</span> passwordGenerationOptions:[<span class="type">String</span>: <span class="type">AnyObject</span>] = [</span><br><span class="line">		<span class="comment">// 密码最小长度</span></span><br><span class="line">		<span class="type">AppExtensionGeneratedPasswordMinLengthKey</span>: (<span class="number">8</span>),</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// 最大密码长度</span></span><br><span class="line">		<span class="type">AppExtensionGeneratedPasswordMaxLengthKey</span>: (<span class="number">30</span>),</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// 是否必须包含数字</span></span><br><span class="line">		<span class="type">AppExtensionGeneratedPasswordRequireDigitsKey</span>: (<span class="literal">true</span>),</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// 字符必须包含符号</span></span><br><span class="line">		<span class="type">AppExtensionGeneratedPasswordRequireSymbolsKey</span>: (<span class="literal">true</span>),</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// Here are all the symbols available in the the 1Password Password Generator:</span></span><br><span class="line">		<span class="comment">// !@#$%^&amp;*()_-+=|[]&#123;&#125;'\";.,&gt;?/~`</span></span><br><span class="line">		<span class="comment">// The string for AppExtensionGeneratedPasswordForbiddenCharactersKey should contain the symbols and characters that you wish 1Password to exclude from the generated password.</span></span><br><span class="line">		<span class="comment">//生成密码的时候排除的字符</span></span><br><span class="line">		<span class="type">AppExtensionGeneratedPasswordForbiddenCharactersKey</span>: <span class="string">"!@#$%/0lIO"</span></span><br><span class="line">	]</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//调用1Password,打开它的页面输入用户注册信息</span></span><br><span class="line">	<span class="type">OnePasswordExtension</span>.sharedExtension().storeLoginForURLString(<span class="string">"https://www.acme.com"</span>, loginDetails: newLoginDetails, passwordGenerationOptions: passwordGenerationOptions, forViewController: <span class="keyword">self</span>, sender: sender) &#123; (loginDictionary, error) -&gt; <span class="type">Void</span> <span class="keyword">in</span></span><br><span class="line">		<span class="keyword">if</span> loginDictionary == <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> error!.code != <span class="type">Int</span>(<span class="type">AppExtensionErrorCodeCancelledByUser</span>) &#123;</span><br><span class="line">				<span class="built_in">print</span>(<span class="string">"Error invoking 1Password App Extension for find login: <span class="subst">\(error)</span>"</span>)</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//把用户输入的注册信息返回给界面组件</span></span><br><span class="line">		<span class="keyword">self</span>.usernameTextField.text = loginDictionary?[<span class="type">AppExtensionUsernameKey</span>] <span class="keyword">as</span>? <span class="type">String</span></span><br><span class="line">		<span class="keyword">self</span>.passwordTextField.text = loginDictionary?[<span class="type">AppExtensionPasswordKey</span>] <span class="keyword">as</span>? <span class="type">String</span></span><br><span class="line">		<span class="keyword">self</span>.firstnameTextField.text = loginDictionary?[<span class="type">AppExtensionReturnedFieldsKey</span>]?[<span class="string">"firstname"</span>] <span class="keyword">as</span>? <span class="type">String</span></span><br><span class="line">		<span class="keyword">self</span>.lastnameTextField.text = loginDictionary?[<span class="type">AppExtensionReturnedFieldsKey</span>]?[<span class="string">"lastname"</span>] <span class="keyword">as</span>? <span class="type">String</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p> 效果如图:</p>
+<p> <img src="/img/2015/11/30/4.PNG" alt=""><br> <img src="/img/2015/11/30/5.PNG" alt=""></p>
+</li>
+</ol>
+<h2 id="使用1Password进行密码的修改">使用1Password进行密码的修改</h2><p>既然有新用户的注册以及登陆,那么密码管理中还有一个就是密码的修改.</p>
+<ol>
+<li>在登录的页面上增加一个按钮,<code>1PasswordExtension</code>内置好了它的图片,你可以直接使用.</li>
+<li>给这个按钮增加点击的事件.</li>
+<li><p>在Controller类中增加事件的实现,调用<code>public func changePasswordForLoginForURLString(URLString: String, loginDetails loginDetailsDictionary: [NSObject : AnyObject]?, passwordGenerationOptions: [NSObject : AnyObject]?, forViewController viewController: UIViewController, sender: AnyObject?, completion: (([NSObject : AnyObject]?, NSError?) -&gt; Void)?)</code></p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//构造1Password修改密码页面的一些信息</span></span><br><span class="line"><span class="keyword">let</span> newLoginDetails:[<span class="type">String</span>: <span class="type">AnyObject</span>] = [</span><br><span class="line">		<span class="type">AppExtensionTitleKey</span>: <span class="string">"ACME"</span>, <span class="comment">// Optional, used for the third schenario only</span></span><br><span class="line">		<span class="type">AppExtensionUsernameKey</span>: <span class="string">"aUsername"</span>, <span class="comment">// Optional, used for the third schenario only</span></span><br><span class="line">		<span class="type">AppExtensionPasswordKey</span>: changedPassword,</span><br><span class="line">		<span class="type">AppExtensionOldPasswordKey</span>: oldPassword,</span><br><span class="line">		<span class="type">AppExtensionNotesKey</span>: <span class="string">"Saved with the ACME app"</span>, <span class="comment">// Optional, used for the third schenario only</span></span><br><span class="line">	]</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//设置密码生成规则</span></span><br><span class="line">	<span class="keyword">let</span> passwordGenerationOptions:[<span class="type">String</span>: <span class="type">AnyObject</span>] = [</span><br><span class="line">		<span class="comment">// 密码最小长度</span></span><br><span class="line">		<span class="type">AppExtensionGeneratedPasswordMinLengthKey</span>: (<span class="number">8</span>),</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// 最大密码长度</span></span><br><span class="line">		<span class="type">AppExtensionGeneratedPasswordMaxLengthKey</span>: (<span class="number">30</span>),</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// 是否必须包含数字</span></span><br><span class="line">		<span class="type">AppExtensionGeneratedPasswordRequireDigitsKey</span>: (<span class="literal">true</span>),</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// 字符必须包含符号</span></span><br><span class="line">		<span class="type">AppExtensionGeneratedPasswordRequireSymbolsKey</span>: (<span class="literal">true</span>),</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// Here are all the symbols available in the the 1Password Password Generator:</span></span><br><span class="line">		<span class="comment">// !@#$%^&amp;*()_-+=|[]&#123;&#125;'\";.,&gt;?/~`</span></span><br><span class="line">		<span class="comment">// The string for AppExtensionGeneratedPasswordForbiddenCharactersKey should contain the symbols and characters that you wish 1Password to exclude from the generated password.</span></span><br><span class="line">		<span class="comment">//生成密码的时候排除的字符</span></span><br><span class="line">		<span class="type">AppExtensionGeneratedPasswordForbiddenCharactersKey</span>: <span class="string">"!@#$%/0lIO"</span></span><br><span class="line">	]</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//调用1Password,打开它的页面输入密码修改信息OnePasswordExtension.sharedExtension().changePasswordForLoginForURLString("https://www.acme.com", loginDetails: newLoginDetails, passwordGenerationOptions: passwordGenerationOptions, forViewController: self, sender: sender) &#123; (loginDictionary, error) -&gt; Void in</span></span><br><span class="line">		<span class="keyword">if</span> loginDictionary == <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> error!.code != <span class="type">Int</span>(<span class="type">AppExtensionErrorCodeCancelledByUser</span>) &#123;</span><br><span class="line">				<span class="built_in">print</span>(<span class="string">"Error invoking 1Password App Extension for find login: <span class="subst">\(error)</span>"</span>)</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//把用户的修改返还给界面</span></span><br><span class="line">		<span class="keyword">self</span>.oldPasswordTextField.text = loginDictionary?[<span class="type">AppExtensionOldPasswordKey</span>] <span class="keyword">as</span>? <span class="type">String</span></span><br><span class="line">		<span class="keyword">self</span>.freshPasswordTextField.text = loginDictionary?[<span class="type">AppExtensionPasswordKey</span>] <span class="keyword">as</span>? <span class="type">String</span></span><br><span class="line">		<span class="keyword">self</span>.confirmPasswordTextField.text = loginDictionary?[<span class="type">AppExtensionPasswordKey</span>] <span class="keyword">as</span>? <span class="type">String</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>效果如图:
+
+![](<span class="regexp">/img/</span><span class="number">2015</span><span class="regexp">/11/</span><span class="number">30</span>/<span class="number">6.</span>PNG)
+![](<span class="regexp">/img/</span><span class="number">2015</span><span class="regexp">/11/</span><span class="number">30</span>/<span class="number">7.</span>PNG)
+</code></pre>
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/11/27/为自己的APP增加OpenIn功能/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">为自己的APP增加OpenIn功能</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="在自己的App中嵌入onePassword密码管理" data-title="在自己的App中嵌入onePassword密码管理" data-url="http://sunxiang0918.github.io/2015/11/30/在自己的App中嵌入onePassword密码管理/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

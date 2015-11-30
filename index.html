@@ -198,6 +198,64 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-在自己的App中嵌入onePassword密码管理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/11/30/在自己的App中嵌入onePassword密码管理/" class="article-date">
+  	<time datetime="2015-11-30T11:36:31.000Z" itemprop="datePublished">2015-11-30</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/11/30/在自己的App中嵌入onePassword密码管理/">在自己的App中嵌入onePassword密码管理</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="在自己的App中嵌入onePassword密码管理">在自己的App中嵌入onePassword密码管理</h1><p><a href="https://agilebits.com/onepassword/">1Password</a>是一个密码管理软件,它可以方便和安全的管理你的密码.它提供反钓鱼保护功能和卓越的密码管理,并具有自动生成强密码功能.所有的机密资料,包括密码,身份卡和信用卡,都是保存在一个安全的地方.在OSX和IOS系统上非常的流行.在我的博文<a href="http://sunxiang0918.cn/2015/09/21/MacOS下JAVA开发使用经验(一">MacOS下JAVA开发使用经验(一)</a>/#1Password)也有介绍.<br>自从我的账号被CSDN泄露的干干净净以后的一段时间里,我的其他账号是不是的就会收到更改密码的邮件.于是,一下狠心购买了<code>1Password</code>,并且把我所有的差不多200多个账号的密码通过<code>1Password</code>都给改成了14位的随机字符,以后就不用担心一个密码丢失导致其他的账号也丢失了(1Password自己本身在它的网上没有所谓的用户名密码,密码是通过加密文件整体在WIFI或iCloud中同步的.).但是这就带来了一个麻烦,就是我的密码都变成了类似于这样的<code>RxCa9vdBUB3fCU</code>的字符串.当使用safari这些的时候还好,它有浏览器的插件可以自动填充.遇到一些App,就只能手动的输入了(类似于光大银行和QQ不允许粘贴密码).这相当的麻烦,又容易出错.因此,自己开发APP的时候,就特别的注意了在输入密码的地方要与<code>1Password</code>的整合,这点网易系的APP就做的比较好,<code>网易云音乐</code>和<code>考拉海淘</code>就是支持了<code>1Password</code>的.<br>要在自己的App中引入<code>1Password</code>其实也不麻烦,可以说是相当的简单.<code>1Password</code>在<code>GitHub</code>上开源了App与它的软件交互的扩展<a href="https://github.com/AgileBits/onepassword-app-extension">1PasswordExtension</a>.我们通过这个扩展就可以在自己的App中嵌入<code>1Password</code>的密码管理了.</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/11/30/在自己的App中嵌入onePassword密码管理/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-为自己的APP增加OpenIn功能" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -803,68 +861,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/10/18/3DTouch尝鲜/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-MacOS下JAVA开发使用经验-二" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/10/11/MacOS下JAVA开发使用经验-二/" class="article-date">
-  	<time datetime="2015-10-11T13:39:59.000Z" itemprop="datePublished">2015-10-11</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/11/MacOS下JAVA开发使用经验-二/">MacOS下JAVA开发使用经验(二)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="MacOS下JAVA开发使用经验(二)">MacOS下JAVA开发使用经验(二)</h1><p><a href="http://sunxiang0918.cn/2015/09/21/MacOS下JAVA开发使用经验(一">上一篇文章</a>)写了最常用的一些工具,接下来再介绍一下提高开发生产力的工具.</p>
-<h2 id="软件">软件</h2><h3 id="BetterZip">BetterZip</h3><p>这个是MAC下很常用的压缩/解压的软件.它对于Windows下的中文支持的比较好.<br>基本上没有遇到在Windows下压缩的中文字符,到Mac下就无法打开的问题了.<br>同时他也支持rar格式. 对于我们JAVA的各种<code>ear</code>,<code>war</code>,<code>jar</code>等 都是可以直接打开,然后编辑的.当双击某个jar中的xml文件后会自动打开关联的文件编辑器,然后保存文本编辑器也会自动的更新jar包.</p>
-<p><img src="/img/2015/10/11/1.png" alt=""></p>
-<h3 id="Beyond_Compare">Beyond Compare</h3><p>这个是我们搞IT的大杀器.以前只有在Windows上有,当时为了这一个软件,我不得不装上了虚拟机.<br>不得不说,用过这么多文件比较工具,这个始终是神话般的存在.什么<code>DiffMerge</code> <code>FileMerge</code> <code>Araxis Merge</code> <code>Kaleidoscope</code> 都弱爆了.<br>这个工具可以配合你的<code>sourceTree</code>等代码管理工具使用,直接清晰地对比和合并代码.同时也可以和<code>JD</code>反编译工具配合直接对比<code>class</code>文件的差异(这个可以参考我的<a href="http://sunxiang0918.cn/2014/09/20/在MAC下使用beyondcompare比较JAVA-Class文件/">另一篇文章</a>).</p>
-<p><img src="/img/2015/10/11/2.png" alt=""></p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MAC/">MAC</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/10/11/MacOS下JAVA开发使用经验-二/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
