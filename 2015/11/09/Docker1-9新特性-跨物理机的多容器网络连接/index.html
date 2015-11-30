@@ -18,7 +18,7 @@
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/09/3.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/09/4.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/09/5.png">
-<meta property="og:updated_time" content="2015-11-09T12:18:05.000Z">
+<meta property="og:updated_time" content="2015-11-27T07:23:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker1.9新特性-跨物理机的多容器网络连接">
 <meta name="twitter:description" content="Docker1.9新特性-跨物理机的多容器网络连接近日，Docker公司正式发布Docker 1.9版本。他带来了很多新的特性,其中最重要的新特性无疑就是多宿主机互联功能.
@@ -262,7 +262,7 @@ var _hmt = _hmt || [];
 <p>安装<code>Zookeeper</code>集群就不在这里细说了,可以参考之前的博文<a href="http://sunxiang0918.cn/2014/09/20/zookeeper-集群部署/" target="_blank" rel="external">zookeeper 集群部署</a>.</p>
 <p>安装完后启动<code>zookeeper</code>.  这里假设 我的ZK的地址为:<code>10.211.55.2:2181</code></p>
 <h2 id="启动Docker服务">启动Docker服务</h2><p>接下来就是需要启动Docker服务了.<br>以前的启动方式是:<code>service docker start</code>.<br>但是这样就不会增加<code>KVS</code>的参数,因此我们需要手动的启动Docker服务:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker daemon --cluster-store=zookeeper://<span class="number">10.211</span>.<span class="number">55.2</span>:<span class="number">2181</span> --cluster-advertise=eth0:<span class="number">2376</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker daemon --cluster-store=zk://<span class="number">10.211</span>.<span class="number">55.2</span>:<span class="number">2181</span> --cluster-advertise=eth0:<span class="number">2376</span></span><br></pre></td></tr></table></figure>
 <p>这里主要有两个参数:</p>
 <table>
 <thead>

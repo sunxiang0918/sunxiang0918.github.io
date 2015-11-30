@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2015-11-27T02:13:45.000Z</updated>
+  <updated>2015-11-30T09:56:30.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://sunxiang0918.github.io/2015/11/27/%E4%B8%BA%E8%87%AA%E5%B7%B1%E7%9A%84APP%E5%A2%9E%E5%8A%A0OpenIn%E5%8A%9F%E8%83%BD/"/>
     <id>http://sunxiang0918.github.io/2015/11/27/为自己的APP增加OpenIn功能/</id>
     <published>2015-11-27T01:55:25.000Z</published>
-    <updated>2015-11-27T02:13:45.000Z</updated>
+    <updated>2015-11-30T09:56:30.000Z</updated>
     <content type="html"><![CDATA[<h1 id="为自己的APP增加OpenIn功能">为自己的APP增加OpenIn功能</h1><p>在做App的时候,可能会遇到你的程序可以打开某种类型的文档.比如用户在safari中下载了一个torrent类型的文件,然后需要直接使用你写的App打开.那么这个时候就需要在编写App的时候进行文档类型的注册了.</p>
 <p><img src="/img/2015/11/27/1.png" alt=""></p>
 <a id="more"></a>
@@ -41,8 +41,9 @@
 </ul>
 <p>通过这个的指定,现在程序就能关联到某种文档文件了.</p>
 <h2 id="处理文档的打开操作">处理文档的打开操作</h2><p>有了与文档的关联后,还需要进行的操作就是当用户指定APP打开文档后需要执行的操作了.</p>
-<p>在<code>AppDelegate</code>这个程序的入口类中,有一个方法:<code>func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -&gt; Bool</code>.<br>我们只要重载这个方法就可以了.<br>这个方法中最总要的两个入参就是<code>openURL url: NSURL</code>以及<code>sourceApplication: String?</code><br>它说明了是哪一个其他程序传过来的文档,以及文档目前的路径是什么.<br>当有了这个参数后,我们就可以直接读取文档的内容了.</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">application</span><span class="params">(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">let</span> encrypteddata = <span class="type">NSData</span>(contentsOfURL: url)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">let</span> base64 = encrypteddata!.base64EncodedStringWithOptions(<span class="type">NSDataBase64EncodingOptions</span>(rawValue: <span class="number">0</span>))</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            <span class="comment">//尝试删除文件</span></span><br><span class="line">            try <span class="type">NSFileManager</span>.defaultManager().removeItemAtURL(url)</span><br><span class="line">        &#125; catch <span class="keyword">let</span> e &#123;</span><br><span class="line">            <span class="built_in">print</span>(e)</span><br><span class="line">        &#125;</span><br><span class="line">                </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><del>在<code>AppDelegate</code>这个程序的入口类中,有一个方法:<code>func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -&gt; Bool</code>.<br>我们只要重载这个方法就可以了.<br>这个方法中最总要的两个入参就是<code>openURL url: NSURL</code>以及<code>sourceApplication: String?</code><br>它说明了是哪一个其他程序传过来的文档,以及文档目前的路径是什么.<br>当有了这个参数后,我们就可以直接读取文档的内容了.</del><code>IOS9废弃</code></p>
+<p>在<code>AppDelegate</code>这个程序的入口类中,有一个方法:<code>func application(application: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -&gt; Bool</code>.<br>我们只要重载这个方法就可以了.<br>这个方法中最重要的两个入参就是<code>openURL url: NSURL</code>以及<code>options: [String : AnyObject]</code><br>它说明了是哪一个其他程序传过来的文档,以及文档目前的路径是什么.<br>当有了这个参数后,我们就可以直接读取文档的内容了.</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">application</span><span class="params">(application: UIApplication, openURL url: NSURL,options: [String : AnyObject])</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">let</span> encrypteddata = <span class="type">NSData</span>(contentsOfURL: url)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">let</span> base64 = encrypteddata!.base64EncodedStringWithOptions(<span class="type">NSDataBase64EncodingOptions</span>(rawValue: <span class="number">0</span>))</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            <span class="comment">//尝试删除文件</span></span><br><span class="line">            try <span class="type">NSFileManager</span>.defaultManager().removeItemAtURL(url)</span><br><span class="line">        &#125; catch <span class="keyword">let</span> e &#123;</span><br><span class="line">            <span class="built_in">print</span>(e)</span><br><span class="line">        &#125;</span><br><span class="line">                </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>通过<code>NSData(contentsOfURL: url)</code>可以读取文档的二进制的内容.<br>文档读取后可以通过<code>NSFileManager.defaultManager().removeItemAtURL(url)</code>删除磁盘上的文档.<br>最后返回一个true,表示是这个程序是能处理这个文档的.</p>
 <p>到此,我们的自己的程序就能打开任意的文档并进行相应的处理了.</p>
 ]]></content>
@@ -97,7 +98,7 @@
     <link href="http://sunxiang0918.github.io/2015/11/09/Docker1-9%E6%96%B0%E7%89%B9%E6%80%A7-%E8%B7%A8%E7%89%A9%E7%90%86%E6%9C%BA%E7%9A%84%E5%A4%9A%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5/"/>
     <id>http://sunxiang0918.github.io/2015/11/09/Docker1-9新特性-跨物理机的多容器网络连接/</id>
     <published>2015-11-09T13:47:08.000Z</published>
-    <updated>2015-11-09T12:18:05.000Z</updated>
+    <updated>2015-11-27T07:23:33.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Docker1-9新特性-跨物理机的多容器网络连接">Docker1.9新特性-跨物理机的多容器网络连接</h1><p>近日，Docker公司正式发布Docker 1.9版本。他带来了很多新的特性,其中最重要的新特性无疑就是多宿主机互联功能.</p>
 <p>在今年6月份的DockerCon上，互联曾经作为测试版本的特性被提出。目前，该特性正式集成在了Docker引擎的稳定版中，并将在产品中使用。其主要功能是为跨宿主机创建Docker引擎中的虚拟网络提供支持。用户可以把其所属的容器挂载到网络中，并控制网络拓扑和通信方式。此外，系统还允许用户在不修改应用的情况下直接与任何网络进行集成。</p>
 <p>那么,我们现在就来试一试如何简单的实现多宿主机互联功能.</p>
@@ -115,7 +116,7 @@
 <p>安装<code>Zookeeper</code>集群就不在这里细说了,可以参考之前的博文<a href="http://sunxiang0918.cn/2014/09/20/zookeeper-集群部署/" target="_blank" rel="external">zookeeper 集群部署</a>.</p>
 <p>安装完后启动<code>zookeeper</code>.  这里假设 我的ZK的地址为:<code>10.211.55.2:2181</code></p>
 <h2 id="启动Docker服务">启动Docker服务</h2><p>接下来就是需要启动Docker服务了.<br>以前的启动方式是:<code>service docker start</code>.<br>但是这样就不会增加<code>KVS</code>的参数,因此我们需要手动的启动Docker服务:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker daemon --cluster-store=zookeeper://<span class="number">10.211</span>.<span class="number">55.2</span>:<span class="number">2181</span> --cluster-advertise=eth0:<span class="number">2376</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker daemon --cluster-store=zk://<span class="number">10.211</span>.<span class="number">55.2</span>:<span class="number">2181</span> --cluster-advertise=eth0:<span class="number">2376</span></span><br></pre></td></tr></table></figure>
 <p>这里主要有两个参数:</p>
 <table>
 <thead>
