@@ -124,7 +124,7 @@ var _hmt = _hmt || [];
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 14.29px;">Docker</a> <a href="/tags/GIT/" style="font-size: 12.86px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.43px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.43px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.43px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.43px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.43px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 14.29px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 11.43px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 17.14px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.43px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18.57px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15.71px;">集群</a>
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 14.29px;">Docker</a> <a href="/tags/GIT/" style="font-size: 12.86px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.43px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.43px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.43px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.43px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.43px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 14.29px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 11.43px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 17.14px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.43px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18.57px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15.71px;">集群</a>
 					</div>
 				</section>
 				
@@ -197,6 +197,70 @@ var _hmt = _hmt || [];
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-Docker从私服中下载镜像遇到的问题" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/29/Docker从私服中下载镜像遇到的问题/" class="article-date">
+  	<time datetime="2015-08-29T13:54:24.000Z" itemprop="datePublished">2015-08-29</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/29/Docker从私服中下载镜像遇到的问题/">Docker从私服中下载镜像遇到的问题</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <h1 id="Docker从私服中下载镜像遇到的问题">Docker从私服中下载镜像遇到的问题</h1><p>由于从docker1.3.2版本开始默认docker registry使用的是https,并且在centos7和centos6.5中默认开启了SSL安全.因此 如果你的私服搭建到centos7上的话.那么其他的机器如果要从这个私服pull镜像的话,很可能会报错:<br><code>If this private registry supports only HTTP or HTTPS with an unknown CA certificate, please add</code>—insecure-registry 192.168.112.136:5000<code>to the daemon&#39;s arguments. In the case of HTTPS, if you have access to the registry&#39;s CA certificate, no need for the flag; simply place the CA certificate at /etc/docker/certs.d/192.168.112.136:5000/ca.crt</code></p>
+<p>那么解决的办法就是在连接私服的客户端上,修改docker-server的配置.<br>具体位置在:ubuntu的 <code>/etc/init/docker.conf</code><br>           centos的 <code>/etc/default/docker</code></p>
+<p>增加一个:<code>--insecure-registry 192.168.112.136:5000</code> 即可. 其中的IP就是私服的IP</p>
+<p>具体如下:</p>
+<ul>
+<li>$ sudo vi /etc/init/docker.conf</li>
+</ul>
+<p><img src="/img/2015/08/29/1.jpg" alt=""></p>
+<p>修改完之后，重启Docker服务即可</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-Docker入门" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -780,72 +844,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/06/29/MongoDB在Linux下的集群安装与配置/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-neo4j-底层存储结构分析" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/06/27/neo4j-底层存储结构分析/" class="article-date">
-  	<time datetime="2015-06-27T13:08:13.000Z" itemprop="datePublished">2015-06-27</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/27/neo4j-底层存储结构分析/">&lt;转&gt;Neo4j 底层存储结构分析</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Neo4j_底层存储结构分析">Neo4j 底层存储结构分析</h1><h2 id="neo4j_中节点和关系的物理存储模型">neo4j 中节点和关系的物理存储模型</h2><h3 id="neo4j存储模型">neo4j存储模型</h3><p><img src="/img/2015/06/27/1.jpg" alt=""></p>
-<p>The node records contain only a pointer to their first property and their first relationship (in what is oftentermed the _relationship chain). From here, we can follow the (doubly) linked-list of relationships until we find the one we’re interested in, the  LIKES relationship from  Node 1 to  Node 2 in this case. Once we’ve found the relationship record of interest, we can simply read its properties if there are any via the same singly-linked list structure as node properties, or we can examine the node records that it relates via its start node and end node IDs. These IDs, multiplied by the node record size, of course give the immediate offset of both nodes in the node store file.</p>
-<p>上面的英文摘自<code>&lt;Graph Databases&gt;</code>(作者：IanRobinson) 一书，描述了 neo4j 的存储模型。Node和Relationship 的 Property 是用一个 Key-Value 的双向列表来保存的； Node 的 Relatsionship 是用一个双向列表来保存的，通过关系，可以方便的找到关系的 from-to Node. Node 节点保存第1个属性和第1个关系ID。</p>
-<p>通过上述存储模型，从一个Node-A开始，可以方便的遍历以该Node-A为起点的图。下面给个示例，来帮助理解上面的存储模型，存储文件的具体格式在第2章详细描述。</p>
-<h3 id="示例1">示例1</h3><p><img src="/img/2015/06/27/2.png" alt=""><br>在这个例子中，A~E表示Node 的编号，R1~R7 表示 <code>Relationship</code> 编号，P1~P10 表示<code>Property</code> 的编号。</p>
-<ul>
-<li>Node 的存储示例图如下,每个<code>Node</code> 保存了第1个<code>Property</code> 和 第1个<code>Relationship</code>：<br><img src="/img/2015/06/27/3.png" alt=""></li>
-<li>关系的存储示意图如下：<br><img src="/img/2015/06/27/4.png" alt=""><br>从示意图可以看出，从 Node-B 开始，可以通过关系的 next 指针，遍历Node-B 的所有关系，然后可以到达与其有关系的第1层Nodes,在通过遍历第1层Nodes的关系，可以达到第2层Nodes,…</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo4j/">Neo4j</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/06/27/neo4j-底层存储结构分析/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2015-11-30T14:49:50.000Z</updated>
+  <updated>2015-12-02T14:59:54.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -14,6 +14,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[MYSQL支持utf8mb4]]></title>
+    <link href="http://sunxiang0918.github.io/2015/12/02/MYSQL%E6%94%AF%E6%8C%81utf8mb4/"/>
+    <id>http://sunxiang0918.github.io/2015/12/02/MYSQL支持utf8mb4/</id>
+    <published>2015-12-02T14:41:52.000Z</published>
+    <updated>2015-12-02T14:59:54.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="MYSQL支持utf8mb4">MYSQL支持utf8mb4</h1><p>MYSQL默认的utf8字符集采用了3个字节来进行保存.这就存在了一个问题,那就是有部分的UTF8的字符其实是保存不进MYSQL的,比如现在流行的emoji表情,这和以前的认知是不同的.为了避免以后出现问题,找了这方面的信息.推荐如果有保存扩展字符的用户,提前就把MYSQL的字符集给修改了.具体MYSQL的默认utf8支持哪些字符编码,可以参见这个:<a href="http://witmax.cn/unicode-list.html" target="_blank" rel="external">Unicode编码表</a>,前126行就是它支持的,后面的就是不支持的.</p>
+<p>发现这个问题其实相当的偶然,在知乎上看到了一个问题<a href="http://www.zhihu.com/question/35901422/answer/64960598" target="_blank" rel="external">为什么知乎不支持non-BMP的汉字？</a>.突然发现了这个问题,一验证果然如此.<br>具体来说就是MYSQL的utf8字符集只使用了3个字节来保存字符.因此UTF8扩展区的字符就无法保存.这个在MYSQL5.5后引入了<code>utf8mb4</code>的字符集来解决这个问题,它使用了4个字节来存储字符,扩展了存储的数量.因此,如果各位是使用的MYSQL5.5以上的版本,推荐在可能存入扩展字符的字段上设置字符集为utf8mb4.虽然这样可能会造成空间的浪费,但是比以后在上线的系统上升级数据库的风险要小的多.</p>
+<a id="more"></a>
+<h2 id="修改方法">修改方法</h2><h3 id="MYSQL服务器端">MYSQL服务器端</h3><p>只需要修改数据库的配置文件 <code>/etc/my.cnf</code>,增加或修改以下两行:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">character-set-server=utf8mb4 </span><br><span class="line">collation_server=utf8mb4_unicode_ci</span><br></pre></td></tr></table></figure>
+<p>然后重启数据库即可.<br>对于已有的表,执行:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> tbl_name <span class="keyword">CONVERT</span> <span class="keyword">TO</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8mb4;</span></span><br></pre></td></tr></table></figure>
+<p>即可.</p>
+<h3 id="客户端">客户端</h3><p>由于JDBC的MYSQL驱动现在不支持显示的设置<code>utf8mb4</code>字符集,所以不能在url连接上增加<code>characterEncoding=utf8mb4</code>.<br>那么就只能采取以下的三种方法了(都需要高版本的JDBC驱动):</p>
+<ol>
+<li>在服务器上设置了<code>character-set-server=utf8mb4</code>后,在客户端url上不显示的设置字符集,它会自动继承服务器的设置</li>
+<li>在执行SQL之前,运行<code>set names utf8mb4</code>.例如:<code>connection.prepareStatement(&quot;set names utf8mb4&quot;).executeQuery();</code></li>
+<li>设置MYSQL的 init_connect参数,设置<code>set names utf8mb4</code>.</li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="MYSQL支持utf8mb4">MYSQL支持utf8mb4</h1><p>MYSQL默认的utf8字符集采用了3个字节来进行保存.这就存在了一个问题,那就是有部分的UTF8的字符其实是保存不进MYSQL的,比如现在流行的emoji表情,这和以前的认知是不同的.为了避免以后出现问题,找了这方面的信息.推荐如果有保存扩展字符的用户,提前就把MYSQL的字符集给修改了.具体MYSQL的默认utf8支持哪些字符编码,可以参见这个:<a href="http://witmax.cn/unicode-list.html">Unicode编码表</a>,前126行就是它支持的,后面的就是不支持的.</p>
+<p>发现这个问题其实相当的偶然,在知乎上看到了一个问题<a href="http://www.zhihu.com/question/35901422/answer/64960598">为什么知乎不支持non-BMP的汉字？</a>.突然发现了这个问题,一验证果然如此.<br>具体来说就是MYSQL的utf8字符集只使用了3个字节来保存字符.因此UTF8扩展区的字符就无法保存.这个在MYSQL5.5后引入了<code>utf8mb4</code>的字符集来解决这个问题,它使用了4个字节来存储字符,扩展了存储的数量.因此,如果各位是使用的MYSQL5.5以上的版本,推荐在可能存入扩展字符的字段上设置字符集为utf8mb4.虽然这样可能会造成空间的浪费,但是比以后在上线的系统上升级数据库的风险要小的多.</p>]]>
+    
+    </summary>
+    
+      <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
+    
+      <category term="Mysql" scheme="http://sunxiang0918.github.io/tags/Mysql/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[在自己的App中嵌入onePassword密码管理]]></title>
@@ -1680,32 +1713,6 @@
     </summary>
     
       <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Docker从私服中下载镜像遇到的问题]]></title>
-    <link href="http://sunxiang0918.github.io/2015/08/29/Docker%E4%BB%8E%E7%A7%81%E6%9C%8D%E4%B8%AD%E4%B8%8B%E8%BD%BD%E9%95%9C%E5%83%8F%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://sunxiang0918.github.io/2015/08/29/Docker从私服中下载镜像遇到的问题/</id>
-    <published>2015-08-29T13:54:24.000Z</published>
-    <updated>2015-10-14T08:03:42.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="Docker从私服中下载镜像遇到的问题">Docker从私服中下载镜像遇到的问题</h1><p>由于从docker1.3.2版本开始默认docker registry使用的是https,并且在centos7和centos6.5中默认开启了SSL安全.因此 如果你的私服搭建到centos7上的话.那么其他的机器如果要从这个私服pull镜像的话,很可能会报错:<br><code>If this private registry supports only HTTP or HTTPS with an unknown CA certificate, please add</code>—insecure-registry 192.168.112.136:5000<code>to the daemon&#39;s arguments. In the case of HTTPS, if you have access to the registry&#39;s CA certificate, no need for the flag; simply place the CA certificate at /etc/docker/certs.d/192.168.112.136:5000/ca.crt</code></p>
-<p>那么解决的办法就是在连接私服的客户端上,修改docker-server的配置.<br>具体位置在:ubuntu的 <code>/etc/init/docker.conf</code><br>           centos的 <code>/etc/default/docker</code></p>
-<p>增加一个:<code>--insecure-registry 192.168.112.136:5000</code> 即可. 其中的IP就是私服的IP</p>
-<p>具体如下:</p>
-<ul>
-<li>$ sudo vi /etc/init/docker.conf</li>
-</ul>
-<p><img src="/img/2015/08/29/1.jpg" alt=""></p>
-<p>修改完之后，重启Docker服务即可</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="Docker从私服中下载镜像遇到的问题">Docker从私服中下载镜像遇到的问题</h1><p>由于从docker1.3.2版本开始默认docker registry使用的是https,并且在centos7和centos6.5中默认开启了SSL安全.因此 如果你的]]>
-    </summary>
-    
-      <category term="Docker" scheme="http://sunxiang0918.github.io/tags/Docker/"/>
-    
-      <category term="大数据" scheme="http://sunxiang0918.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
   </entry>
   

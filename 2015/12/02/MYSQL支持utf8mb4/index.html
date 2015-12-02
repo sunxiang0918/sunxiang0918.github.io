@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2015/8 | 翔妖除魔的个人博客</title>
+  <title>MYSQL支持utf8mb4 | 翔妖除魔的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="翔妖除魔的个人博客">
-<meta property="og:url" content="http://sunxiang0918.github.io/archives/2015/08/index.html">
+  <meta name="description" content="MYSQL支持utf8mb4MYSQL默认的utf8字符集采用了3个字节来进行保存.这就存在了一个问题,那就是有部分的UTF8的字符其实是保存不进MYSQL的,比如现在流行的emoji表情,这和以前的认知是不同的.为了避免以后出现问题,找了这方面的信息.推荐如果有保存扩展字符的用户,提前就把MYSQL的字符集给修改了.具体MYSQL的默认utf8支持哪些字符编码,可以参见这个:Unicode编码表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MYSQL支持utf8mb4">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/12/02/MYSQL支持utf8mb4/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
-<meta property="og:description">
+<meta property="og:description" content="MYSQL支持utf8mb4MYSQL默认的utf8字符集采用了3个字节来进行保存.这就存在了一个问题,那就是有部分的UTF8的字符其实是保存不进MYSQL的,比如现在流行的emoji表情,这和以前的认知是不同的.为了避免以后出现问题,找了这方面的信息.推荐如果有保存扩展字符的用户,提前就把MYSQL的字符集给修改了.具体MYSQL的默认utf8支持哪些字符编码,可以参见这个:Unicode编码表">
+<meta property="og:updated_time" content="2015-12-02T14:59:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="翔妖除魔的个人博客">
-<meta name="twitter:description">
+<meta name="twitter:title" content="MYSQL支持utf8mb4">
+<meta name="twitter:description" content="MYSQL支持utf8mb4MYSQL默认的utf8字符集采用了3个字节来进行保存.这就存在了一个问题,那就是有部分的UTF8的字符其实是保存不进MYSQL的,比如现在流行的emoji表情,这和以前的认知是不同的.为了避免以后出现问题,找了这方面的信息.推荐如果有保存扩展字符的用户,提前就把MYSQL的字符集给修改了.具体MYSQL的默认utf8支持哪些字符编码,可以参见这个:Unicode编码表">
   
     <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
   
@@ -196,177 +197,119 @@ var _hmt = _hmt || [];
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-MYSQL支持utf8mb4" class="article article-type-post" itemscope itemprop="blogPost">
   
+    <div class="article-meta">
+      <a href="/2015/12/02/MYSQL支持utf8mb4/" class="article-date">
+  	<time datetime="2015-12-02T14:41:52.000Z" itemprop="datePublished">2015-12-02</time>
+</a>
+    </div>
   
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MYSQL支持utf8mb4
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mysql/">Mysql</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
+      
+        
+        <h1 id="MYSQL支持utf8mb4">MYSQL支持utf8mb4</h1><p>MYSQL默认的utf8字符集采用了3个字节来进行保存.这就存在了一个问题,那就是有部分的UTF8的字符其实是保存不进MYSQL的,比如现在流行的emoji表情,这和以前的认知是不同的.为了避免以后出现问题,找了这方面的信息.推荐如果有保存扩展字符的用户,提前就把MYSQL的字符集给修改了.具体MYSQL的默认utf8支持哪些字符编码,可以参见这个:<a href="http://witmax.cn/unicode-list.html" target="_blank" rel="external">Unicode编码表</a>,前126行就是它支持的,后面的就是不支持的.</p>
+<p>发现这个问题其实相当的偶然,在知乎上看到了一个问题<a href="http://www.zhihu.com/question/35901422/answer/64960598" target="_blank" rel="external">为什么知乎不支持non-BMP的汉字？</a>.突然发现了这个问题,一验证果然如此.<br>具体来说就是MYSQL的utf8字符集只使用了3个字节来保存字符.因此UTF8扩展区的字符就无法保存.这个在MYSQL5.5后引入了<code>utf8mb4</code>的字符集来解决这个问题,它使用了4个字节来存储字符,扩展了存储的数量.因此,如果各位是使用的MYSQL5.5以上的版本,推荐在可能存入扩展字符的字段上设置字符集为utf8mb4.虽然这样可能会造成空间的浪费,但是比以后在上线的系统上升级数据库的风险要小的多.</p>
+<a id="more"></a>
+<h2 id="修改方法">修改方法</h2><h3 id="MYSQL服务器端">MYSQL服务器端</h3><p>只需要修改数据库的配置文件 <code>/etc/my.cnf</code>,增加或修改以下两行:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">character-set-server=utf8mb4 </span><br><span class="line">collation_server=utf8mb4_unicode_ci</span><br></pre></td></tr></table></figure>
+<p>然后重启数据库即可.<br>对于已有的表,执行:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> tbl_name <span class="keyword">CONVERT</span> <span class="keyword">TO</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8mb4;</span></span><br></pre></td></tr></table></figure>
+<p>即可.</p>
+<h3 id="客户端">客户端</h3><p>由于JDBC的MYSQL驱动现在不支持显示的设置<code>utf8mb4</code>字符集,所以不能在url连接上增加<code>characterEncoding=utf8mb4</code>.<br>那么就只能采取以下的三种方法了(都需要高版本的JDBC驱动):</p>
+<ol>
+<li>在服务器上设置了<code>character-set-server=utf8mb4</code>后,在客户端url上不显示的设置字符集,它会自动继承服务器的设置</li>
+<li>在执行SQL之前,运行<code>set names utf8mb4</code>.例如:<code>connection.prepareStatement(&quot;set names utf8mb4&quot;).executeQuery();</code></li>
+<li>设置MYSQL的 init_connect参数,设置<code>set names utf8mb4</code>.</li>
+</ol>
+
+      
+    </div>
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/08/29/Docker从私服中下载镜像遇到的问题/" class="archive-article-date">
-  	<time datetime="2015-08-29T13:54:24.000Z" itemprop="datePublished">8月 29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/08/29/Docker从私服中下载镜像遇到的问题/">Docker从私服中下载镜像遇到的问题</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
   </div>
-</article>
   
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/08/27/Docker入门/" class="archive-article-date">
-  	<time datetime="2015-08-27T13:29:31.000Z" itemprop="datePublished">8月 27</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/08/27/Docker入门/">Docker入门</a>
-    </h1>
   
+    <a href="/2015/11/30/在自己的App中嵌入onePassword密码管理/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">在自己的App中嵌入onePassword密码管理</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/08/09/Solr数据导入Handler/" class="archive-article-date">
-  	<time datetime="2015-08-08T16:00:00.000Z" itemprop="datePublished">8月 9</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/08/09/Solr数据导入Handler/">&lt;翻译&gt;Solr 数据导入Handler</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lucene/">Lucene</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Solr/">Solr</a></li></ul>
-	</div>
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="MYSQL支持utf8mb4" data-title="MYSQL支持utf8mb4" data-url="http://sunxiang0918.github.io/2015/12/02/MYSQL支持utf8mb4/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/08/04/Swift-2-0-新特性/" class="archive-article-date">
-  	<time datetime="2015-08-04T13:35:51.000Z" itemprop="datePublished">8月 4</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/08/04/Swift-2-0-新特性/">Swift 2.0 新特性</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/08/02/swift中多线程的使用方法/" class="archive-article-date">
-  	<time datetime="2015-08-02T14:34:44.000Z" itemprop="datePublished">8月 2</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/08/02/swift中多线程的使用方法/">swift中多线程的使用方法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 </div>
       <footer id="footer">
@@ -392,8 +335,8 @@ var _hmt = _hmt || [];
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false
