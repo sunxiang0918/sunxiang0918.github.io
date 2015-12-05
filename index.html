@@ -198,6 +198,65 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-在Linux上运行Swift" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/12/05/在Linux上运行Swift/" class="article-date">
+  	<time datetime="2015-12-05T15:26:26.000Z" itemprop="datePublished">2015-12-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/05/在Linux上运行Swift/">在Linux上运行Swift</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="在Linux上运行Swift">在Linux上运行Swift</h1><p>盼星星盼月亮,等了半年,终于在12月的头几天,苹果开源了<code>Swift</code>语言.并建立了一个<a href="http://swift.org">Swift.org</a>社区以及<a href="http://github.com/apple">Github</a>来维护.开源以后,最大的好处当然是有更多的人来参与Swift语言的发展,让Swift语言增加更多的新的特性,更多的开源框架,工作在更多的平台上面.这对于一个开发语言来说无疑是一个很好的消息.而对于我来说,除了在编写代码的时候能更了解Swift某些函数的参数意义和工作的原理(作为一个JAVA Coder,平时如果遇到搞不定的问题或者是不明白的地方,习惯了直接翻它的源码来了解原委的)外,让我基本上抛弃了<code>Python</code>脚本,平时有什么小东西小程序需要写一下的话,现在可以直接写一个Swift文件,然后在命令行直接调用<code>swift xxx.swift</code>或者<code>swiftc -O xxxx.swift</code>即可.</p>
+<h2 id="在Linux上安装Swift">在Linux上安装Swift</h2><p>前面废话说了这么多.现在就来看看如何在Linux上安装Swift的运行环境.MACOS上的就不用说了,直接安装一个Xcode就可以了.</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/12/05/在Linux上运行Swift/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-MYSQL支持utf8mb4" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -809,75 +868,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-为-Key-Value-数据库实现MVCC-事务" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/10/23/为-Key-Value-数据库实现MVCC-事务/" class="article-date">
-  	<time datetime="2015-10-23T03:12:50.000Z" itemprop="datePublished">2015-10-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/23/为-Key-Value-数据库实现MVCC-事务/">&lt;转&gt; 为 Key-Value 数据库实现MVCC 事务</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="为_Key-Value_数据库实现MVCC_事务">为 Key-Value 数据库实现MVCC 事务</h1><p>ACID 是软件领域使用最广泛的技术之一，它是关系数据库的基石，是企业级中间件不可或缺的部分，但通常通过黑盒的方式提供。但是在许多情况下，这种古老的事务方式已经不能够适应现代大规模系统和NoSQL数据库的需要了，现代系统要求更高的性能要求，更大的数据量，更高的可用性。在这种情况下，传统的事务模型被定制的事务或者半事务模型所取代，而在这些模型中事务性并不像以往那样被看重。</p>
-<p>在本文中我们会讨论一下key-value数据库的无锁事务操作，这种技术可以广泛应用于任何一种数据库系统。在GridDynamics中，我们就用这种技术在Oracle Coherence上实现了一个轻量级的非标准的事务机制。在第一部分我们会通过几个重要的用例来了解两种简单的方法，在第二部分我们会研究更多更通用的方法，比如说PostgreSQL的MVCC实现。</p>
-<h2 id="原子性缓存切换，读提交隔离">原子性缓存切换，读提交隔离</h2><p>让我们从一个简单易于实现的方法开始，这个方法适用于读远多于写的系统。比如说电子商务系统中每天要进行的数据更新，一些管理性操作例如无效货品的修复以及缓存更新。</p>
-<p>最简单的例子是把所有数据都加载进缓存里，然后通过一个代理接口来执行诸如 get() 和 put() 这样的操作。这个接口会与两个缓存打交道，A和B，按照以下逻辑运行（图 1）：</p>
-<ul>
-<li>任何时候只能有一个缓存处于可用状态，代理接口会把所有的请求路由给它（图1.1）。</li>
-<li>更新数据的时候把新数据加载到目前不可用的缓存中（图1.2）。</li>
-<li>更新进程切换标志哪个缓存可用的标记（图1.3），代理接口开始把新的读请求分发到新标记为可用的缓存。</li>
-<li>缓存切换阶段的事务可以依据不用的持久性和隔离性要求来分别处理。如果允许“不可重复读” ，那么切换很简单，老数据会被立刻清理掉。否则，代理接口会维护一个仍未结束的事务列表，并把属于这个列表中的每一个请求都路由到原来的缓存中。只有当列表中的所有事物都提交或者放弃之后老数据才会被清空。
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/10/23/为-Key-Value-数据库实现MVCC-事务/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 </div>
