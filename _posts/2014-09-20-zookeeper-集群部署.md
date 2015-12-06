@@ -135,3 +135,84 @@ $ ./zkServer.sh start
 
 PS: 需要注意的是,ZK集群提供了过半存活的能力.也就是说2n+1台机器环境下的ZK集群.最多允许n个节点挂掉.超过了就无法选举出leader了.
 
+
+---
+
+Update: 2015-12-05 10:25:04
+
+##在Docker1.9下部署跨物理机的ZK集群.
+现在虚拟化非常的流行.Docker的使用也越来越多了.因此,在我们的系统中也使用Docker来封装了各种服务,ZK也不例外.
+
+要在Docker中搭建ZK集群,主要有两种方法.第一种方法就是使用`Docker1.9`的`network`.另外一种就是使用`--net=host`模式来实现.
+
+###network方式实现
+首先搭建好`Docker1.9`,并创建一个网络`my-net`.这方面可以参考我的博文[Docker1.9新特性-跨物理机的多容器网络连接](/2015/11/09/Docker1-9新特性-跨物理机的多容器网络连接/).
+然后在宿主机上创建两个目录,一个是 `conf` 一个是 `data`. 在`data`文件夹中照样的创建`myid`文件,并写上号码. 在`conf`文件夹中修改`zoo.cfg`配置文件:
+
+```bash
+...
+server.1=zk1:2888:3888
+server.2=zk2:2888:3888
+server.3=zk3:2888:3888
+```
+
+然后就可以启动docker容器了:
+
+```bash
+docker run --privileged=true -p 3181:2181 -v /root/zookeeper/1/conf:/opt/zookeeper/conf -v /root/zookeeper/1/data:/tmp/zookeeper --name zk1 --hostname zk1 --net my-net jplock/zookeeper
+
+docker run --privileged=true -p 3281:2181 -v /root/zookeeper/2/conf:/opt/zookeeper/conf -v /root/zookeeper/2/data:/tmp/zookeeper --name zk2 --hostname zk2 --net my-net jplock/zookeeper
+
+docker run --privileged=true -p 3381:2181 -v /root/zookeeper/3/conf:/opt/zookeeper/conf -v /root/zookeeper/3/data:/tmp/zookeeper --name zk3 --hostname zk3 --net my-net jplock/zookeeper
+```
+
+这样就相当于启动了3个ZK,并且建立起集群了.
+
+```bash
+[root@CentOS7_with_kernel4 ~]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                        PORTS                                        NAMES
+bd3e7befe015        jplock/zookeeper    "/opt/zookeeper/bin/z"   23 minutes ago      Up 3 seconds                  2888/tcp, 3888/tcp, 0.0.0.0:3181->2181/tcp   zk1
+b5dfc1977efd        jplock/zookeeper    "/opt/zookeeper/bin/z"   24 minutes ago      Up 2 seconds                  2888/tcp, 3888/tcp, 0.0.0.0:3281->2181/tcp   zk2
+1e605a32885d        jplock/zookeeper    "/opt/zookeeper/bin/z"   24 minutes ago      Up 2 seconds                  2888/tcp, 3888/tcp, 0.0.0.0:3381->2181/tcp   zk3
+```
+
+###host方式实现
+host模式要求docker1.5以上. 这种方式就是使用宿主机的网络直接当成容器的网络.因此,配置ZK集群也很简单.相当于是在多台真实的物理机上进行部署. 这种方式的缺点就是 一个宿主机上只能部署一个ZK.否则会端口冲突.
+
+在宿主机上创建两个目录,一个是 `conf` 一个是 `data`. 在`data`文件夹中照样的创建`myid`文件,并写上号码. 在`conf`文件夹中修改`zoo.cfg`配置文件:
+
+```bash
+...
+server.1=10.211.55.13:2888:3888
+server.2=10.211.55.14:2888:3888
+server.3=10.211.55.15:2888:3888
+```
+
+然后就可以启动docker容器了:
+
+```bash
+宿主机1:
+docker run --privileged=true -v /root/zk/1/conf:/opt/zookeeper/conf -v /root/zk/1/data:/tmp/zookeeper --name z_k1 --net=host jplock/zookeeper
+
+宿主机2:
+docker run --privileged=true -v /root/zk/2/conf:/opt/zookeeper/conf -v /root/zk/2/data:/tmp/zookeeper --name z_k2 --net=host jplock/zookeeper
+
+宿主机3:
+docker run --privileged=true -v /root/zk/3/conf:/opt/zookeeper/conf -v /root/zk/3/data:/tmp/zookeeper --name z_k3 --net=host jplock/zookeeper
+```
+
+这样就相当于启动了3个ZK,并且建立起集群了.
+
+```bash
+[root@CentOS7_with_kernel4 ~]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                        PORTS                                        NAMES
+11cb1b859fb7        jplock/zookeeper    "/opt/zookeeper/bin/z"   10 minutes ago      Up 10 minutes      							                               z_k1
+
+[root@CentOS7_with_kernel4_2 ~]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                        PORTS                                        NAMES
+1vxsf1859fb7        jplock/zookeeper    "/opt/zookeeper/bin/z"   10 minutes ago      Up 10 minutes  								                               z_k2
+
+[root@CentOS7_with_kernel4_3 ~]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                        PORTS                                        NAMES
+11cbbd9s7fb7        jplock/zookeeper    "/opt/zookeeper/bin/z"   10 minutes ago      Up 10 minutes                                                          z_k3
+```
