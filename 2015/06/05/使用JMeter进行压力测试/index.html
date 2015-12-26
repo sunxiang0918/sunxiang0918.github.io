@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用JMeter进行压力测试 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="使用JMeter进行压力测试说到压力测试,一般第一反应都是LoadRunner.这个软件也确实是自动化测试的一个事实标准.无奈这个软件太过庞大,以及不能在MacOS上使用.我由于项目的需要,需要对一个模块的WebServcie接口做压力的测试,于是就找到了另外一个神器JMeter.JMeter是Apache组织开发的基于Java的压力测试工具.它是由JAVA编写的,可以跨平台.最初只能测试Web应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用JMeter进行压力测试">
+<meta property="og:url" content="http://sunxiang0918.github.io/2015/06/05/使用JMeter进行压力测试/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="使用JMeter进行压力测试说到压力测试,一般第一反应都是LoadRunner.这个软件也确实是自动化测试的一个事实标准.无奈这个软件太过庞大,以及不能在MacOS上使用.我由于项目的需要,需要对一个模块的WebServcie接口做压力的测试,于是就找到了另外一个神器JMeter.JMeter是Apache组织开发的基于Java的压力测试工具.它是由JAVA编写的,可以跨平台.最初只能测试Web应">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/1.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/2.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/3.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/4.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/5.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/6.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/7.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/8.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/9.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/10.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/11.png">
+<meta property="og:updated_time" content="2015-12-26T15:31:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用JMeter进行压力测试">
+<meta name="twitter:description" content="使用JMeter进行压力测试说到压力测试,一般第一反应都是LoadRunner.这个软件也确实是自动化测试的一个事实标准.无奈这个软件太过庞大,以及不能在MacOS上使用.我由于项目的需要,需要对一个模块的WebServcie接口做压力的测试,于是就找到了另外一个神器JMeter.JMeter是Apache组织开发的基于Java的压力测试工具.它是由JAVA编写的,可以跨平台.最初只能测试Web应">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 14.29px;">Docker</a> <a href="/tags/GIT/" style="font-size: 12.86px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.43px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.43px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.43px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.43px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.43px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 14.29px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 12.86px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Nutch/" style="font-size: 10px;">Nutch</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 17.14px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.43px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18.57px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/日志挖掘/" style="font-size: 10px;">日志挖掘</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15.71px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-使用JMeter进行压力测试" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/06/05/使用JMeter进行压力测试/" class="article-date">
+  	<time datetime="2015-06-05T11:00:46.000Z" itemprop="datePublished">2015-06-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用JMeter进行压力测试
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        
+        <h1 id="使用JMeter进行压力测试">使用JMeter进行压力测试</h1><p>说到压力测试,一般第一反应都是LoadRunner.这个软件也确实是自动化测试的一个事实标准.无奈这个软件太过庞大,以及不能在MacOS上使用.我由于项目的需要,需要对一个模块的WebServcie接口做压力的测试,于是就找到了另外一个神器JMeter.<br>JMeter是Apache组织开发的基于Java的压力测试工具.它是由JAVA编写的,可以跨平台.最初只能测试Web应用,现在可以进行各种的压力测试,包括但不限于JAVA小程序,CGI脚本,JAVA RMI调用,数据库,FTP服务等等. 并且它的操作非常简单,通过几部的配置就可以创建一个完整的压力测试用例.</p>
+<h2 id="JMeter安装">JMeter安装</h2><p>JMeter是由JAVA编写的,所以需要依赖JDK的运行环境,最新版的JMeter需要JDK1.6以上的支持.</p>
+<p>JMeter的软件可以通过<a href="http://jmeter.apache.org/download_jmeter.cgi" target="_blank" rel="external">官网下载</a>.直接下载编译后的压缩包,然后在终端中输入:<code>unzip apache-jmeter-2.13.zip</code>进行解压.然后得到以下的文件:<br><a id="more"></a></p>
+<p><img src="/img/2015/06/05/1.png" alt=""></p>
+<p>而后在终端中执行<code>./jmeter</code>即可启动主界面.</p>
+<p><img src="/img/2015/06/05/2.png" alt=""></p>
+<h2 id="进行Web的压力测试">进行Web的压力测试</h2><p>JMeter中最小的单位就是元件.你可以给你的测试计划中增加若干的元件,每一个元件其实就是一个步骤.<br>JMeter中设置了各种不同的元件:有设置用户的,有设置定时器的,有设置前后置处理的,有设置断言的还有设置监听器的.通过这些不同的元件的组合,我们就能很很容易的组合出更多不同的压力测试用例.</p>
+<p>我们以最简单的Web服务器的压力测试为例,来演示下如何使用JMeter设置测试用例.</p>
+<h3 id="设置线程组(模拟用户)">设置线程组(模拟用户)</h3><p>压力测试不同于功能测试，软件的正确性并不是它的测试重点。它所看重的是软件的执行效率，尤其是短时间内访问用户数爆炸性增长时软件的响应速度.因此就需要同时模拟多个用户对系统进行请求.<br>因此,一般设置测试计划的第一步都是创建一个线程组,用来模拟多个用户的操作.</p>
+<p><img src="/img/2015/06/05/3.png" alt=""></p>
+<p>而后就需要设置线程组的一些属性.</p>
+<ul>
+<li>线程数:相当于是模拟用户的数量.</li>
+<li>准备时长:表示线程之间间隔多少时间,单位是秒.0就表示了所有的线程并发发送请求,否则就是每个线程间隔几秒发送请求</li>
+<li>循环次数:表示每个线程执行几次</li>
+<li>调度器:就是创建线程的schedule.</li>
+<li>在取样器错误后执行的操作:表示线程出现错误后执行的操作.比如继续,或者停止线程,或者测试</li>
+</ul>
+<p><img src="/img/2015/06/05/4.png" alt=""></p>
+<h3 id="设置HTTP请求">设置HTTP请求</h3><p>这里我们使用最简单的用例进行测试——访问我的博客的首页,测试QPS(Query Per Second 每秒查询率)的情况.</p>
+<p>因此,接下来我们需要增加的就是在线程组上面右键—-添加—-Sampler—-HTTP请求.</p>
+<p><img src="/img/2015/06/05/5.png" alt=""></p>
+<p>在JMetaer中取样器(Sampler)就是与服务器进行交互的元件.一个取样器通常会进行三个部分的工作:</p>
+<ul>
+<li>向服务器发送请求</li>
+<li>记录服务器的响应数据</li>
+<li>记录响应的时间信息</li>
+</ul>
+<p><img src="/img/2015/06/05/6.png" alt=""><br>这里我设置了:</p>
+<ul>
+<li>服务器名称:  sunxiang0918.cn</li>
+<li>端口号:        80</li>
+<li>HTTP请求实现:    JAVA</li>
+<li>协议:            http</li>
+<li>方法:            GET</li>
+<li>ContentEncoding:    UTF-8</li>
+<li>路径:            /</li>
+</ul>
+<p>其实这样就算是完成了一个HTTP请求的设置了.这个时候我们就可以保存这个测试用例到一个<code>JMX文件</code>中.然后执行这个测试用例了. 不过,由于我们还没有配置监听器元件,因此,现在运行的话.我们是看不到任何的结果的.</p>
+<h3 id="设置结果监听器">设置结果监听器</h3><p>为了我们能查看到请求的结果,我们需要再添加监听器.<br>在这里我们增加两个结果监听器:<code>察看结果树</code>以及<code>聚合报告</code><br><code>查看结果树</code>可以查看到每一次请求的具体情况,包括了请求参数,结果反馈,请求时间等等.<br><code>聚合报告</code>会展示本次测试计划所有的请求的一个聚合的结果.</p>
+<p><img src="/img/2015/06/05/7.png" alt=""><br>这两个结果监听器都不需要什么设置.增加后,即可再执行一次测试计划.里面就会有结果了.</p>
+<p>我们先来看<code>查看结果树</code>.<br><img src="/img/2015/06/05/8.png" alt=""><br>它显示了这次请求的所有信息.比如开始时间,线程名字,完成用时,请求大小,反馈大小,反馈代码,采样次数,错误信息,反馈头信息,反馈体等等.<br>通过这个列表,我们就能很清楚的知道所有请求的大概情况.</p>
+<p>然后就是<code>聚合报告</code>.<br><img src="/img/2015/06/05/9.png" alt=""><br>它用表格的形式展示了本次测试的总体情况.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Label</th>
+<th style="text-align:center">Samples</th>
+<th style="text-align:center">Average</th>
+<th style="text-align:center">Median</th>
+<th style="text-align:center">90%Line</th>
+<th style="text-align:center">95%Line</th>
+<th style="text-align:center">99%Line</th>
+<th style="text-align:center">Min</th>
+<th style="text-align:center">Max</th>
+<th style="text-align:center">Error</th>
+<th style="text-align:center">Throughput</th>
+<th style="text-align:center">KB/sec</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">名称</td>
+<td style="text-align:center">采样请求数</td>
+<td style="text-align:center">平均响应时间</td>
+<td style="text-align:center">中位数</td>
+<td style="text-align:center">90%用户响应时间</td>
+<td style="text-align:center">95%用户响应时间</td>
+<td style="text-align:center">99%用户响应时间</td>
+<td style="text-align:center">最小响应时间</td>
+<td style="text-align:center">最大响应时间</td>
+<td style="text-align:center">错误请求百分比</td>
+<td style="text-align:center">吞吐量,每秒完成请求数</td>
+<td style="text-align:center">每秒接收数据量</td>
+</tr>
+<tr>
+<td style="text-align:center">HTTP请求</td>
+<td style="text-align:center">200</td>
+<td style="text-align:center">811</td>
+<td style="text-align:center">660</td>
+<td style="text-align:center">1537</td>
+<td style="text-align:center">1886</td>
+<td style="text-align:center">2422</td>
+<td style="text-align:center">275</td>
+<td style="text-align:center">3424</td>
+<td style="text-align:center">0.00%</td>
+<td style="text-align:center">15.8/sec</td>
+<td style="text-align:center">542.3</td>
+</tr>
+</tbody>
+</table>
+<h3 id="限制QPS">限制QPS</h3><p>为了了解博客的首页在负载达到30QPS时的响应时间,我们就需要控制向博客首页发送请求的负载为固定的30QPS.<br>JMeter提供了一个非常有用的定时器:<code>Constant Throughput Timer</code>(常数吞吐量定时器),通过该定时器可以方便的控制给一个采样器发送请求的吞吐量.</p>
+<p><img src="/img/2015/06/05/10.png" alt=""></p>
+<p><img src="/img/2015/06/05/11.png" alt=""></p>
+<p>首先是<code>Target throughput</code>目标吞吐量,需要注意的是这个的单位是分钟. 比如我们要测试的是30QPS,那么一分钟的吞吐量就是 1800.<br>而<code>Calculate Throughput based on</code>有五个选项:</p>
+<ul>
+<li>This thread only:控制每一个线程的吞吐量.这个时候,总吞吐量就是<code>Target throughput</code>乘以线程数</li>
+<li>All active threads:设置总体的吞吐量,它会把<code>Target throughput</code>分配到每一个活跃的想成上.</li>
+<li>All active threads in current thread group.设置总体的吞吐量,它会把<code>Target throughput</code>分配到每一个活跃的想成上.当一个测试计划中只有一个测试组的时候,效果和<code>All active threads</code>是一样的.</li>
+<li>All active threads(shared):与<code>All active threads</code>的区别在于,每个活跃线程都会在所有活跃线程上一次运行结束后等待一定的时间后再次运行.</li>
+<li>All active threads in current thread group(shared):与<code>All active threads in current thread group</code>的区别在于,每个活跃线程都会在所有活跃线程上一次运行结束后等待一定的时间后再次运行.</li>
+</ul>
+<p>因此,我们这里选择了<code>All active threads</code>.</p>
+<p><strong>需要注意的是</strong>:这个常量吞吐量定时器只有在线程组中产生了足够多的请求的时候才有意义.否则,就算设置了这个<code>Target throughput</code>,也有可能由于线程数和请求数不够,而打不到预期的目标.</p>
+<p>在这个基础上再跑一次的结果为:<br>|Label|Samples|Average|Median|90%Line|95%Line|99%Line|Min|Max|Error|Throughput|KB/sec|<br>|:—:|:—:|:—:|:—:|:—:|:—:|:—:|:—:|:—:|:—:|:—:|:—:|<br>|名称|采样请求数|平均响应时间|中位数|90%用户响应时间|95%用户响应时间|99%用户响应时间|最小响应时间|最大响应时间|错误请求百分比|吞吐量,每秒完成请求数|每秒接收数据量|<br>|HTTP请求|300|910|723|1525|1812|3268|305|9255|0.00%|11.2/sec|387.0|</p>
+<p>由此可见,在这里访问github.io,确实相当的慢啊….</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/06/24/如何在Git中撤销一切/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          &lt;转&gt;如何在Git中撤销一切
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/05/18/Swift扩展的三个微妙细节/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">&lt;转&gt;Swift扩展的三个微妙细节</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="使用JMeter进行压力测试" data-title="使用JMeter进行压力测试" data-url="http://sunxiang0918.github.io/2015/06/05/使用JMeter进行压力测试/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
