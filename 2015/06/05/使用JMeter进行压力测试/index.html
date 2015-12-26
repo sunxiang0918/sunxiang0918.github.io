@@ -22,7 +22,7 @@
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/9.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/10.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/11.png">
-<meta property="og:updated_time" content="2015-12-26T15:31:01.000Z">
+<meta property="og:updated_time" content="2015-12-26T15:49:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用JMeter进行压力测试">
 <meta name="twitter:description" content="使用JMeter进行压力测试说到压力测试,一般第一反应都是LoadRunner.这个软件也确实是自动化测试的一个事实标准.无奈这个软件太过庞大,以及不能在MacOS上使用.我由于项目的需要,需要对一个模块的WebServcie接口做压力的测试,于是就找到了另外一个神器JMeter.JMeter是Apache组织开发的基于Java的压力测试工具.它是由JAVA编写的,可以跨平台.最初只能测试Web应">
@@ -352,7 +352,55 @@ var _hmt = _hmt || [];
 </ul>
 <p>因此,我们这里选择了<code>All active threads</code>.</p>
 <p><strong>需要注意的是</strong>:这个常量吞吐量定时器只有在线程组中产生了足够多的请求的时候才有意义.否则,就算设置了这个<code>Target throughput</code>,也有可能由于线程数和请求数不够,而打不到预期的目标.</p>
-<p>在这个基础上再跑一次的结果为:<br>|Label|Samples|Average|Median|90%Line|95%Line|99%Line|Min|Max|Error|Throughput|KB/sec|<br>|:—:|:—:|:—:|:—:|:—:|:—:|:—:|:—:|:—:|:—:|:—:|:—:|<br>|名称|采样请求数|平均响应时间|中位数|90%用户响应时间|95%用户响应时间|99%用户响应时间|最小响应时间|最大响应时间|错误请求百分比|吞吐量,每秒完成请求数|每秒接收数据量|<br>|HTTP请求|300|910|723|1525|1812|3268|305|9255|0.00%|11.2/sec|387.0|</p>
+<p>在这个基础上再跑一次的结果为:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Label</th>
+<th style="text-align:center">Samples</th>
+<th style="text-align:center">Average</th>
+<th style="text-align:center">Median</th>
+<th style="text-align:center">90%Line</th>
+<th style="text-align:center">95%Line</th>
+<th style="text-align:center">99%Line</th>
+<th style="text-align:center">Min</th>
+<th style="text-align:center">Max</th>
+<th style="text-align:center">Error</th>
+<th style="text-align:center">Throughput</th>
+<th style="text-align:center">KB/sec</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">名称</td>
+<td style="text-align:center">采样请求数</td>
+<td style="text-align:center">平均响应时间</td>
+<td style="text-align:center">中位数</td>
+<td style="text-align:center">90%用户响应时间</td>
+<td style="text-align:center">95%用户响应时间</td>
+<td style="text-align:center">99%用户响应时间</td>
+<td style="text-align:center">最小响应时间</td>
+<td style="text-align:center">最大响应时间</td>
+<td style="text-align:center">错误请求百分比</td>
+<td style="text-align:center">吞吐量,每秒完成请求数</td>
+<td style="text-align:center">每秒接收数据量</td>
+</tr>
+<tr>
+<td style="text-align:center">HTTP请求</td>
+<td style="text-align:center">300</td>
+<td style="text-align:center">910</td>
+<td style="text-align:center">723</td>
+<td style="text-align:center">1525</td>
+<td style="text-align:center">1812</td>
+<td style="text-align:center">3268</td>
+<td style="text-align:center">305</td>
+<td style="text-align:center">9255</td>
+<td style="text-align:center">0.00%</td>
+<td style="text-align:center">11.2/sec</td>
+<td style="text-align:center">387.0</td>
+</tr>
+</tbody>
+</table>
 <p>由此可见,在这里访问github.io,确实相当的慢啊….</p>
 
       
