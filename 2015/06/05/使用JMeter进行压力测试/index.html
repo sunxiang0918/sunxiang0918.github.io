@@ -17,12 +17,15 @@
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/4.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/5.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/6.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/12.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/13.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/7.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/8.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/14.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/9.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/10.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/11.png">
-<meta property="og:updated_time" content="2015-12-26T15:49:19.000Z">
+<meta property="og:updated_time" content="2015-12-27T03:45:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用JMeter进行压力测试">
 <meta name="twitter:description" content="使用JMeter进行压力测试说到压力测试,一般第一反应都是LoadRunner.这个软件也确实是自动化测试的一个事实标准.无奈这个软件太过庞大,以及不能在MacOS上使用.我由于项目的需要,需要对一个模块的WebServcie接口做压力的测试,于是就找到了另外一个神器JMeter.JMeter是Apache组织开发的基于Java的压力测试工具.它是由JAVA编写的,可以跨平台.最初只能测试Web应">
@@ -287,10 +290,15 @@ var _hmt = _hmt || [];
 <li>路径:            /</li>
 </ul>
 <p>其实这样就算是完成了一个HTTP请求的设置了.这个时候我们就可以保存这个测试用例到一个<code>JMX文件</code>中.然后执行这个测试用例了. 不过,由于我们还没有配置监听器元件,因此,现在运行的话.我们是看不到任何的结果的.</p>
-<h3 id="设置结果监听器">设置结果监听器</h3><p>为了我们能查看到请求的结果,我们需要再添加监听器.<br>在这里我们增加两个结果监听器:<code>察看结果树</code>以及<code>聚合报告</code><br><code>查看结果树</code>可以查看到每一次请求的具体情况,包括了请求参数,结果反馈,请求时间等等.<br><code>聚合报告</code>会展示本次测试计划所有的请求的一个聚合的结果.</p>
-<p><img src="/img/2015/06/05/7.png" alt=""><br>这两个结果监听器都不需要什么设置.增加后,即可再执行一次测试计划.里面就会有结果了.</p>
+<h3 id="增加响应断言">增加响应断言</h3><p>为了判断结果的正确性,我们有时需要增加响应的断言.比如响应代码必须是200才作数.<br>JMeter中有一个元件就叫做<code>响应断言</code>.这个就可以加在HTTP请求的后面,用来判断结果是否正确.</p>
+<p><img src="/img/2015/06/05/12.png" alt=""></p>
+<p>在这里我只增加了一个最简单的通过响应代码来判断请求是否正确.</p>
+<p><img src="/img/2015/06/05/13.png" alt=""><br>除此之外,它还能通过响应的内容,响应的头信息等来进行判断.功能非常的强大.</p>
+<h3 id="设置结果监听器">设置结果监听器</h3><p>为了我们能查看到请求的结果,我们需要再添加监听器.<br>在这里我们增加三个结果监听器:<code>察看结果树</code> <code>图形结果</code>以及<code>聚合报告</code><br><code>查看结果树</code>可以查看到每一次请求的具体情况,包括了请求参数,结果反馈,请求时间等等.<br><code>图形结果</code> 可以以图形的方式展现请求的中和结果.<br><code>聚合报告</code>会展示本次测试计划所有的请求的一个聚合的结果.</p>
+<p><img src="/img/2015/06/05/7.png" alt=""><br>这几个结果监听器都不需要什么设置.增加后,即可再执行一次测试计划.里面就会有结果了.</p>
 <p>我们先来看<code>查看结果树</code>.<br><img src="/img/2015/06/05/8.png" alt=""><br>它显示了这次请求的所有信息.比如开始时间,线程名字,完成用时,请求大小,反馈大小,反馈代码,采样次数,错误信息,反馈头信息,反馈体等等.<br>通过这个列表,我们就能很清楚的知道所有请求的大概情况.</p>
-<p>然后就是<code>聚合报告</code>.<br><img src="/img/2015/06/05/9.png" alt=""><br>它用表格的形式展示了本次测试的总体情况.</p>
+<p>然后就是<code>图形结果</code><br><img src="/img/2015/06/05/14.png" alt=""><br>从这个图上就能很清楚的看出整个请求和响应的趋势.</p>
+<p>最后就是<code>聚合报告</code>.<br><img src="/img/2015/06/05/9.png" alt=""><br>它用表格的形式展示了本次测试的总体情况.</p>
 <table>
 <thead>
 <tr>
@@ -402,6 +410,7 @@ var _hmt = _hmt || [];
 </tbody>
 </table>
 <p>由此可见,在这里访问github.io,确实相当的慢啊….</p>
+<h2 id="总结">总结</h2><p>这里只是简单的展示了一下JMeter的用法,其实对其他的压力测试,比如<code>WebService</code>,<code>Restful</code>,<code>RMI</code>等的测试都可以参照这个步骤,增加不同的元件即可.</p>
 
       
     </div>
