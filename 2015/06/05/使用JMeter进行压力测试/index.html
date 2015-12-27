@@ -17,6 +17,8 @@
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/4.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/5.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/6.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/15.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/16.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/12.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/13.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/7.png">
@@ -25,7 +27,7 @@
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/9.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/10.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/11.png">
-<meta property="og:updated_time" content="2015-12-27T03:48:34.000Z">
+<meta property="og:updated_time" content="2015-12-27T04:13:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用JMeter进行压力测试">
 <meta name="twitter:description" content="使用JMeter进行压力测试说到压力测试,一般第一反应都是LoadRunner.这个软件也确实是自动化测试的一个事实标准.无奈这个软件太过庞大,以及不能在MacOS上使用.我由于项目的需要,需要对一个模块的WebServcie接口做压力的测试,于是就找到了另外一个神器JMeter.JMeter是Apache组织开发的基于Java的压力测试工具.它是由JAVA编写的,可以跨平台.最初只能测试Web应">
@@ -251,7 +253,7 @@ var _hmt = _hmt || [];
       
       
         <div id="toc" class="article-toc">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用JMeter进行压力测试"><span class="toc-number">1.</span> <span class="toc-text">使用JMeter进行压力测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JMeter安装"><span class="toc-number">1.1.</span> <span class="toc-text">JMeter安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进行Web的压力测试"><span class="toc-number">1.2.</span> <span class="toc-text">进行Web的压力测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#设置线程组(模拟用户)"><span class="toc-number">1.2.1.</span> <span class="toc-text">设置线程组(模拟用户)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置HTTP请求"><span class="toc-number">1.2.2.</span> <span class="toc-text">设置HTTP请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#增加响应断言"><span class="toc-number">1.2.3.</span> <span class="toc-text">增加响应断言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置结果监听器"><span class="toc-number">1.2.4.</span> <span class="toc-text">设置结果监听器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#限制QPS"><span class="toc-number">1.2.5.</span> <span class="toc-text">限制QPS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用JMeter进行压力测试"><span class="toc-number">1.</span> <span class="toc-text">使用JMeter进行压力测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JMeter安装"><span class="toc-number">1.1.</span> <span class="toc-text">JMeter安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进行Web的压力测试"><span class="toc-number">1.2.</span> <span class="toc-text">进行Web的压力测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#设置线程组(模拟用户)"><span class="toc-number">1.2.1.</span> <span class="toc-text">设置线程组(模拟用户)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置HTTP请求"><span class="toc-number">1.2.2.</span> <span class="toc-text">设置HTTP请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#请求参数模板化"><span class="toc-number">1.2.3.</span> <span class="toc-text">请求参数模板化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#增加响应断言"><span class="toc-number">1.2.4.</span> <span class="toc-text">增加响应断言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置结果监听器"><span class="toc-number">1.2.5.</span> <span class="toc-text">设置结果监听器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#限制QPS"><span class="toc-number">1.2.6.</span> <span class="toc-text">限制QPS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
           <hr/>
         </div>
         
@@ -295,6 +297,13 @@ var _hmt = _hmt || [];
 <li>路径:            /</li>
 </ul>
 <p>其实这样就算是完成了一个HTTP请求的设置了.这个时候我们就可以保存这个测试用例到一个<code>JMX文件</code>中.然后执行这个测试用例了. 不过,由于我们还没有配置监听器元件,因此,现在运行的话.我们是看不到任何的结果的.</p>
+<h3 id="请求参数模板化">请求参数模板化</h3><p>在实际的使用中,我们的请求中可能有不同的参数,并且这些参数可能是不相同的.这就需要把参数模板化.</p>
+<p>在JMeter中,参数的语法是: <code>${xxxx}</code> 其中的<code>xxxx</code>即为参数名. 通过这个语法,就可以在整个请求中调用参数的值. 只要我们对这些参数进行赋值即可.</p>
+<p>比如在这里我们增加一个<code>Random Variable</code>.这个表示的是随机的给一个变量进行赋值.<br><img src="/img/2015/06/05/15.png" alt=""></p>
+<p>我们在这里设置了一个<code>keyword</code>的变量,其值为<code>0</code>到<code>100</code>间的随机数.随机方式采用默认的.</p>
+<p>然后在请求中增加一个请求的参数:<br><img src="/img/2015/06/05/16.png" alt=""></p>
+<p>执行测试计划,会发现请求的URL就会变成:<code>GET http://sunxiang0918.cn/?aaaaa=xxxx49</code>,后面的数字就是随机.</p>
+<p>除了随机变量或用户定义的变量外.还可以读取CSV文件,通过<code>CSV Data Set Config</code>,可以读取CSV文件,并且制定每一列的变量名是什么.这样就可以在请求的时候预设多个变量值.</p>
 <h3 id="增加响应断言">增加响应断言</h3><p>为了判断结果的正确性,我们有时需要增加响应的断言.比如响应代码必须是200才作数.<br>JMeter中有一个元件就叫做<code>响应断言</code>.这个就可以加在HTTP请求的后面,用来判断结果是否正确.</p>
 <p><img src="/img/2015/06/05/12.png" alt=""></p>
 <p>在这里我只增加了一个最简单的通过响应代码来判断请求是否正确.</p>
