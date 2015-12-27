@@ -25,7 +25,7 @@
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/9.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/10.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/06/05/11.png">
-<meta property="og:updated_time" content="2015-12-27T03:45:54.000Z">
+<meta property="og:updated_time" content="2015-12-27T03:48:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用JMeter进行压力测试">
 <meta name="twitter:description" content="使用JMeter进行压力测试说到压力测试,一般第一反应都是LoadRunner.这个软件也确实是自动化测试的一个事实标准.无奈这个软件太过庞大,以及不能在MacOS上使用.我由于项目的需要,需要对一个模块的WebServcie接口做压力的测试,于是就找到了另外一个神器JMeter.JMeter是Apache组织开发的基于Java的压力测试工具.它是由JAVA编写的,可以跨平台.最初只能测试Web应">
@@ -250,6 +250,11 @@ var _hmt = _hmt || [];
       
       
       
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用JMeter进行压力测试"><span class="toc-number">1.</span> <span class="toc-text">使用JMeter进行压力测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JMeter安装"><span class="toc-number">1.1.</span> <span class="toc-text">JMeter安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进行Web的压力测试"><span class="toc-number">1.2.</span> <span class="toc-text">进行Web的压力测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#设置线程组(模拟用户)"><span class="toc-number">1.2.1.</span> <span class="toc-text">设置线程组(模拟用户)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置HTTP请求"><span class="toc-number">1.2.2.</span> <span class="toc-text">设置HTTP请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#增加响应断言"><span class="toc-number">1.2.3.</span> <span class="toc-text">增加响应断言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置结果监听器"><span class="toc-number">1.2.4.</span> <span class="toc-text">设置结果监听器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#限制QPS"><span class="toc-number">1.2.5.</span> <span class="toc-text">限制QPS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+          <hr/>
+        </div>
+        
         
         <h1 id="使用JMeter进行压力测试">使用JMeter进行压力测试</h1><p>说到压力测试,一般第一反应都是LoadRunner.这个软件也确实是自动化测试的一个事实标准.无奈这个软件太过庞大,以及不能在MacOS上使用.我由于项目的需要,需要对一个模块的WebServcie接口做压力的测试,于是就找到了另外一个神器JMeter.<br>JMeter是Apache组织开发的基于Java的压力测试工具.它是由JAVA编写的,可以跨平台.最初只能测试Web应用,现在可以进行各种的压力测试,包括但不限于JAVA小程序,CGI脚本,JAVA RMI调用,数据库,FTP服务等等. 并且它的操作非常简单,通过几部的配置就可以创建一个完整的压力测试用例.</p>
 <h2 id="JMeter安装">JMeter安装</h2><p>JMeter是由JAVA编写的,所以需要依赖JDK的运行环境,最新版的JMeter需要JDK1.6以上的支持.</p>
