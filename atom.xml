@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2015-12-22T03:00:26.000Z</updated>
+  <updated>2015-12-27T13:11:22.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -14,6 +14,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[在Swift中使用随机数]]></title>
+    <link href="http://sunxiang0918.github.io/2015/12/27/%E5%9C%A8Swift%E4%B8%AD%E4%BD%BF%E7%94%A8%E9%9A%8F%E6%9C%BA%E6%95%B0/"/>
+    <id>http://sunxiang0918.github.io/2015/12/27/在Swift中使用随机数/</id>
+    <published>2015-12-27T12:27:49.000Z</published>
+    <updated>2015-12-27T13:11:22.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="在Swift中使用随机数">在Swift中使用随机数</h1><p>在我们的开发过程中,有时需要产生一些随机数.而Swift中并没有像JAVA中一样提供一个专门的<code>Random</code>类来集中的生成随机数.<br>在Swift中,提供了几个全局的函数来生成随机数.一个是<code>random()</code>,还有一个是<code>arc4random()</code>,以及专门生成浮点的<code>srand48(Int)</code>和<code>drand48()</code>.<br>这些方法并没有进行封装,其实并不符合面向对象的思想.并且如果想要限制生成的随机数的最大最小值也不得行.因此,我们有必要对他们进行一个封装.</p>
+<a id="more"></a>
+<h2 id="arc4random()">arc4random()</h2><p>arc4random 是一个非常优秀的随机数算法,它会返回给我们一个任意的整数,如果我们想要在某一个范围里的话,做一次取模运算取余数就可以了.但是由于<code>arc4random()</code>函数返回的值无论上什么平台上都是返回一个<code>UInt32</code>(无符号32位整数)的值.因此,在32位的平台上进行<code>Int(arc4random())</code>转换的话,就有一半的几率出现转换越界,这就会造成程序的崩溃.</p>
+<p>因此,在这种情况下,我们可以使用<code>arc4random_uniform</code>这个改良的<code>arc4random</code>函数:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">arc4random_uniform</span><span class="params">(<span class="number">_</span>: UInt32)</span></span> -&gt; <span class="type">UInt32</span></span><br></pre></td></tr></table></figure>
+<p>这个函数接收一个UInt32的数字n作为输入,返回一个0到n-1之间的随机数.那么,只要我们传入的n不超过Int的范围,就可以避免像上面一样的转换越界的问题了.</p>
+<p>因此,我们Int的随机数生成函数可以写成这样:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">extension</span> <span class="title">Int</span> </span>&#123;</span><br><span class="line">    public <span class="keyword">static</span> <span class="func"><span class="keyword">func</span> <span class="title">random</span><span class="params">(lower: Int = <span class="number">0</span>, <span class="number">_</span> upper: Int = Int.<span class="built_in">max</span>)</span></span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> lower + <span class="type">Int</span>(arc4random_uniform(<span class="type">UInt32</span>(upper - lower + <span class="number">1</span>)))</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public <span class="keyword">static</span> <span class="func"><span class="keyword">func</span> <span class="title">random</span><span class="params">(range: Range&lt;Int&gt;)</span></span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> random(range.startIndex, range.endIndex)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码使用了<code>扩展</code>,对Int类型增加了一个扩展,并实现了<code>random(lower: Int = 0, _ upper: Int = Int.max) -&gt; Int</code>和<code>random(range: Range&lt;Int&gt;) -&gt; Int</code>两个方法.这样,如果我们需要一个整数的随机数的话,就可以这样调用了:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Int</span>.random()</span><br><span class="line"><span class="type">Int</span>.random(<span class="number">0</span>, <span class="number">50</span>)</span><br><span class="line"><span class="type">Int</span>.random(<span class="number">20</span>...<span class="number">50</span>)</span><br></pre></td></tr></table></figure>
+<p>这里不得不夸一下<code>扩展</code>机制,真心方便.它可以不修改原有类的源码的情况下,给这个类增加新的功能.这就大大的增加了编写代码的方便.毕竟很多时候最开始时是考虑不周全的,我们并不能给某个类增加所有的方法,到后面进行修改的时候,就必然牵涉到修改源码.如果源码是自己写的还好,如果源码不是自己写的或者根本就没有源码了.那么给这个类增加方法就非常的不方便了.JAVA中有大量的<code>XXXXUtils</code>类,其实干的就是这个事情,比如<code>StringUtils</code>,由于JAVA中的<code>String</code>类是不能继承和修改的,因此就只有定义了一个工具类,里面就是对String做了一堆的扩展.调用的时候更不符合面向对象的思想.全是<code>StringUtils.xxxx(sourceStr,destStr)</code>这样的.</p>
+<h2 id="其他类型的随机数">其他类型的随机数</h2><p>除了整数的随机数以外,浮点的随机数也是很常用的.因此我们同样可以对浮点数进行扩展.这里就有两种思路,第一种是继续使用<code>arc4random()</code>函数,把生成的随机整数转换成为浮点数.还有一种就是调用<code>srand48(Int)</code>和<code>drand48()</code>直接生成随机浮点数.这两个方案都是差不多的,不过由于每次调用<code>drand48()</code>前都需要调用<code>srand48(Int)</code>设置随机初始化的种子,因此我个人更倾向于使用<code>arc4random()</code>.于是就有以下的方法:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">extension</span> <span class="title">Bool</span> </span>&#123;</span><br><span class="line">    public <span class="keyword">static</span> <span class="func"><span class="keyword">func</span> <span class="title">random</span><span class="params">()</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="type">Int</span>.random(<span class="number">0</span>, <span class="number">1</span>) == <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">extension</span> <span class="title">Double</span> </span>&#123;</span><br><span class="line">    <span class="comment">/// SwiftRandom extension</span></span><br><span class="line">    public <span class="keyword">static</span> <span class="func"><span class="keyword">func</span> <span class="title">random</span><span class="params">(lower: Double = <span class="number">0</span>, <span class="number">_</span> upper: Double = <span class="number">100</span>)</span></span> -&gt; <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="type">Double</span>(arc4random()) / <span class="number">0xFFFFFFFF</span>) * (upper - lower) + lower</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">extension</span> <span class="title">Float</span> </span>&#123;</span><br><span class="line">    <span class="comment">/// SwiftRandom extension</span></span><br><span class="line">    public <span class="keyword">static</span> <span class="func"><span class="keyword">func</span> <span class="title">random</span><span class="params">(lower: Float = <span class="number">0</span>, <span class="number">_</span> upper: Float = <span class="number">100</span>)</span></span> -&gt; <span class="type">Float</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="type">Float</span>(arc4random()) / <span class="number">0xFFFFFFFF</span>) * (upper - lower) + lower</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">extension</span> <span class="title">CGFloat</span> </span>&#123;</span><br><span class="line">    <span class="comment">/// SwiftRandom extension</span></span><br><span class="line">    public <span class="keyword">static</span> <span class="func"><span class="keyword">func</span> <span class="title">random</span><span class="params">(lower: CGFloat = <span class="number">0</span>, <span class="number">_</span> upper: CGFloat = <span class="number">1</span>)</span></span> -&gt; <span class="type">CGFloat</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="type">CGFloat</span>(<span class="type">Float</span>(arc4random()) / <span class="type">Float</span>(<span class="type">UINT32_MAX</span>)) * (upper - lower) + lower</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样集中常用数据类型的随机数的生成就都有了,并且使用起来也非常的方便.</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Bool</span>.random()</span><br><span class="line"><span class="type">Double</span>.random(<span class="number">1.5</span>,<span class="number">10.8</span>)</span><br><span class="line"><span class="type">Float</span>.random()</span><br><span class="line"><span class="type">CGFloat</span>.random()</span><br></pre></td></tr></table></figure>]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="在Swift中使用随机数">在Swift中使用随机数</h1><p>在我们的开发过程中,有时需要产生一些随机数.而Swift中并没有像JAVA中一样提供一个专门的<code>Random</code>类来集中的生成随机数.<br>在Swift中,提供了几个全局的函数来生成随机数.一个是<code>random()</code>,还有一个是<code>arc4random()</code>,以及专门生成浮点的<code>srand48(Int)</code>和<code>drand48()</code>.<br>这些方法并没有进行封装,其实并不符合面向对象的思想.并且如果想要限制生成的随机数的最大最小值也不得行.因此,我们有必要对他们进行一个封装.</p>]]>
+    
+    </summary>
+    
+      <category term="Swift" scheme="http://sunxiang0918.github.io/tags/Swift/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[ELK初实践]]></title>
@@ -1420,150 +1450,6 @@ org.apache.avro.util.Utf8</code>的异常,开始折腾了我很久.最后发现�
       <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
     
       <category term="MAC" scheme="http://sunxiang0918.github.io/tags/MAC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[<翻译>基于内容地址的Docker Registry2.0]]></title>
-    <link href="http://sunxiang0918.github.io/2015/09/20/%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AE%B9%E5%9C%B0%E5%9D%80%E7%9A%84Docker-Registry2-0/"/>
-    <id>http://sunxiang0918.github.io/2015/09/20/基于内容地址的Docker-Registry2-0/</id>
-    <published>2015-09-20T14:18:58.000Z</published>
-    <updated>2015-09-20T15:48:22.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="基于内容地址的Docker_Registry2-0">基于内容地址的Docker Registry2.0</h1><p>由于最近在项目中需要使用<code>Docker</code>,并且需要持续集成,因此就研究了一下Docker的<code>Registry</code>.突然发现<code>V1</code>版本的<a href="https://github.com/docker/docker-registry" target="_blank" rel="external">Registry</a>已经被官方打为<strong>废弃</strong>了.新的第二个版本的<a href="https://github.com/docker/distribution" target="_blank" rel="external">Registry</a>已经开始提供服务.因此就着重的研究了一下这个,无奈现在相关的文档还非常的少.找到一篇日文的文章感觉还不错,因此就翻译了一下.先申明下我日语也就是玩票的性质,肯定有很多不正确的地方,还望海涵.</p>
-<hr>
-<h2 id="Content_Addressable_DockerイメージとRegistry2-0"><a href="http://deeeet.com/writing/2015/04/20/docker-1_6_distribution/" target="_blank" rel="external">Content Addressable DockerイメージとRegistry2.0</a></h2><p>Docker1.6已经出了.它增加了很多新的功能,比如:容器与镜像的标记(具体更多的信息可以看RancherOS的<a href="http://rancher.com/docker-labels/" target="_blank" rel="external">“Adding Label Support to Docker 1.6”</a>),日志记录的多种驱动等等.这次的Release更新中,我最感兴趣的就是Docker的Image开始基于内容进行寻址(Content-addressable) (<a href="https://github.com/docker/docker/pull/11109" target="_blank" rel="external">#11109</a>)</p>
-<p>到目前为止,Docker Registry通过镜像的名字与Tag与Image进行交互(比如:<code>tcnksm/golang:1.2</code>).而Tag是由镜像的作者自己定义的.这就不能保证在相同的Tag下的镜像内容是完全相同的(在GIG中由于使用了commit的哈希值,因此标签不会出现这种情况.)</p>
-<p>与<code>Docker1.6</code>同时发布的<code>Registry2.0</code>(<a href="https://github.com/docker/distribution" target="_blank" rel="external">docker/distribution</a>)为镜像使用了一种不重复的ID(<code>digest</code>)来确保同一ID值所引用的镜像的内容始终是相同的(immutable image references)</p>
-<a id="more"></a>
-<h3 id="尝试">尝试</h3><p>DockerHub已经开始支持<code>Registry2.0</code>,因此可以马上使用这个功能.但是,这次是尝试自己搭建一个私有的注册环境来尝试它的新功能(环境是在OSX上使用 boot2docker)</p>
-<p>首先需要安装Registry.与V1相同,Docker已经提供了相应的镜像.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -p <span class="number">5000</span>:<span class="number">5000</span> registry:<span class="number">2.0</span></span><br></pre></td></tr></table></figure>
-<p>准备一个简单的<code>Dockerfile</code>文件来构建我们的<code>tcnksm/test-digest</code>镜像.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FROM busybox</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker build -t $(boot2docker ip):<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest:latest .</span><br></pre></td></tr></table></figure>
-<p>然后通过<code>images</code>命令来验证是否正确.使用<code>--digests</code>参数会在结果中显示<code>digest</code>信息.与Git的不同,<code>build</code>的过程是不会生成<code>digest</code>的值的.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker images --digests</span><br><span class="line">REPOSITORY                               TAG                 DIGEST              IMAGE ID            CREATED             VIRTUAL SIZE</span><br><span class="line"><span class="number">192.168</span>.<span class="number">59.103</span>:<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest   latest              &lt;none&gt;              <span class="number">8</span>c2e06607696        <span class="number">3</span> days ago          <span class="number">2.433</span> MB</span><br></pre></td></tr></table></figure>
-<p>通过<code>push</code>向<code>Registry</code>进行推送.<code>push</code>的过程会生成<code>digest</code>值.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker push $(boot2docker ip):<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest:latest</span><br><span class="line">...</span><br><span class="line">Digest: sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6<span class="built_in">fc</span>775b24d5ae26477c96fb5eaa4</span><br></pre></td></tr></table></figure>
-<p>为了替换本地生成的不带<code>digest</code>的镜像.我们可以在<code>pull</code>的时候,使用<code>NAME@DIGEST</code>的方式来代替原来<code>NAME:TAG</code>的方式.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi $(boot2docker ip):<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest:latest</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull $(boot2docker ip):<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest@sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6<span class="built_in">fc</span>775b24d5ae26477c96fb5eaa4</span><br></pre></td></tr></table></figure>
-<p>这个时候再使用<code>images</code>命令来确认一下.这次的镜像信息中就带有<code>digest</code>信息了.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker images --digests</span><br><span class="line">REPOSITORY                               TAG                 DIGEST                                                                    IMAGE ID            CREATED             VIRTUAL SIZE</span><br><span class="line"><span class="number">192.168</span>.<span class="number">59.103</span>:<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest   &lt;none&gt;              sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6<span class="built_in">fc</span>775b24d5ae26477c96fb5eaa4   <span class="number">8</span>c2e06607696        <span class="number">3</span> days ago          <span class="number">2.433</span> MB</span><br></pre></td></tr></table></figure>
-<h3 id="Dockerfile">Dockerfile</h3><p><code>Dockerfile</code>的<code>FROM</code>语句现在也可以使用<code>digest</code>来指定镜像的名字.如果发现通过原来的镜像捕捉任何的东西就更新成为新的镜像,那么这样的操作可以被避免(気がついたら元のイメージ更新されていて完成イメージが意図しないものになっていたということが避けられる．)</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FROM <span class="number">192.168</span>.<span class="number">59.103</span>:<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest@sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6<span class="built_in">fc</span>775b24d5ae26477c96fb5eaa4</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker build .</span><br><span class="line">Step <span class="number">0</span> : FROM <span class="number">192.168</span>.<span class="number">59.103</span>:<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest@sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6<span class="built_in">fc</span>775b24d5ae26477c96fb5eaa4</span><br><span class="line">---&gt; <span class="number">8</span>c2e06607696</span><br><span class="line">Successfully built <span class="number">8</span>c2e06607696</span><br></pre></td></tr></table></figure>
-<h3 id="镜像的更新">镜像的更新</h3><p>可以通过编辑<code>Dockerfile</code>文件然后通过<code>build</code>命令来构建新的镜像.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FROM busybox</span><br><span class="line">MAINTAINER tcnksm</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker build -t $(boot2docker ip):<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest:latest .</span><br></pre></td></tr></table></figure>
-<p>然后执行<code>Registry</code>的<code>push</code>操作,于是现在的<code>digest</code>会被改变.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker push $(boot2docker ip):<span class="number">5000</span>/tcnksm/<span class="built_in">test</span>-digest:latest</span><br><span class="line">...</span><br><span class="line">Digest: sha256:<span class="number">4675</span>f7a9d45932e3043058ef032680d76e8aacccda94b74374efe156e2940ee5</span><br></pre></td></tr></table></figure>
-<h3 id="机制">机制</h3><p>简单的说明一下机制.<code>digest</code>不是本地生成的,而是通过<code>push</code>操作,在<code>Registry</code>一方生成的.</p>
-<p>当客户端推送镜像到<code>Registry</code>时会同时附带<code>Image Manifest</code>(也就是签名).<code>Image Manifest</code>也就是Docker镜像内容的一些JSON话的定义.在Golang中的结构就如下所示,包含了镜像的名字,FSLayer的信息等等(manifest的具体定义参见<a href="https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-1.md" target="_blank" rel="external">这里</a>)</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> ManifestData <span class="keyword">struct</span> &#123;</span><br><span class="line">    Name          <span class="typename">string</span>             <span class="string">`json:"name"`</span></span><br><span class="line">    Tag           <span class="typename">string</span>             <span class="string">`json:"tag"`</span></span><br><span class="line">    Architecture  <span class="typename">string</span>             <span class="string">`json:"architecture"`</span></span><br><span class="line">    FSLayers      []*FSLayer         <span class="string">`json:"fsLayers"`</span></span><br><span class="line">    History       []*ManifestHistory <span class="string">`json:"history"`</span></span><br><span class="line">    SchemaVersion <span class="typename">int</span>                <span class="string">`json:"schemaVersion"`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>你可以调用他的API来查看<code>Manifest</code>中的内容.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl $(boot2docker ip):<span class="number">5000</span>/v2/tcnksm/<span class="built_in">test</span>-digest/manifests/latest</span><br></pre></td></tr></table></figure>
-<p>因此,<code>Registry</code>是通过下面的函数来根据<code>Manifest</code>的元数据来生成<code>digest</code>的(<a href="https://github.com/docker/distribution/blob/master/registry/handlers/images.go" target="_blank" rel="external">registry/handlers/images.go</a>)</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// PutImageManifest validates and stores and image in the registry.</span></span><br><span class="line"><span class="keyword">func</span> (imh *imageManifestHandler) PutImageManifest(w http.ResponseWriter, r *http.Request)</span><br></pre></td></tr></table></figure>
-<p>在客户端调用的时候通过消息头<code>Docker-Content-Digest</code>发送给对方(<a href="https://github.com/docker/distribution/blob/master/docs/spec/api.md#put-manifest" target="_blank" rel="external">API doc</a>)</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">202</span> Accepted</span><br><span class="line">Location: &lt;url&gt;</span><br><span class="line">Content-Length: <span class="number">0</span></span><br><span class="line">Docker-Content-Digest: &lt;digest&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="Registry不同的话?">Registry不同的话?</h3><p>如果发送的<code>Manifest</code>内容是相同的话,那么推送到不同的Registry其实是会生成相同的<code>digest</code>的.<code>digest</code>对于<code>Registry</code>来说是全局唯一的.</p>
-<p>所以通过上面的方式制作的镜像,如果推送到<code>DockerHub</code>中的话,是会得到相同的<code>digest</code>的.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker build -t tcnksm/<span class="built_in">test</span>-digest:latest .</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker push tcnksm/<span class="built_in">test</span>-digest:latest</span><br><span class="line">...</span><br><span class="line">Digest: sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6<span class="built_in">fc</span>775b24d5ae26477c96fb5eaa4</span><br></pre></td></tr></table></figure>
-<h3 id="Registry2-0">Registry2.0</h3><p><a href="http://blog.docker.com/2015/04/faster-and-better-image-distribution-with-registry-2-0-and-engine-1-6/" target="_blank" rel="external">Faster and Better Image Distribution with Registry 2.0 and Engine 1.6 | Docker Blog</a></p>
-<p><a href="https://github.com/docker/distribution" target="_blank" rel="external">docker/distribution</a>是一个新的Registr的实现.尝试用来解决现在版本的一些API或安全性的问题.现在的V1版本是使用<code>Pythone</code>来实现的,而新的<code>V2</code>版本则是使用Go语言来实现的.</p>
-<p>新的特征有:</p>
-<ul>
-<li>重新定义了镜像的<code>Manifest</code>(<a href="https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-1.md" target="_blank" rel="external">Image Manifest Version 2, Schema 1</a>) - 可以参阅 <a href="https://github.com/docker/docker/issues/8093" target="_blank" rel="external">#8093</a>,主要是改善了安全方面的问题</li>
-<li>新的API(<a href="https://github.com/docker/distribution/blob/master/docs/spec/api.md" target="_blank" rel="external">Docker Registry HTTP API V2</a>,<a href="https://github.com/docker/distribution/blob/master/docs/spec/api.md#detail" target="_blank" rel="external">#Detail</a>) - 使用<code>Manifest V2</code>来改善URI,如果在<code>Push/Pull</code>的过程中程序死掉或异常终止,那么当再开启的时候,会继续执行.(详细的实现的话,目前我还没有看到由Go语言接口实现的客户端实现到底是怎么做的).</li>
-<li>后端的存储插件化(<a href="https://github.com/docker/distribution/blob/master/docs/storagedrivers.md" target="_blank" rel="external">Docker-Registry Storage Driver</a>) - 在新版本中,可以选择内存,文件系统,S3,Azure Blob Storage来作为镜像的存储.重新定义了一套Go语言的接口,允许你自己实现不同的存储.</li>
-<li>webhook的实现(<a href="https://github.com/docker/distribution/blob/master/docs/notifications.md" target="_blank" rel="external">Notifications</a>) - <code>Push/Pull</code>到某个endpoint的时候,可以发送相应的事件通知.</li>
-</ul>
-<p>目前<code>dist</code>命令还只有一些基本框架而已(<a href="https://github.com/docker/distribution/tree/master/cmd/dist" target="_blank" rel="external">dist</a>).这对Docker镜像的pull/push操作只能使用命令行.作为Docker镜像的下载与运行来说,现在不是分离的了,这点有点讨厌.它试图全部都在这里进行解决.</p>
-<h3 id="References">References</h3><ul>
-<li><a href="https://docs.docker.com/registry/overview/" target="_blank" rel="external">Docker Registry 2.0</a></li>
-<li><a href="https://github.com/docker/distribution/blob/master/docs/spec/auth/token.md" target="_blank" rel="external">Docker Registry v2 authentication via central service</a></li>
-<li><a href="https://github.com/docker/distribution/blob/master/docs/deploying.md" target="_blank" rel="external">Deploying a registry service</a></li>
-<li><a href="https://github.com/kelseyhightower/docker-registry-osx-setup-guide" target="_blank" rel="external">kelseyhightower/docker-registry-osx-setup-guide</a></li>
-</ul>
-<hr>
-<p>原文链接: <a href="http://deeeet.com/writing/2015/04/20/docker-1_6_distribution/" target="_blank" rel="external">http://deeeet.com/writing/2015/04/20/docker-1_6_distribution/</a><br>翻译: <a href="sunxiang0918.cn">翔妖除魔</a></p>
-<hr>
-<p>补充一点我自己的看法.</p>
-<p>对于V1的问题主要有:</p>
-<ul>
-<li>性能:<ul>
-<li>随机ID重复Push  (docker的id是 客户端随机生成的.)</li>
-<li>metadata,layer,metadata,layer (链表结构,不能随机读取)</li>
-<li>python实现</li>
-</ul>
-</li>
-<li>安全        <ul>
-<li>随机image id</li>
-<li>无法对内容进行校验</li>
-<li>无法确定layer来源</li>
-</ul>
-</li>
-<li>其他<ul>
-<li>相同TAG两次下载 镜像可能是不一样的    </li>
-</ul>
-</li>
-</ul>
-<p>而V2的好处就在于 ID是更具内容使用SHA256算出来的.</p>
-<ul>
-<li><p>Digest(V2中的image Id):</p>
-<ul>
-<li>内容可校验</li>
-<li>算法可插拔</li>
-<li>cache友好</li>
-<li>服务器端计算,加强安全</li>
-<li>统一了存储</li>
-</ul>
-</li>
-<li><p>Manifest:</p>
-<ul>
-<li>包含所有layer信息</li>
-<li>signature强化校验</li>
-<li>V1兼容</li>
-</ul>
-</li>
-<li><p>性能:</p>
-<ul>
-<li>Go实现</li>
-<li>并行pull</li>
-<li>减少了auth流程</li>
-</ul>
-</li>
-<li><p>其他:</p>
-<ul>
-<li>Notification机制</li>
-<li>后端存储插件化</li>
-<li>全新API</li>
-<li>更复杂的鉴权方式</li>
-</ul>
-</li>
-<li><p>存在问题:</p>
-<ul>
-<li>API缺失:   delete, search,list 没有</li>
-<li>push/pull 速度有待优化 (gzip解压压缩)</li>
-<li>镜像格式和V1 <strong>不兼容</strong></li>
-</ul>
-</li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="基于内容地址的Docker_Registry2-0">基于内容地址的Docker Registry2.0</h1><p>由于最近在项目中需要使用<code>Docker</code>,并且需要持续集成,因此就研究了一下Docker的<code>Registry</code>.突然发现<code>V1</code>版本的<a href="https://github.com/docker/docker-registry">Registry</a>已经被官方打为<strong>废弃</strong>了.新的第二个版本的<a href="https://github.com/docker/distribution">Registry</a>已经开始提供服务.因此就着重的研究了一下这个,无奈现在相关的文档还非常的少.找到一篇日文的文章感觉还不错,因此就翻译了一下.先申明下我日语也就是玩票的性质,肯定有很多不正确的地方,还望海涵.</p>
-<hr>
-<h2 id="Content_Addressable_DockerイメージとRegistry2-0"><a href="http://deeeet.com/writing/2015/04/20/docker-1_6_distribution/">Content Addressable DockerイメージとRegistry2.0</a></h2><p>Docker1.6已经出了.它增加了很多新的功能,比如:容器与镜像的标记(具体更多的信息可以看RancherOS的<a href="http://rancher.com/docker-labels/">“Adding Label Support to Docker 1.6”</a>),日志记录的多种驱动等等.这次的Release更新中,我最感兴趣的就是Docker的Image开始基于内容进行寻址(Content-addressable) (<a href="https://github.com/docker/docker/pull/11109">#11109</a>)</p>
-<p>到目前为止,Docker Registry通过镜像的名字与Tag与Image进行交互(比如:<code>tcnksm/golang:1.2</code>).而Tag是由镜像的作者自己定义的.这就不能保证在相同的Tag下的镜像内容是完全相同的(在GIG中由于使用了commit的哈希值,因此标签不会出现这种情况.)</p>
-<p>与<code>Docker1.6</code>同时发布的<code>Registry2.0</code>(<a href="https://github.com/docker/distribution">docker/distribution</a>)为镜像使用了一种不重复的ID(<code>digest</code>)来确保同一ID值所引用的镜像的内容始终是相同的(immutable image references)</p>]]>
-    
-    </summary>
-    
-      <category term="Docker" scheme="http://sunxiang0918.github.io/tags/Docker/"/>
-    
-      <category term="大数据" scheme="http://sunxiang0918.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
   </entry>
   

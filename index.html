@@ -198,6 +198,64 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-在Swift中使用随机数" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/12/27/在Swift中使用随机数/" class="article-date">
+  	<time datetime="2015-12-27T12:27:49.000Z" itemprop="datePublished">2015-12-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/27/在Swift中使用随机数/">在Swift中使用随机数</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="在Swift中使用随机数">在Swift中使用随机数</h1><p>在我们的开发过程中,有时需要产生一些随机数.而Swift中并没有像JAVA中一样提供一个专门的<code>Random</code>类来集中的生成随机数.<br>在Swift中,提供了几个全局的函数来生成随机数.一个是<code>random()</code>,还有一个是<code>arc4random()</code>,以及专门生成浮点的<code>srand48(Int)</code>和<code>drand48()</code>.<br>这些方法并没有进行封装,其实并不符合面向对象的思想.并且如果想要限制生成的随机数的最大最小值也不得行.因此,我们有必要对他们进行一个封装.</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/12/27/在Swift中使用随机数/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-ELK初实践" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -723,68 +781,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/11/09/Docker1-9新特性-跨物理机的多容器网络连接/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-升级CentOS7的Linux内核" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/11/08/升级CentOS7的Linux内核/" class="article-date">
-  	<time datetime="2015-11-08T07:56:29.000Z" itemprop="datePublished">2015-11-08</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/11/08/升级CentOS7的Linux内核/">升级CentOS7的Linux内核</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="升级CentOS7的Linux内核">升级CentOS7的Linux内核</h1><p>默认刚安装的CentOS7的内核是3.10的.</p>
-<p>这个可以在 终端中输入:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uname -r</span><br><span class="line"><span class="number">3.10</span>.<span class="number">0</span>-<span class="number">229</span>.el7.x86_64</span><br></pre></td></tr></table></figure>
-<p>来确认.</p>
-<p>由于我需要试验docker1.9中的新功能.而它的新功能需要<code>vxlan</code>的相关功能.而这个在3.16以上版本才正确.因此,就需要给CentOS7升级内核.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/11/08/升级CentOS7的Linux内核/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
