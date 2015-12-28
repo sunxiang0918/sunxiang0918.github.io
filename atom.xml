@@ -519,7 +519,7 @@ org.apache.avro.util.Utf8</code>的异常,开始折腾了我很久.最后发现�
     <link href="http://sunxiang0918.github.io/2015/11/09/Docker1-9%E6%96%B0%E7%89%B9%E6%80%A7-%E8%B7%A8%E7%89%A9%E7%90%86%E6%9C%BA%E7%9A%84%E5%A4%9A%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5/"/>
     <id>http://sunxiang0918.github.io/2015/11/09/Docker1-9新特性-跨物理机的多容器网络连接/</id>
     <published>2015-11-09T13:47:08.000Z</published>
-    <updated>2015-11-27T07:23:33.000Z</updated>
+    <updated>2015-12-28T14:02:48.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Docker1-9新特性-跨物理机的多容器网络连接">Docker1.9新特性-跨物理机的多容器网络连接</h1><p>近日，Docker公司正式发布Docker 1.9版本。他带来了很多新的特性,其中最重要的新特性无疑就是多宿主机互联功能.</p>
 <p>在今年6月份的DockerCon上，互联曾经作为测试版本的特性被提出。目前，该特性正式集成在了Docker引擎的稳定版中，并将在产品中使用。其主要功能是为跨宿主机创建Docker引擎中的虚拟网络提供支持。用户可以把其所属的容器挂载到网络中，并控制网络拓扑和通信方式。此外，系统还允许用户在不修改应用的情况下直接与任何网络进行集成。</p>
 <p>那么,我们现在就来试一试如何简单的实现多宿主机互联功能.</p>
@@ -560,6 +560,7 @@ org.apache.avro.util.Utf8</code>的异常,开始折腾了我很久.最后发现�
 <p>使用上面的参数启动后,Docker会在Zookeeper上建立一个目录.里面存放的就是网络的配置信息.</p>
 <p><img src="/img/2015/11/09/2.png" alt=""></p>
 <p>直接把所有宿主机上的Docker都像这样的方式启动.</p>
+<p>如果你想直接使用<code>service docker start</code>方式启动的话,需要修改<code>/usr/lib/systemd/system/docker.service</code>这个文件.在<code>ExecStart=/usr/bin/docker daemon</code>后面加上<code>--cluster-store=zk://10.211.55.2:2181 --cluster-advertise=eth0:2376</code>.然后执行<code>systemctl daemon-reload</code>,重新加载<code>docker.service</code>即可. 以后就可以在命令行中直接输入<code>service docker start</code>启动带1.9跨网的Docker服务了.注意,一定要先启动Zookeeper哦!</p>
 <h2 id="创建网络">创建网络</h2><p>Docker1.9新增加了一个命令<code>network</code>,用于配置网络.在Docker1.9中,它把网络也当成了一种类似于容器的东西.可以创建,查询,删除网络.</p>
 <p>比如在单机下 可以输入<code>docker network create my-single-net</code>创建一个网络.<br>然后在启动容器的时候使用:<code>docker run -itd --net=my-single-net --name web nginx</code>来使一个容器使用指定的网络来通信. 只要是在<strong>同一个网络</strong>下的容器,他们之间都可以通过<strong>容器的名字</strong>进行互联.而不需要像以前一样,写一堆的<code>-Link</code>了.<br>而对于不同的网络之间也可以使用<code>docker network connect</code>命令来使两个网络之间进行互联.<br>比如:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker network create app</span><br><span class="line">docker run -itd --name myapp --net=app myapp</span><br><span class="line">docker network connect app web</span><br></pre></td></tr></table></figure>
