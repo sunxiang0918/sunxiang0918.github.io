@@ -18,7 +18,7 @@
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/09/3.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/09/4.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2015/11/09/5.png">
-<meta property="og:updated_time" content="2015-12-28T14:07:30.000Z">
+<meta property="og:updated_time" content="2015-12-29T06:00:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker1.9新特性-跨物理机的多容器网络连接">
 <meta name="twitter:description" content="Docker1.9新特性-跨物理机的多容器网络连接近日，Docker公司正式发布Docker 1.9版本。他带来了很多新的特性,其中最重要的新特性无疑就是多宿主机互联功能.
@@ -251,7 +251,7 @@ var _hmt = _hmt || [];
 <h2 id="原理">原理</h2><p>Docker新的网络拓扑是采用的<code>overlay network</code>模式的网络.<br>它需要一个分布式的<code>Key-Value Storage</code>作为辅助的存储.当前Docker支持<code>Consul</code>,<code>Etcd</code>和<code>ZooKeeper</code>.当创建网络之前,你首先是需要安装并运行<code>KVS</code>.然后在启动Docker的时候加上一定的参数,这样Docker就会把网络拓扑信息保存在<code>KVS</code>上,形成全局唯一的网络.</p>
 <p><img src="/img/2015/11/09/1.png" alt=""></p>
 <a id="more"></a>
-<h2 id="安装Docker1-9前的准备">安装Docker1.9前的准备</h2><p>由于Docker1.9多宿主机联网的功能设计为可插拔式，毫无保留兼容<code>VXLAN</code>或者IPVLAN等技术。使用ovs（Open vSwitch）和VXLAN隧道进行实现。因此,需要操作系统支持<code>VXLAN</code>.而在<code>Kernel3.16</code>以下支持这个是有问题的.这个可以参见<a href="https://github.com/docker/docker/issues/14145" target="_blank" rel="external">Issues14145</a>.因此我们首先就是需要把操作系统的内核升级.具体的升级方法可以参考我之前的博文<a href="http://sunxiang0918.cn/2015/11/08/升级CentOS7的Linux内核/" target="_blank" rel="external">升级CentOS7的Linux内核</a>.</p>
+<h2 id="安装Docker1-9前的准备">安装Docker1.9前的准备</h2><p>由于Docker1.9多宿主机联网的功能设计为可插拔式，毫无保留兼容<code>VXLAN</code>或者IPVLAN等技术。使用ovs（Open vSwitch）和VXLAN隧道进行实现。因此,需要操作系统支持<code>VXLAN</code>.而在<code>Kernel3.16</code>以下支持这个是有问题的,虽然看得到网络,但是使用这个网络启动容器的时候会报:<code>subnet sandbox join failed for &quot;10.0.0.0/24&quot;: error creating vxlan interface: file exists</code>,这个问题具体可以参见<a href="https://github.com/docker/docker/issues/14145" target="_blank" rel="external">Issues14145</a>.因此我们首先就是需要把操作系统的内核升级.具体的升级方法可以参考我之前的博文<a href="/2015/11/08/升级CentOS7的Linux内核/">升级CentOS7的Linux内核</a>.</p>
 <p>然后还需要关闭Selinux. 直接编辑<code>/etc/selinux/config</code>文件中设置<code>SELINUX=disabled</code> ，然后重启服务器。</p>
 <p>还需要做的就是关闭防火墙:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld.service <span class="comment">#停止firewall</span></span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld.service <span class="comment">#禁止firewall开机启动</span></span><br></pre></td></tr></table></figure>
@@ -259,7 +259,7 @@ var _hmt = _hmt || [];
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -qO- https://get.docker.com/ | sh</span><br></pre></td></tr></table></figure>
 <p>等他执行完成后,最新版就安装完成了.</p>
 <h2 id="启动Zookeeper">启动Zookeeper</h2><p>这里我使用<code>Zookeeper</code>来做试验,官网上的是使用<code>Consul</code>做的演示,如果想使用<code>Consul</code>可以看<a href="http://docs.docker.com/engine/userguide/networking/get-started-overlay/" target="_blank" rel="external">这里</a>.</p>
-<p>安装<code>Zookeeper</code>集群就不在这里细说了,可以参考之前的博文<a href="http://sunxiang0918.cn/2014/09/20/zookeeper-集群部署/" target="_blank" rel="external">zookeeper 集群部署</a>.</p>
+<p>安装<code>Zookeeper</code>集群就不在这里细说了,可以参考之前的博文<a href="/2014/09/20/zookeeper-集群部署/">zookeeper 集群部署</a>.</p>
 <p>安装完后启动<code>zookeeper</code>.  这里假设 我的ZK的地址为:<code>10.211.55.2:2181</code></p>
 <h2 id="启动Docker服务">启动Docker服务</h2><p>接下来就是需要启动Docker服务了.<br>以前的启动方式是:<code>service docker start</code>.<br>但是这样就不会增加<code>KVS</code>的参数,因此我们需要手动的启动Docker服务:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker daemon --cluster-store=zk://<span class="number">10.211</span>.<span class="number">55.2</span>:<span class="number">2181</span> --cluster-advertise=eth0:<span class="number">2376</span></span><br></pre></td></tr></table></figure>
