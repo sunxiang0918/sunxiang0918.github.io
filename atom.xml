@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2015-12-27T13:11:22.000Z</updated>
+  <updated>2015-12-30T14:23:03.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -14,6 +14,72 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[<转>Swift-LOG输出]]></title>
+    <link href="http://sunxiang0918.github.io/2015/12/30/Swift-LOG%E8%BE%93%E5%87%BA/"/>
+    <id>http://sunxiang0918.github.io/2015/12/30/Swift-LOG输出/</id>
+    <published>2015-12-30T14:17:30.000Z</published>
+    <updated>2015-12-30T14:23:03.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="LOG输出">LOG输出</h1><p>Log 输出是程序开发中很重要的组成部分，虽然它并不是直接的业务代码，但是却可以忠实地反映我们的程序是如何工作的，以及记录程序运行的过程中发生了什么。</p>
+<p>在 Swift 中，最简单的输出方法就是使用 print，在我们关心的地方输出字符串和值。但是这并不够，试想一下当程序变得非常复杂的时候，我们可能会输出很多内容，而想在其中寻找到我们希望的输出其实并不容易。我们往往需要更好更精确的输出，这包括输出这个 log 的文件，调用的行号以及所处的方法名字等等。</p>
+<p>我们当然可以在 print 的时候将当前的文件名字和那些必要的信息作为参数同我们的消息一起进行打印：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Test.swift</span></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">method</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"文件名:Test.swift, 方法名:method，这是一条输出"</span>)</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>但是这显然非常麻烦，每次输入文件名和方法名不说，随着代码的改变，这些 Log 的位置也可能发生改变，这时我们可能还需要不断地去维护这些输出，代价实在太大。</p>
+<p>在 Swift 中，编译器为我们准备了几个很有用的编译符号，用来处理类似这样的需求，它们分别是：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">符号</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">FILE</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left">包含这个符号的文件的路径</td>
+</tr>
+<tr>
+<td style="text-align:left">LINE</td>
+<td style="text-align:left">Int</td>
+<td style="text-align:left">符号出现处的行号</td>
+</tr>
+<tr>
+<td style="text-align:left">COLUMN</td>
+<td style="text-align:left">Int</td>
+<td style="text-align:left">符号出现处的列</td>
+</tr>
+<tr>
+<td style="text-align:left">FUNCTION</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left">包含这个符号的方法名字</td>
+</tr>
+</tbody>
+</table>
+<p>因此，我们可以通过使用这些符号来写一个好一些的 Log 输出方法：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">printLog</span><span class="generics">&lt;T&gt;</span><span class="params">(message: T,  </span><br><span class="line">                    file: String = <span class="keyword">__FILE__</span>,</span><br><span class="line">                  method: String = <span class="keyword">__FUNCTION__</span>,</span><br><span class="line">                    line: Int = <span class="keyword">__LINE__</span>)</span></span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"<span class="subst">\((file <span class="keyword">as</span> NSString)</span>.lastPathComponent)[<span class="subst">\(line)</span>], <span class="subst">\(method)</span>: <span class="subst">\(message)</span>"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样，在进行 log 的时候我们只需要使用这个方法就能完成文件名，行号以及方法名的输出了。最棒的是，我们不再需要对这样的输出进行维护，无论在哪里它都能正确地输出各个参数：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Test.swift</span></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">method</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    printLog(<span class="string">"这是一条输出"</span>)</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出：</span></span><br><span class="line"><span class="comment">// Test.swift[62], method(): 这是一条输出</span></span><br></pre></td></tr></table></figure>
+<p>另外，对于 log 输出更多地其实是用在程序开发和调试的过程中的，过多的输出有可能对运行的性能造成影响。在 Release 版本中关闭掉向控制台的输出也是软件开发中一种常见的做法。如果我们在开发中就注意使用了统一的 log 输出的话，这就变得非常简单了。使用<a href="http://swifter.tips/condition-compile" target="_blank" rel="external">条件编译</a>的方法，我们可以添加条件，并设置合适的编译配置，使 printLog 的内容在 Release 时被去掉，从而成为一个空方法：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">printLog</span><span class="generics">&lt;T&gt;</span><span class="params">(message: T,  </span><br><span class="line">                    file: String = <span class="keyword">__FILE__</span>,</span><br><span class="line">                  method: String = <span class="keyword">__FUNCTION__</span>,</span><br><span class="line">                    line: Int = <span class="keyword">__LINE__</span>)</span></span></span><br><span class="line">&#123;</span><br><span class="line">    #<span class="keyword">if</span> <span class="type">DEBUG</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"<span class="subst">\((file <span class="keyword">as</span> NSString)</span>.lastPathComponent)[<span class="subst">\(line)</span>], <span class="subst">\(method)</span>: <span class="subst">\(message)</span>"</span>)</span><br><span class="line">    #endif</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>新版本的 LLVM 编译器在遇到这个空方法时，甚至会直接将这个方法整个去掉，完全不去调用它，从而实现零成本。</p>
+<hr>
+<p>原文链接: <a href="http://swifter.tips/log/" target="_blank" rel="external">http://swifter.tips/log/</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="LOG输出">LOG输出</h1><p>Log 输出是程序开发中很重要的组成部分，虽然它并不是直接的业务代码，但是却可以忠实地反映我们的程序是如何工作的，以及记录程序运行的过程中发生了什么。</p>
+<p>在 Swift 中，最简单的输出方法就是使用 print，在我们关心的地方输出字符串和值。但是这并不够，试想一下当程序变得非常复杂的时候，我们可能会输出很多内容，而想在其中寻找到我们希望的输出其实并不容易。我们往往需要更好更精确的输出，这包括输出这个 log 的文件，调用的行号以及所处的方法名字等等。</p>
+<p>我们当然可以在 print 的时候将当前的文件名字和那些必要的信息作为参数同我们的消息一起进行打印：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Test.swift</span></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">method</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"文件名:Test.swift, 方法名:method，这是一条输出"</span>)</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]>
+    
+    </summary>
+    
+      <category term="Swift" scheme="http://sunxiang0918.github.io/tags/Swift/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[在Swift中使用随机数]]></title>
@@ -1385,73 +1451,6 @@ org.apache.avro.util.Utf8</code>的异常,开始折腾了我很久.最后发现�
       <category term="大数据" scheme="http://sunxiang0918.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
       <category term="集群" scheme="http://sunxiang0918.github.io/tags/%E9%9B%86%E7%BE%A4/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[MacOS下JAVA开发使用经验(一)]]></title>
-    <link href="http://sunxiang0918.github.io/2015/09/21/MacOS%E4%B8%8BJAVA%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8%E7%BB%8F%E9%AA%8C(%E4%B8%80)/"/>
-    <id>http://sunxiang0918.github.io/2015/09/21/MacOS下JAVA开发使用经验(一)/</id>
-    <published>2015-09-21T13:38:36.000Z</published>
-    <updated>2015-10-11T15:46:16.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="MacOS下JAVA开发使用经验(一)">MacOS下JAVA开发使用经验(一)</h1><p>我是大概在2007年左右接触到MACOS的.当时先是折腾了半年的<code>Ubuntu</code>,然后在一个偶然的机会发现了<code>MacOS 10.4.6</code>,看到界面截图,简直是惊为天人.刚好那个时候苹果开始使用Intel的CPU.让我们有机会品尝了一下黑苹果的滋味.虽然在我的<code>HP DV2621</code>笔记本上装黑苹果又卡又热,但是还是让我深深的喜欢上了这个系统.到2009年,实在是憋不住了,买了我人生中的第一台macbook <code>mb990</code>.然后毕业后到公司上班也申请一直使用苹果系统.反正我是搞JAVA的,到是和操作系统关系不大,反而我到是觉得搞JAVA开发,Mac比Win还好用些,这么多年来也是越用越顺手.这里分享下我平时使用的一些经验或软件吧~</p>
-<h2 id="硬件">硬件</h2><p>这部分没啥好说的,苹果的电脑就这么几个型号.不过对于我们上班的来说,还是推荐使用rMBP+24寸以上的显示器的组合. 苹果的视网膜屏确实相当牛逼,看代码完全是种享受.<br>配置的话,只要不是macmini和air以及现在新出的macbook的话,应该都还OK.我个人是使用的<code>2014年rMBP 15寸低配</code>那款.编译和运行的速度秒杀大多数的机器.<br>而对于键盘和鼠标的话,没有什么特殊的要求.机械键盘我还没用过,不好评价的.鼠标的话,我用的是苹果的<code>Magic Mouse</code>,有人说那鼠标完全是反人类的,其实我觉得还好,现在平均每天要用10个小时以上,也没觉得特别的不适.使用这个鼠标最大的好处肯定就是它的多点触控了.几个工具全屏再加上几个多桌面,使用那个鼠标很容易的就可以做切换.</p>
-<a id="more"></a>
-<h2 id="系统">系统</h2><p>系统的话就不断的保持最新的正式版即可.升级一般来说都可以放心,我从以前的<code>10.5</code>升级到<code>10.10</code>都没遇到过什么问题.<br>然后就是一些系统的设置了.</p>
-<h3 id="Docker自动放大">Docker自动放大</h3><p>由于使用的程序比较多,所以Docker上有一堆的图标,自然每一个图标就比较小,因此需要把自动放大的功能给打开.而且也不能放到屏幕的左右两边,否则就会小的没法看…<br><img src="/img/2015/09/21/1.png" alt=""></p>
-<h3 id="屏幕四个角触发操作">屏幕四个角触发操作</h3><p>这个是MacOS的一个比较实用的功能,就是把鼠标移动到屏幕的四个角上就可以触发一些特定的操作.比如显示桌面啊,launchpad啊等等.<br>我一般都是把左下角设置为<code>显示桌面</code>,左上角设置为<code>MissionControl</code>,右上角设置为<code>Launchpad</code><br><img src="/img/2015/09/21/2.png" alt=""></p>
-<h3 id="将F1_F2等作为标准按钮">将F1 F2等作为标准按钮</h3><p>不知道是出于什么原因,MacOS系统刚装上的时候,键盘最上面的一排F1,F2的按钮是音量键这些.这完全就没法用嘛.所以必须设置成为标准的F1 F2功能. 这个只需要在<code>设置-键盘</code> 里面设置即可.<br><img src="/img/2015/09/21/3.png" alt=""></p>
-<h3 id="设置浏览器的刷新快捷键">设置浏览器的刷新快捷键</h3><p>在默认的情况下,Safari和Chrome都没有提供<code>F5</code>刷新页面的功能.这让我们在浏览网页或修改页面的时候很难受,因此需要增加上这些快捷键. 这在<code>设置-键盘-快捷键</code>中设置.<br><img src="/img/2015/09/21/4.png" alt=""></p>
-<h3 id="鼠标和触控板的轻触和滚动方向">鼠标和触控板的轻触和滚动方向</h3><p>自从Macos10.8以后,苹果把鼠标和触控板的滑动方向给反向了,也就是鼠标向下滑动,页面是往上走的.这和<code>Ipad</code>这些操作是一样的,但是我总觉得在电脑上有点奇怪.所以需要修改下. 同时还有就是鼠标和触控板的多点控制,比如两个指头是切换屏幕啊,轻触是右键啊等等 都是在 <code>设置-鼠标</code>和<code>设置-触控板</code>里面设置.<br><img src="/img/2015/09/21/5.png" alt=""></p>
-<p><img src="/img/2015/09/21/6.png" alt=""></p>
-<h3 id="增加状态栏直接锁定屏幕">增加状态栏直接锁定屏幕</h3><p>在公司上班,谁都有离开位置的时候,为了防止电脑可能被其他人随便操作,一定的安全措施还是需要的.最简单的方法就是直接把电脑屏幕给合上,那么再次打开的时候就要求输入密码.但是这样电脑就会休眠,而且如果外接了显示器的,有可能本来笔记本就是合上的(在mbp接上电源,外接键盘和鼠标的情况下.如果合并笔记本屏幕,那么就会单输出图像到外接显示器,这个时候系统是不会休眠的).那么还有一个方法就是使用<code>钥匙串</code>的功能,一键锁定计算机,并且关闭屏幕显示. 这个就是在<code>应用程序-实用工具-钥匙串访问</code>中.<br><img src="/img/2015/09/21/7.png" alt=""></p>
-<p><img src="/img/2015/09/21/8.png" alt=""></p>
-<h2 id="软件">软件</h2><p>软件即是工具,所谓工欲善其事，必先利其器.好的工具能让你的工作更得心应手.这里就推荐一下我平时所使用的一些工具.</p>
-<p>先来看一下我的Docker,我最常用的软件基本上就在这了.<br><img src="/img/2015/09/21/9.png" alt=""></p>
-<h3 id="XtraFinder">XtraFinder</h3><p>这个是Finder的增强工具.免费的,提供了很多有用的工具,基本上属于必装.</p>
-<ul>
-<li>提供了类似于Chrome一样的多标签操作</li>
-<li>双击某一个标签,提供了两个标签的联合操作.</li>
-<li>支持<code>Command+x</code>的剪切操作</li>
-<li>增加了右键<code>新建文件</code>的功能</li>
-<li>增加了在当前文件夹直接打开终端的功能</li>
-<li>增加了快捷键显示和隐藏系统<code>隐藏文件</code>的功能.</li>
-<li>提供了文件夹和文件分开排序的功能<br><img src="/img/2015/09/21/10.png" alt=""></li>
-</ul>
-<h3 id="1Password">1Password</h3><p>这个又是一个神器,他可以帮你保存所有的密码.这样你只需要记住一个密码就可以了,其他的密码都交由它来保存.它同时有safari和chrome的插件,以及IOS端的程序.通过加密了的文件使用iCloud进行同步,没有中心的服务器.自从CSDN被拖库而被泄露了一堆密码以后,我就开始使用这个软件,把我所有的账号都通过它设置成14位的不同的随机密码,这样减少了一个密码泄露,全部玩完的情况.要说这个软件的缺点,那就是卖的有点贵,300多一个好像.不过我觉得还是值了.(网上到是有这个的破解软件,但是如果真想使用这个软件,我建议还是买正版吧.一个用来保存密码的软件使用破解的,我怕里面的密码也一起被”破解”了..)<br><img src="/img/2015/09/21/11.png" alt=""></p>
-<p><img src="/img/2015/09/21/12.png" alt=""></p>
-<h3 id="Doit-im">Doit.im</h3><p>这个是国内的一个厂商推出的GTD软件.可以和IOS以及Web页面同步.我试用了很多的GTD软件,最后对比下来觉得这个软件做的比较好.提供了很完善的功能,比如<code>收集箱</code> <code>下一步行动</code> <code>明日代办</code> <code>日程</code> <code>项目</code> <code>情景</code> <code>标签</code> <code>子任务</code> <code>优先级</code> 等等.能让我很轻松的管理各种任务,有什么想法了就马上记录到收集箱中.然后再进行进一步的细分,这样就可以始终保持工作有条不紊的进行. BTW,这个软件是收取服务费的,一年100块.</p>
-<p><img src="/img/2015/09/21/13.png" alt=""></p>
-<h3 id="Teambition">Teambition</h3><p>这个是团队协作的工具,它提供的Mac客户端,其实就是一个Webkit的网页.这点做的就没有Doit.im好,太偷懒了.具体的用法可以参考我另外的一篇博文 <a href="http://sunxiang0918.cn/2015/09/07/使用TeamBition进行敏捷开发/" target="_blank" rel="external">使用TeamBition进行敏捷开发</a></p>
-<h3 id="邮件">邮件</h3><p>这个是Macos自带的程序,前段时间还使用过腾讯的FoxMail,也还可以.两个的功能都差不多,随便选择一个就可以了.我是不想再安装一个软件,所以选择了自带的Mail程序.<br>需要注意的是,最好在Mail程序中设置一个你的签名.并且在签名中增加一个Unicode的字符.这样在发送邮件的时候,Mail会把你的邮件使用UTF-8的格式来传送,这样Win端的一些工具收到后就不会有乱码的问题.<br><img src="/img/2015/09/21/14.png" alt=""></p>
-<h3 id="Reeder">Reeder</h3><p>这个是目前最好用的RSS阅读软件了.他可以订阅各种的来源,自从google的死了后,现在我使用的是Feedly提供的服务.还算稳定可靠.同样提供了IOS端的程序,两个间可以进行同步.虽然现在都在说RSS已经过时了,但是我觉得RSS还能活跃很久,毕竟这种订阅的信息收集其实是很高效和有用的.<br><img src="/img/2015/09/21/15.png" alt=""></p>
-<h3 id="Safari">Safari</h3><p>没啥好说的,系统自带的游览器.速度快,稳定.配合iCloud和handoff功能,在IOS设备和笔记本间无缝的切换,体验相当的舒服.然后我把搜索引擎设置成为了百度.这意味着平时的生活和娱乐就使用的safari.</p>
-<h3 id="Chrome">Chrome</h3><p>对比Safari,我更倾向于把Chrome当成一个工作相关的工具.首先就是把搜索引擎设置为google,然后安装上<code>PostMan</code>,<code>JSON-handle</code>,<code>OneTab</code>,<code>红杏</code>等扩展插件,然后再配合自带的<code>审查元素</code>功能.基本上我遇得到的一些界面分析,Rest调用,JSON格式化等等都能应付了.</p>
-<h3 id="QQ和微信">QQ和微信</h3><p>这个没啥说的,国内基本上是必装的软件了.</p>
-<h3 id="EverNote">EverNote</h3><p>我是把EverNote当做知识库来使用,配合它的标签和强大的搜索功能.基本上能很快的找到我以前记录的东西.这东西也是有IOS端的.平时看知乎或网页等等,看到感兴趣需要记录的了,可以直接发送到everNote中去. 而且我觉得这货在MAC上比在Win上用的顺手.不管是界面还是操作,而且没得广告.<br><img src="/img/2015/09/21/16.png" alt=""></p>
-<h3 id="iTunes和网易音乐">iTunes和网易音乐</h3><p>一个是用来听本地音乐的,一个是用来听在线音乐的.现在是没有音乐作为背景,就写不出来代码… T.Tb</p>
-<h3 id="IntelliJ_IDEA">IntelliJ IDEA</h3><p>Intellij是我认为最智能的JAVA IDE,推荐所有的Javaer们都尝试尝试.可以最开始从eclipse转过来的时候比较痛苦,但是一旦上手后,就会觉得以前像在使用记事本写代码一样.. IDEA提供了很强大的上下文推导以及Spring等框架的上下文管理,强大的Maven支持,再加上完备的插件支持,自己再多设置几个<code>Live Template</code> 写起代码来那叫一个顺手啊.<br>插件除了自带的,我还安装了<code>Docker Integration</code> <code>FindBugs</code> <code>JProfiler</code> <code>Mybatis plugin</code> <code>RegexpTester</code> <code>Scala</code> <code>ZooKeeper</code>.<br>总之,保证你不后悔使用<code>IntelliJ IDEA</code><br><img src="/img/2015/09/21/17.png" alt=""></p>
-<h3 id="XCode">XCode</h3><p>要玩儿IOS编程,当然还是要使用官方的XCode了.当然,说实话,我觉得没有<code>IDEA</code>出的<code>AppCode</code>用起顺手,功能也没有别人的多.不过胜在官方支持,对各个功能,特别是storyboard支持的最好.XCode同样也可以安装插件,首先必装的就是<code>Alcatraz</code>-用来管理插件的插件.可以通过在终端中执行下面的代码来安装:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://raw.github.com/supermarin/Alcatraz/master/Scripts/install.sh | sh</span><br></pre></td></tr></table></figure>
-<p>而后就直接在<code>Windows-Package Manager</code>里面选择需要的插件即可.我使用了这些插件:<br><code>ClangFormat</code> <code>FuzzyAutocomplete</code> <code>HighlightSelectedString</code> <code>LinkedLog</code> <code>OMColorSense</code> <code>OMQuickHelp</code> <code>SFJumpToLine</code> <code>VVDocumenter-Xcode</code> <code>XToDo</code></p>
-<p><img src="/img/2015/09/21/18.png" alt=""></p>
-<h3 id="Cornerstone">Cornerstone</h3><p>可以说是MacOS下最好用的SVN工具了.他集中式的管理了SVN项目.界面的布局和操作也非常的合理.支持几乎所有的SVN功能.这个工具基本上陪伴了我5年.最多的时候管理了一百多个项目而性能不减.可以说是完爆Win上的同类软件.不过这个软件是付费的,大概60美刀左右.<br><img src="/img/2015/09/21/19.png" alt=""></p>
-<h3 id="SourceTree">SourceTree</h3><p>这个软件又是一个神器,用来管理Git的.同Cornerstone一样,也是一个集中式的管理工具.界面布局和操作非常的方便.支持创建,克隆,提交,push,pull,分支,合并等等Git的功能.大大的简化了开发者与代码库之间的操作.同时在Mac的体验也比Win上的相同软件要好的多.最重要的是它是一个免费的软件,堪称业界良心啊.<br><img src="/img/2015/09/21/20.png" alt=""></p>
-<h3 id="Pages_Numbers_Keynote">Pages Numbers Keynote</h3><p>苹果办公软件三剑客.我平时写东西都是使用这个软件的.觉得简洁,写出来的效果也很好.特别是Keynote,做出来的演讲稿效果相当的舒服.如果要发给别个交互,发布成为PDF就可以了.</p>
-<h3 id="Word_Excel_PowerPoint">Word Excel PowerPoint</h3><p>毕竟公司里面不全都是用的Macos系统,别人写的DOC文件,你还是要打开看的,或者老总发给你的Excel教你填,你也不好意思发个PDF给人家..所以这个软件还是需要保留的.</p>
-<h3 id="Fraise_SublimeText">Fraise SublimeText</h3><p>这两个都是文本编辑器,第一个支持最完整的编码格式,以及能很方便的转换各种文本的编码格式,基本上被我用来转换文档格式用了.<br>而SublimeText可以说是一个最强大的文本编辑器.平时看日志,临时改些代码,格式化XML,记录会议纪要等等都是靠它了.<br><img src="/img/2015/09/21/21.png" alt=""></p>
-<h3 id="MacDown">MacDown</h3><p>用来书写MarkDown格式的文本的.这个软件是我试用了一堆MAC上的MarkDown软件后选出来的.支持的MarkDown语法算是很完整的了,非在线的编辑器,允许自定义样式和代码高亮的格式,支持各种快捷键操作.总之,非常的好用.我现在基本上所有的文本都是使用MarkDown来记录了.<br><img src="/img/2015/09/21/22.png" alt=""></p>
-<h3 id="Parallels_Desktop">Parallels Desktop</h3><p>MacOS上的虚拟机软件,我对比过VMware.觉得这个软件无论是在速度还是系统占用上都有优势.<br>现在虚拟机其实很少使用了,主要就是打开一些非要用IE打开的奇葩网页.然后就是虚拟机上安装一些Linux系统或Oracle数据库来瞎折腾.这样不会影响到实体机.<br><img src="/img/2015/09/21/23.png" alt=""></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="MacOS下JAVA开发使用经验(一)">MacOS下JAVA开发使用经验(一)</h1><p>我是大概在2007年左右接触到MACOS的.当时先是折腾了半年的<code>Ubuntu</code>,然后在一个偶然的机会发现了<code>MacOS 10.4.6</code>,看到界面截图,简直是惊为天人.刚好那个时候苹果开始使用Intel的CPU.让我们有机会品尝了一下黑苹果的滋味.虽然在我的<code>HP DV2621</code>笔记本上装黑苹果又卡又热,但是还是让我深深的喜欢上了这个系统.到2009年,实在是憋不住了,买了我人生中的第一台macbook <code>mb990</code>.然后毕业后到公司上班也申请一直使用苹果系统.反正我是搞JAVA的,到是和操作系统关系不大,反而我到是觉得搞JAVA开发,Mac比Win还好用些,这么多年来也是越用越顺手.这里分享下我平时使用的一些经验或软件吧~</p>
-<h2 id="硬件">硬件</h2><p>这部分没啥好说的,苹果的电脑就这么几个型号.不过对于我们上班的来说,还是推荐使用rMBP+24寸以上的显示器的组合. 苹果的视网膜屏确实相当牛逼,看代码完全是种享受.<br>配置的话,只要不是macmini和air以及现在新出的macbook的话,应该都还OK.我个人是使用的<code>2014年rMBP 15寸低配</code>那款.编译和运行的速度秒杀大多数的机器.<br>而对于键盘和鼠标的话,没有什么特殊的要求.机械键盘我还没用过,不好评价的.鼠标的话,我用的是苹果的<code>Magic Mouse</code>,有人说那鼠标完全是反人类的,其实我觉得还好,现在平均每天要用10个小时以上,也没觉得特别的不适.使用这个鼠标最大的好处肯定就是它的多点触控了.几个工具全屏再加上几个多桌面,使用那个鼠标很容易的就可以做切换.</p>]]>
-    
-    </summary>
-    
-      <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
-    
-      <category term="MAC" scheme="http://sunxiang0918.github.io/tags/MAC/"/>
     
   </entry>
   
