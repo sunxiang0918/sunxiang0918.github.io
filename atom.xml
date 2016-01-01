@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2015-12-30T14:23:03.000Z</updated>
+  <updated>2016-01-01T16:12:46.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -14,6 +14,85 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[再见2015]]></title>
+    <link href="http://sunxiang0918.github.io/2015/12/31/%E5%86%8D%E8%A7%812015/"/>
+    <id>http://sunxiang0918.github.io/2015/12/31/再见2015/</id>
+    <published>2015-12-31T14:13:48.000Z</published>
+    <updated>2016-01-01T16:12:46.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="再见2015">再见2015</h1><p>时光匆匆,转眼2015年就要过去了.2015开年的事情仿佛刚过去没有多久,2016又要来了.今年是忙碌的一年,不管是在生活上还是在工作上都发生了很多的变化.本文将回顾一下作为程序猿的自己在今年的成长,做一个简单的总结.</p>
+<h2 id="博客">博客</h2><p>今年年中,自己在github.io上搭建了自己的个人博客,并且把以前的一些文章从evernote上迁移了过来.以前,从来没有写博客的习惯,一个是觉得写博客比较麻烦,因为可能不是自己一个人看,不能像在evernote上那样随便乱写.还有一个就是觉得东西有个地方保存就好了,没必要分享出来.不过,最后还是决定把博客搭建出来,既能锻炼自己的书写,也能强迫自己把东西记录的更规范更细致,最后也能分享给有需要的人.从事了5年的软件行业了,渐渐的开始理解开源人的心态了,也从各位开源的大神中得到了很多的好处,是时候把自己力所能及的东西分享出来了.</p>
+<p>今年一共写了<a href="/archives/2015">43篇博客</a>,从数量上来说不算多.主要涉及的是<code>JAVA研发体系</code>以及<code>Swift</code>方面的内容.<br>对于明年,目标是60篇博客,内容上更有深度与广度.希望能够达成.</p>
+<a id="more"></a>
+<h2 id="阅读">阅读</h2><p>今年阅读的书不多,更大的变化是技术类的书从以前的只阅读实体书,到渐渐的开始接受电子书了.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">书名</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">完成度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="http://book.douban.com/subject/26274206/" target="_blank" rel="external">写给大忙人看的JAVA SE8</a></td>
+<td style="text-align:center">实体书</td>
+<td style="text-align:center">完成</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="http://book.douban.com/subject/26261153/" target="_blank" rel="external">Spark大数据处理</a></td>
+<td style="text-align:center">实体书</td>
+<td style="text-align:center">60%</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="http://book.douban.com/subject/2347790/" target="_blank" rel="external">敏捷软件开发 原则,模式与实践</a></td>
+<td style="text-align:center">实体书</td>
+<td style="text-align:center">重读</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://github.com/numbbbbb/the-swift-programming-language-in-chinese" target="_blank" rel="external">The Swift Programming Language</a></td>
+<td style="text-align:center">电子书</td>
+<td style="text-align:center">完成</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://leanpub.com/swifter" target="_blank" rel="external">SWIFTER 100个Swift必备Tips</a></td>
+<td style="text-align:center">电子书</td>
+<td style="text-align:center">完成</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.gitbook.com/book/yeasy/docker_practice/details" target="_blank" rel="external">Docker —— 从入门到实践</a></td>
+<td style="text-align:center">电子书</td>
+<td style="text-align:center">完成</td>
+</tr>
+<tr>
+<td style="text-align:left">快学Scala</td>
+<td style="text-align:center">PDF电子书</td>
+<td style="text-align:center">40%</td>
+</tr>
+</tbody>
+</table>
+<h2 id="团队实践">团队实践</h2><p>今年由于公司新开项目的原因,能够有机会对团队的运作有较大的改变.<br>首先,终于把所有的代码都从SVN上迁移到了GIT上.这个过程看似简单,其实是比较麻烦的.当一个团队在SVN上都搞了5年了,然后更换了整个工作的流程,并不是想象中的这么容易的.要让十多号人都熟悉GIT的概念,熟悉基于分支的开发模式.终于彻底贯彻了我在2012年摘抄到evernote上&lt;<a href="/2012/08/18/A-successful-Git-branching-model/">A successful Git branching model</a>&gt;这篇文章上所描述的工作模式.感觉到了GIT的强大与方便.<br>其次,尝试在项目中引入SCRUM敏捷开发,由于团队人数不多,需求比较灵活.因此,尝试了引入SCRUM敏捷开发,并且使用了Teambition作为管理工具,每天进行站立会议,阶段评审等等.就目前执行了3个多月的效果来看,一半的一半.一半的成功是坚持了站立会议,阶段任务制定,阶段成果评审等等,确实清晰了当前的项目状态.一半的失败是没有坚持下来使用Teambition工具,并且任务墙也没有坚持下来.除了让所有团队成员事无巨细的拆分任务和记录任务状态不容易外,自己对于Scrum的不熟悉也是一个原因.搞了这么多年的瀑布式开发,开发的习惯还没有更改过来.<br>希望明年会有进步,把任务墙的机制彻底的落实下来.</p>
+<h2 id="JAVA">JAVA</h2><p>今年在JAVA方面主要的进步是在于扩展了大数据方面的知识.以前搞了这么久的JAVA,一直停留在了JAVA语言本身,各种业务逻辑,J2EE,检索引擎这些上面.而今年开始有机会接触了<code>Hadoop</code>,<code>HBase</code>,<code>HIVE</code>,<code>Spark</code>这些东西,虽然还很基础.不过总算也是入门了.<br>明年的目标就是以项目作为机会深入的了解大数据,以及数据挖掘方面的东西.</p>
+<h2 id="互联网技术">互联网技术</h2><p>今年还有一个显著的变化就是接触了大量的互联网的技术.公司的新项目是一个类似于互联网的项目,因此需要掌握一些以前接触比较少的互联网技术.比如:<code>mongoDB</code>,<code>Kafka</code>,<code>Redis</code>,<code>Zabbix</code>,<code>ELK</code>,<code>S3</code>,<code>ceph</code>等等.相较于以前的项目,变化还是相当的大的.接触了很多新颖的东西,也趟了很多的坑.总的来说就是痛并快乐着.<br>互联网的趋势势必会席卷整个IT行业,你在哪一个垂直行业都是躲不了的.这也是件好事.就我个人而言,也比较高兴的,找到了以前学习软件的时候的那种兴奋感.<code>勿忘初心,重新学习</code>一直作为我整个2015年写在QQ签名上的座右铭.</p>
+<h2 id="其他语言">其他语言</h2><p>2015年还有一个重大的变化就是我开始把眼界从JAVA的生态环境中跳出去.接触了更多的语言以及它们的一些思想.其实搞软件的不能只关注于自己的那一小块圈子,在其他语言中也有很多可以借鉴和启发你的东西,就算暂时没有,开拓开拓眼界也是好的,指不定哪天就会用上呢.</p>
+<p>在年中,接触到<code>Kafka</code>的时候了解到了它是使用<code>scala</code>写的,和<code>JRuby</code>,<code>JPtyhon</code>这些类似,它是基于JVM上的一门新的语言.其实这门语言已经出来很久了,不过一直不算很广泛.这次在<code>Kafka</code>和<code>akka</code>中看到使用了<code>scala</code>,于是就去了解了一下.然后就被它的语法所吸引了,它解决了JAVA很多以前很烦琐的东西.JAVA由于一直要兼容以前版本的东西,所以这几年变化一直不大.哪怕最新的JDK1.8新增了很多的东西,但是整个体系还是在那摆着的.比如闭包的实现,完全比不上其他的语言,要实现一个闭包还需要提前的定义一个接口.而<code>scala</code>真是解决了这些的问题,它以简洁的语法漂亮的增加了我们的效率,并且还兼容了大部分的JAVA库,要知道这些JAVA库可是JAVA现在一直坐稳第一语言最大的依仗.C#语言本身其实经过这几年的发展已经比JAVA要优秀了,但是背后缺少了开源社区的支持,以及长年累月积累起来的各种库,始终在5 6名左右徘徊.因此,明年的目标就是继续学习<code>scala</code>,争取能拿<code>scala</code>写一些东西出来.</p>
+<p>在年底,由于<code>codis</code>和<code>docker</code>的原因,近距离的接触到了<code>golang</code>,这个被google誉为下一代开发语言的语言.也大致的了解了一下,它的一些思想确实比较先进,比如<code>协程</code>,<code>严格的书写格式</code>等等.不过由于时间和精力的原因并未有太深入,现在还停留在大致能看懂别人的源码的程度.明年的目标是系统的学习一下<code>golang</code>.我对这门语言还是比较看好的,它从语言级别就支持多并发的特性,是比较适合于大数据高并发的系统的.</p>
+<p>贯穿整年,得益于Apple对开源的态度,以及IOS9对IOS开发者真机调试的免费开放(是的,这个理由就是这么low,真的是被这个吸引了,可以自己给自己的手机开发APP了).我深入的学习了<code>Swfit</code>,这是从2012年在公司项目上使用<code>Objective-C</code>写过一个<code>MacOS</code>上的工具外,时隔3年又一次投入Apple的怀抱,这次的感觉很好.由于从大学开始就一直学习的是<code>JAVA</code>和<code>Python</code>,对于自己手动的管理内存实在是头痛.因此,信仰没有抵过现实,把<code>MacOS</code>上的工具开发完成后,就再没有接触过<code>Objective-C</code>了.<br>但是,在2014年WWDC上看了Swift的演示,我一下就被吸引了.类似于动态语言的语法,静态语言的本质,各种语法糖以及现代语言的思想,无不吸引了我.再加上年底的开源,更是把Swfit推上了一个小高潮.<br>现在Swfit已经是我第二熟悉的语言了,又时甚至会想要是JAVA有 Swfit的这个特性就好了~<br>基于Swfit,今年断断续续的写了两个完整的应用以及几个框架或代码片段.也算是入了Swift的门了.第三个应用也在筹划的阶段.明年的目标就是更加的熟悉Swift以及IOS的开发,不指望以后靠IOS吃饭,自娱自乐写点有意思的应用还是不错的.</p>
+<h2 id="DevOps">DevOps</h2><p>以前在这方面接触的最多的就是 搭建了 Maven+Jenkins进行持续化集成,并且一直使用了3年.<br>今年开始涉及了云计算以及容器化技术.开始在各种云上实验各种东西.并且把Docker引入了今年公司的新项目中.Docker可以说是今年获得的最重要的技能之一.</p>
+<h2 id="开源">开源</h2><p>单独把这个写出来,也是想说明现在对于开源越来越有认同感.自己也在<a href="http://git.oschina.net" target="_blank" rel="external">Git@oschina</a>以及<a href="https://github.com/sunxiang0918" target="_blank" rel="external">github.com</a>上分享了几个东西.有<code>Swift</code>的,也有<code>JAVA</code>的.其中拿来练手而写的<a href="http://git.oschina.net/xycm/ZhiHuDaily-Swift" target="_blank" rel="external">ZhiHuDaily-Swift</a>更是拿到了<code>git@OSC</code>上<code>Swift</code>分类下最高的Star数以及收到了知乎官方的电邮(当然不是法律侵权这些),这让我非常的高兴,更加的坚定了开源的决心.<br>明年的目标是希望能参与一个他人的开源项目,或是协作,或是<code>pull request</code>.现在Swift开源了,要是能在<code>Swfit</code>上留下自己的印记,那可是很值得开心的,加油!</p>
+<h2 id="总结">总结</h2><p>总结今年的成长,比去年的多姿多彩,涉及了更多的方面.并且成功的进入了IOS Programmer的世界,也算是圆了资深脑残果粉的一个心愿.其他技术方面,很多东西都只能算是入了个门,更多的精彩和挑战还在后面.<br><strong>期待2016!再见2015!</strong></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="再见2015">再见2015</h1><p>时光匆匆,转眼2015年就要过去了.2015开年的事情仿佛刚过去没有多久,2016又要来了.今年是忙碌的一年,不管是在生活上还是在工作上都发生了很多的变化.本文将回顾一下作为程序猿的自己在今年的成长,做一个简单的总结.</p>
+<h2 id="博客">博客</h2><p>今年年中,自己在github.io上搭建了自己的个人博客,并且把以前的一些文章从evernote上迁移了过来.以前,从来没有写博客的习惯,一个是觉得写博客比较麻烦,因为可能不是自己一个人看,不能像在evernote上那样随便乱写.还有一个就是觉得东西有个地方保存就好了,没必要分享出来.不过,最后还是决定把博客搭建出来,既能锻炼自己的书写,也能强迫自己把东西记录的更规范更细致,最后也能分享给有需要的人.从事了5年的软件行业了,渐渐的开始理解开源人的心态了,也从各位开源的大神中得到了很多的好处,是时候把自己力所能及的东西分享出来了.</p>
+<p>今年一共写了<a href="/archives/2015">43篇博客</a>,从数量上来说不算多.主要涉及的是<code>JAVA研发体系</code>以及<code>Swift</code>方面的内容.<br>对于明年,目标是60篇博客,内容上更有深度与广度.希望能够达成.</p>]]>
+    
+    </summary>
+    
+      <category term="其他" scheme="http://sunxiang0918.github.io/tags/%E5%85%B6%E4%BB%96/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[<转>Swift-LOG输出]]></title>
@@ -1386,63 +1465,6 @@ org.apache.avro.util.Utf8</code>的异常,开始折腾了我很久.最后发现�
 <li>其五,集群至少要分三片,加上主从备份.也就是说至少需要6个节点才能组建<code>Redis</code>集群.</li>
 </ul>
 <p>从上面可以看出,目前官方的方案.并不适合我们.它现在还不稳定,开源社区的支持也比较少.<br>从其他三方的方案中进行对比,最后选择<code>Codis</code>作为我们<code>Redis</code>集群部署的方案.</p>]]>
-    
-    </summary>
-    
-      <category term="Kafka" scheme="http://sunxiang0918.github.io/tags/Kafka/"/>
-    
-      <category term="大数据" scheme="http://sunxiang0918.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    
-      <category term="集群" scheme="http://sunxiang0918.github.io/tags/%E9%9B%86%E7%BE%A4/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Kafka集群部署]]></title>
-    <link href="http://sunxiang0918.github.io/2015/09/28/Kafka%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"/>
-    <id>http://sunxiang0918.github.io/2015/09/28/Kafka集群部署/</id>
-    <published>2015-09-28T14:12:16.000Z</published>
-    <updated>2015-12-28T01:16:09.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="Kafka集群">Kafka集群</h1><p>Kafka作为新一代的消息系统,最初是由LinkedIn公司开发,之后开源成为Apache的顶级项目.<br>它与传统的消息系统相比,有以下不同:</p>
-<ul>
-<li>它被设计为一个分布式系统，易于向外扩展；</li>
-<li>它同时为发布和订阅提供高吞吐量；</li>
-<li>它支持多订阅者，当失败时能自动平衡消费者；</li>
-<li>它将消息持久化到磁盘，因此可用于批量消费，例如ETL，以及实时应用程序。</li>
-</ul>
-<p>同时.Kafka提供了多种客户端的Driver.这点比阿里的<code>RocketMQ</code>要好.而阿里的RocketMQ在性能和使用方面优于Kafka,不过只提供JAVA的客户端.</p>
-<p>而我们系统中不光只有JAVA应用,因此,在我们的系统中,决定使用kafka作为我们的消息服务.</p>
-<a id="more"></a>
-<h2 id="集群部署">集群部署</h2><ol>
-<li>启动Zookeeper服务<br>　　集群部署也是需要启用Zookeeper。
-　　</li>
-<li><p>启动Kafka broker服务<br> 在不同的机器上拷贝kafka.然后修改它的<code>$KAFKA_HOME/config/server.properties</code>文件.<br> 主要是修改以下几个地方:</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#服务的序号,这个需要在集群中保证唯一</span></span><br><span class="line">brokerid = <span class="number">0</span></span><br><span class="line"><span class="comment">#服务的端口,如果是一台机器上只启动一个kafka,可以不修改</span></span><br><span class="line">port = <span class="number">1234</span></span><br><span class="line"><span class="comment">#服务的数据存放位置,默认可以不修改</span></span><br><span class="line">log.dir = /tmp/kafka_<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<pre><code>然后调用 <span class="escape">`.</span>/bin/kafka-server-start.sh conf/server.properties<span class="escape">` </span>即可启动
-</code></pre><ol>
-<li><p>然后就可以创建<code>Topic</code>了. </p>
-<p> <code>bin/kafka-topics.sh --create --zookeeper 127.0.0.1:2181 --replication-factor 2 --partitions 2 --topic testTopic</code></p>
-<p> 其中<code>replication-factor</code>表示要在几个节点上存放数据.一般有几个节点就配置成几个就可以了.<br> <code>partitions</code>就表示分片.一般配置成1就可以了.</p>
-</li>
-<li><p>到此,kafka的集群就搭建完成了.然后就可以使用我们的代码来进行试验了.</p>
-<p> Spring配置:</p>
- <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">	<span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">beans</span> <span class="attribute">xmlns</span>=<span class="value">"http://www.springframework.org/schema/beans"</span></span><br><span class="line">       <span class="attribute">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">       <span class="attribute">xsi:schemaLocation</span>=<span class="value">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"jmsTemplate"</span> <span class="attribute">class</span>=<span class="value">"com.sobey.jcg.kafka.util.KafkaTemplate"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">constructor-arg</span> <span class="attribute">value</span>=<span class="value">"127.0.0.1:8092,127.0.0.1:8093"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"defaultThreadPool"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 核心线程数，默认为1 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"corePoolSize"</span> <span class="attribute">value</span>=<span class="value">"100"</span>/&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 最大线程数，默认为Integer.MAX_VALUE --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"maxPoolSize"</span> <span class="attribute">value</span>=<span class="value">"900"</span>/&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 队列最大长度，一般需要设置值&gt;=notifyScheduledMainExecutor.maxNum；默认为Integer.MAX_VALUE --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"queueCapacity"</span> <span class="attribute">value</span>=<span class="value">"50"</span>/&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 线程池维护线程所允许的空闲时间，默认为60s --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"keepAliveSeconds"</span> <span class="attribute">value</span>=<span class="value">"60"</span>/&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 线程池对拒绝任务（无线程可用）的处理策略，目前只支持AbortPolicy、CallerRunsPolicy；默认为后者     --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"rejectedExecutionHandler"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- AbortPolicy:直接抛出java.util.concurrent.RejectedExecutionException异常 --&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- CallerRunsPolicy:主线程直接执行该任务，执行完之后尝试添加下一个任务到线程池中，可以有效降低向线程池内添加任务的速度 --&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- DiscardOldestPolicy:抛弃旧的任务、暂不支持；会导致被丢弃的任务无法再次被执行 --&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- DiscardPolicy:抛弃当前任务、暂不支持；会导致被丢弃的任务无法再次被执行        --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="title">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"customConsumerMessageListener"</span> <span class="attribute">class</span>=<span class="value">"com.xxx.jcg.kafka.util.KafkaMessageListenerAdapter"</span> <span class="attribute">scope</span>=<span class="value">"prototype"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">constructor-arg</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"com.xxx.jcg.kafka.test.CustomConsumer"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="title">constructor-arg</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!--ZK的链接 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"zookeeperConnect"</span> <span class="attribute">class</span>=<span class="value">"com.sobey.jcg.kafka.util.ZookeeperConnect"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"zkConnect"</span> <span class="attribute">value</span>=<span class="value">"127.0.0.1:2181"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"zkConnectionTimeout"</span> <span class="attribute">value</span>=<span class="value">"6000"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"zkSessionTimeout"</span> <span class="attribute">value</span>=<span class="value">"400"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"zkSyncTime"</span> <span class="attribute">value</span>=<span class="value">"200"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"com.sobey.jcg.kafka.util.KafkaMessageListenerContainer"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">constructor-arg</span> <span class="attribute">ref</span>=<span class="value">"zookeeperConnect"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">constructor-arg</span> <span class="attribute">ref</span>=<span class="value">"defaultThreadPool"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"listener"</span> <span class="attribute">ref</span>=<span class="value">"customConsumerMessageListener"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"topic"</span> <span class="attribute">value</span>=<span class="value">"kafkatopic"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"com.sobey.jcg.kafka.util.KafkaMessageListenerContainer"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">constructor-arg</span> <span class="attribute">ref</span>=<span class="value">"zookeeperConnect"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">constructor-arg</span> <span class="attribute">ref</span>=<span class="value">"defaultThreadPool"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"listener"</span> <span class="attribute">ref</span>=<span class="value">"customConsumerMessageListener"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"topic"</span> <span class="attribute">value</span>=<span class="value">"clusterTest"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="title">beans</span>&gt;</span></span><br><span class="line">	```	</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	测试代码:</span><br><span class="line">	</span><br><span class="line">	```java</span><br><span class="line">	public class JMSSenderTest &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        CustomSpringContextUtil.getContext("applicationContext.xml").getBean("jmsTemplate");</span><br><span class="line"></span><br><span class="line">        UserInfo userInfo = new UserInfo("aaa",17,true);</span><br><span class="line">        </span><br><span class="line">        JMSSender.getInstance().sendMessage(userInfo,"clusterTest");</span><br><span class="line"></span><br><span class="line">        JMSSender.getInstance().sendMessage("这个是String","clusterTest");</span><br><span class="line"></span><br><span class="line">        HashMap<span class="tag">&lt;<span class="title">Object,Object</span>&gt;</span> objectObjectMap = new HashMap<span class="tag">&lt;<span class="title">Object,</span> <span class="attribute">Object</span>&gt;</span>();</span><br><span class="line">        objectObjectMap.put("name","bbbb");</span><br><span class="line">        objectObjectMap.put("age",20);</span><br><span class="line">        objectObjectMap.put("gender",true);</span><br><span class="line">        JMSSender.getInstance().sendMessage(objectObjectMap,"clusterTest");</span><br><span class="line">    &#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<pre><code>如果正常的话,就会发送消息到kafka中. 并且程序能有消费的记录.
-</code></pre>]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="Kafka集群">Kafka集群</h1><p>Kafka作为新一代的消息系统,最初是由LinkedIn公司开发,之后开源成为Apache的顶级项目.<br>它与传统的消息系统相比,有以下不同:</p>
-<ul>
-<li>它被设计为一个分布式系统，易于向外扩展；</li>
-<li>它同时为发布和订阅提供高吞吐量；</li>
-<li>它支持多订阅者，当失败时能自动平衡消费者；</li>
-<li>它将消息持久化到磁盘，因此可用于批量消费，例如ETL，以及实时应用程序。</li>
-</ul>
-<p>同时.Kafka提供了多种客户端的Driver.这点比阿里的<code>RocketMQ</code>要好.而阿里的RocketMQ在性能和使用方面优于Kafka,不过只提供JAVA的客户端.</p>
-<p>而我们系统中不光只有JAVA应用,因此,在我们的系统中,决定使用kafka作为我们的消息服务.</p>]]>
     
     </summary>
     
