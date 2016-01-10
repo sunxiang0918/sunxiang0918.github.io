@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="翔妖除魔的个人博客">
 <meta property="og:description" content="在IOS中使用swift调用系统相机在IOS的APP开发中,很容易就会遇到使用拍照或录制视频的功能.如果要求并不是太多的话,最简单方式就是调用系统自带的图像获取器UIImagePickerController. 
 由于UIImagePickerController继承自UINavigationController,所以它的delegate需要实现UIImagePickerControllerDel">
-<meta property="og:updated_time" content="2016-01-10T13:38:13.000Z">
+<meta property="og:updated_time" content="2016-01-10T13:45:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在IOS中使用swift调用系统相机">
 <meta name="twitter:description" content="在IOS中使用swift调用系统相机在IOS的APP开发中,很容易就会遇到使用拍照或录制视频的功能.如果要求并不是太多的话,最简单方式就是调用系统自带的图像获取器UIImagePickerController. 
@@ -256,18 +256,56 @@ var _hmt = _hmt || [];
 <li><code>UIImagePickerController.isSourceTypeAvailable(.SavedPhotosAlbum)</code></li>
 </ul>
 </li>
-<li>然后指定数据的来源.一共有三种来源:<ul>
+<li><p>然后指定数据的来源.一共有三种来源:</p>
+<ul>
 <li><code>UIImagePickerControllerSourceType.PhotoLibrary</code>    来自系统图库</li>
 <li><code>UIImagePickerControllerSourceType.Camera</code>       来自相机</li>
 <li><code>UIImagePickerControllerSourceType.SavedPhotosAlbum</code>      来自相册</li>
 </ul>
 </li>
-<li><p>设置媒体类型,<code>UIImagePickerController</code>根据这个的值来决定选择或拍摄的媒体类型.这个是一个[String] 字符串数组.多个值就表明了可以在拍摄的界面上切换.需要注意的是这个<code>mediaTypes</code>的定义是在<code>MobileCoreService</code>框架下的.当然也可以直接使用<code>String</code>的常量来描述.常用的媒体类型为:</p>
-<p> |常量名|常量值|说明|<br> |:—-:|:—-:|:—-:|<br> |kUTTypeImage|        public.image|        照片|<br> |kUTTypeMovie|        public.movie|        音视频|<br> |kUTTypeVideo|        public.video|        纯视频|<br> |kUTTypeAudio|        public.audio|        纯音频|<br> |kUTTypeLivePhoto|    com.apple.live-photo|  IOS9的动态照片(关于动态图片后面再单独开博文来说)|</p>
+<li><p>如果数据来源是相机,那么还需要设置相机的捕获模式<code>cameraCaptureMode</code>. 主要分为<code>.Photo</code>和<code>.Video</code></p>
 </li>
-<li>如果数据来源是相机,那么还需要设置相机的捕获模式<code>cameraCaptureMode</code>. 主要分为<code>.Photo</code>和<code>.Video</code></li>
-<li>实现各种代理方法接收保存和获取图像的方法.</li>
+<li><p>实现各种代理方法接收保存和获取图像的方法.</p>
+</li>
+<li><p>设置媒体类型,<code>UIImagePickerController</code>根据这个的值来决定选择或拍摄的媒体类型.这个是一个[String] 字符串数组.多个值就表明了可以在拍摄的界面上切换.需要注意的是这个<code>mediaTypes</code>的定义是在<code>MobileCoreService</code>框架下的.当然也可以直接使用<code>String</code>的常量来描述.常用的媒体类型为:</p>
+</li>
 </ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">常量名</th>
+<th style="text-align:center">常量值</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">kUTTypeImage</td>
+<td style="text-align:center">public.image</td>
+<td style="text-align:center">照片</td>
+</tr>
+<tr>
+<td style="text-align:center">kUTTypeMovie</td>
+<td style="text-align:center">public.movie</td>
+<td style="text-align:center">音视频</td>
+</tr>
+<tr>
+<td style="text-align:center">kUTTypeVideo</td>
+<td style="text-align:center">public.video</td>
+<td style="text-align:center">纯视频</td>
+</tr>
+<tr>
+<td style="text-align:center">kUTTypeAudio</td>
+<td style="text-align:center">public.audio</td>
+<td style="text-align:center">纯音频</td>
+</tr>
+<tr>
+<td style="text-align:center">kUTTypeLivePhoto</td>
+<td style="text-align:center">com.apple.live-photo</td>
+<td style="text-align:center">IOS9的动态照片(关于动态图片后面再单独开博文来说)</td>
+</tr>
+</tbody>
+</table>
 <a id="more"></a>
 <p>除了上面说的几个设置外,在使用<code>UIImagePickerController</code>过程中可能还用得到的设置主要有:</p>
 <ul>
