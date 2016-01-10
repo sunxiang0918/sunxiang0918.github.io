@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>在IOS中使用swift调用系统相机 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在IOS中使用swift调用系统相机在IOS的APP开发中,很容易就会遇到使用拍照或录制视频的功能.如果要求并不是太多的话,最简单方式就是调用系统自带的图像获取器UIImagePickerController. 
+由于UIImagePickerController继承自UINavigationController,所以它的delegate需要实现UIImagePickerControllerDel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在IOS中使用swift调用系统相机">
+<meta property="og:url" content="http://sunxiang0918.github.io/2016/01/02/在IOS中使用swift调用系统相机/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="在IOS中使用swift调用系统相机在IOS的APP开发中,很容易就会遇到使用拍照或录制视频的功能.如果要求并不是太多的话,最简单方式就是调用系统自带的图像获取器UIImagePickerController. 
+由于UIImagePickerController继承自UINavigationController,所以它的delegate需要实现UIImagePickerControllerDel">
+<meta property="og:updated_time" content="2016-01-10T13:38:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在IOS中使用swift调用系统相机">
+<meta name="twitter:description" content="在IOS中使用swift调用系统相机在IOS的APP开发中,很容易就会遇到使用拍照或录制视频的功能.如果要求并不是太多的话,最简单方式就是调用系统自带的图像获取器UIImagePickerController. 
+由于UIImagePickerController继承自UINavigationController,所以它的delegate需要实现UIImagePickerControllerDel">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 15px;">Docker</a> <a href="/tags/GIT/" style="font-size: 13.33px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.67px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.67px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.67px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.67px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.67px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 15px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 13.33px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Nutch/" style="font-size: 10px;">Nutch</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18.33px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.67px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 11.67px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18.33px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/日志挖掘/" style="font-size: 10px;">日志挖掘</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 16.67px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-在IOS中使用swift调用系统相机" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/02/在IOS中使用swift调用系统相机/" class="article-date">
+  	<time datetime="2016-01-02T12:03:41.000Z" itemprop="datePublished">2016-01-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      在IOS中使用swift调用系统相机
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#在IOS中使用swift调用系统相机"><span class="toc-number">1.</span> <span class="toc-text">在IOS中使用swift调用系统相机</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本知识"><span class="toc-number">1.1.</span> <span class="toc-text">基本知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Demo"><span class="toc-number">1.2.</span> <span class="toc-text">Demo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自定义相薄"><span class="toc-number">1.3.</span> <span class="toc-text">自定义相薄</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="在IOS中使用swift调用系统相机">在IOS中使用swift调用系统相机</h1><p>在IOS的APP开发中,很容易就会遇到使用拍照或录制视频的功能.如果要求并不是太多的话,最简单方式就是调用系统自带的图像获取器<code>UIImagePickerController</code>. </p>
+<p>由于<code>UIImagePickerController</code>继承自<code>UINavigationController</code>,所以它的<code>delegate</code>需要实现<code>UIImagePickerControllerDelegate</code>和<code>UINavigationControllerDelegate</code>两个协议.</p>
+<h2 id="基本知识">基本知识</h2><p>要使用这个类主要要做以下几件事情:</p>
+<ol>
+<li>首先要创建一个全局的<code>UIImagePickerController</code>实例.</li>
+<li>判断设备是否支持数据来源:<ul>
+<li><code>UIImagePickerController.isSourceTypeAvailable(.Camera)</code></li>
+<li><code>UIImagePickerController.isSourceTypeAvailable(.PhotoLibrary)</code></li>
+<li><code>UIImagePickerController.isSourceTypeAvailable(.SavedPhotosAlbum)</code></li>
+</ul>
+</li>
+<li>然后指定数据的来源.一共有三种来源:<ul>
+<li><code>UIImagePickerControllerSourceType.PhotoLibrary</code>    来自系统图库</li>
+<li><code>UIImagePickerControllerSourceType.Camera</code>       来自相机</li>
+<li><code>UIImagePickerControllerSourceType.SavedPhotosAlbum</code>      来自相册</li>
+</ul>
+</li>
+<li><p>设置媒体类型,<code>UIImagePickerController</code>根据这个的值来决定选择或拍摄的媒体类型.这个是一个[String] 字符串数组.多个值就表明了可以在拍摄的界面上切换.需要注意的是这个<code>mediaTypes</code>的定义是在<code>MobileCoreService</code>框架下的.当然也可以直接使用<code>String</code>的常量来描述.常用的媒体类型为:</p>
+<p> |常量名|常量值|说明|<br> |:—-:|:—-:|:—-:|<br> |kUTTypeImage|        public.image|        照片|<br> |kUTTypeMovie|        public.movie|        音视频|<br> |kUTTypeVideo|        public.video|        纯视频|<br> |kUTTypeAudio|        public.audio|        纯音频|<br> |kUTTypeLivePhoto|    com.apple.live-photo|  IOS9的动态照片(关于动态图片后面再单独开博文来说)|</p>
+</li>
+<li>如果数据来源是相机,那么还需要设置相机的捕获模式<code>cameraCaptureMode</code>. 主要分为<code>.Photo</code>和<code>.Video</code></li>
+<li>实现各种代理方法接收保存和获取图像的方法.</li>
+</ol>
+<a id="more"></a>
+<p>除了上面说的几个设置外,在使用<code>UIImagePickerController</code>过程中可能还用得到的设置主要有:</p>
+<ul>
+<li><strong>modalTransitionStyle</strong>:        取景框出现效果</li>
+<li><strong>allowsEditing</strong>:    是否允许编辑,只有在<code>showsCameraControls</code>属性为<code>true</code>时才有效</li>
+<li><strong>showsCameraControls</strong>:  是否显示拍照时的工具栏,如果要自定义拍摄界面,需要把这个工具栏隐藏掉</li>
+<li><strong>videoMaximumDuration</strong>: 录制视频的时长, 默认是10秒</li>
+<li><strong>videoQuality</strong>:  视频质量,枚举定义在<code>UIImagePickerControllerQualityType</code>中</li>
+<li><strong>cameraDevice</strong>: 前置,还是后置摄像头,枚举定义在<code>UIImagePickerControllerCameraDevice</code></li>
+<li><strong>cameraFlashMode</strong>:闪光灯模式,枚举定义在<code>UIImagePickerControllerCameraFlashMode</code></li>
+</ul>
+<p>有了这些准备,就可以开始来实现一个最简单的DEMO了.</p>
+<h2 id="Demo">Demo</h2><p>DEMO很简单,在一个APP上增加一个按钮,点击这个按钮,打开系统自带的摄像头.然后可以进行拍摄,最后把拍摄结果保存到相册中.</p>
+<ol>
+<li><p>首先先创建一个<code>UIImagePickerController</code>:</p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> imagePickerController:<span class="type">UIImagePickerController</span> = <span class="type">UIImagePickerController</span>()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>给某个ViewController上增加<code>UIImagePickerControllerDelegate</code>和<code>UINavigationControllerDelegate</code>两个协议.</p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ViewController</span>: <span class="title">UIViewController</span>,<span class="title">UIImagePickerControllerDelegate</span>,<span class="title">UINavigationControllerDelegate</span> </span>&#123;</span><br><span class="line">	<span class="keyword">override</span> <span class="func"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</span><br><span class="line">		imagePickerController.delegate = <span class="keyword">self</span></span><br><span class="line">	&#125;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后设置PickerController的初始值:</p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">imagePickerController.modalTransitionStyle = .<span class="type">FlipHorizontal</span></span><br><span class="line">   imagePickerController.allowsEditing = <span class="literal">true</span>	<span class="comment">//是否允许编辑</span></span><br><span class="line">   imagePickerController.sourceType = .<span class="type">Camera</span>	<span class="comment">//数据来源为摄像头</span></span><br><span class="line">    imagePickerController.videoMaximumDuration = <span class="number">15</span>      <span class="comment">//模式录制视频长度,单位秒</span></span><br><span class="line">    imagePickerController.mediaTypes = [<span class="string">"public.image"</span>,<span class="string">"public.movie"</span>]        <span class="comment">//允许的相机类型(拍照,摄像....)</span></span><br><span class="line">    imagePickerController.videoQuality = .<span class="type">TypeHigh</span>		     <span class="comment">//视频质量</span></span><br><span class="line">    imagePickerController.cameraCaptureMode = .<span class="type">Photo</span>		<span class="comment">//初始摄像头的模式</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置界面按钮的事件响应,在相应中增加打开<code>imagePickerController</code>视图的方法:</p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">self</span>.presentViewController(imagePickerController, animated: <span class="literal">true</span>) &#123; () -&gt; <span class="type">Void</span> <span class="keyword">in</span></span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li><p>实现完成照片或视频的拍摄回调代理方法:<code>func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject])</code>:</p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">imagePickerController</span><span class="params">(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject])</span></span> &#123;</span><br><span class="line">	  <span class="comment">//获取媒体的类型</span></span><br><span class="line">       <span class="keyword">let</span> mediaType = info[<span class="type">UIImagePickerControllerMediaType</span>] <span class="keyword">as</span>! <span class="type">String</span></span><br><span class="line">       </span><br><span class="line">       <span class="comment">//如果媒体是照片</span></span><br><span class="line">       <span class="keyword">if</span> mediaType == kUTTypeImage <span class="keyword">as</span> <span class="type">String</span> &#123;</span><br><span class="line">           <span class="comment">//获取到拍摄的照片, UIImagePickerControllerEditedImage是经过剪裁过的照片,UIImagePickerControllerOriginalImage是原始的照片</span></span><br><span class="line">           <span class="keyword">let</span> image = info[<span class="type">UIImagePickerControllerEditedImage</span>] <span class="keyword">as</span>! <span class="type">UIImage</span></span><br><span class="line">           </span><br><span class="line">           <span class="comment">//调用方法保存到图像库中</span></span><br><span class="line">           <span class="type">UIImageWriteToSavedPhotosAlbum</span>(image, <span class="keyword">self</span>,<span class="string">"image:didFinishSavingWithError:contextInfo:"</span>, <span class="literal">nil</span>)</span><br><span class="line">           </span><br><span class="line">       &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="comment">//视频</span></span><br><span class="line">           <span class="comment">//获取到视频的临时路径</span></span><br><span class="line">           <span class="keyword">let</span> urlStr =  (info[<span class="type">UIImagePickerControllerMediaURL</span>] <span class="keyword">as</span>! <span class="type">NSURL</span>).path</span><br><span class="line">           <span class="comment">//启动异步线程保存视频到图像库中</span></span><br><span class="line">           dispatch_async(dispatch_get_global_queue(<span class="type">DISPATCH_QUEUE_PRIORITY_DEFAULT</span>, <span class="number">0</span>), &#123; () -&gt; <span class="type">Void</span> <span class="keyword">in</span></span><br><span class="line">           <span class="comment">//调用方法保存到图像库中</span></span><br><span class="line">               <span class="type">UISaveVideoAtPathToSavedPhotosAlbum</span>(urlStr!, <span class="keyword">self</span>, <span class="string">"video:didFinishSavingWithError:contextInfo:"</span>, <span class="literal">nil</span>)</span><br><span class="line">           &#125;)</span><br><span class="line">       &#125;</span><br><span class="line">       </span><br><span class="line">       <span class="comment">//关闭照相框</span></span><br><span class="line">       <span class="keyword">self</span>.dismissViewControllerAnimated(<span class="literal">true</span>, completion: <span class="literal">nil</span>)</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实现完成保存后的结果回调方法<code>func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer&lt;Void&gt;)</code>:</p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">image</span><span class="params">(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer&lt;Void&gt;)</span></span> &#123;</span><br><span class="line">       <span class="keyword">if</span> error == <span class="literal">nil</span> &#123;</span><br><span class="line">           <span class="keyword">let</span> ac = <span class="type">UIAlertController</span>(title: <span class="string">"Saved!"</span>, message: <span class="string">"成功保存照片到图库"</span>, preferredStyle: .<span class="type">Alert</span>)</span><br><span class="line">           ac.addAction(<span class="type">UIAlertAction</span>(title: <span class="string">"OK"</span>, style: .<span class="type">Default</span>, handler: <span class="literal">nil</span>))</span><br><span class="line">           presentViewController(ac, animated: <span class="literal">true</span>, completion: <span class="literal">nil</span>)</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="keyword">let</span> ac = <span class="type">UIAlertController</span>(title: <span class="string">"Save error"</span>, message: error?.localizedDescription, preferredStyle: .<span class="type">Alert</span>)</span><br><span class="line">           ac.addAction(<span class="type">UIAlertAction</span>(title: <span class="string">"OK"</span>, style: .<span class="type">Default</span>, handler: <span class="literal">nil</span>))</span><br><span class="line">           presentViewController(ac, animated: <span class="literal">true</span>, completion: <span class="literal">nil</span>)</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实现完成保存视频后的结果回调方法<code>func video(videoPath: String, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer&lt;Void&gt;)</code>:</p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">video</span><span class="params">(videoPath: String, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer&lt;Void&gt;)</span></span> &#123;</span><br><span class="line">       <span class="keyword">if</span> error == <span class="literal">nil</span> &#123;</span><br><span class="line">           <span class="keyword">let</span> ac = <span class="type">UIAlertController</span>(title: <span class="string">"Saved!"</span>, message: <span class="string">"成功保存视频到图库"</span>, preferredStyle: .<span class="type">Alert</span>)</span><br><span class="line">           ac.addAction(<span class="type">UIAlertAction</span>(title: <span class="string">"OK"</span>, style: .<span class="type">Default</span>, handler: <span class="literal">nil</span>))</span><br><span class="line">           presentViewController(ac, animated: <span class="literal">true</span>, completion: <span class="literal">nil</span>)</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="keyword">let</span> ac = <span class="type">UIAlertController</span>(title: <span class="string">"Save error"</span>, message: error?.localizedDescription, preferredStyle: .<span class="type">Alert</span>)</span><br><span class="line">           ac.addAction(<span class="type">UIAlertAction</span>(title: <span class="string">"OK"</span>, style: .<span class="type">Default</span>, handler: <span class="literal">nil</span>))</span><br><span class="line">           presentViewController(ac, animated: <span class="literal">true</span>, completion: <span class="literal">nil</span>)</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这样就完成了打开系统相机,并把拍摄的结果放入系统默认的相薄中的全部功能了.</p>
+<h2 id="自定义相薄">自定义相薄</h2><p>到目前为止照片等都是保存到系统默认的<code>相机胶卷</code>这个相薄中. 但是像<code>QQ</code> <code>微信</code>这些应用都是可以把图片存放到自己的相薄中的.这就要求程序中对相薄进行操作了.</p>
+<p>在IOS9中,要操作相薄的话,需要引入<code>import Photos</code>库.然后使用<code>PHPhotoLibrary</code>这个类.</p>
+<p>先说创建相薄:</p>
+<ol>
+<li><p>首先需要定义一个<code>PHAssetCollection</code>对象:</p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private <span class="keyword">var</span> assetCollection:<span class="type">PHAssetCollection</span>?</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>新增一个创建相薄的方法<code>createAlbum</code>: </p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">createAlbum</span><span class="params">()</span></span> &#123;</span><br><span class="line">	 <span class="comment">//创建一个FetchOptions,属性选择器</span></span><br><span class="line">       <span class="keyword">let</span> fetchOptions = <span class="type">PHFetchOptions</span>()</span><br><span class="line">       <span class="comment">//指定相薄的名称</span></span><br><span class="line">       fetchOptions.predicate = <span class="type">NSPredicate</span>(format: <span class="string">"title = %@"</span>, <span class="string">"测试用"</span>)</span><br><span class="line">       <span class="comment">//获取相薄的对象</span></span><br><span class="line">       <span class="keyword">let</span> collection = <span class="type">PHAssetCollection</span>.fetchAssetCollectionsWithType(.<span class="type">Album</span>, subtype: .<span class="type">Any</span>, options: fetchOptions)</span><br><span class="line">       </span><br><span class="line">       <span class="comment">//如果查询出的第一个对象存在,那么就说明相薄已经存在了,直接赋值</span></span><br><span class="line">       <span class="keyword">if</span> <span class="keyword">let</span> <span class="number">_</span> = collection.firstObject &#123;</span><br><span class="line">           assetCollection =  collection.firstObject <span class="keyword">as</span>? <span class="type">PHAssetCollection</span></span><br><span class="line">       &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">       	  <span class="comment">//否则需要创建一个新的相薄</span></span><br><span class="line">           <span class="keyword">var</span> assetCollectionPlaceholder:<span class="type">PHObjectPlaceholder</span>!</span><br><span class="line">           <span class="comment">//调用performChanges方法来创建相薄</span></span><br><span class="line">           <span class="type">PHPhotoLibrary</span>.sharedPhotoLibrary().performChanges(&#123; () -&gt; <span class="type">Void</span> <span class="keyword">in</span></span><br><span class="line">               <span class="comment">//根据title来创建一个相薄的请求</span></span><br><span class="line">               <span class="keyword">let</span> createAlbumRequest = <span class="type">PHAssetCollectionChangeRequest</span>.creationRequestForAssetCollectionWithTitle(<span class="string">"测试用"</span>)</span><br><span class="line">               <span class="comment">//获取出请求中的placeholder</span></span><br><span class="line">               assetCollectionPlaceholder = createAlbumRequest.placeholderForCreatedAssetCollection</span><br><span class="line">               &#125;) &#123; (success, error) -&gt; <span class="type">Void</span> <span class="keyword">in</span></span><br><span class="line">                   <span class="comment">//创建完成的回调</span></span><br><span class="line">                   <span class="keyword">if</span> (!success) &#123;</span><br><span class="line">                       <span class="type">NSLog</span>(<span class="string">"Error creating album: <span class="subst">\(error)</span>"</span>);</span><br><span class="line">                   &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                   	<span class="comment">//如果创建成功.那么就要获取到PHAssetCollection,只有有了这个才能把照片存放到这个相薄中</span></span><br><span class="line">                       <span class="keyword">let</span> collectionFetchResult = <span class="type">PHAssetCollection</span>.fetchAssetCollectionsWithLocalIdentifiers([assetCollectionPlaceholder.localIdentifier], options: <span class="literal">nil</span>)</span><br><span class="line">                       <span class="keyword">self</span>.assetCollection =  collectionFetchResult.firstObject <span class="keyword">as</span>? <span class="type">PHAssetCollection</span></span><br><span class="line">                   &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建完成相薄后,就可以保存照片到相薄中了: </p>
+ <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">imagePickerController</span><span class="params">(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject])</span></span> &#123;</span><br><span class="line">       <span class="keyword">let</span> mediaType = info[<span class="type">UIImagePickerControllerMediaType</span>] <span class="keyword">as</span>! <span class="type">String</span></span><br><span class="line">       </span><br><span class="line">       <span class="comment">//尝试创建相薄</span></span><br><span class="line">       createAlbum()</span><br><span class="line">       </span><br><span class="line">       <span class="keyword">if</span> mediaType == kUTTypeImage <span class="keyword">as</span> <span class="type">String</span> &#123;</span><br><span class="line">           <span class="comment">//图片</span></span><br><span class="line">           <span class="keyword">let</span> image = info[<span class="type">UIImagePickerControllerEditedImage</span>] <span class="keyword">as</span>! <span class="type">UIImage</span></span><br><span class="line">           <span class="comment">//使用线程同步     </span></span><br><span class="line">                  dispatch_async(dispatch_get_global_queue(<span class="type">DISPATCH_QUEUE_PRIORITY_DEFAULT</span>, <span class="number">0</span>), &#123;</span><br><span class="line">               <span class="comment">//保存到自定义的相薄中</span></span><br><span class="line">               <span class="type">PHPhotoLibrary</span>.sharedPhotoLibrary().performChanges(&#123; () -&gt; <span class="type">Void</span> <span class="keyword">in</span></span><br><span class="line">                   <span class="comment">//根据相片得到保存的请求</span></span><br><span class="line">                   <span class="keyword">let</span> assetRequest = <span class="type">PHAssetChangeRequest</span>.creationRequestForAssetFromImage(image)</span><br><span class="line">                   <span class="comment">//找到placehodler</span></span><br><span class="line">                   <span class="keyword">let</span> assetPlaceholder = assetRequest.placeholderForCreatedAsset</span><br><span class="line">                   <span class="comment">//创建photosAsset</span></span><br><span class="line">                   <span class="keyword">let</span> photosAsset = <span class="type">PHAsset</span>.fetchAssetsInAssetCollection(<span class="keyword">self</span>.assetCollection!, options: <span class="literal">nil</span>)</span><br><span class="line">                   <span class="comment">//实例化 保存事件</span></span><br><span class="line">                   <span class="keyword">if</span> <span class="keyword">let</span> albumChangeRequest = <span class="type">PHAssetCollectionChangeRequest</span>(forAssetCollection: <span class="keyword">self</span>.assetCollection!, assets: photosAsset) &#123;</span><br><span class="line">                   	<span class="comment">//执行相薄照片的保存</span></span><br><span class="line">                       albumChangeRequest.addAssets([assetPlaceholder!])</span><br><span class="line">                   &#125;</span><br><span class="line">                   </span><br><span class="line">                   &#125;, completionHandler: &#123; (success, error) -&gt; <span class="type">Void</span> <span class="keyword">in</span></span><br><span class="line">                       dispatch_async(dispatch_get_main_queue(), &#123;</span><br><span class="line">                           <span class="type">NSLog</span>(<span class="string">"Adding Image to Library -&gt; %@"</span>, (success ? <span class="string">"Sucess"</span>:<span class="string">"Error!"</span>))</span><br><span class="line">                           <span class="comment">//</span></span><br><span class="line">                           <span class="keyword">if</span> !success &#123;</span><br><span class="line">                               <span class="comment">//表示没有保存成功,尝试保存到系统自带的里面</span></span><br><span class="line">                               <span class="comment">//保存到图库</span></span><br><span class="line">                               <span class="type">UIImageWriteToSavedPhotosAlbum</span>(image, <span class="keyword">self</span>,<span class="string">"image:didFinishSavingWithError:contextInfo:"</span>, <span class="literal">nil</span>)</span><br><span class="line">                           &#125;</span><br><span class="line">                           <span class="comment">//保存陈红</span></span><br><span class="line">                           <span class="keyword">self</span>.dismissViewControllerAnimated(<span class="literal">true</span>, completion: <span class="literal">nil</span>)</span><br><span class="line">                       &#125;)</span><br><span class="line">               &#125;)</span><br><span class="line">           &#125;)</span><br><span class="line">           </span><br><span class="line">       &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="comment">//视频</span></span><br><span class="line">           ...</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如此就能保存相片到自定义的相薄中了,其实对相薄还可以有其他的操作,比如列出所有相薄的名字,删除相薄等等.这个具体的参考<code>PHPhotoLibrary</code>类即可.</p>
+<h2 id="总结">总结</h2><p>本文简单的介绍了一下,如何调用系统自带的相机和相册来进行照片和视频的拍摄.同时也介绍了如何自定义相薄,为以后更高级的拍摄功能做了准备.</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/12/31/再见2015/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">再见2015</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="在IOS中使用swift调用系统相机" data-title="在IOS中使用swift调用系统相机" data-url="http://sunxiang0918.github.io/2016/01/02/在IOS中使用swift调用系统相机/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
