@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Akka in JAVA(一) | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Akka in JAVA(一)AKKA简介什么是AKKAAkka是一个由Scala编写的,能兼容Sacala和JAVA的,用于编写高可用和高伸缩性的Actor模型框架.它基于了事件驱动的并发处理模式,性能非常的高,并且有很高的可用性.大大的简化了我们在应用系统中开发并发处理的过程.它在各个领域都有很好的表现.
+使用AKKA的好处就如上面简介中所说的,AKKA把并发操作的各种复杂的东西都统一的做了封">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Akka in JAVA(一)">
+<meta property="og:url" content="http://sunxiang0918.github.io/2016/01/10/Akka-in-JAVA-1/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="Akka in JAVA(一)AKKA简介什么是AKKAAkka是一个由Scala编写的,能兼容Sacala和JAVA的,用于编写高可用和高伸缩性的Actor模型框架.它基于了事件驱动的并发处理模式,性能非常的高,并且有很高的可用性.大大的简化了我们在应用系统中开发并发处理的过程.它在各个领域都有很好的表现.
+使用AKKA的好处就如上面简介中所说的,AKKA把并发操作的各种复杂的东西都统一的做了封">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2016/01/10/1.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2016/01/10/2.png">
+<meta property="og:image" content="http://sunxiang0918.github.io/img/2016/01/10/3.png">
+<meta property="og:updated_time" content="2016-01-20T11:46:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Akka in JAVA(一)">
+<meta name="twitter:description" content="Akka in JAVA(一)AKKA简介什么是AKKAAkka是一个由Scala编写的,能兼容Sacala和JAVA的,用于编写高可用和高伸缩性的Actor模型框架.它基于了事件驱动的并发处理模式,性能非常的高,并且有很高的可用性.大大的简化了我们在应用系统中开发并发处理的过程.它在各个领域都有很好的表现.
+使用AKKA的好处就如上面简介中所说的,AKKA把并发操作的各种复杂的东西都统一的做了封">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 14.29px;">Docker</a> <a href="/tags/GIT/" style="font-size: 12.86px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.43px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.43px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.43px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.43px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.43px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 14.29px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 12.86px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Nutch/" style="font-size: 10px;">Nutch</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18.57px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.43px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 11.43px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 17.14px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/日志挖掘/" style="font-size: 10px;">日志挖掘</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15.71px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Akka-in-JAVA-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/10/Akka-in-JAVA-1/" class="article-date">
+  	<time datetime="2016-01-10T08:46:28.000Z" itemprop="datePublished">2016-01-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Akka in JAVA(一)
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Akka_in_JAVA(一)"><span class="toc-number">1.</span> <span class="toc-text">Akka in JAVA(一)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA简介"><span class="toc-number">1.1.</span> <span class="toc-text">AKKA简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是AKKA"><span class="toc-number">1.1.1.</span> <span class="toc-text">什么是AKKA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用AKKA的好处"><span class="toc-number">1.1.2.</span> <span class="toc-text">使用AKKA的好处</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Akka_for_JAVA"><span class="toc-number">1.1.3.</span> <span class="toc-text">Akka for JAVA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Actor模型"><span class="toc-number">1.2.</span> <span class="toc-text">Actor模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是Actor"><span class="toc-number">1.2.1.</span> <span class="toc-text">什么是Actor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Actor系统"><span class="toc-number">1.2.2.</span> <span class="toc-text">Actor系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Actor路径"><span class="toc-number">1.2.3.</span> <span class="toc-text">Actor路径</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hello_AKKA_Demo"><span class="toc-number">1.3.</span> <span class="toc-text">Hello AKKA Demo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Actor调用"><span class="toc-number">1.4.</span> <span class="toc-text">Actor调用</span></a></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="Akka_in_JAVA(一)">Akka in JAVA(一)</h1><h2 id="AKKA简介">AKKA简介</h2><h3 id="什么是AKKA">什么是AKKA</h3><p>Akka是一个由<code>Scala</code>编写的,能兼容<code>Sacala</code>和<code>JAVA</code>的,用于编写高可用和高伸缩性的<code>Actor模型</code>框架.它基于了事件驱动的并发处理模式,性能非常的高,并且有很高的可用性.大大的简化了我们在应用系统中开发并发处理的过程.它在各个领域都有很好的表现.</p>
+<h3 id="使用AKKA的好处">使用AKKA的好处</h3><p>就如上面简介中所说的,AKKA把并发操作的各种复杂的东西都统一的做了封装.我们主要关心的是业务逻辑的实现,只需要少量的关心<code>Actor模型</code>的串联即可构建出高可用,高性能,高扩展的应用.</p>
+<h3 id="Akka_for_JAVA">Akka for JAVA</h3><p>由于AKKA是使用<code>Scala</code>编写的,而<code>Scala</code>是一种基于JVM的语言.因此<code>JAVA</code>对AKKA的支持也是很不错的.Akka自身又是采用微内核的方式来实现的,这就意味着能很容易的在自己的项目中应用AKKA,只需要引入几个akka的Lib包即可.而官方直接就提供了<code>Maven</code>库供我们在JAVA中使用AKKA.<br>这些AKKA的依赖包主要有:</p>
+<ul>
+<li><strong>akka-actor</strong>:最核心的依赖包,里面实现了Actor模型的大部分东西</li>
+<li><strong>akka-agent</strong>:代理/整合了Scala中的一些STM特性</li>
+<li><strong>akka-camel</strong>:整合了Apache的Camel</li>
+<li><strong>akka-cluster</strong>:akka集群依赖,封装了集群成员的管理和路由</li>
+<li><strong>akka-kernel</strong>:akka的一个极简化的应用服务器,可以脱离项目单独运行.</li>
+<li><strong>akka-osgi</strong>:对OSGI容器的支持,有akka的最基本的Bundle</li>
+<li><strong>akka-remote</strong>:akka远程调用</li>
+<li><strong>akka-slf4j</strong>:Akka的日志事件监听</li>
+<li><strong>akka-testkit</strong>:Akka的各种测试工具</li>
+<li><strong>akka-zeromq</strong>:整合ZeroMQ<br>其中最总要的就是<code>akka-actor</code>,最简单的AKKA使用的话,只需要引入这个包就可以了.</li>
+</ul>
+<a id="more"></a>
+<h2 id="Actor模型">Actor模型</h2><h3 id="什么是Actor">什么是Actor</h3><p>既然说AKKA是一个<code>Actor模型</code>框架,那么就需要搞清楚什么是<code>Actor模型</code>.<code>Actor模型</code>是由<code>Carl Hewitt</code>于上世纪70年代提出的,目的是为了解决分布式编程中的一系列问题而产生.<br>在<code>Actor模型</code>中,<strong>一切都可以抽象为Actor</strong>.<br>而Actor是封装了状态和行为的对象,他们的唯一通讯方式就是交换消息,交换的消息放在接收方的邮箱(Inbox)里.也就是说Actor之间并不直接通信,而是通过了消息来相互沟通,每一个Actor都把它要做的事情都封装在了它的内部.<br>每一个Actor是可以有状态也可以是无状态的,理论上来讲,每一个Actor都拥有属于自己的轻量级线程,保护它不会被系统中的其他部分影响.因此,我们在编写Actor时,就不用担心并发的问题.<br>通过Actor能够简化锁以及线程管理,Actor具有以下的特性:</p>
+<ul>
+<li>提供了一种高级的抽象,能够封装状态和操作.简化并发应用的开发.</li>
+<li>提供了异步的非阻塞的/高性能的事件驱动模型</li>
+<li>超级轻量级的线程事件处理能力.</li>
+</ul>
+<p>要在JAVA中实现一个<code>Actor</code>也非常的简单,直接继承<code>akka.actor.UntypedActor</code>类,然后实现<code>public void onReceive(Object message) throws Exception</code>方法即可.</p>
+<h3 id="Actor系统">Actor系统</h3><p>光有一个一个独立的Actor显然是不行的.Akka中还有一个<code>Actor System</code>.<br><code>Actor System</code>统管了<code>Actor</code>,是Actor的系统工厂或管理者,掌控了Actor的生命周期.</p>
+<p><img src="/img/2016/01/10/1.png" alt=""><br>如上图所示,我们可以通过<code>ActorSystem.create</code>来创建一个ActorSystem的实例.然后通过<code>actorOf</code>等方法来获取<code>ActorRef</code>对象.<code>ActorRef</code>即为<code>Actor Reference</code>.它是Actor的一个引用,主要的作用是发送消息给它表示的Actor.而Actor可以通过访问<code>self()</code>或<code>sender()</code>方法来获取到自身或消息发送者的Actor引用.通过引用发送消息.在Akka中,Actor之间永远都不能直接的通信,必须通过他们的代理<code>ActorRef</code>建立通信.</p>
+<h3 id="Actor路径">Actor路径</h3><p>为了实现一切事物都是Actor,为了能把一个复杂的事物划分的更细致.Akka引入了父子Actor.也就是Actor是有树形结构的关系的.这样的父子结构就能递归的把任何复杂的事物原子化.这也是Actor模型的精髓所在.这样做不仅使任务本身被清晰地划分出结构,而且最终的Actor也能按照他们明确的消息类型以及处理流程来进行解析.这样的递归结构使得消息能够在正确的层次进行处理.</p>
+<p><img src="/img/2016/01/10/2.png" alt=""></p>
+<p>为了能管理父子结构的Actor,Akka又引入了<code>Actor Path</code>,也就是Actor路径.<br>Actor路径使用类似于URL的方式来描述一个Actor,<code>Actor Path</code>在一个<code>Actor System</code>中是唯一的.通过路径,可以很明确的看出某个Actor的父级关系是怎样的.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//本地Actor</span><br><span class="line"><span class="string">"akka://my-sys/user/service-a/worker1"</span></span><br><span class="line"></span><br><span class="line">//远程Actor</span><br><span class="line"><span class="string">"akka.tcp://my-sys@host.example.com:2552/user/service-b"</span></span><br><span class="line"></span><br><span class="line">//集群Actor服务</span><br><span class="line"><span class="string">"cluster://my-cluster/service-c"</span></span><br></pre></td></tr></table></figure>
+<p>以上三种就是Akka中支持的<code>Actor</code>路径. 每一个通过ActorSystem创建出来的Actor都会有一个这样的路径.也可以通过这个路径从ActorSystem中获取一个<code>Actor</code>.</p>
+<p>当我们创建一个ActorSystem的时候,AKKA会为该System默认的创建三个Actor,并处于不同的层次:</p>
+<p><img src="/img/2016/01/10/3.png" alt=""><br>其中的<code>root guardian</code>是所有Actor的父.<br>而<code>User</code>Actor是所有用户创建的Actor的父.它的路径是<code>/user</code>,通过system.actorOf()创建出来的Actor都算是用户的Actor,也都是这个Actor的子.<br><code>System</code>Actor是所有系统创建的Actor的父.它的路径是<code>/system</code>,主要的作用是提供了一系列的系统的功能.</p>
+<p>当我们查找一个Actor的时候,可以使用ActorSystem.actorSelection()方法.并且可以使用绝对路径或者相对路径来获取.如果是相对路径,那么<code>..</code>表示的是父Actor.比如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ActorSelection selection = system.actorSelection(<span class="string">"../brother"</span>);</span><br><span class="line">ActorRef actor = selection.anchor();</span><br><span class="line">selection.tell(xxx);</span><br></pre></td></tr></table></figure>
+<p>同时,也可以通过通配符来查询逻辑的Actor层级,比如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ActorSelection selection = system.actorSelection(<span class="string">"../*"</span>);</span><br><span class="line">selection.tell(xxx);</span><br></pre></td></tr></table></figure>
+<p>这个就表示把消息发送给当前Actor之外的所有同级的Actor.</p>
+<h2 id="Hello_AKKA_Demo">Hello AKKA Demo</h2><p>原理讲了这么多,那么我们就来看一看一个最简单的Akka的例子吧.<br>这个是一个最简单的打招呼的例子,这个例子中,定义了招呼,打招呼的人两个对象或者说消息.然后定义了执行打招呼和打印招呼两个Actor.然后通过ActorSystem整合整个打招呼的过程.</p>
+<p><strong>Greet.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 用于表示执行打招呼这个操作的消息</span><br><span class="line"> * <span class="doctag">@author</span> SUN</span><br><span class="line"> * <span class="doctag">@version</span> 1.0</span><br><span class="line"> * <span class="doctag">@Date</span> 16/1/6 21:43</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Greet</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Greeting.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 招呼体,里面有打的什么招呼</span><br><span class="line"> * <span class="doctag">@author</span> SUN</span><br><span class="line"> * <span class="doctag">@version</span> 1.0</span><br><span class="line"> * <span class="doctag">@Date</span> 16/1/6 21:44</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Greeting</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> String message;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Greeting</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.message = message;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>WhoToGreet.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 打招呼的人</span><br><span class="line"> * <span class="doctag">@author</span> SUN</span><br><span class="line"> * <span class="doctag">@version</span> 1.0</span><br><span class="line"> * <span class="doctag">@Date</span> 16/1/6 21:41</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WhoToGreet</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> String who;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WhoToGreet</span><span class="params">(String who)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.who = who;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Greeter.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 打招呼的Actor</span><br><span class="line"> * <span class="doctag">@author</span> SUN</span><br><span class="line"> * <span class="doctag">@version</span> 1.0</span><br><span class="line"> * <span class="doctag">@Date</span> 16/1/6 21:40</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Greeter</span> <span class="keyword">extends</span> <span class="title">UntypedActor</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    String greeting = <span class="string">""</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Object message)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (message <span class="keyword">instanceof</span> WhoToGreet)</span><br><span class="line">            greeting = <span class="string">"hello, "</span> + ((WhoToGreet) message).who;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (message <span class="keyword">instanceof</span> Greet)</span><br><span class="line">            <span class="comment">// 发送招呼消息给发送消息给这个Actor的Actor</span></span><br><span class="line">            getSender().tell(<span class="keyword">new</span> Greeting(greeting), getSelf());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span> unhandled(message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>GreetPrinter.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 打印招呼</span><br><span class="line"> * <span class="doctag">@author</span> SUN</span><br><span class="line"> * <span class="doctag">@version</span> 1.0</span><br><span class="line"> * <span class="doctag">@Date</span> 16/1/6 21:45</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GreetPrinter</span> <span class="keyword">extends</span> <span class="title">UntypedActor</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Object message)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (message <span class="keyword">instanceof</span> Greeting)</span><br><span class="line">            System.out.println(((Greeting) message).message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>DemoMain.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * <span class="doctag">@author</span> SUN</span><br><span class="line"> * <span class="doctag">@version</span> 1.0</span><br><span class="line"> * <span class="doctag">@Date</span> 16/1/6 21:39</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoMain</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> ActorSystem system = ActorSystem.create(<span class="string">"helloakka"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建一个到greeter Actor的管道</span></span><br><span class="line">        <span class="keyword">final</span> ActorRef greeter = system.actorOf(Props.create(Greeter.class), <span class="string">"greeter"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建邮箱</span></span><br><span class="line">        <span class="keyword">final</span> Inbox inbox = Inbox.create(system);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 先发第一个消息,消息类型为WhoToGreet</span></span><br><span class="line">        greeter.tell(<span class="keyword">new</span> WhoToGreet(<span class="string">"akka"</span>), ActorRef.noSender());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 真正的发送消息,消息体为Greet</span></span><br><span class="line">        inbox.send(greeter, <span class="keyword">new</span> Greet());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 等待5秒尝试接收Greeter返回的消息</span></span><br><span class="line">        Greeting greeting1 = (Greeting) inbox.receive(Duration.create(<span class="number">5</span>, TimeUnit.SECONDS));</span><br><span class="line">        System.out.println(<span class="string">"Greeting: "</span> + greeting1.message);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 发送第三个消息,修改名字</span></span><br><span class="line">        greeter.tell(<span class="keyword">new</span> WhoToGreet(<span class="string">"typesafe"</span>), ActorRef.noSender());</span><br><span class="line">        <span class="comment">// 发送第四个消息</span></span><br><span class="line">        inbox.send(greeter, <span class="keyword">new</span> Greet());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 等待5秒尝试接收Greeter返回的消息</span></span><br><span class="line">        Greeting greeting2 = (Greeting) inbox.receive(Duration.create(<span class="number">5</span>, TimeUnit.SECONDS));</span><br><span class="line">        System.out.println(<span class="string">"Greeting: "</span> + greeting2.message);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 新创建一个Actor的管道</span></span><br><span class="line">        ActorRef greetPrinter = system.actorOf(Props.create(GreetPrinter.class));</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//使用schedule 每一秒发送一个Greet消息给 greeterActor,然后把greeterActor的消息返回给greetPrinterActor </span></span><br><span class="line">        system.scheduler().schedule(Duration.Zero(), Duration.create(<span class="number">1</span>, TimeUnit.SECONDS), greeter, <span class="keyword">new</span> Greet(), system.dispatcher(), greetPrinter);</span><br><span class="line">        <span class="comment">//system.shutdown();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上就是整个Demo的所有代码,并不多.接下来我们就分析一下这个程序.</p>
+<p>首先是定义的几个消息.在Akka中传递的消息必须实现<code>Serializable</code>接口.<code>WhoToGreet</code>消息表示了打招呼的人,<code>Greeting</code>表示了招呼的内容,而<code>Greet</code>表示了打招呼这个动作.</p>
+<p>接着就是两个最重要的Actor了.<code>GreetPrinter</code>非常简单,接收到消息后,判断消息的类型,如果是<code>Greeting</code>招呼内容,那么就直接打印消息到控制台.而<code>Greeter</code>这个Actor稍微复杂点,它消费两种不同的消息,如果是<code>WhoToGreet</code>,那么就把要打招呼的人记录到自己的上下文中,如果是<code>Greet</code>,那么就构造出招呼的内容,并把消息反馈回sender.</p>
+<p>最后,再来分析下DemoMain.</p>
+<ol>
+<li>一来,先创建了一个<code>ActorSystem</code>,</li>
+<li>然后创建了一个<code>Greeter</code>Actor的实例,命名为<code>greeter</code>.</li>
+<li>接着,为这个Actor,显示的创建了一个<code>邮箱</code>.</li>
+<li>而后,调用<code>greeter.tell(new WhoToGreet(&quot;akka&quot;), ActorRef.noSender());</code>,表示给greeter这个Actor发送一个消息,消息的内容是<code>WhoToGreet</code>,发送者是空.这就意味着在greeter这个Actor内部,调用sender是不能获取到发送者的.通过这个动作,就把消息限定为了单向的.</li>
+<li>再然后,通过<code>inbox.send(greeter, new Greet());</code>,使用邮箱显示的发送一个Greet消息给greeter.这是给Actor发送消息的另外一种方法,这种方法通常会有更高的自主性,能完成更多更复杂的操作.但是调用起来比直接使用<code>ActorRef</code>来的复杂.</li>
+<li><code>Greeting greeting1 = (Greeting) inbox.receive(Duration.create(5, TimeUnit.SECONDS));</code>表示的就是尝试在5秒钟内,从<code>Inbox</code>邮箱中获取到反馈消息.如果5秒内没有获取到,那么就抛出<code>TimeoutException</code>异常. 由于我们在greeter这个Actor中有处理,接收到<code>Greet</code>消息后,就构造一个<code>Greeting</code>消息给<code>sender</code>,因此这个地方是能够正确的获取到消息的反馈的.</li>
+<li>后面的操作都是一样的,就不再重复描述.</li>
+<li>只有最后一个代码稍微有点不一样<code>system.scheduler().schedule(Duration.Zero(), Duration.create(1, TimeUnit.SECONDS), greeter, new Greet(), system.dispatcher(), greetPrinter);</code>,这个使用了<code>ActorSystem</code>中的调度功能.每一秒钟给greeter这个Actor发送一个<code>Greet</code>消息,并指定消息的发送者是<code>greetPrinter</code>.这样每隔一秒钟,greeter就会收到<code>Greet</code>消息,然后构造成<code>Greeting</code>消息,又返回给<code>GreetPrinter</code>这个Actor,这个Actor接收到消息后,打印出来.形成一个环流.</li>
+</ol>
+<h2 id="Actor调用">Actor调用</h2>
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/01/20/超越继承之路：协议混合/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          &lt;转&gt;超越继承之路：协议混合
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/01/02/在IOS中使用swift调用系统相机/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">在IOS中使用swift调用系统相机</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Akka-in-JAVA-1" data-title="Akka in JAVA(一)" data-url="http://sunxiang0918.github.io/2016/01/10/Akka-in-JAVA-1/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
