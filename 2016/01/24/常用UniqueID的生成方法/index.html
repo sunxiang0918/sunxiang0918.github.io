@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>常用UniqueID的生成方法 | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="常用UniqueID的生成方法这几天在与其他的系统进行联调的时候,出现了对方的唯一ID使用的是Int32来存储,而我们提供的UniqueID是标准的UUID,从而导致他们无法存储的问题.由于他们是一个历史的老系统,牵扯很深,所以无法进行改造,只能我们来适应它(幸好和它们交互的数据不会太多.应该不会超过Int32的上限).从而引出了对UniqueID生成方法的思考.这里列出了几种常用的UniqueI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用UniqueID的生成方法">
+<meta property="og:url" content="http://sunxiang0918.github.io/2016/01/24/常用UniqueID的生成方法/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="常用UniqueID的生成方法这几天在与其他的系统进行联调的时候,出现了对方的唯一ID使用的是Int32来存储,而我们提供的UniqueID是标准的UUID,从而导致他们无法存储的问题.由于他们是一个历史的老系统,牵扯很深,所以无法进行改造,只能我们来适应它(幸好和它们交互的数据不会太多.应该不会超过Int32的上限).从而引出了对UniqueID生成方法的思考.这里列出了几种常用的UniqueI">
+<meta property="og:updated_time" content="2016-01-27T08:51:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="常用UniqueID的生成方法">
+<meta name="twitter:description" content="常用UniqueID的生成方法这几天在与其他的系统进行联调的时候,出现了对方的唯一ID使用的是Int32来存储,而我们提供的UniqueID是标准的UUID,从而导致他们无法存储的问题.由于他们是一个历史的老系统,牵扯很深,所以无法进行改造,只能我们来适应它(幸好和它们交互的数据不会太多.应该不会超过Int32的上限).从而引出了对UniqueID生成方法的思考.这里列出了几种常用的UniqueI">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 15px;">Docker</a> <a href="/tags/GIT/" style="font-size: 13.33px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.67px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.67px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.67px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.67px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.67px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 15px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 13.33px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Nutch/" style="font-size: 10px;">Nutch</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18.33px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.67px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 11.67px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 18.33px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/日志挖掘/" style="font-size: 10px;">日志挖掘</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 16.67px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-常用UniqueID的生成方法" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/24/常用UniqueID的生成方法/" class="article-date">
+  	<time datetime="2016-01-24T12:58:39.000Z" itemprop="datePublished">2016-01-24</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      常用UniqueID的生成方法
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#常用UniqueID的生成方法"><span class="toc-number">1.</span> <span class="toc-text">常用UniqueID的生成方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基于数据库的发号器"><span class="toc-number">1.1.</span> <span class="toc-text">基于数据库的发号器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于规则计算的UniqueID"><span class="toc-number">1.2.</span> <span class="toc-text">基于规则计算的UniqueID</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#UUID"><span class="toc-number">1.2.1.</span> <span class="toc-text">UUID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MongoDB的ObjectID"><span class="toc-number">1.2.2.</span> <span class="toc-text">MongoDB的ObjectID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Twitter的snowflake算法"><span class="toc-number">1.2.3.</span> <span class="toc-text">Twitter的snowflake算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="常用UniqueID的生成方法">常用UniqueID的生成方法</h1><p>这几天在与其他的系统进行联调的时候,出现了对方的唯一ID使用的是<code>Int32</code>来存储,而我们提供的UniqueID是标准的UUID,从而导致他们无法存储的问题.由于他们是一个历史的老系统,牵扯很深,所以无法进行改造,只能我们来适应它(幸好和它们交互的数据不会太多.应该不会超过Int32的上限).从而引出了对UniqueID生成方法的思考.这里列出了几种常用的UniqueID的生成办法.</p>
+<h2 id="基于数据库的发号器">基于数据库的发号器</h2><p>这个是最常见和最容易想到的生成UniqueID的方法.也就是依赖数据库的自增ID来获取唯一ID,由于在分布式系统中数据库都是做了分布式或同步的,因此能保证数据库的自增键或序列是不会重复的.</p>
+<ul>
+<li>在Oracle中,可以创建一个序列,然后使用序列的<code>nextVal</code>来获取.</li>
+<li>在Mysql中,由于没有序列的概念,只能创建一个表,表的主键设置为自增.要获取UniqueID的时候就不断的往这个表中插入记录,获取<code>last_insert_id()</code>即可.为了避免表的记录数过多,可以考虑采用使用回滚的方式来规避.</li>
+<li>在redis中,可以使用<code>INCR key</code>这个命令来获取一个自增的key,每调用一次,key值增加1.如果没有这个key值,则初始化key值为0.</li>
+</ul>
+<p>使用这种方案的优点就是可以满足像<code>Int32</code>这种短数据的唯一.而缺点就是增加了系统的复杂性.需要在系统中强依赖数据库,并且获取<code>UniqueID</code>是需要与数据库交互的,虽然可以一次批量的获取几个ID,但是总体来说,性能会有损失.</p>
+<a id="more"></a>
+<h2 id="基于规则计算的UniqueID">基于规则计算的UniqueID</h2><p>这一大类就是通过某些计算的规则,在分布式的每台机器上独立计算获取UniqueID,最常见的就是UUID了.</p>
+<h3 id="UUID">UUID</h3><p>UUID全称<code>Universally Unique IDentifier</code>.它是由OSF(开源软件基金会 Open Software Foundation)所颁布的一种唯一ID计算的规则.它是一个可以表示层32个16进制字符的128bit的数字.中间用<code>-</code>符号分隔.常见的形式为:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.<br>其中前面的16个字符表示的是时间戳和UUID版本号,接下来的4个字符表示的是时间序列以及保留字段,最后12个字符是节点标识.</p>
+<p>目前有Version1-5 5个版本:</p>
+<ul>
+<li><strong>Version1</strong>:基于时间的UUID,这个版本的UUID可以保证在全球范围内的唯一性.<br>  这个版本有60位的字节来表示时间,精确到纳秒,因此基本上保证了时间上的不重复,并且最后还有48位字节的节点信息,是由MAC地址等硬件信息来表达的.中间的16位时钟序列则用于避免其他信息改变(机器时间错误,MAC地址手动填写冲突等)的情况下增加的一个随机码. 基本上可以说这个版本的UUID就可以满足高并发的分布式系统下的UniqueID的唯一.</li>
+<li><strong>Version2</strong>:DCE安全的UUID,这个版本的UUID的算法和Version1的是相同的,但是会把时间戳的前4位置换为POSIX的UID或GID.这个版本的UUID使用的比较少.</li>
+<li><strong>Version3</strong>:基于名字MD5的UUID,这个版本的UUID通过计算名字和名字空间的MD5散列值而得到结果.这个版本的UUID保证了:相同命名空间中不同名字生成的UUID是唯一的,不同命名空间中的UUID的唯一性,但是相同名字空间中相同名字的UUID是可能会重复的.因此,一般不用作UniqueID的生成.</li>
+<li><strong>Version4</strong>:这个版本也是使用的比较多的,也是JAVA中<code>UUID.randomUUID()</code>方法的实现规则.它不关心UUID的各个位置上的规则,直接使用<code>SecureRandom</code>生成16个随机的字节.然后把第6个字节设置为<code>Version4</code>,把第8个字节设置为<code>IETF</code>标识.</li>
+<li><strong>Version5</strong>:基于名字SHA1的UUID,这个版本的UUID算法和Version3的是一样的,只是把名字和命名空间的散列算法改为了SHA1</li>
+</ul>
+<p>从这几个版本中可以看出,<code>Version1</code>和<code>Version2</code>是最适合于分布式计算环境下,具有高度唯一性的UniqueID,而<code>Version3</code>和<code>Version5</code>适用于一定范围内名字唯一的情况.而<code>Version4</code>在分布式的情况下,最好不要用,虽然是随机的,但是说不准在高并发的情况下,就有可能重复.<br>因此,如果要在JAVA中生成Version1的UUID,可以使用以下这个jar包</p>
+<p><code>`xml
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.eaio.uuid&lt;/groupId&gt;
+            &lt;artifactId&gt;uuid&lt;/artifactId&gt;
+            &lt;version&gt;3.2&lt;/version&gt;
+        &lt;/dependency&gt;</code></p>
+<h3 id="MongoDB的ObjectID">MongoDB的ObjectID</h3><p>在Mongo数据库中,每一个文档必须有一个”_id”建,默认情况下这个是一个ObjectId的值.而ObjectId就是使用了序列计算的方式来获取这个唯一值.</p>
+<p>ObjectID使用了12个字节来进行存储,每个字节表示两位十六进制数字,是一个24位的字符串.<br>它的前4位表示的是时间戳,单位为秒.通过这个可以大致的保证唯一性,并且可以通过这4个字符来获取文档的创建时间.<br>接下来的3字节是所在主机的唯一标识符,通常是机器的主机名的散列值.<br>再后面的两字节表示的是生成这个ObjectID的进程的ID号(PID)<br>这样,前9位就保证了同一秒中不同机器不同进程产生的ObejctId是唯一的.而后3字节就是一个自增的计数器,确保相同进程同一秒内产生的ObjectId也是不一样的.这样同一秒中类允许最多每个进程拥有16777215个不同的ObjectID.这基本上是不可能重复了.</p>
+<h3 id="Twitter的snowflake算法">Twitter的snowflake算法</h3><p>为了满足Twitter每秒上万条消息的请求,每条消息都必须分配一个唯一的ID,这些id还需要一些大致的顺序.因此,Twitter公布了他们的Snowflake算法来生成这个唯一UniqueID.</p>
+<p>Snowflake算法生成的唯一键是由64位组成的.在默认的情况下:分为了4组.<br>第一位的0预留不使用.<br>第二组是41位的时间戳.精确到毫秒.<br>第三组的10位是工作机器的Id.默认可以使用MAC地址来唯一标识,当然使用进程号也是可以的.<br>第四组是12位的序列号,同mongo的ObjectID相同,也是一个自增的ID.可以保证1毫秒产生4095个不重复的自增序列.<br>这个算法的优势就是一个Int64就可以进行存储,比UUID等的128位减少了很多</p>
+<h2 id="总结">总结</h2><p>基本上常见的分布式情况下的UniqueID的生成方法就分为了两大类,一类是基于分配的发号器,另外一类是基于规则计算的唯一序列.而后者的常用算法通常就是UUID以及OjbectID和SnowFlake<br>基于发号器的优势在于可以按照准连续的增加,可以用于Int32等的存储.但是性能和系统复杂度上存在一定的缺陷.<br>而基于计算规则的优势主要是分布式情况下,各机器独立运算,性能上有保证.但是通常都需要使用64位以上的空间来进行存储.<br>具体如何选择,需要在项目中具体的分析.</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/01/20/超越继承之路：协议混合/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">&lt;转&gt;超越继承之路：协议混合</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="常用UniqueID的生成方法" data-title="常用UniqueID的生成方法" data-url="http://sunxiang0918.github.io/2016/01/24/常用UniqueID的生成方法/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
