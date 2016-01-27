@@ -38,6 +38,6 @@ uname -r
 
 7. 这样,重启的话.系统就会是最新的内核了.
 
-PS: 如果不想安装最新的内核版本.而是想选一个早先的版本的话.可以访问这个地址:[dfw.mirror.rackspace.com](dfw.mirror.rackspace.com).他里面有很多版本的镜像.找到你想要的版本的rpm.直接下载下来.然后上传到Centos中.然后执行`yum localinstall xxxx.rpm -y` 就可以本地安装内核了. 剩下的操作和在线的是一样的.
+PS: 如果不想安装最新的内核版本.而是想选一个早先的版本的话.可以访问这个地址:[dfw.mirror.rackspace.com](http://dfw.mirror.rackspace.com).他里面有很多版本的镜像.找到你想要的版本的rpm.直接下载下来.然后上传到Centos中.然后执行`yum localinstall xxxx.rpm -y` 就可以本地安装内核了. 剩下的操作和在线的是一样的.
 
 
