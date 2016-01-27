@@ -262,6 +262,73 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-Akka-in-JAVA-2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/13/Akka-in-JAVA-2/" class="article-date">
+  	<time datetime="2016-01-13T14:43:04.000Z" itemprop="datePublished">2016-01-13</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/13/Akka-in-JAVA-2/">Akka in JAVA(二)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Akka_in_JAVA(二)">Akka in JAVA(二)</h1><p>继续<a href="/2016/01/10/Akka-in-JAVA-1/">Akka in JAVA(一)</a>中所讲.</p>
+<h2 id="Actor调用">Actor调用</h2><p>从上面的例子中,我们可以大概的对AKKA在JAVA中的使用有一个全局的概念.这里我们在稍微细致的讲解一下.</p>
+<p>在JAVA中使用AKKA进行开发主要有这几个步骤:</p>
+<ol>
+<li>定义消息模型.</li>
+<li>创建Actor的实现,以及业务逻辑</li>
+<li>在需要使用AKKA的地方获取到ActorSystem,然后根据业务的数据流,获取到合适的Actor,给Actor发送消息.</li>
+<li>在Actor的实现用,对接收到的消息进行具体的处理或转发.从而形成业务逻辑流.</li>
+</ol>
+<p>下面我们分别讲解一下这几个步骤.</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/01/13/Akka-in-JAVA-2/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-Akka-in-JAVA-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -798,65 +865,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/12/08/Nutch2-3-安装与部署/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-在Linux上运行Swift" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/12/05/在Linux上运行Swift/" class="article-date">
-  	<time datetime="2015-12-05T15:26:26.000Z" itemprop="datePublished">2015-12-05</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/05/在Linux上运行Swift/">在Linux上运行Swift</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="在Linux上运行Swift">在Linux上运行Swift</h1><p>盼星星盼月亮,等了半年,终于在12月的头几天,苹果开源了<code>Swift</code>语言.并建立了一个<a href="http://swift.org">Swift.org</a>社区以及<a href="http://github.com/apple">Github</a>来维护.开源以后,最大的好处当然是有更多的人来参与Swift语言的发展,让Swift语言增加更多的新的特性,更多的开源框架,工作在更多的平台上面.这对于一个开发语言来说无疑是一个很好的消息.而对于我来说,除了在编写代码的时候能更了解Swift某些函数的参数意义和工作的原理(作为一个JAVA Coder,平时如果遇到搞不定的问题或者是不明白的地方,习惯了直接翻它的源码来了解原委的)外,让我基本上抛弃了<code>Python</code>脚本,平时有什么小东西小程序需要写一下的话,现在可以直接写一个Swift文件,然后在命令行直接调用<code>swift xxx.swift</code>或者<code>swiftc -O xxxx.swift</code>即可.</p>
-<h2 id="在Linux上安装Swift">在Linux上安装Swift</h2><p>前面废话说了这么多.现在就来看看如何在Linux上安装Swift的运行环境.MACOS上的就不用说了,直接安装一个Xcode就可以了.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/12/05/在Linux上运行Swift/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

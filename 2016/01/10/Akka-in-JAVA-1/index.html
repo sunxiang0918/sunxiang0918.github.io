@@ -16,7 +16,7 @@
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2016/01/10/1.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2016/01/10/2.png">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2016/01/10/3.png">
-<meta property="og:updated_time" content="2016-01-20T11:46:04.000Z">
+<meta property="og:updated_time" content="2016-01-23T14:44:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Akka in JAVA(一)">
 <meta name="twitter:description" content="Akka in JAVA(一)AKKA简介什么是AKKAAkka是一个由Scala编写的,能兼容Sacala和JAVA的,用于编写高可用和高伸缩性的Actor模型框架.它基于了事件驱动的并发处理模式,性能非常的高,并且有很高的可用性.大大的简化了我们在应用系统中开发并发处理的过程.它在各个领域都有很好的表现.
@@ -243,7 +243,7 @@ var _hmt = _hmt || [];
       
       
         <div id="toc" class="article-toc">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Akka_in_JAVA(一)"><span class="toc-number">1.</span> <span class="toc-text">Akka in JAVA(一)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA简介"><span class="toc-number">1.1.</span> <span class="toc-text">AKKA简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是AKKA"><span class="toc-number">1.1.1.</span> <span class="toc-text">什么是AKKA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用AKKA的好处"><span class="toc-number">1.1.2.</span> <span class="toc-text">使用AKKA的好处</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Akka_for_JAVA"><span class="toc-number">1.1.3.</span> <span class="toc-text">Akka for JAVA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Actor模型"><span class="toc-number">1.2.</span> <span class="toc-text">Actor模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是Actor"><span class="toc-number">1.2.1.</span> <span class="toc-text">什么是Actor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Actor系统"><span class="toc-number">1.2.2.</span> <span class="toc-text">Actor系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Actor路径"><span class="toc-number">1.2.3.</span> <span class="toc-text">Actor路径</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hello_AKKA_Demo"><span class="toc-number">1.3.</span> <span class="toc-text">Hello AKKA Demo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Actor调用"><span class="toc-number">1.4.</span> <span class="toc-text">Actor调用</span></a></li></ol></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Akka_in_JAVA(一)"><span class="toc-number">1.</span> <span class="toc-text">Akka in JAVA(一)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA简介"><span class="toc-number">1.1.</span> <span class="toc-text">AKKA简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是AKKA"><span class="toc-number">1.1.1.</span> <span class="toc-text">什么是AKKA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用AKKA的好处"><span class="toc-number">1.1.2.</span> <span class="toc-text">使用AKKA的好处</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Akka_for_JAVA"><span class="toc-number">1.1.3.</span> <span class="toc-text">Akka for JAVA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Actor模型"><span class="toc-number">1.2.</span> <span class="toc-text">Actor模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是Actor"><span class="toc-number">1.2.1.</span> <span class="toc-text">什么是Actor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Actor系统"><span class="toc-number">1.2.2.</span> <span class="toc-text">Actor系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Actor路径"><span class="toc-number">1.2.3.</span> <span class="toc-text">Actor路径</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hello_AKKA_Demo"><span class="toc-number">1.3.</span> <span class="toc-text">Hello AKKA Demo</span></a></li></ol></li></ol>
           <hr/>
         </div>
         
@@ -312,7 +312,7 @@ var _hmt = _hmt || [];
 <li>后面的操作都是一样的,就不再重复描述.</li>
 <li>只有最后一个代码稍微有点不一样<code>system.scheduler().schedule(Duration.Zero(), Duration.create(1, TimeUnit.SECONDS), greeter, new Greet(), system.dispatcher(), greetPrinter);</code>,这个使用了<code>ActorSystem</code>中的调度功能.每一秒钟给greeter这个Actor发送一个<code>Greet</code>消息,并指定消息的发送者是<code>greetPrinter</code>.这样每隔一秒钟,greeter就会收到<code>Greet</code>消息,然后构造成<code>Greeting</code>消息,又返回给<code>GreetPrinter</code>这个Actor,这个Actor接收到消息后,打印出来.形成一个环流.</li>
 </ol>
-<h2 id="Actor调用">Actor调用</h2>
+
       
     </div>
     
@@ -321,11 +321,11 @@ var _hmt = _hmt || [];
     
 <nav id="article-nav">
   
-    <a href="/2016/01/20/超越继承之路：协议混合/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/01/13/Akka-in-JAVA-2/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          &lt;转&gt;超越继承之路：协议混合
+          Akka in JAVA(二)
         
       </div>
     </a>

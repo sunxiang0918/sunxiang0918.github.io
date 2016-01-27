@@ -198,6 +198,69 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-MongoDB在Linux下的集群安装与配置" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/06/29/MongoDB在Linux下的集群安装与配置/" class="article-date">
+  	<time datetime="2015-06-29T13:24:24.000Z" itemprop="datePublished">2015-06-29</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/29/MongoDB在Linux下的集群安装与配置/">MongoDB在Linux下的集群安装与配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="MongoDB在Linux下的集群安装与配置">MongoDB在Linux下的集群安装与配置</h1><h2 id="一-MongoDB集群方式">一.MongoDB集群方式</h2><p><strong>Mongodb</strong>是时下流行的NoSql数据库.它拥有三种集群的搭建方式:<code>Replica Set</code> / <code>Sharding</code> / <code>Master-Slaver</code>.   分别为 副本集方式集群, 分片集群, 主从集群.<br>三种集群搭建方式首选<code>Replica Set</code>，只有真的是大数据，Sharding才能显现威力，毕竟备节点同步数据是需要时间的。Sharding可以将多片数据集中到路由节点上进行一些对比，然后将数据返回给客户端，但是效率还是比较低的说。  </p>
+<p>这里用最常用的 Replica的方式集群来做介绍</p>
+<h2 id="二-Replica_Set">二.Replica Set</h2><p><code>Replica Set</code>集群当中包含了多份数据，保证主节点挂掉了，备节点能继续提供数据服务，提供的前提就是数据需要和主节点一致。如下图：<br><img src="/img/2015/06/29/1.png" alt=""></p>
+<p><code>Mongodb(M)</code>表示主节点，<code>Mongodb(S)</code>表示备节点，<code>Mongodb(A)</code>表示仲裁节点。主备节点存储数据，仲裁节点不存储数据。客户端同时连接主节点与备节点，不连接仲裁节点。</p>
+<p>使用的时候 可以通过配置 让M负责写,S负责读.从而达到读写分离的效果</p>
+<p>仲裁节点是一种特殊的节点，它本身并<code>不存储数据</code>，主要的作用是决定哪一个备节点在主节点挂掉之后提升为主节点，所以客户端不需要连接此节点。这里虽然只有一个备节点，但是仍然需要一个仲裁节点来提升备节点级别。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/06/29/MongoDB在Linux下的集群安装与配置/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-neo4j-底层存储结构分析" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -736,65 +799,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2014/09/20/zookeeper-集群部署/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-在MAC下使用beyondcompare比较JAVA-Class文件" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/09/20/在MAC下使用beyondcompare比较JAVA-Class文件/" class="article-date">
-  	<time datetime="2014-09-20T02:33:29.000Z" itemprop="datePublished">2014-09-20</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/09/20/在MAC下使用beyondcompare比较JAVA-Class文件/">在MAC下使用beyondcompare比较JAVA Class文件</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="在MAC下使用beyondcompare比较JAVA_Class文件">在MAC下使用beyondcompare比较JAVA Class文件</h1><p>2014年9月1日.beyondCompare终于推出了Mac版了.真的是大快人心的大好事,大了又大.<br>以前用过很多MAC上的比较工具,像什么<code>Araxis Merge</code> <code>DiffFork</code> <code>DiffMerge</code> <code>Kaleidoscope</code>等等. 都没有很好用. 对比Windows平台上的BeyondCompare,差的不是一点半点.</p>
-<p>使用beyondcompare对比.class文件的时候,默认是直接对比的二进制文件.这基本上就看不懂.因此,需要在对比的时候自动的反编译为源代码.然后再进行对比.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mac/">Mac</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/09/20/在MAC下使用beyondcompare比较JAVA-Class文件/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

@@ -112,11 +112,182 @@
   </entry>
   
   <entry>
+    <title><![CDATA[Akka in JAVA(二)]]></title>
+    <link href="http://sunxiang0918.github.io/2016/01/13/Akka-in-JAVA-2/"/>
+    <id>http://sunxiang0918.github.io/2016/01/13/Akka-in-JAVA-2/</id>
+    <published>2016-01-13T14:43:04.000Z</published>
+    <updated>2016-01-27T06:42:42.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="Akka_in_JAVA(二)">Akka in JAVA(二)</h1><p>继续<a href="/2016/01/10/Akka-in-JAVA-1/">Akka in JAVA(一)</a>中所讲.</p>
+<h2 id="Actor调用">Actor调用</h2><p>从上面的例子中,我们可以大概的对AKKA在JAVA中的使用有一个全局的概念.这里我们在稍微细致的讲解一下.</p>
+<p>在JAVA中使用AKKA进行开发主要有这几个步骤:</p>
+<ol>
+<li>定义消息模型.</li>
+<li>创建Actor的实现,以及业务逻辑</li>
+<li>在需要使用AKKA的地方获取到ActorSystem,然后根据业务的数据流,获取到合适的Actor,给Actor发送消息.</li>
+<li>在Actor的实现用,对接收到的消息进行具体的处理或转发.从而形成业务逻辑流.</li>
+</ol>
+<p>下面我们分别讲解一下这几个步骤.</p>
+<a id="more"></a>
+<h3 id="定义消息模型">定义消息模型</h3><p>在AKKA中的消息模型可以是任意实现了<code>Serializable</code>接口的对象.和大多数的远程调用框架一样,为了AKKA的高可用,以后可能会牵涉到远程调用和集群,那么消息模型就需要跨网络的进行传输,这就要求对消息模型进行序列化和反序列化.因此,要求消息模型必须实现<code>Serializable</code>接口.具体的序列化和反序列化在后面讲解远程调用的时候再细谈.</p>
+<h3 id="创建Actor的实现-">创建Actor的实现.</h3><p>有了消息模型后,就需要有Actor对这些消息进行消费了.<br>在AKKA中Actor分为了<code>TypedActor</code>和<code>UnTypedActor</code>.</p>
+<p>其中<code>TypedActor</code>是<code>Akka</code>基于<code>Active对象</code>(Active Object)设计模式的一个实现,该设计模式解耦了在一个对象上执行方法和调用方法的逻辑,执行方法和调用方法分别在各自的线程上独立运行.该模式的目标是通过使用异步的方法调用和内部的调度器来处理请求,从而实现方法的执行时异步处理的.通俗点来讲,<code>TypedActor</code>就是可以预先的定义一系列的接口和实现,然后通过<code>ActorSystem</code>来创建这个<code>TypedActor</code>的实例,当调用这个实例的方法的时候,其实是会异步的执行方法的,而不是同步的.至于如何异步的,这就交由AKKA内部来实现了,开发人员不需要关心.这其实就比较像<code>goLang</code>语言中的<code>fmt</code>的一些方法或<code>go</code>关键字,很简单的方法调用背后隐藏了异步的执行操作.</p>
+<p>而<code>UnTypedActor</code>更像是JAVA中的JMS调用.方法的调用和执行完全依赖了消息,通过消息的类型或内容来区别不同的执行.对于消息的发送方式都是相同的,那就是直接给这个Actor的邮箱中发送Message.也就是说<code>UnTypedActor</code>更接近于我们前两个小节中所说的<code>Actor</code>这个概念.</p>
+<p>事实也是如此,在AKKA中我们更多的是倾向于使用<code>UnTypedActor</code>向<code>Actor</code>系统间传递消息,而<code>TypedActor</code>更多的是用来桥接<code>Actor</code>系统和<code>非Actor</code>的.</p>
+<h4 id="创建UnTypedActor">创建<code>UnTypedActor</code></h4><p>在<code>AKKA for JAVA</code>中,创建一个<code>UnTypedActor</code>非常的简单.直接继承<code>UnTypedActor</code>类,并实现<code>public void onReceive(Object message) throws Exception</code>方法即可.在<code>onReceive</code>方法中就是需要实现的业务逻辑.比如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GreetPrinter</span> <span class="keyword">extends</span> <span class="title">UntypedActor</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Object message)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (message <span class="keyword">instanceof</span> Greeting)</span><br><span class="line">            System.out.println(((Greeting) message).message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="创建TypedActor">创建<code>TypedActor</code></h4><p>由于AKKA是由<code>scala</code>写的,因此它其实最切合的就是使用<code>scala</code>进行开发,而JAVA作为一个强类型的静态语言,很多<code>scala</code>的特性其实是不好模仿出来的.因此,在JAVA中使用<code>TypedActor</code>其实是比较麻烦的.</p>
+<ol>
+<li><p>首先需要定义<code>Actor</code>的接口.对于异步的方法,需要返回<code>scala.concurrent.Future</code>对象.阻塞的异步调用,需要返回<code>akka.japi.Option</code>.同步调用直接返回结果对象.比如:</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Squarer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">   	<span class="function">Future&lt;Integer&gt; <span class="title">square</span><span class="params">(<span class="keyword">int</span> i)</span></span>; <span class="comment">//non-blocking send-request-reply</span></span><br><span class="line"></span><br><span class="line">   	<span class="function">Option&lt;Integer&gt; <span class="title">squareNowPlease</span><span class="params">(<span class="keyword">int</span> i)</span></span>;<span class="comment">//blocking send-request-reply</span></span><br><span class="line"></span><br><span class="line">   	<span class="function"><span class="keyword">int</span> <span class="title">squareNow</span><span class="params">(<span class="keyword">int</span> i)</span></span>; <span class="comment">//blocking send-request-reply</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>写<code>TypedActor</code>的实现:</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SquarerImpl</span> <span class="keyword">implements</span> <span class="title">Squarer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SquarerImpl</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = <span class="string">"default"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SquarerImpl</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Future&lt;Integer&gt; <span class="title">square</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Futures.successful(squareNow(i));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Option&lt;Integer&gt; <span class="title">squareNowPlease</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Option.some(squareNow(i));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">squareNow</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">100</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"执行里面"</span>);</span><br><span class="line">        <span class="keyword">return</span> i * i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在调用AKKA的地方实例化<code>TypedActor</code>的实例:</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> ActorSystem system = ActorSystem.create(<span class="string">"helloakka"</span>);</span><br><span class="line"></span><br><span class="line">       <span class="comment">/*默认构造方法的Actor*/</span></span><br><span class="line">       Squarer mySquarer = TypedActor.get(system).typedActorOf(<span class="keyword">new</span> TypedProps&lt;&gt;(Squarer.class, SquarerImpl.class));</span><br><span class="line"></span><br><span class="line">       <span class="comment">/*传参构造的Actor*/</span></span><br><span class="line">       Squarer otherSquarer =</span><br><span class="line">               TypedActor.get(system).typedActorOf(<span class="keyword">new</span> TypedProps&lt;&gt;(Squarer.class,</span><br><span class="line">                               <span class="keyword">new</span> Creator&lt;SquarerImpl&gt;() &#123;</span><br><span class="line">                                   <span class="function"><span class="keyword">public</span> SquarerImpl <span class="title">create</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                                       <span class="keyword">return</span> <span class="keyword">new</span> SquarerImpl(<span class="string">"foo"</span>);</span><br><span class="line">                                   &#125;</span><br><span class="line">                               &#125;),</span><br><span class="line">                       <span class="string">"name"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行<code>TypedActor</code>中的方法:</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Option&lt;Integer&gt; oSquare = mySquarer.squareNowPlease(<span class="number">10</span>); <span class="comment">//Option[Int]</span></span><br><span class="line">      System.out.println(<span class="string">"阻塞异步调用执行外面"</span>);</span><br><span class="line">      <span class="comment">//获取结果</span></span><br><span class="line">      System.out.println(oSquare.get());</span><br><span class="line">      </span><br><span class="line">      Future&lt;Integer&gt; fSquare = mySquarer.square(<span class="number">10</span>); <span class="comment">//A Future[Int]</span></span><br><span class="line">      System.out.println(<span class="string">"非阻塞异步执行外面"</span>);</span><br><span class="line">      <span class="comment">//等待5秒内返回结果</span></span><br><span class="line">      System.out.println(Await.result(fSquare, Duration.apply(<span class="number">5</span>, TimeUnit.SECONDS)));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行后会在控制台打印:</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">执行里面</span><br><span class="line">阻塞异步调用执行外面</span><br><span class="line"><span class="number">100</span></span><br><span class="line">非阻塞异步执行外面</span><br><span class="line">执行里面</span><br><span class="line"><span class="number">100</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>从这个结果很容易的看出成功的异步调用了Actor.</p>
+<h4 id="小结">小结</h4><p>从上面的例子可以看出<code>TypedActor</code>其实在JAVA中是比较麻烦的,因此我们会更多的使用<code>UnTypedActor</code>.后面的例子中<code>Actor</code>指的都是<code>UnTypedActor</code></p>
+<h3 id="获取Actor">获取Actor</h3><p>在创建了Actor后,接下来就是需要实例化或获取Actor了.其主要是通过<code>ActorSystem</code>中的<code>actorOf</code>和<code>actorSelection</code>以及<code>actorFor</code>三个方法.</p>
+<ul>
+<li><strong>actorOf</strong>：创建一个新的Actor。创建的Actor为调用该方法时所属的Context下的直接子Actor；</li>
+<li><strong>actorSelection</strong>：当消息传递来时，只查找现有的Actor，而不会创建新的Actor；在创建了selection时，也不会验证目标Actors是否存在；</li>
+<li><strong>actorFor</strong>(<em>已经被actorSelection所deprecated</em>):只会查找现有的Actor，而不会创建新的Actor。</li>
+</ul>
+<h2 id="Actor生命周期">Actor生命周期</h2><p>AKKA为Actor生命周期的每个阶段都提供了一个钩子(hook),我们可以在必要的时候重载这些方法来完成一些事情。如下图所示:</p>
+<p><img src="/img/2016/01/13/2.png" alt=""><br>因此,基本上,一个Actor的生命周期依此为:</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">actorOf -&gt; preStart -&gt; start -&gt; receive -&gt; stop -&gt; postStop</span><br></pre></td></tr></table></figure>
+<p>为了更好的理解Actor的生命周期,官方还出了一个图来进行描述:<br><img src="/img/2016/01/13/1.png" alt=""></p>
+<p>从上图我们可以看到,一个Actor初始的时候路径是空的,通过调用<code>actorOf</code>方法实例化一个Actor的实例,会返回一个<code>ActorRef</code>来表示<code>Actor</code>的引用.它包含了一个<code>UID</code>和一个<code>Path</code>,这两个值共同的标识了一个Actor的唯一.重启操作<code>Path</code>和<code>UID</code>不会改变,因此重启前获取到的<code>ActorRef</code>继续有效.</p>
+<p>但是<code>ActorRef</code>的生命周期在actor停止的时候结束.此时适当的生命周期Hook会被调用, 处于监控状态的actor会收到通知.在该Actor结束后, 此路径可以通过<code>actorOf</code>方法重用.此时新的<code>ActorRef</code>的路径和之前一样但是UID不同.所以在停止前获取到的<code>ActorRef</code>不再有效.</p>
+<p>与<code>ActorRef</code>不同,<code>ActorSelection</code>只关心<code>Path</code>而不关心具体是哪一个<code>Actor</code>.也就是说对一个明确路径的<code>ActorSelection</code>来说,无论对应的<code>Actor</code>是重启还是重新创建,只要是路径一样的,那么都是有效的.如果要通过<code>ActorSelection</code>来获取一个具体的<code>Actor</code>,需要调用<code>ActorSelection</code>的<code>resolveOne</code>的方法来获取.</p>
+<h2 id="Dispatcher">Dispatcher</h2><p>在AKKA中,actor之间都是通过消息的传递来完成彼此的交互的.而当Actor的数量比较多后,彼此之间的通信就需要协调,从而能更好的平衡整个系统的执行性能.</p>
+<p>在AKKA中,负责协调Actor之间通信的就是<code>Dispatcher</code>.它在自己独立的线程上不断的进行协调,把来自各个Actor的消息分配到执行线程上.</p>
+<p>在AKKA中提供了四种不同的<code>Dispatcher</code>,我们可以根据不同的情况选择不同的<code>Dispatcher</code>.</p>
+<ul>
+<li><strong>Dispatcher</strong>:这个是AKKA默认的<code>Dispatcher</code>.对于这种Dispatcher,每一个Actor都由自己的MailBox支持,它可以被多个Actor所共享.而Dispatcher则由ThreadPool和ForkJoinPool支持.比较适合于非阻塞的情况.</li>
+<li><strong>PinnedDispatcher</strong>:这种Dispatcher为每一个Actor都单独提供了专有的线程,这意味着该Dispatcher不能再Actor之间共享.因此,这种Dispatcher比较适合处理对外部资源的操作或者是耗时比较长的Actor.PinnedDispatcher在内部使用了ThreaddPool和Executor,并针对阻塞操作进行了优化.所以这个Dispatcher比较适合阻塞的情况.但是在使用这个Dispatcher的时候需要考虑到线程资源的问题,不能启动的太多.</li>
+<li><strong>BalancingDispatcher</strong>(已被废弃):它是基于事件的Dispatcher,它可以针对相同类型的Actor的任务进行协调,若某个Actor上的任务较为繁忙,就可以将它的工作分发给闲置的Actor,前提是这些Actor都属于相同的类型.对于这种Dispatcher,所有Actor只有唯一的一个MailBox,被所有相同类型的Actor所共享.</li>
+<li><strong>CallingThreadDispatcher</strong>:这种Dispatcher主要用于测试,它会将任务执行在当前的线程上,不会启动新的线程,也不提供执行顺序的保证.如果调用没有及时的执行,那么任务就会放入ThreadLocal的队列中,等待前面的调用任务结束后再执行.对于这个Dispatcher,每一个Actor都有自己的MailBox,它可以被多个Actor共享.</li>
+</ul>
+<p>如果要配置<code>Dispatcher</code>,可以在项目的<code>resource</code>目录中创建一个<code>conf</code>文件(默认名字为<code>application.conf</code>).然后修改其中的配置:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">demo5 &#123;</span><br><span class="line">  writer-dispatcher &#123;</span><br><span class="line">    type = Dispatcher   //Dispatcher类型,Dispatcher  PinnedDispatcher</span><br><span class="line">    executor = "fork-join-executor"   //底层实现方式  fork-join-executor  thread-pool-executor</span><br><span class="line">    //执行器方式的参数</span><br><span class="line">    fork-join-executor &#123;</span><br><span class="line">      parallelism-min = 2</span><br><span class="line">      parallelism-factor = 2.0</span><br><span class="line">      parallelism-max = 10</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    thread-pool-executor &#123;</span><br><span class="line">      core-pool-size-min = 2</span><br><span class="line">      core-pool-size-factor = 2.0</span><br><span class="line">      core-pool-size-max = 10</span><br><span class="line">    &#125;</span><br><span class="line">    throughput = 100</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中<code>writer-dispatcher</code>是dispatcher的名字,同一个配置文件中可以配置多个.<code>type</code>为四种类型中的某一个.<code>executor</code>是底层实现方式,通常有两种<code>fork-join-executor</code>和<code>thread-pool-executor</code>.这两种的参数为:</p>
+<ul>
+<li><strong>core-pool-size-min/parallelism-min</strong> : 最小线程数</li>
+<li><strong>core-pool-size-max/parallelism-max</strong> : 最大线程数</li>
+<li><strong>core-pool-size-factor/parallelism-factor</strong>: 线程层级因子,通常和CPU核数相关.</li>
+</ul>
+<p>要在AKKA中使用配置文件,需要在创建ActorSystem的时候进行指定:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> ActorSystem system = ActorSystem.create(<span class="string">"demo5"</span>, ConfigFactory.load(<span class="string">"demo5"</span>).getConfig(<span class="string">"demo5"</span>));</span><br></pre></td></tr></table></figure>
+<p><code>ConfigFactory.load(&quot;demo5&quot;)</code>读取的就是<code>Resource</code>文件夹中的<code>demo5.conf</code>这个配置文件.<code>getConfig(&quot;demo5&quot;)</code>读取的是这个配置文件中的<code>demo5</code>这部分的配置.</p>
+<p>而要使用配置的<code>Dispatcher</code>需要在创建Actor实例的时候,使用<code>withDispatcher(String)</code>方法来指定:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Props props = Props.create(WriterActor.class).withDispatcher(<span class="string">"writer-dispatcher"</span>);</span><br><span class="line">getContext().actorOf(props,<span class="string">"writer_"</span>+i)</span><br></pre></td></tr></table></figure>
+<p>这里有一个简单的例子,就是发送消息给一堆的Actor,每一个Actor接收到消息后打印出线程的名字:</p>
+<p><strong>StartCommand.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StartCommand</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> actorCount =<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">StartCommand</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">StartCommand</span><span class="params">(<span class="keyword">int</span> actorCount)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.actorCount = actorCount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getActorCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> actorCount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setActorCount</span><span class="params">(<span class="keyword">int</span> actorCount)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.actorCount = actorCount;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>WriterActor.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WriterActor</span> <span class="keyword">extends</span> <span class="title">UntypedActor</span> </span>&#123;</span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Object message)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>ControlActor.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ControlActor</span> <span class="keyword">extends</span> <span class="title">UntypedActor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Object message)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (message <span class="keyword">instanceof</span> StartCommand) &#123;</span><br><span class="line"></span><br><span class="line">            List&lt;ActorRef&gt; actors = createActors(((StartCommand) message).getActorCount());</span><br><span class="line"></span><br><span class="line">            <span class="comment">/*这里使用了JDK1.8中的StreamAPI*/</span></span><br><span class="line">            actors.stream().parallel().forEach(actorRef -&gt; actorRef.tell(<span class="string">"Insert"</span>, ActorRef.noSender()));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> List&lt;ActorRef&gt; <span class="title">createActors</span><span class="params">(<span class="keyword">int</span> actorCount)</span> </span>&#123;</span><br><span class="line">        Props props = Props.create(WriterActor.class).withDispatcher(<span class="string">"writer-dispatcher"</span>);</span><br><span class="line">        </span><br><span class="line">        List&lt;ActorRef&gt; actors = <span class="keyword">new</span> ArrayList&lt;&gt;(actorCount);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; actorCount; i++) &#123;</span><br><span class="line">            actors.add(getContext().actorOf(props,<span class="string">"writer_"</span>+ i));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> actors;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>AkkaMain5.java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AkkaMain5</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> ActorSystem system = ActorSystem.create(<span class="string">"demo5"</span>, ConfigFactory.load(<span class="string">"demo5"</span>)</span><br><span class="line">                .getConfig(<span class="string">"demo5"</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建一个到greeter Actor的管道</span></span><br><span class="line">        <span class="keyword">final</span> ActorRef controlActor = system.actorOf(Props.create(ControlActor.class), <span class="string">"control"</span>);</span><br><span class="line"></span><br><span class="line">        controlActor.tell(<span class="keyword">new</span> StartCommand(<span class="number">100</span>),ActorRef.noSender());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//system.shutdown();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行这个程序,执行的结果为:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">demo5-writer-dispatcher-<span class="number">11</span></span><br><span class="line">demo5-writer-dispatcher-<span class="number">14</span></span><br><span class="line">demo5-writer-dispatcher-<span class="number">8</span></span><br><span class="line">demo5-writer-dispatcher-<span class="number">7</span></span><br><span class="line">demo5-writer-dispatcher-<span class="number">13</span></span><br><span class="line">demo5-writer-dispatcher-<span class="number">7</span></span><br><span class="line">demo5-writer-dispatcher-<span class="number">8</span></span><br><span class="line">demo5-writer-dispatcher-<span class="number">14</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>可以看出线程被重复的利用了.仔细数的话,一共只有10个线程.</p>
+<p>而如果把Dispatcher的类型改成<code>PinnedDispatcher</code>的话,系统就会创建100个线程出来.符合开始说的区别.</p>
+<h2 id="Router">Router</h2><p>在真实的情况中,通常针对某一种消息,会启动很多个相同的Actor来进行处理.当然,你可以在程序中循环的启动很多个相同的Actor来实现,就如上一小结中启动100个Actor那样,但是这就牵涉到Actor任务的平衡,Actor个数的维护等等,比较的麻烦.因此,在AKKA中存在一种特殊的Actor,即<code>Router</code>.Akka通过<code>Router</code>机制,来有效的分配消息给actor来完成工作.而在AKKA中,被<code>Router</code>管理的actor被称作<code>Routee</code>.</p>
+<p>根据项目的需求,可以使用不同的路由策略来分发一个消息到actor中.Akka附带了几个常用的路由策略,配置起就可以使用.当然,也可以自定义一个路由器.</p>
+<h3 id="使用Router">使用Router</h3><p>要使用Router非常的简单,可以在Actor内通过实例化<code>Router</code>对象的方式来使用,也可以在Actor外通过<code>withRouter</code>的方式直接创建一个<code>RouterActor</code>来使用.</p>
+<h4 id="Actor内使用">Actor内使用</h4><p>这种方式是通过AKKA提供的API,手动的创建<code>Router</code>对象,然后调用<code>addRoutee</code>方法手动的添加<code>Actor</code>(需要注意,每一次调用addRoutee都会返回一个新的Router对象),然后通过<code>route</code>来发送消息.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">List&lt;ActorRef&gt; actors = createActors(((StartCommand) message).getActorCount());</span><br><span class="line"></span><br><span class="line">  Router router = <span class="keyword">new</span> Router(<span class="keyword">new</span> RoundRobinRoutingLogic());</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (ActorRef actor : actors) &#123;</span><br><span class="line">      router = router.addRoutee(actor);</span><br><span class="line">      <span class="comment">//需要注意,需要接收addRoutee的返回</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  router.route(<span class="string">"Insert"</span>,ActorRef.noSender());</span><br></pre></td></tr></table></figure>
+<p>这段代码首先创建了100个相同类型的Actor,然后实例化了一个<code>Router</code>,路由策略是轮询.然后把这100个Actor显式的加入到Router中. 最后,发送消息的时候通过<code>router.route</code>的方式进行发送.AKKA会把这个消息按照路由策略分发给某一个Actor中执行.</p>
+<h4 id="Actor外使用">Actor外使用</h4><p>这种方式是通过创建一个<code>RouteActor</code>来使用路由.<code>RouteActor</code>和一般的<code>Actor</code>没有什么不同,区别在于它没有什么业务逻辑,在创建它的时候,它会创建N个具备业务逻辑的子Actor.当它接收到消息后,会把消息转发给它的某个子Actor.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*使用Router方式启动100个Actor*/</span></span><br><span class="line">       Props props = Props.create(WriterActor.class).withRouter(<span class="keyword">new</span> RoundRobinPool(((StartCommand) message).getActorCount())).withDispatcher(<span class="string">"writer-dispatcher"</span>);</span><br><span class="line">       ActorRef actorRef = getContext().actorOf(props);</span><br><span class="line">       actorRef.tell(<span class="string">"Insert"</span>,ActorRef.noSender());</span><br></pre></td></tr></table></figure>
+<p>这段代码确定了子Actor的类型,然后定义了路由策略.而后创建了<code>RouteActor</code>.最后发送消息的时候通过给路由Actor发送消息的方式进行处理.</p>
+<h4 id="配置使用">配置使用</h4><p>这种方式是通过在AKKA的配置中来定义<code>Router</code>,创建的时候直接读取配置来获取<code>Router</code>.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">akka.actor.deployment &#123;</span><br><span class="line">  /router &#123;</span><br><span class="line">    router = round-robin</span><br><span class="line">    nr-of-instances = <span class="number">5</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个就是在配置中指定了一个router,策略是轮询,子Actor数是5个.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ActorRef router = system.actorOf(<span class="keyword">new</span> Props(ExampleActor.class).withRouter(<span class="keyword">new</span> FromConfig()), <span class="string">"router"</span>);</span><br></pre></td></tr></table></figure>
+<p>然后通过<code>FromConfig()</code>配置加载<code>Router</code>.加载的时候需要指定<code>router</code>的名字.这个名字需要和配置中的<code>Router</code>的路径相对应.</p>
+<h3 id="内置Router">内置Router</h3><p>AKKA中一共内置了8种路由策略,他们分别是:</p>
+<ul>
+<li><p><strong>RoundRobinPool</strong>:    这个是最常用的,轮询方式分发消息</p>
+  <figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">akka.actor.deployment &#123;</span><br><span class="line">  	/parent/router1 &#123;</span><br><span class="line">    	router = <span class="command">round</span>-robin-pool</span><br><span class="line">    	nr-<span class="keyword">of</span>-instances = <span class="number">5</span></span><br><span class="line">  	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>RandomPool</strong>:    这个是随机方式分发消息</p>
+  <figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">akka.actor.deployment </span><span class="expression">&#123;</span><br><span class="line"> 		<span class="end-block">/parent</span><span class="end-block">/router</span>5 &#123;</span><br><span class="line">   		<span class="variable">router</span> = <span class="variable">random-pool</span></span><br><span class="line">   		<span class="variable">nr-of-instances</span> = 5</span><br><span class="line"> 		&#125;</span><span class="xml"></span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>BalancingPool</strong>: 均衡分发消息,所有的子Routee共享一个邮箱,它会尝试重新从繁忙routee分配任务到空闲routee</p>
+  <figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">akka.actor.deployment </span><span class="expression">&#123;</span><br><span class="line"> 		<span class="end-block">/parent</span><span class="end-block">/router</span>9 &#123;</span><br><span class="line">   		<span class="variable">router</span> = <span class="variable">balancing-pool</span></span><br><span class="line">   		<span class="variable">nr-of-instances</span> = 5</span><br><span class="line"> 		&#125;</span><span class="xml"></span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>SmallestMailboxPool</strong>:    最少消息邮箱分发,这个按照</p>
+<ul>
+<li>选择有空邮箱的空闲Routee处理</li>
+<li>选择任意空邮箱的Routee</li>
+<li>选择邮箱中有最少挂起消息的routee</li>
+<li><p>选择任一远程routee,远程actor优先级最低,因为其邮箱大小未知</p>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">akka.actor.deployment </span><span class="expression">&#123;</span><br><span class="line"> 		<span class="end-block">/parent</span><span class="end-block">/router</span>11 &#123;</span><br><span class="line">   		<span class="variable">router</span> = <span class="variable">smallest-mailbox-pool</span></span><br><span class="line">   		<span class="variable">nr-of-instances</span> = 5</span><br><span class="line"> 		&#125;</span><span class="xml"></span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>BroadcastPool</strong>:这个Router比较特殊,是广播消息,也就是一个消息会被他所有的子Actor接收到,而不仅仅是其中的某一个.</p>
+  <figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">akka.actor.deployment </span><span class="expression">&#123;</span><br><span class="line"> 		<span class="end-block">/parent</span><span class="end-block">/router</span>13 &#123;</span><br><span class="line">   		<span class="variable">router</span> = <span class="variable">broadcast-pool</span></span><br><span class="line">   		<span class="variable">nr-of-instances</span> = 5</span><br><span class="line"> 		&#125;</span><span class="xml"></span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>ScatterGatherFirstCompletedPool</strong>:这个Router也比较特殊,它会把消息发送到它所有的子Routee中,然后它会等待直到接收到第一个答复,该结果将发送回原始发送者.而其他的答复将会被丢弃.</p>
+  <figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">akka.actor.deployment &#123;</span><br><span class="line"> 		/parent/router17 &#123;</span><br><span class="line">   		router = scatter-gather-pool</span><br><span class="line">   		nr-<span class="operator">of</span>-instances = <span class="number">5</span></span><br><span class="line">   		<span class="operator">within</span> = <span class="number">10</span> <span class="built_in">seconds</span></span><br><span class="line"> 		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>TailChoppingPool</strong>:这个Router将首先发送消息到一个随机挑取的routee,短暂的延迟后发给第二个routee(从剩余的routee中随机挑选),以此类推.它等待第一个答复,并将它转回给原始发送者.其他答复将被丢弃.这样设计的目的在于使用冗余来加快分布式情况下的查询等业务.</p>
+  <figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">akka.actor.deployment &#123;</span><br><span class="line"> 		/parent/router21 &#123;</span><br><span class="line">   		router = tail-chopping-pool</span><br><span class="line">   		nr-<span class="operator">of</span>-instances = <span class="number">5</span></span><br><span class="line">   		<span class="operator">within</span> = <span class="number">10</span> <span class="built_in">seconds</span></span><br><span class="line">   		tail-chopping-router.interval = <span class="number">20</span> <span class="built_in">milliseconds</span></span><br><span class="line"> 		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>ConsistentHashingPool</strong>:使用一致性hash的方式来分发消息.它会把传送的消息映射到它的消息环上,然后进行Actor的选择.</p>
+  <figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">akka.actor.deployment &#123;</span><br><span class="line"> 		/parent/router25 &#123;</span><br><span class="line">   		<span class="variable">router =</span> consistent-hashing-pool</span><br><span class="line">   		<span class="variable">nr-of-instances =</span> <span class="number">5</span></span><br><span class="line">   		<span class="variable">virtual-nodes-factor =</span> <span class="number">10</span></span><br><span class="line"> 		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="动态改变Routee数量">动态改变Routee数量</h3><p>上述的大多数Route除了在配置或实例化的时候指定固定数量的Routee外,还能配置一个resize的策略,指定最大最小的Routee的数量:</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">akka.actor.deployment &#123;</span><br><span class="line">  /router2 &#123;</span><br><span class="line">    router = <span class="built_in">round</span>-robin</span><br><span class="line">    resizer &#123;</span><br><span class="line">      <span class="built_in">lower</span>-bound = <span class="number">2</span></span><br><span class="line">      <span class="built_in">upper</span>-bound = <span class="number">15</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> lowerBound = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">int</span> upperBound = <span class="number">15</span>;</span><br><span class="line">DefaultResizer resizer = <span class="keyword">new</span> DefaultResizer(lowerBound, upperBound);</span><br><span class="line">ActorRef router3 = system.actorOf(<span class="keyword">new</span> Props(ExampleActor.class).withRouter(<span class="keyword">new</span> RoundRobinRouter(nrOfInstances)));</span><br></pre></td></tr></table></figure>
+<h2 id="Scheduler">Scheduler</h2><p>在实际使用AKKA中,可能会需要定时或重复的发送消息给某些Actor.要处理这类的问题,除了直接使用JAVA的API或<code>Quartz</code>显式的重复调用<code>ActorRef.tell</code>外,AKKA还提供了一个简单的Scheduler.</p>
+<p>AKKA的<code>Scheduler</code>比较简单,是由<code>ActorSystem</code>提供的,可以简单的对Actor发送重复或定时任务.<br>比如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ActorRef actorRef = system.actorOf(Props.create(WriterActor.class));</span><br><span class="line"></span><br><span class="line">     system.scheduler().scheduleOnce(Duration.create(<span class="number">5</span>, TimeUnit.SECONDS),actorRef,<span class="string">"1111"</span>,system.dispatcher(),ActorRef.noSender());</span><br></pre></td></tr></table></figure>
+<p>这个例子中,实例化了一个Actor.然后调用<code>system.scheduler()</code>获取到<code>Scheduler</code>,然后调用<code>scheduleOnce(延迟时间,目标Actor,消息,调度器,发送者)</code>方法延迟5秒再发送消息给某个Actor.</p>
+<p>此外,除了延迟发送消息,Akka的<code>Scheduler</code>还提供了定时重复发送消息,比如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ActorRef actorRef = system.actorOf(Props.create(WriterActor.class));</span><br><span class="line"></span><br><span class="line">system.scheduler().schedule(Duration.Zero(),Duration.create(<span class="number">1</span>, TimeUnit.SECONDS),actorRef,<span class="string">"1111"</span>,system.dispatcher(),ActorRef.noSender());</span><br></pre></td></tr></table></figure>
+<p>这个例子中,调用了<code>Scheduler</code>的<code>schedule(第一次调用时间,间隔时间,目标Actor,消息,调度器,发送者)</code>方法每一秒发送一个消息给Actor.</p>
+<p>需要注意的是<code>Scheduler</code>的这两个方法都会返回一个<code>Cancellable</code>对象.通过这个对象,我们可以显式的调用<code>cancellable.cancel();</code>来取消重复任务.</p>
+<p>其实,除了能重复的给Actor发送消息外,AKKA的<code>scheduler</code>由于可以接收<code>Runnable</code>接口,所以基本上可以做任何的事情.例如,在Spark中,AppClient中的ClientActor需要与Master这个Remote Actor通信,从而注册所有的Spark Master.由于注册过程中牵涉到远程通信,可能会因为网络原因导致通信错误,因此需要引入重试的机会.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="Akka_in_JAVA(二)">Akka in JAVA(二)</h1><p>继续<a href="/2016/01/10/Akka-in-JAVA-1/">Akka in JAVA(一)</a>中所讲.</p>
+<h2 id="Actor调用">Actor调用</h2><p>从上面的例子中,我们可以大概的对AKKA在JAVA中的使用有一个全局的概念.这里我们在稍微细致的讲解一下.</p>
+<p>在JAVA中使用AKKA进行开发主要有这几个步骤:</p>
+<ol>
+<li>定义消息模型.</li>
+<li>创建Actor的实现,以及业务逻辑</li>
+<li>在需要使用AKKA的地方获取到ActorSystem,然后根据业务的数据流,获取到合适的Actor,给Actor发送消息.</li>
+<li>在Actor的实现用,对接收到的消息进行具体的处理或转发.从而形成业务逻辑流.</li>
+</ol>
+<p>下面我们分别讲解一下这几个步骤.</p>]]>
+    
+    </summary>
+    
+      <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[Akka in JAVA(一)]]></title>
     <link href="http://sunxiang0918.github.io/2016/01/10/Akka-in-JAVA-1/"/>
     <id>http://sunxiang0918.github.io/2016/01/10/Akka-in-JAVA-1/</id>
     <published>2016-01-10T08:46:28.000Z</published>
-    <updated>2016-01-20T11:46:04.000Z</updated>
+    <updated>2016-01-23T14:44:14.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Akka_in_JAVA(一)">Akka in JAVA(一)</h1><h2 id="AKKA简介">AKKA简介</h2><h3 id="什么是AKKA">什么是AKKA</h3><p>Akka是一个由<code>Scala</code>编写的,能兼容<code>Sacala</code>和<code>JAVA</code>的,用于编写高可用和高伸缩性的<code>Actor模型</code>框架.它基于了事件驱动的并发处理模式,性能非常的高,并且有很高的可用性.大大的简化了我们在应用系统中开发并发处理的过程.它在各个领域都有很好的表现.</p>
 <h3 id="使用AKKA的好处">使用AKKA的好处</h3><p>就如上面简介中所说的,AKKA把并发操作的各种复杂的东西都统一的做了封装.我们主要关心的是业务逻辑的实现,只需要少量的关心<code>Actor模型</code>的串联即可构建出高可用,高性能,高扩展的应用.</p>
 <h3 id="Akka_for_JAVA">Akka for JAVA</h3><p>由于AKKA是使用<code>Scala</code>编写的,而<code>Scala</code>是一种基于JVM的语言.因此<code>JAVA</code>对AKKA的支持也是很不错的.Akka自身又是采用微内核的方式来实现的,这就意味着能很容易的在自己的项目中应用AKKA,只需要引入几个akka的Lib包即可.而官方直接就提供了<code>Maven</code>库供我们在JAVA中使用AKKA.<br>这些AKKA的依赖包主要有:</p>
@@ -181,7 +352,7 @@
 <li>后面的操作都是一样的,就不再重复描述.</li>
 <li>只有最后一个代码稍微有点不一样<code>system.scheduler().schedule(Duration.Zero(), Duration.create(1, TimeUnit.SECONDS), greeter, new Greet(), system.dispatcher(), greetPrinter);</code>,这个使用了<code>ActorSystem</code>中的调度功能.每一秒钟给greeter这个Actor发送一个<code>Greet</code>消息,并指定消息的发送者是<code>greetPrinter</code>.这样每隔一秒钟,greeter就会收到<code>Greet</code>消息,然后构造成<code>Greeting</code>消息,又返回给<code>GreetPrinter</code>这个Actor,这个Actor接收到消息后,打印出来.形成一个环流.</li>
 </ol>
-<h2 id="Actor调用">Actor调用</h2>]]></content>
+]]></content>
     <summary type="html">
     <![CDATA[<h1 id="Akka_in_JAVA(一)">Akka in JAVA(一)</h1><h2 id="AKKA简介">AKKA简介</h2><h3 id="什么是AKKA">什么是AKKA</h3><p>Akka是一个由<code>Scala</code>编写的,能兼容<code>Sacala</code>和<code>JAVA</code>的,用于编写高可用和高伸缩性的<code>Actor模型</code>框架.它基于了事件驱动的并发处理模式,性能非常的高,并且有很高的可用性.大大的简化了我们在应用系统中开发并发处理的过程.它在各个领域都有很好的表现.</p>
 <h3 id="使用AKKA的好处">使用AKKA的好处</h3><p>就如上面简介中所说的,AKKA把并发操作的各种复杂的东西都统一的做了封装.我们主要关心的是业务逻辑的实现,只需要少量的关心<code>Actor模型</code>的串联即可构建出高可用,高性能,高扩展的应用.</p>
@@ -1516,83 +1687,6 @@ org.apache.avro.util.Utf8</code>的异常,开始折腾了我很久.最后发现�
       <category term="大数据" scheme="http://sunxiang0918.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
       <category term="集群" scheme="http://sunxiang0918.github.io/tags/%E9%9B%86%E7%BE%A4/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[<转> 为 Key-Value 数据库实现MVCC 事务]]></title>
-    <link href="http://sunxiang0918.github.io/2015/10/23/%E4%B8%BA-Key-Value-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9E%E7%8E%B0MVCC-%E4%BA%8B%E5%8A%A1/"/>
-    <id>http://sunxiang0918.github.io/2015/10/23/为-Key-Value-数据库实现MVCC-事务/</id>
-    <published>2015-10-23T03:12:50.000Z</published>
-    <updated>2015-10-23T03:21:36.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="为_Key-Value_数据库实现MVCC_事务">为 Key-Value 数据库实现MVCC 事务</h1><p>ACID 是软件领域使用最广泛的技术之一，它是关系数据库的基石，是企业级中间件不可或缺的部分，但通常通过黑盒的方式提供。但是在许多情况下，这种古老的事务方式已经不能够适应现代大规模系统和NoSQL数据库的需要了，现代系统要求更高的性能要求，更大的数据量，更高的可用性。在这种情况下，传统的事务模型被定制的事务或者半事务模型所取代，而在这些模型中事务性并不像以往那样被看重。</p>
-<p>在本文中我们会讨论一下key-value数据库的无锁事务操作，这种技术可以广泛应用于任何一种数据库系统。在GridDynamics中，我们就用这种技术在Oracle Coherence上实现了一个轻量级的非标准的事务机制。在第一部分我们会通过几个重要的用例来了解两种简单的方法，在第二部分我们会研究更多更通用的方法，比如说PostgreSQL的MVCC实现。</p>
-<h2 id="原子性缓存切换，读提交隔离">原子性缓存切换，读提交隔离</h2><p>让我们从一个简单易于实现的方法开始，这个方法适用于读远多于写的系统。比如说电子商务系统中每天要进行的数据更新，一些管理性操作例如无效货品的修复以及缓存更新。</p>
-<p>最简单的例子是把所有数据都加载进缓存里，然后通过一个代理接口来执行诸如 get() 和 put() 这样的操作。这个接口会与两个缓存打交道，A和B，按照以下逻辑运行（图 1）：</p>
-<ul>
-<li>任何时候只能有一个缓存处于可用状态，代理接口会把所有的请求路由给它（图1.1）。</li>
-<li>更新数据的时候把新数据加载到目前不可用的缓存中（图1.2）。</li>
-<li>更新进程切换标志哪个缓存可用的标记（图1.3），代理接口开始把新的读请求分发到新标记为可用的缓存。</li>
-<li>缓存切换阶段的事务可以依据不用的持久性和隔离性要求来分别处理。如果允许“不可重复读” ，那么切换很简单，老数据会被立刻清理掉。否则，代理接口会维护一个仍未结束的事务列表，并把属于这个列表中的每一个请求都路由到原来的缓存中。只有当列表中的所有事物都提交或者放弃之后老数据才会被清空。<a id="more"></a>
-</li>
-</ul>
-<p><img src="/img/2015/10/23/1.png" alt=""><br>Fig.1 Cache Switch</p>
-<p>相同的技术也可用于部分更新。依据存储方式的不同也有多种实现方法，我们来看一个有三个缓存简单例子。这个例子中的框架遇上一个类似，但是代理接口按照以下逻辑运行（图 2）：</p>
-<ul>
-<li>用户请求被路由到主缓存（”PRIMARY”缓存）（图 2.1）</li>
-<li>新增数据和更新数据加载进2号缓存（“NEW”缓存），删除项的key放入3号缓存（”DELETE”缓存）（图2.2）</li>
-<li>提交进程（特指写事务）切换全局标示，这个标示会告诉代理接口先去”NEW”和”DELETE”缓存去查找所请求的数据，如果在这两个区域中没有发现再去”PRIMARY”缓存查找（图2.3）。换句话说，在这一步所有的请求都被改派到了更新过的数据中查找。</li>
-<li>提交进程将 NEW 和 DELETE 区域的变化传递给PRIMARY。也即在PRIMARY缓存区以非原子的方式更新、增加、删除数据项（图2.4）。</li>
-<li>最后，所有的提交进程把全局标识切换回来，所有的请求仍然路由到 PRIMARY 缓存区域（图2.5）。</li>
-<li>在第4步，可以把老数据拷贝到另一个缓存区，这样就可以支持回滚操作。即使是全量更新也可以用这种方法。</li>
-</ul>
-<p><img src="/img/2015/10/23/2.png" alt=""><br>Fig.2 Partial Cache Switch</p>
-<p>从上面的两个例子我们可以看出，专用于读的数据快照避免了数据更新的干扰，大大降低了复杂性。在一个写密集型的环境中就不容易做到这一点了。在下一节我们会讨论一种非常好的方法可以完美的解决这个问题。</p>
-<p>MVCC 事务，可重复读隔离</p>
-<p>事物间的隔离可以通过给数据项加上版本号来实现。有许多方法能做到这一点，下面我们会介绍一种与PostgreSQL  的事务处理方法非常相似的办法。</p>
-<p>正如前面所说，每个事务可以对应于一个部分数据快照。在同一时间，每一个数据项都有他自己的生命周期 - 从加入缓存到移出缓存或者被更新（被新版本所取代）。所以可以通过给每条数据打两个时间戳来实现隔离，每个事物通过开始时间（两个时间戳之一，译者注）来找出在事务开始时处于可见状态的数据。但在实践中常用一个单调递增的计数来代替时间戳：</p>
-<ul>
-<li>当新事务开始的时候：<ul>
-<li>它会获得一个全局唯一且单调递增的事务ID ，也叫 XID。</li>
-<li>进程里保存着所有事务的XID.</li>
-</ul>
-</li>
-<li>缓存里的每个数据项有两个额外标记，xmin 和 xmax。按照以下规则赋值：<ul>
-<li>当数据项被某个事务建立的时候， xmin 设置为该事务的XID ，xmax 无值。</li>
-<li>当数据被某个事务移除的时候，xmin 不变，xmax 设置为该事务的XID。数据并没有真的从缓存中清除，只是被标记为已删除。</li>
-<li>当数据被某个事务更新的时候，老数据仍然保存在缓存里，xmax 被赋值为事务的XID，同时增加一条新的数据，新数据的 xmin 也赋值为XID 并且xmax 为空。换句话说更新操作等于一次删除加一次增加。</li>
-</ul>
-</li>
-<li>如果以下两个条件成立，那么数据对于某次事务是可见的：<ul>
-<li>xmin 有值并且小于或等于当前事务ID。</li>
-<li>xmax 为空，或者等于未提交事务（放弃的或者还未完成的）的XID ，或者大于当前事务ID。</li>
-</ul>
-</li>
-<li>xmin 和 xmax 可以存储两个位标记，表明事务是否放弃或者提交，这样才能进行上面的检查（xmax 是否等于未提交事务的ID）。<br>逻辑如下图所示：</li>
-</ul>
-<p><img src="/img/2015/10/23/3.png" alt=""><br>Fig.3 PostgeSQL-like MVCC</p>
-<p>这种方法的缺点是废弃数据的移除有些繁琐。因为不同事务看到的数据版本不同，决定何时将数据标为不可见或者移除是比较复杂的。不过也有两种以上的方法能够做到，第一种是PostgreSQL中使用的，第二种是Oracle使用的：</p>
-<ul>
-<li>所有的版本都存储在同一个key-value空间中，对版本数量没有限制（也即可以储存任意多的版本，译者注）。由一个后台进程来回收老版本数据，这个回收可以按计划调度执行也可以再读或者写的时候触发。</li>
-<li>主key-value 空间只储存最新的版本，之前的版本储存在另外的地方，且储存老版本的空间大小是固定的。 最新的版本会指向之前的版本，但是却不能够由此上溯到之前的任意版本， 因为存储老版本数据的区域大小是固定的， 太早的版本会被移除。如果某个事务不能够找到指定版本的数据就会失败。 </li>
-</ul>
-<hr>
-<p><strong>原文链接:</strong><a href="http://my.oschina.net/juliashine/blog/111624" target="_blank" rel="external">http://my.oschina.net/juliashine/blog/111624</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="为_Key-Value_数据库实现MVCC_事务">为 Key-Value 数据库实现MVCC 事务</h1><p>ACID 是软件领域使用最广泛的技术之一，它是关系数据库的基石，是企业级中间件不可或缺的部分，但通常通过黑盒的方式提供。但是在许多情况下，这种古老的事务方式已经不能够适应现代大规模系统和NoSQL数据库的需要了，现代系统要求更高的性能要求，更大的数据量，更高的可用性。在这种情况下，传统的事务模型被定制的事务或者半事务模型所取代，而在这些模型中事务性并不像以往那样被看重。</p>
-<p>在本文中我们会讨论一下key-value数据库的无锁事务操作，这种技术可以广泛应用于任何一种数据库系统。在GridDynamics中，我们就用这种技术在Oracle Coherence上实现了一个轻量级的非标准的事务机制。在第一部分我们会通过几个重要的用例来了解两种简单的方法，在第二部分我们会研究更多更通用的方法，比如说PostgreSQL的MVCC实现。</p>
-<h2 id="原子性缓存切换，读提交隔离">原子性缓存切换，读提交隔离</h2><p>让我们从一个简单易于实现的方法开始，这个方法适用于读远多于写的系统。比如说电子商务系统中每天要进行的数据更新，一些管理性操作例如无效货品的修复以及缓存更新。</p>
-<p>最简单的例子是把所有数据都加载进缓存里，然后通过一个代理接口来执行诸如 get() 和 put() 这样的操作。这个接口会与两个缓存打交道，A和B，按照以下逻辑运行（图 1）：</p>
-<ul>
-<li>任何时候只能有一个缓存处于可用状态，代理接口会把所有的请求路由给它（图1.1）。</li>
-<li>更新数据的时候把新数据加载到目前不可用的缓存中（图1.2）。</li>
-<li>更新进程切换标志哪个缓存可用的标记（图1.3），代理接口开始把新的读请求分发到新标记为可用的缓存。</li>
-<li>缓存切换阶段的事务可以依据不用的持久性和隔离性要求来分别处理。如果允许“不可重复读” ，那么切换很简单，老数据会被立刻清理掉。否则，代理接口会维护一个仍未结束的事务列表，并把属于这个列表中的每一个请求都路由到原来的缓存中。只有当列表中的所有事物都提交或者放弃之后老数据才会被清空。]]>
-    
-    </summary>
-    
-      <category term="大数据" scheme="http://sunxiang0918.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
   </entry>
   
