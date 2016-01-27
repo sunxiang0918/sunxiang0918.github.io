@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://sunxiang0918.github.io/2016/01/24/常用UniqueID的生成方法/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
 <meta property="og:description" content="常用UniqueID的生成方法这几天在与其他的系统进行联调的时候,出现了对方的唯一ID使用的是Int32来存储,而我们提供的UniqueID是标准的UUID,从而导致他们无法存储的问题.由于他们是一个历史的老系统,牵扯很深,所以无法进行改造,只能我们来适应它(幸好和它们交互的数据不会太多.应该不会超过Int32的上限).从而引出了对UniqueID生成方法的思考.这里列出了几种常用的UniqueI">
-<meta property="og:updated_time" content="2016-01-27T08:51:34.000Z">
+<meta property="og:updated_time" content="2016-01-27T08:57:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="常用UniqueID的生成方法">
 <meta name="twitter:description" content="常用UniqueID的生成方法这几天在与其他的系统进行联调的时候,出现了对方的唯一ID使用的是Int32来存储,而我们提供的UniqueID是标准的UUID,从而导致他们无法存储的问题.由于他们是一个历史的老系统,牵扯很深,所以无法进行改造,只能我们来适应它(幸好和它们交互的数据不会太多.应该不会超过Int32的上限).从而引出了对UniqueID生成方法的思考.这里列出了几种常用的UniqueI">
@@ -262,12 +262,7 @@ var _hmt = _hmt || [];
 <li><strong>Version5</strong>:基于名字SHA1的UUID,这个版本的UUID算法和Version3的是一样的,只是把名字和命名空间的散列算法改为了SHA1</li>
 </ul>
 <p>从这几个版本中可以看出,<code>Version1</code>和<code>Version2</code>是最适合于分布式计算环境下,具有高度唯一性的UniqueID,而<code>Version3</code>和<code>Version5</code>适用于一定范围内名字唯一的情况.而<code>Version4</code>在分布式的情况下,最好不要用,虽然是随机的,但是说不准在高并发的情况下,就有可能重复.<br>因此,如果要在JAVA中生成Version1的UUID,可以使用以下这个jar包</p>
-<p><code>`xml
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.eaio.uuid&lt;/groupId&gt;
-            &lt;artifactId&gt;uuid&lt;/artifactId&gt;
-            &lt;version&gt;3.2&lt;/version&gt;
-        &lt;/dependency&gt;</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>com.eaio.uuid<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>uuid<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="title">version</span>&gt;</span>3.2<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <h3 id="MongoDB的ObjectID">MongoDB的ObjectID</h3><p>在Mongo数据库中,每一个文档必须有一个”_id”建,默认情况下这个是一个ObjectId的值.而ObjectId就是使用了序列计算的方式来获取这个唯一值.</p>
 <p>ObjectID使用了12个字节来进行存储,每个字节表示两位十六进制数字,是一个24位的字符串.<br>它的前4位表示的是时间戳,单位为秒.通过这个可以大致的保证唯一性,并且可以通过这4个字符来获取文档的创建时间.<br>接下来的3字节是所在主机的唯一标识符,通常是机器的主机名的散列值.<br>再后面的两字节表示的是生成这个ObjectID的进程的ID号(PID)<br>这样,前9位就保证了同一秒中不同机器不同进程产生的ObejctId是唯一的.而后3字节就是一个自增的计数器,确保相同进程同一秒内产生的ObjectId也是不一样的.这样同一秒中类允许最多每个进程拥有16777215个不同的ObjectID.这基本上是不可能重复了.</p>
 <h3 id="Twitter的snowflake算法">Twitter的snowflake算法</h3><p>为了满足Twitter每秒上万条消息的请求,每条消息都必须分配一个唯一的ID,这些id还需要一些大致的顺序.因此,Twitter公布了他们的Snowflake算法来生成这个唯一UniqueID.</p>
