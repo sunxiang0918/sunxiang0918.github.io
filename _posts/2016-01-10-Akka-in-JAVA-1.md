@@ -3,6 +3,7 @@ title: Akka in JAVA(一)
 date: 2016-01-10 16:46:28
 tags:
 - JAVA
+- Akka
 ---
 
 #Akka in JAVA(一)
