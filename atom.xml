@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2016-02-13T14:52:00.000Z</updated>
+  <updated>2016-02-13T14:53:41.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://sunxiang0918.github.io/2016/02/10/Akka-in-JAVA-4/"/>
     <id>http://sunxiang0918.github.io/2016/02/10/Akka-in-JAVA-4/</id>
     <published>2016-02-10T12:35:02.000Z</published>
-    <updated>2016-02-13T14:52:00.000Z</updated>
+    <updated>2016-02-13T14:53:41.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Akka_in_JAVA(四)">Akka in JAVA(四)</h1><p>最后这个部分讲一讲AKKA中的事件消息类型. 在Akka中主要是有三种消息类型,每一种类型对应了不同的使用场景.他们分别是:<code>Fire and Forget模式</code>,<code>Send and Receive模式</code>和<code>Publisher-Subscriber模式</code>.</p>
 <h2 id="Fire_and_Forget模式">Fire and Forget模式</h2><p>这种发送消息的模式是Akka中所推荐的,也是我们前面一直在使用的方式.也就是单向消息模式,Actor在发送消息之后,并不需要获取响应.这种方式在JAVA中需要使用<code>ActorRef</code>或<code>ActorSelection</code>的<code>tell</code>方法.和消息队列类似,直接调用该方法即可,程序不会阻塞,会直接执行后面的操作,但是消息已经发送给目标的Actor了.这种方式的具体使用方法前面已经列举了很多了,这里就不再重复的举例了.</p>
 <h2 id="Send_and_Receive模式">Send and Receive模式</h2><p>这种发送消息的模式是双向的,当Actor在发送消息之后,会接收到一个Future对象.和JAVA的Future一样,通过这个可以异步的接收到对方的结果消息.</p>
@@ -92,6 +92,8 @@
 <p>在整个AKKA中,提供了一套完整的Future机制,不光是在Actor传递消息间可以使用,也可以在非Actor中直接使用.</p>]]>
     
     </summary>
+    
+      <category term="Akka" scheme="http://sunxiang0918.github.io/tags/Akka/"/>
     
       <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
     
@@ -306,7 +308,7 @@
     <link href="http://sunxiang0918.github.io/2016/01/18/Akka-in-JAVA-3/"/>
     <id>http://sunxiang0918.github.io/2016/01/18/Akka-in-JAVA-3/</id>
     <published>2016-01-18T13:23:13.000Z</published>
-    <updated>2016-02-11T14:56:16.000Z</updated>
+    <updated>2016-02-13T14:54:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Akka_in_JAVA(三)">Akka in JAVA(三)</h1><p>上两个部分讲了<code>Akka</code>的基本知识和常见的用法.接下来讲一讲<code>Akka</code>的远程调用以及集群的使用.因为在现在的项目中,基本上都是分布式的,单个的应用程序都快成为”熊猫”了.因此<code>Akka</code>的远程以及集群调用就是非常有必要的了.</p>
 <h2 id="Remote调用">Remote调用</h2><p><code>Akka-Remoting</code>是采用了P2P(peer-to-peer)的通信方式设计的,也就是端对端的方式.特别是Akka-Remoting不能与网络地址转换和负载均衡一起的工作.<br>但是,由于<code>Akka</code>在设计的时候就考虑了远程调用以及分布式的情况.因此,<code>Akka-Remoting</code>在使用上就非常的简单,几乎等于是透明的,和本地调用几乎相同.除了传递的消息需要可序列化以及创建和查找Actor的时候路径稍有不同外,没有其他的区别了.</p>
 <h3 id="远程调用的准备">远程调用的准备</h3><p>要在项目中使用<code>Akka-Remoting</code>非常的简单,只需要引入Maven中的<code>akka-remote</code>就可以了.</p>
@@ -467,6 +469,8 @@
     
     </summary>
     
+      <category term="Akka" scheme="http://sunxiang0918.github.io/tags/Akka/"/>
+    
       <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
     
   </entry>
@@ -476,7 +480,7 @@
     <link href="http://sunxiang0918.github.io/2016/01/13/Akka-in-JAVA-2/"/>
     <id>http://sunxiang0918.github.io/2016/01/13/Akka-in-JAVA-2/</id>
     <published>2016-01-13T14:43:04.000Z</published>
-    <updated>2016-01-27T06:42:42.000Z</updated>
+    <updated>2016-02-13T14:54:05.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Akka_in_JAVA(二)">Akka in JAVA(二)</h1><p>继续<a href="/2016/01/10/Akka-in-JAVA-1/">Akka in JAVA(一)</a>中所讲.</p>
 <h2 id="Actor调用">Actor调用</h2><p>从上面的例子中,我们可以大概的对AKKA在JAVA中的使用有一个全局的概念.这里我们在稍微细致的讲解一下.</p>
 <p>在JAVA中使用AKKA进行开发主要有这几个步骤:</p>
@@ -638,6 +642,8 @@
     
     </summary>
     
+      <category term="Akka" scheme="http://sunxiang0918.github.io/tags/Akka/"/>
+    
       <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
     
   </entry>
@@ -647,7 +653,7 @@
     <link href="http://sunxiang0918.github.io/2016/01/10/Akka-in-JAVA-1/"/>
     <id>http://sunxiang0918.github.io/2016/01/10/Akka-in-JAVA-1/</id>
     <published>2016-01-10T08:46:28.000Z</published>
-    <updated>2016-01-23T14:44:14.000Z</updated>
+    <updated>2016-02-13T14:53:59.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Akka_in_JAVA(一)">Akka in JAVA(一)</h1><h2 id="AKKA简介">AKKA简介</h2><h3 id="什么是AKKA">什么是AKKA</h3><p>Akka是一个由<code>Scala</code>编写的,能兼容<code>Sacala</code>和<code>JAVA</code>的,用于编写高可用和高伸缩性的<code>Actor模型</code>框架.它基于了事件驱动的并发处理模式,性能非常的高,并且有很高的可用性.大大的简化了我们在应用系统中开发并发处理的过程.它在各个领域都有很好的表现.</p>
 <h3 id="使用AKKA的好处">使用AKKA的好处</h3><p>就如上面简介中所说的,AKKA把并发操作的各种复杂的东西都统一的做了封装.我们主要关心的是业务逻辑的实现,只需要少量的关心<code>Actor模型</code>的串联即可构建出高可用,高性能,高扩展的应用.</p>
 <h3 id="Akka_for_JAVA">Akka for JAVA</h3><p>由于AKKA是使用<code>Scala</code>编写的,而<code>Scala</code>是一种基于JVM的语言.因此<code>JAVA</code>对AKKA的支持也是很不错的.Akka自身又是采用微内核的方式来实现的,这就意味着能很容易的在自己的项目中应用AKKA,只需要引入几个akka的Lib包即可.而官方直接就提供了<code>Maven</code>库供我们在JAVA中使用AKKA.<br>这些AKKA的依赖包主要有:</p>
@@ -731,6 +737,8 @@
 </ul>]]>
     
     </summary>
+    
+      <category term="Akka" scheme="http://sunxiang0918.github.io/tags/Akka/"/>
     
       <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
     
