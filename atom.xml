@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2016-02-13T14:49:15.000Z</updated>
+  <updated>2016-02-13T14:52:00.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://sunxiang0918.github.io/2016/02/10/Akka-in-JAVA-4/"/>
     <id>http://sunxiang0918.github.io/2016/02/10/Akka-in-JAVA-4/</id>
     <published>2016-02-10T12:35:02.000Z</published>
-    <updated>2016-02-13T14:49:15.000Z</updated>
+    <updated>2016-02-13T14:52:00.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Akka_in_JAVA(四)">Akka in JAVA(四)</h1><p>最后这个部分讲一讲AKKA中的事件消息类型. 在Akka中主要是有三种消息类型,每一种类型对应了不同的使用场景.他们分别是:<code>Fire and Forget模式</code>,<code>Send and Receive模式</code>和<code>Publisher-Subscriber模式</code>.</p>
 <h2 id="Fire_and_Forget模式">Fire and Forget模式</h2><p>这种发送消息的模式是Akka中所推荐的,也是我们前面一直在使用的方式.也就是单向消息模式,Actor在发送消息之后,并不需要获取响应.这种方式在JAVA中需要使用<code>ActorRef</code>或<code>ActorSelection</code>的<code>tell</code>方法.和消息队列类似,直接调用该方法即可,程序不会阻塞,会直接执行后面的操作,但是消息已经发送给目标的Actor了.这种方式的具体使用方法前面已经列举了很多了,这里就不再重复的举例了.</p>
 <h2 id="Send_and_Receive模式">Send and Receive模式</h2><p>这种发送消息的模式是双向的,当Actor在发送消息之后,会接收到一个Future对象.和JAVA的Future一样,通过这个可以异步的接收到对方的结果消息.</p>
@@ -45,7 +45,7 @@
 <p>它使用<code>future</code>函数,异步的计算阶乘.并且把计算结果进行封装处理.然后通过<code>pipe</code>方法,把这个异步的结果尝试发送给<code>getSender()</code>,从而达到整个代码完全非阻塞的结果.</p>
 <h2 id="Publisher-Subscriber模式">Publisher-Subscriber模式</h2><p>这种模式也就是消息的订阅和发布.用处非常的广泛,比如一个Publisher和多个Subscriber的组合应用,形成事件的广播,前者会将消息同时发送给所有的订阅者,实现分布式的并行处理.比如针对订单的处理,当用户下了订单后,既要生成订单数据,又要通知库存还要通知卖方和买房.于是,就可以将这些不同的任务交给不同的Subscriber,当接收到消息后,同时对订单进行处理.另外,这种模式还可以对Actor的生命周期进行完整的监听,当Actor的节点成员发生变化后,其他节点可以及时的进行各种处理.<br>具体的例子,可以参考上一篇博客中的<code>SimpleClusterListener</code>,它就是在<code>preStart</code>方法中调用了<code>cluster.subscribe</code>方法订阅了集群中的<code>MemberEvent.class</code> <code>UnreachableMember.class</code>两个事件.<br>除了监听集群中的状态外,还可以通过调用<code>system.eventStream()</code>来获取消息总线,从而调用<code>subscribe</code>和<code>publish</code>方法来发布和订阅消息.</p>
 <h2 id="Demo">Demo</h2><p>这里使用一个稍微复杂点的例子来对Akka做一个简单的总结.它涉及到了Akka中的远程调用,本地调用,集群调用.使用了<code>Future</code> <code>Publisher-Subscriber</code>等特性,算是一个比较全面的例子.</p>
-<p>这个例子原载于<a href="http://shiyanjun.cn/archives/1186.html" target="_blank" rel="external">http://shiyanjun.cn/archives/1186.html</a>上,是使用<code>scala</code>写的.主要的功能是实现一个简单的模拟日志实时处理的集群系统,类似于<code>Flume</code>,可以从某一个数据源中输入数据,然后程序收集数据,然后经过一个拦截器层,处理数据,并且转换为特定的格式,最后把数据写入<code>Kafka</code>中.具体的逻辑如下图:</p>
+<p>这个例子原载于<a href="http://shiyanjun.cn/archives/1186.html" target="_blank" rel="external">http://shiyanjun.cn/archives/1186.html</a>上,是使用<code>scala</code>写的,我用<code>JAVA</code>重写了一次,并增加了一些东西.这个例子主要的功能是实现一个简单的模拟日志实时处理的集群系统,类似于<code>Flume</code>,可以从某一个数据源中输入数据,然后程序收集数据,然后经过一个拦截器层,处理数据,并且转换为特定的格式,最后把数据写入<code>Kafka</code>中.具体的逻辑如下图:</p>
 <p><img src="/img/2016/02/10/1.png" alt=""></p>
 <p>在上图中,将日志处理系统分为了3个子部分,通过Akka的Role来进行划分,3个角色分别为<code>collector</code>收集器,<code>interceptor</code>拦截器,<code>processor</code>处理器,3个子系统中的节点都是整个Akka集群中的成员.整个集群系统的数据流向是:<code>collector</code>接收数据,然后将数据发送到<code>interceptor</code>,<code>interceptor</code>接收到数据后,解析出真实IP地址,拦截存在于黑名单中的IP请求,如果IP地址不在黑名单,则发送给<code>processor</code>去转换为最终的模型,然后保存到Kafka中.</p>
 <p>首先,我们需要定义的是几个子系统间传递的消息:</p>
