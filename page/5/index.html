@@ -198,6 +198,66 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Swift局部SCOPE" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/07/29/Swift局部SCOPE/" class="article-date">
+  	<time datetime="2015-07-29T02:06:40.000Z" itemprop="datePublished">2015-07-29</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/07/29/Swift局部SCOPE/">&lt;转&gt;Swift局部SCOPE</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="局部SCOPE">局部SCOPE</h1><p>C 系语言中在方法内部我们是可以任意添加成对的大括号 {} 来限定代码的作用范围的。这么做一般来说有两个好处，首先是超过作用域后里面的临时变量就将失效，这不仅可以使方法内的命名更加容易，也使得那些不被需要的引用的回收提前进行了，可以稍微提高一些代码的效率；另外，在合适的位置插入括号也利于方法的梳理，对于那些不太方便提取为一个单独方法，但是又应该和当前方法内的其他部分进行一些区分的代码，使用大括号可以将这样的结构进行一个相对自然的划分。</p>
+<p>举一个不失一般性的例子，虽然我个人不太喜欢使用代码手写 UI，但钟情于这么做的人还是不在少数。如果我们要在 Objective-C 中用代码构建 UI 的话，我们一般会选择在 -loadView 里写一些类似这样的代码：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-(<span class="keyword">void</span>)loadView &#123;</span><br><span class="line">    <span class="built_in">UIView</span> *view = [[<span class="built_in">UIView</span> alloc] initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">320</span>, <span class="number">480</span>)];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UILabel</span> *titleLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">            initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">30</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">    titleLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">    titleLabel<span class="variable">.text</span> = <span class="string">@"Title"</span>;</span><br><span class="line">    [view addSubview:titleLabel];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UILabel</span> *textLabel = [[<span class="built_in">UILabel</span> alloc] </span><br><span class="line">            initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">150</span>, <span class="number">80</span>, <span class="number">20</span>, <span class="number">40</span>)];</span><br><span class="line">    textLabel<span class="variable">.textColor</span> = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">    textLabel<span class="variable">.text</span> = <span class="string">@"Text"</span>;</span><br><span class="line">    [view addSubview:textLabel];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span><span class="variable">.view</span> = view;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/07/29/Swift局部SCOPE/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-Swift2-0中字符串的设计" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -776,66 +836,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/03/25/74个Swift标准库函数/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-GIT-两个仓库的合并" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/13/GIT-两个仓库的合并/" class="article-date">
-  	<time datetime="2015-01-13T05:47:18.000Z" itemprop="datePublished">2015-01-13</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/13/GIT-两个仓库的合并/">GIT 两个仓库的合并</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="GIT_两个仓库的合并">GIT 两个仓库的合并</h1><p>情况是这样的,以前我们的全文检索引擎是按照模块提交到不同的Git仓库上的. 现在做新的检索引擎准备按照springframe那样,按照模块还是提交到一个Git仓库中,便于版本的维护.<br>这就牵涉到,需要把以前的一些模块仓库,合并到一起来.因为我们还是想保留以前的提交记录等等.而不是直接新建一个仓库,然后把代码都拷贝到一起.这样就会丢失以前的提交记录.</p>
-<h2 id="操作过程是这样的:">操作过程是这样的:</h2><ol>
-<li><p>先在<a href="https://www.sourcetreeapp.com/">sourcetree</a>中 <code>clone</code>新的仓库.比如:<a href="http://127.0.0.1/a.git">http://127.0.0.1/a.git</a></p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GIT/">GIT</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/01/13/GIT-两个仓库的合并/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

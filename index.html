@@ -198,6 +198,67 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Akka-in-JAVA-4" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/10/Akka-in-JAVA-4/" class="article-date">
+  	<time datetime="2016-02-10T12:35:02.000Z" itemprop="datePublished">2016-02-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/02/10/Akka-in-JAVA-4/">Akka in JAVA(四)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Akka_in_JAVA(四)">Akka in JAVA(四)</h1><p>最后这个部分讲一讲AKKA中的事件消息类型. 在Akka中主要是有三种消息类型,每一种类型对应了不同的使用场景.他们分别是:<code>Fire and Forget模式</code>,<code>Send and Receive模式</code>和<code>Publisher-Subscriber模式</code>.</p>
+<h2 id="Fire_and_Forget模式">Fire and Forget模式</h2><p>这种发送消息的模式是Akka中所推荐的,也是我们前面一直在使用的方式.也就是单向消息模式,Actor在发送消息之后,并不需要获取响应.这种方式在JAVA中需要使用<code>ActorRef</code>或<code>ActorSelection</code>的<code>tell</code>方法.和消息队列类似,直接调用该方法即可,程序不会阻塞,会直接执行后面的操作,但是消息已经发送给目标的Actor了.这种方式的具体使用方法前面已经列举了很多了,这里就不再重复的举例了.</p>
+<h2 id="Send_and_Receive模式">Send and Receive模式</h2><p>这种发送消息的模式是双向的,当Actor在发送消息之后,会接收到一个Future对象.和JAVA的Future一样,通过这个可以异步的接收到对方的结果消息.</p>
+<p>在整个AKKA中,提供了一套完整的Future机制,不光是在Actor传递消息间可以使用,也可以在非Actor中直接使用.</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/02/10/Akka-in-JAVA-4/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-使用Swift的面向协议编程定义Segue标识" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -810,64 +871,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/12/30/Swift-LOG输出/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-在Swift中使用随机数" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/12/27/在Swift中使用随机数/" class="article-date">
-  	<time datetime="2015-12-27T12:27:49.000Z" itemprop="datePublished">2015-12-27</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/27/在Swift中使用随机数/">在Swift中使用随机数</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="在Swift中使用随机数">在Swift中使用随机数</h1><p>在我们的开发过程中,有时需要产生一些随机数.而Swift中并没有像JAVA中一样提供一个专门的<code>Random</code>类来集中的生成随机数.<br>在Swift中,提供了几个全局的函数来生成随机数.一个是<code>random()</code>,还有一个是<code>arc4random()</code>,以及专门生成浮点的<code>srand48(Int)</code>和<code>drand48()</code>.<br>这些方法并没有进行封装,其实并不符合面向对象的思想.并且如果想要限制生成的随机数的最大最小值也不得行.因此,我们有必要对他们进行一个封装.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/12/27/在Swift中使用随机数/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
