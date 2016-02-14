@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2016-02-13T14:53:41.000Z</updated>
+  <updated>2016-02-14T02:45:50.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://sunxiang0918.github.io/2016/02/10/Akka-in-JAVA-4/"/>
     <id>http://sunxiang0918.github.io/2016/02/10/Akka-in-JAVA-4/</id>
     <published>2016-02-10T12:35:02.000Z</published>
-    <updated>2016-02-13T14:53:41.000Z</updated>
+    <updated>2016-02-14T02:45:50.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Akka_in_JAVA(四)">Akka in JAVA(四)</h1><p>最后这个部分讲一讲AKKA中的事件消息类型. 在Akka中主要是有三种消息类型,每一种类型对应了不同的使用场景.他们分别是:<code>Fire and Forget模式</code>,<code>Send and Receive模式</code>和<code>Publisher-Subscriber模式</code>.</p>
 <h2 id="Fire_and_Forget模式">Fire and Forget模式</h2><p>这种发送消息的模式是Akka中所推荐的,也是我们前面一直在使用的方式.也就是单向消息模式,Actor在发送消息之后,并不需要获取响应.这种方式在JAVA中需要使用<code>ActorRef</code>或<code>ActorSelection</code>的<code>tell</code>方法.和消息队列类似,直接调用该方法即可,程序不会阻塞,会直接执行后面的操作,但是消息已经发送给目标的Actor了.这种方式的具体使用方法前面已经列举了很多了,这里就不再重复的举例了.</p>
 <h2 id="Send_and_Receive模式">Send and Receive模式</h2><p>这种发送消息的模式是双向的,当Actor在发送消息之后,会接收到一个Future对象.和JAVA的Future一样,通过这个可以异步的接收到对方的结果消息.</p>
@@ -84,6 +84,7 @@
 <p>当执行了这个Demo后,首先会看到的就是和上一篇博客中一样的集群启动和加入的消息.而后会看到每5秒接收到一批Nginx的日志,并发送给Kafka.这时可以通过Kafka的客户端看到这些处理后的日志:</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;"<span class="attribute">installid</span>":<span class="value"><span class="string">"0000VACO"</span></span>,"<span class="attribute">imsi</span>":<span class="value"><span class="string">"460012927613645"</span></span>,"<span class="attribute">network</span>":<span class="value"><span class="string">"1"</span></span>,"<span class="attribute">action</span>":<span class="value"><span class="string">"1840"</span></span>,"<span class="attribute">type</span>":<span class="value"><span class="string">"1"</span></span>,"<span class="attribute">eventdate</span>":<span class="value"><span class="string">"2015-08-21 18:29:19"</span></span>,"<span class="attribute">realip</span>":<span class="value"><span class="string">"61.175.219.69"</span></span>&#125;</span><br><span class="line">&#123;"<span class="attribute">installid</span>":<span class="value"><span class="string">"0000kcpz"</span></span>,"<span class="attribute">sessionid</span>":<span class="value"><span class="string">"cbc7bbb560914c374cb7a29eef8c21441440152816008"</span></span>,"<span class="attribute">operator</span>":<span class="value"><span class="string">"1"</span></span>,"<span class="attribute">timestamp</span>":<span class="value"><span class="string">"1440152873"</span></span>,"<span class="attribute">eventcode</span>":<span class="value"><span class="string">"200003"</span></span>,"<span class="attribute">radioid</span>":<span class="value"><span class="string">"1100000046018"</span></span>,"<span class="attribute">eventdate</span>":<span class="value"><span class="string">"2015-08-21 18:29:19"</span></span>,"<span class="attribute">realip</span>":<span class="value"><span class="string">"119.128.106.232"</span></span>&#125;</span><br><span class="line">&#123;"<span class="attribute">installid</span>":<span class="value"><span class="string">"0000lAOX"</span></span>,"<span class="attribute">sessionid</span>":<span class="value"><span class="string">"25371384b2eb1a5dc5643e14626ecbd41440152875362"</span></span>,"<span class="attribute">operator</span>":<span class="value"><span class="string">"1"</span></span>,"<span class="attribute">timestamp</span>":<span class="value"><span class="string">"1440152954"</span></span>,"<span class="attribute">eventcode</span>":<span class="value"><span class="string">"300039"</span></span>,"<span class="attribute">eventdate</span>":<span class="value"><span class="string">"2015-08-21 18:29:19"</span></span>,"<span class="attribute">realip</span>":<span class="value"><span class="string">"121.25.190.146"</span></span>&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="总结">总结</h2><p>经过这四篇的博客,简单的介绍了一下Akka是什么,大概的用处是什么,以及Akka在JAVA中该如何的使用.由于篇幅以及本人经验的原因,还有很多都没有讲到,以后如有涉及,再慢慢的补上.总之,Akka是一个非常强大的框架,在现在大数据,高性能,分布式的环境下可以发挥很多的作用,各位可以试一试.</p>
+<p>PS:本系列文章中所有的Demo的源码已上传至<a href="https://github.com/sunxiang0918/AkkaDemo" target="_blank" rel="external">GitHub</a>中.</p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h1 id="Akka_in_JAVA(四)">Akka in JAVA(四)</h1><p>最后这个部分讲一讲AKKA中的事件消息类型. 在Akka中主要是有三种消息类型,每一种类型对应了不同的使用场景.他们分别是:<code>Fire and Forget模式</code>,<code>Send and Receive模式</code>和<code>Publisher-Subscriber模式</code>.</p>
