@@ -198,6 +198,68 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-74个Swift标准库函数" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/25/74个Swift标准库函数/" class="article-date">
+  	<time datetime="2015-03-25T14:33:03.000Z" itemprop="datePublished">2015-03-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/25/74个Swift标准库函数/">&lt;转&gt;74个Swift标准库函数</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="74个Swift标准库函数">74个Swift标准库函数</h1><blockquote>
+<p>本文译自 <a href="http://practicalswift.com/2014/06/14/the-swift-standard-library-list-of-built-in-functions/">Swift Standard Library: Documented and undocumented built-in functions in the Swift standard library – the complete list with all 74 functions</a>。我不是原作者，我只是勤劳的翻译工：）文中作者没有提及他是如何发现这么多未在文档中体现的内置函数的，估计是反编译的结果。我测试了好多个都能用，而且Xcode还会给出语法提示：）</p>
+</blockquote>
+<p>Swift包含了74个内置函数，但在<code>The Swift Programming Langage</code>一书中只介绍了其中的7个，其它的都没有在文档中体现。</p>
+<p>这篇文章列举出了所有的内置Swift函数。文中所谓的<code>内置函数</code>是指无需引入任何模块（比如说Fundation等）即可以直接使用的函数。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/03/25/74个Swift标准库函数/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-GIT-两个仓库的合并" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -777,66 +839,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2014/06/27/记一次JVM优化过程/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Jboss4控制台加锁" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/05/18/Jboss4控制台加锁/" class="article-date">
-  	<time datetime="2014-05-18T06:10:01.000Z" itemprop="datePublished">2014-05-18</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/05/18/Jboss4控制台加锁/">Jboss4控制台加锁</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Jboss4控制台加锁">Jboss4控制台加锁</h1><p>由于Jboss服务器默认的情况下,可以通过远程的方式登陆控制台,然后关闭卸载服务.这对于真正的线上服务来说是非常危险的操作,哪怕是在电视台内部的局域网也是如此.因此,需要给JBOSS控制台加上密码.</p>
-<h2 id="隐藏访问目录">隐藏访问目录</h2><p>这一步主要是隐藏控制台的访问目录.<br>具体是修改:<code>jboss_home/server/default/deploy/jbossweb-tomcat55.sar/conf/web.xml</code>文件:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">param-name</span>&gt;</span>listings<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">param-value</span>&gt;</span>false<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span></span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JBOSS/">JBOSS</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/05/18/Jboss4控制台加锁/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

@@ -198,6 +198,67 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Swift-LOG输出" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/12/30/Swift-LOG输出/" class="article-date">
+  	<time datetime="2015-12-30T14:17:30.000Z" itemprop="datePublished">2015-12-30</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/30/Swift-LOG输出/">&lt;转&gt;Swift-LOG输出</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="LOG输出">LOG输出</h1><p>Log 输出是程序开发中很重要的组成部分，虽然它并不是直接的业务代码，但是却可以忠实地反映我们的程序是如何工作的，以及记录程序运行的过程中发生了什么。</p>
+<p>在 Swift 中，最简单的输出方法就是使用 print，在我们关心的地方输出字符串和值。但是这并不够，试想一下当程序变得非常复杂的时候，我们可能会输出很多内容，而想在其中寻找到我们希望的输出其实并不容易。我们往往需要更好更精确的输出，这包括输出这个 log 的文件，调用的行号以及所处的方法名字等等。</p>
+<p>我们当然可以在 print 的时候将当前的文件名字和那些必要的信息作为参数同我们的消息一起进行打印：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Test.swift</span></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">method</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"文件名:Test.swift, 方法名:method，这是一条输出"</span>)</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/12/30/Swift-LOG输出/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-在Swift中使用随机数" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -719,68 +780,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/11/24/Swift中使用NSUserDefaults保存自定义对象/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Docker1-9新特性-跨物理机的多容器网络连接" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/11/09/Docker1-9新特性-跨物理机的多容器网络连接/" class="article-date">
-  	<time datetime="2015-11-09T13:47:08.000Z" itemprop="datePublished">2015-11-09</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/11/09/Docker1-9新特性-跨物理机的多容器网络连接/">Docker1.9新特性-跨物理机的多容器网络连接</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Docker1-9新特性-跨物理机的多容器网络连接">Docker1.9新特性-跨物理机的多容器网络连接</h1><p>近日，Docker公司正式发布Docker 1.9版本。他带来了很多新的特性,其中最重要的新特性无疑就是多宿主机互联功能.</p>
-<p>在今年6月份的DockerCon上，互联曾经作为测试版本的特性被提出。目前，该特性正式集成在了Docker引擎的稳定版中，并将在产品中使用。其主要功能是为跨宿主机创建Docker引擎中的虚拟网络提供支持。用户可以把其所属的容器挂载到网络中，并控制网络拓扑和通信方式。此外，系统还允许用户在不修改应用的情况下直接与任何网络进行集成。</p>
-<p>那么,我们现在就来试一试如何简单的实现多宿主机互联功能.</p>
-<h2 id="原理">原理</h2><p>Docker新的网络拓扑是采用的<code>overlay network</code>模式的网络.<br>它需要一个分布式的<code>Key-Value Storage</code>作为辅助的存储.当前Docker支持<code>Consul</code>,<code>Etcd</code>和<code>ZooKeeper</code>.当创建网络之前,你首先是需要安装并运行<code>KVS</code>.然后在启动Docker的时候加上一定的参数,这样Docker就会把网络拓扑信息保存在<code>KVS</code>上,形成全局唯一的网络.</p>
-<p><img src="/img/2015/11/09/1.png" alt=""></p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/11/09/Docker1-9新特性-跨物理机的多容器网络连接/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

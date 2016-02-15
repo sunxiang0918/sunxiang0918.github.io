@@ -198,6 +198,99 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Swift中基本数据类型与NSData转换" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/15/Swift中基本数据类型与NSData转换/" class="article-date">
+  	<time datetime="2016-02-15T10:01:21.000Z" itemprop="datePublished">2016-02-15</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/02/15/Swift中基本数据类型与NSData转换/">Swift中基本数据类型与NSData转换</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Swift中基本数据类型与NSData转换">Swift中基本数据类型与NSData转换</h1><p>最近由于程序的需要,要与JAVA的服务端进行Socket的交互,那么这就牵涉到了数据的交互.Socket的数据交互一般都是直接采用二进制Bytes的方式来传递,那么就需要把Swift中的各种基本数据转换成为JAVA服务器可以认可的Bytes字节数组,以及把JAVA的字节数组反序列化为Swift中的基本数据.</p>
+<h2 id="big-endian_and_little-endian">big-endian and little-endian</h2><p>要在不同程序中进行字节数组的数据交换,有个很重要的东西就是<code>字节序</code>.<code>字节序</code>顾名思义就是字节的顺序,也就是大于1个字节类型的数据在内存中存放的顺序.这个在跨平台以及网络程序交互中非常的重要.</p>
+<p>常见的字节序主要有两类:<code>Big-Endian</code>和<code>Little-Endian</code>.它们的定义为:</p>
+<ul>
+<li>Big-Endian:高位字节排放在内存的低地址端,地位字节排放在内存的高地址端.</li>
+<li>Little-Endian:地位字节排放在内存的低地址端,高位字节排放在内存的高地址端.<br>这样说可能比较抽象,我们来举个例子就非常清楚了:<br>比如一个32位的Int类型数据: <code>let a = Int32(2)</code>分别采用<code>Big-Endian</code>和<code>Little-Endian</code>的情况如下:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字节号</th>
+<th style="text-align:center">0</th>
+<th style="text-align:center">1</th>
+<th style="text-align:center">2</th>
+<th style="text-align:center">3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Big-endian</td>
+<td style="text-align:center">00</td>
+<td style="text-align:center">00</td>
+<td style="text-align:center">00</td>
+<td style="text-align:center">02</td>
+</tr>
+<tr>
+<td style="text-align:center">Little-Endian</td>
+<td style="text-align:center">02</td>
+<td style="text-align:center">00</td>
+<td style="text-align:center">00</td>
+<td style="text-align:center">00</td>
+</tr>
+</tbody>
+</table>
+<p>也就是他们两个是相反的.<code>Big-Endian</code>和<code>Little-Endian</code>跟CPU的指令有关,每一种CPU不是<code>Big-Endian</code>就是<code>Little-Endian</code>.常见的IA架构的CPU,比如Intel或AMD的都是使用的<code>Little-Endian</code>,而PowerPC活着SPARC的处理器则是<code>Big-Endian</code>的.而在互联网的网络交互以及TCP协议中使用的是<code>Big-Endian</code>,JAVA的虚拟机中的字节序是<code>Big-Endian</code>的.而Swift由于是运行在IA架构的CPU上的,因此,它的字节序是<code>Little-Endian</code>的.</p>
+<p>正是由于运行在X86上的<code>Swift</code>和<code>JAVA</code>的字节序是相反的,因此,它们两个进行跨语言的网络数据交互的时候,就需要对数据进行字节序的转换.否则就会出现数据读取错误的情况,比如用<code>JAVA</code>采用<code>Big-Endian</code>序的Int32<code>02000000</code>,<code>Swift</code>采用<code>Little-Endian</code>序解析出来是<code>33554432</code>而不是期望的<code>2</code>.</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/02/15/Swift中基本数据类型与NSData转换/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-Akka-in-JAVA-4" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -810,67 +903,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/12/31/再见2015/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Swift-LOG输出" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/12/30/Swift-LOG输出/" class="article-date">
-  	<time datetime="2015-12-30T14:17:30.000Z" itemprop="datePublished">2015-12-30</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/30/Swift-LOG输出/">&lt;转&gt;Swift-LOG输出</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="LOG输出">LOG输出</h1><p>Log 输出是程序开发中很重要的组成部分，虽然它并不是直接的业务代码，但是却可以忠实地反映我们的程序是如何工作的，以及记录程序运行的过程中发生了什么。</p>
-<p>在 Swift 中，最简单的输出方法就是使用 print，在我们关心的地方输出字符串和值。但是这并不够，试想一下当程序变得非常复杂的时候，我们可能会输出很多内容，而想在其中寻找到我们希望的输出其实并不容易。我们往往需要更好更精确的输出，这包括输出这个 log 的文件，调用的行号以及所处的方法名字等等。</p>
-<p>我们当然可以在 print 的时候将当前的文件名字和那些必要的信息作为参数同我们的消息一起进行打印：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Test.swift</span></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">method</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"文件名:Test.swift, 方法名:method，这是一条输出"</span>)</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/12/30/Swift-LOG输出/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
