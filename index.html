@@ -198,6 +198,78 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Swift中使用NSStream" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/20/Swift中使用NSStream/" class="article-date">
+  	<time datetime="2016-02-20T07:11:41.000Z" itemprop="datePublished">2016-02-20</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/02/20/Swift中使用NSStream/">Swift中使用NSStream</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Swift中使用NSStream">Swift中使用NSStream</h1><p>因为我的开源项目<a href="https://github.com/sunxiang0918/zkClient4Swift">zkClient4Swift</a>的需要,要在Swift连接Socket,因此涉及到了使用NSStream来进行网络的流交互.特此把使用的过程整理出来供大家参考.</p>
+<h2 id="流交互">流交互</h2><p>通常在跨语言的交互中,由于语言对于数据结构的存储是不一样的,因此,会使用流的方式来进行交互.流交互方式与语言和设备无关.流是在通信隧道中串行传输的连续的比特位序列.从编码的角度来说,流是单向同步的.因此,一般流都分为了输入流(InputStream)和输出流(OutputStream).这些流的数据通常只能使用一次,消耗完后,就无法从流对象中再次的获取或写入.</p>
+<h2 id="Swift中的流">Swift中的流</h2><p>在Swift中,与流相关的主要是三个类:<code>NSStream</code>,<code>NSInputStream</code>,<code>NSOutputStream</code>.除开<code>NSStream</code>是一个抽象的基类外,剩下的两个类分别对应了输入流和输出流的所有属性和操作.</p>
+<p>在<code>NSInputStream</code>或<code>NSOutputStream</code>中,可以对<code>文件</code>,<code>Socket</code>,<code>NSData</code>中获取数据.由于我这次是进行网络交互,因此,主要说下针对<code>Socket</code>进行的操作.</p>
+<p><code>NSStream</code>对象中有一个属性<code>delegate</code>用来指定流事件的代理对象,这个也是整个<code>NSStream</code>最总要的方法.我们可以自己实现<code>NSStreamDelegate</code>协议并复制给<code>NSInputStream</code>或<code>NSOutputStream</code>的<code>delegate</code>属性,每当有流事件的时候,就会调用<code>NSStreamDelegate</code>协议的<code>public func stream(aStream: NSStream, handleEvent eventCode: NSStreamEvent)</code>方法实现,从而处理流相关的所有处理.</p>
+<p>而对于输入流来说,我们可以使用<code>public func read(buffer: UnsafeMutablePointer&lt;UInt8&gt;, maxLength len: Int) -&gt; Int</code>方法来获取数据.<br>而对于输出流来说,我们可以使用<code>public func write(buffer: UnsafePointer&lt;UInt8&gt;, maxLength len: Int) -&gt; Int</code>方法来写入数据.</p>
+<p>对于<code>NSStreamDelegate</code>协议的<code>public func stream(aStream: NSStream, handleEvent eventCode: NSStreamEvent)</code>方法,主要是需要了解<code>NSStreamEvent</code>事件类型,它们主要有:</p>
+<ul>
+<li><strong>None</strong> : </li>
+<li><strong>OpenCompleted</strong> : 当连接创建完毕时触发</li>
+<li><strong>HasBytesAvailable</strong> : 当有数据可读取时触发</li>
+<li><strong>HasSpaceAvailable</strong> : 当可以发送数据时触发</li>
+<li><strong>ErrorOccurred</strong> : 当出现错误时触发</li>
+<li><strong>EndEncountered</strong> : 当连接结束时触发</li>
+</ul>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/02/20/Swift中使用NSStream/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-Swift中基本数据类型与NSData转换" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -843,66 +915,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2016/01/02/在IOS中使用swift调用系统相机/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-再见2015" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/12/31/再见2015/" class="article-date">
-  	<time datetime="2015-12-31T14:13:48.000Z" itemprop="datePublished">2015-12-31</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/31/再见2015/">再见2015</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="再见2015">再见2015</h1><p>时光匆匆,转眼2015年就要过去了.2015开年的事情仿佛刚过去没有多久,2016又要来了.今年是忙碌的一年,不管是在生活上还是在工作上都发生了很多的变化.本文将回顾一下作为程序猿的自己在今年的成长,做一个简单的总结.</p>
-<h2 id="博客">博客</h2><p>今年年中,自己在github.io上搭建了自己的个人博客,并且把以前的一些文章从evernote上迁移了过来.以前,从来没有写博客的习惯,一个是觉得写博客比较麻烦,因为可能不是自己一个人看,不能像在evernote上那样随便乱写.还有一个就是觉得东西有个地方保存就好了,没必要分享出来.不过,最后还是决定把博客搭建出来,既能锻炼自己的书写,也能强迫自己把东西记录的更规范更细致,最后也能分享给有需要的人.从事了5年的软件行业了,渐渐的开始理解开源人的心态了,也从各位开源的大神中得到了很多的好处,是时候把自己力所能及的东西分享出来了.</p>
-<p>今年一共写了<a href="/archives/2015">43篇博客</a>,从数量上来说不算多.主要涉及的是<code>JAVA研发体系</code>以及<code>Swift</code>方面的内容.<br>对于明年,目标是60篇博客,内容上更有深度与广度.希望能够达成.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/其他/">其他</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/12/31/再见2015/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

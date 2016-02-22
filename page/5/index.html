@@ -198,6 +198,74 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Swift-2-0-新特性" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/04/Swift-2-0-新特性/" class="article-date">
+  	<time datetime="2015-08-04T13:35:51.000Z" itemprop="datePublished">2015-08-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/04/Swift-2-0-新特性/">Swift 2.0 新特性</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Swift_2-0_新特性">Swift 2.0 新特性</h1><p><code>Swift2.0</code> 算是一个大得版本更新.新增或修改了很多的特性.出来这么久了,我也把我练手写的知乎日报全部转换成了<code>Swfit2.0</code>.其中还是遇到了一些问题.因此,趁有空,就尝试总结一下<code>Swift2.0</code>的一些新特性或新的变化.</p>
+<p>PS:本文写的时候采用的是 Swift2.0+Xcode7 beta4 的环境.</p>
+<h2 id="1-guard语句">1.guard语句</h2><p><code>Swift2.0</code>中新引入了一个关键字<code>guard</code>用于条件的判断处理.它和<code>if</code>语句比较类似,都是通过一个<code>boolean</code>值来决定流程的走向.但是与<code>if</code>语句不同的是.<code>guard</code>语句只会有一个代码块.没有像<code>if else</code>那样有多个<code>guard else</code>.</p>
+<p>那么<code>guard</code>到底有何作用呢?<code>guard</code>允许在一个代码周期中提前退出.也就是说,在<code>guard</code>关键字后接一个布尔表达式,只有当值为<code>false</code>的时候,才会执行<code>else</code>后的内容.如果值为<code>true</code>,那么就跳过这个<code>guard</code>代码块.</p>
+<p><code>guard</code>语句最常见的用法就是替代<code>if</code>做参数的合法性校验.<br>比如在以前:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">doSomeThing</span><span class="params">(a:String?,b:String?)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>	<span class="keyword">let</span> _a = a &#123;</span><br><span class="line">		<span class="keyword">if</span>	<span class="keyword">let</span> _b = b &#123;</span><br><span class="line">			<span class="built_in">print</span>(<span class="string">"<span class="subst">\(_a)</span>:<span class="subst">\(_b)</span>"</span>)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// print("\(_a):(_b)")  //这个地方不能访问_a和_b</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>向上面的例子那样,如果每一个参数都使用<code>if</code>语句来判断,那么这样的代码写起来非常的繁琐.读起来也不是很清晰.基于这种的情况,<code>Swift2.0</code>增加了<code>guard</code>关键字.把上面的代码改成使用<code>guard</code>的写法就会成这样:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">doSomeThing2</span><span class="params">(a:String?,b:String?)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    guard <span class="keyword">let</span> _a = a <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    guard <span class="keyword">let</span> _b = b <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"<span class="subst">\(_a)</span>:<span class="subst">\(_b)</span>"</span>)	<span class="comment">//这个地方是可以访问_a和_b</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样写比起以前使用<code>if</code>来做判断,代码的可读性更强了.并且<code>Optaion</code>类型的变量的解包可以在全局可见了.这在网络编程中解析JSON等是非常有用的.</p>
+<p><code>guard</code>除了用于入参的校验和可选类型的解包外.还可以用于抛出异常以及结合<code>available</code>做函数的检查:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">guard name != <span class="literal">nil</span> <span class="keyword">else</span> &#123;</span><br><span class="line">	throw <span class="type">IllegalArgumentException</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">guard #available(iOS <span class="number">8</span>, *) <span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/04/Swift-2-0-新特性/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-swift中多线程的使用方法" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -767,72 +835,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/06/05/使用JMeter进行压力测试/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Swift扩展的三个微妙细节" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/05/18/Swift扩展的三个微妙细节/" class="article-date">
-  	<time datetime="2015-05-18T13:55:14.000Z" itemprop="datePublished">2015-05-18</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/18/Swift扩展的三个微妙细节/">&lt;转&gt;Swift扩展的三个微妙细节</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Swift扩展的三个微妙细节">Swift扩展的三个微妙细节</h1><p>每当我初次翻看某文档时，我都走马观花似的快速阅过，还一边点着头一边喃喃自语说：“好！懂了，就这么回事！”，可是过后当我真正要运用到这些我以为已经理解了的知识点时，却发现实际情况和我想的往往不一样，每当这时我就懵了，心想：“哇哦…怎么回事？这和我想的完全不一样啊！文档里有说这事吗？”。</p>
-<p>最近的几次讨论促使我扪心自问是否真正的理解了Swift中的扩展。我阅读过关于扩展的文档，并且我“认为”我自己对这块内容已经是理解的相当透彻了。可是这几次讨论，加上自己私下通过敲代码的验证，让我发现了我原先不曾注意到几个微妙的细节。</p>
-<p>更新：这篇文章刚一发表，Swift社区就出手襄助并帮助我弄明白了我最根本的纠结点在哪。为此，我写了另一篇文章“<a href="http://www.andrewcbancroft.com/2015/04/24/clarifying-swift-access-control-hint-swift-isnt-c-sharp/">阐明Swift访问控制</a>”进一步说明我之前的误解。为了避免犯我曾今犯过的错误，我建议大家去读一读。</p>
-<h2 id="三个关于扩展的微妙细节">三个关于扩展的微妙细节</h2><p>对下面列出的三个细节的思考严重挑战了我之前对Swift扩展的理解：</p>
-<ol>
-<li>Swift扩展对它所扩展类型的<strong>visibility</strong>。比如，扩展能访问被<code>private</code>所修饰的内容吗?</li>
-<li>定义扩展的位置是否对扩展的<strong>visibility</strong>有影响。比如我这有一个类型我想写个扩展，把扩展写在同一个源文件里和把扩展写在另一个文件里有什么区别吗？</li>
-<li>扩展里“成员”的默认访问修饰符以及是否给他们添加修饰对这个扩展作为一个类型的公共接口的影响。</li>
-</ol>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/05/18/Swift扩展的三个微妙细节/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

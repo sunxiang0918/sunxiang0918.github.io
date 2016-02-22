@@ -198,6 +198,71 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-记一次JVM优化过程" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/06/27/记一次JVM优化过程/" class="article-date">
+  	<time datetime="2014-06-27T02:29:56.000Z" itemprop="datePublished">2014-06-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/06/27/记一次JVM优化过程/">记一次JVM优化过程</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="记一次JVM优化过程">记一次JVM优化过程</h1><h2 id="问题的引出">问题的引出</h2><p>在多个系统环境中都出现了我们的DCMP在运行过程中突然停止响应,并且时间长达几分钟至几十分钟之久.期间DCMP任何功能都无法运行.严重的影响了系统的运行.因此需要分析排查问题的原因</p>
+<h2 id="解决思路">解决思路</h2><p>经过最初步的分析,发现是DCMP在运行一段时间后,会执行<code>FullGC</code>. 在FullGC的过程中整个系统会停止一切响应.因此,解决该问题的思路,就是分析出DCMP平凡进行<code>FullGC</code>的原因.然后进行优化</p>
+<h2 id="分析过程">分析过程</h2><ol>
+<li><p>在DCMP运行的过程中,通过windows任务管理器找到进程的<code>PID</code>.然后调用JDK自带的命令: </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ jstat –gcutil PID 重复次数 间隔时间</span><br></pre></td></tr></table></figure>
+<p> 获取当前JVM的内存信息:<br> <img src="/img/2014/06/27/1.png" alt=""><br> 他上面标识了JVM中每一个区的说占用百分比.</p>
+</li>
+</ol>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2014/06/27/记一次JVM优化过程/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-Jboss4控制台加锁" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">

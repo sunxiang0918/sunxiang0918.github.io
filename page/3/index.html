@@ -198,6 +198,67 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Swift中使用NSUserDefaults保存自定义对象" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/11/24/Swift中使用NSUserDefaults保存自定义对象/" class="article-date">
+  	<time datetime="2015-11-24T03:32:07.000Z" itemprop="datePublished">2015-11-24</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/11/24/Swift中使用NSUserDefaults保存自定义对象/">Swift中使用NSUserDefaults保存自定义对象</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Swift中使用NSUserDefaults保存自定义对象">Swift中使用NSUserDefaults保存自定义对象</h1><p>NSUserDefaults适合存储轻量级的本地客户端数据,比如保存一些系统的基本配置等东西,使用NSUserDefaults是首选,它非常的简单,不依赖其他的什么东西,屏蔽了Plist文件的读写等等.</p>
+<p>但是NSUserDefaults支持的数据格式比较有限,只支持了<code>Int</code>、<code>Float</code>、<code>Double</code>，<code>String</code>，<code>NSDate</code>，<code>NSArray</code>，<code>NSDictionary</code>，<code>Bool</code>.不支持自定义对象的存取.</p>
+<p>这个特性对于简单的数值来说还算比较容易.只需要简单的操作(一个Value 一个Key ),例如，想要保存一个NSString的对象，代码实现为：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//存</span></span><br><span class="line"><span class="type">NSUserDefaults</span>.standardUserDefaults().setInteger(<span class="number">10</span>, forKey: <span class="string">"aaa"</span>)</span><br><span class="line"><span class="comment">//取</span></span><br><span class="line"><span class="type">NSUserDefaults</span>.standardUserDefaults().integerForKey(<span class="string">"aaaa"</span>)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/11/24/Swift中使用NSUserDefaults保存自定义对象/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-Docker1-9新特性-跨物理机的多容器网络连接" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -812,72 +873,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/10/03/Redis集群部署/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Kafka集群部署" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/09/28/Kafka集群部署/" class="article-date">
-  	<time datetime="2015-09-28T14:12:16.000Z" itemprop="datePublished">2015-09-28</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/28/Kafka集群部署/">Kafka集群部署</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Kafka集群">Kafka集群</h1><p>Kafka作为新一代的消息系统,最初是由LinkedIn公司开发,之后开源成为Apache的顶级项目.<br>它与传统的消息系统相比,有以下不同:</p>
-<ul>
-<li>它被设计为一个分布式系统，易于向外扩展；</li>
-<li>它同时为发布和订阅提供高吞吐量；</li>
-<li>它支持多订阅者，当失败时能自动平衡消费者；</li>
-<li>它将消息持久化到磁盘，因此可用于批量消费，例如ETL，以及实时应用程序。</li>
-</ul>
-<p>同时.Kafka提供了多种客户端的Driver.这点比阿里的<code>RocketMQ</code>要好.而阿里的RocketMQ在性能和使用方面优于Kafka,不过只提供JAVA的客户端.</p>
-<p>而我们系统中不光只有JAVA应用,因此,在我们的系统中,决定使用kafka作为我们的消息服务.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kafka/">Kafka</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/集群/">集群</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/09/28/Kafka集群部署/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

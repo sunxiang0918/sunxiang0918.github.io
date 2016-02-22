@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Swift中使用NSStream | 翔妖除魔的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Swift中使用NSStream因为我的开源项目zkClient4Swift的需要,要在Swift连接Socket,因此涉及到了使用NSStream来进行网络的流交互.特此把使用的过程整理出来供大家参考.
+流交互通常在跨语言的交互中,由于语言对于数据结构的存储是不一样的,因此,会使用流的方式来进行交互.流交互方式与语言和设备无关.流是在通信隧道中串行传输的连续的比特位序列.从编码的角度来说,流是单">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift中使用NSStream">
+<meta property="og:url" content="http://sunxiang0918.github.io/2016/02/20/Swift中使用NSStream/index.html">
+<meta property="og:site_name" content="翔妖除魔的个人博客">
+<meta property="og:description" content="Swift中使用NSStream因为我的开源项目zkClient4Swift的需要,要在Swift连接Socket,因此涉及到了使用NSStream来进行网络的流交互.特此把使用的过程整理出来供大家参考.
+流交互通常在跨语言的交互中,由于语言对于数据结构的存储是不一样的,因此,会使用流的方式来进行交互.流交互方式与语言和设备无关.流是在通信隧道中串行传输的连续的比特位序列.从编码的角度来说,流是单">
+<meta property="og:updated_time" content="2016-02-22T14:16:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Swift中使用NSStream">
+<meta name="twitter:description" content="Swift中使用NSStream因为我的开源项目zkClient4Swift的需要,要在Swift连接Socket,因此涉及到了使用NSStream来进行网络的流交互.特此把使用的过程整理出来供大家参考.
+流交互通常在跨语言的交互中,由于语言对于数据结构的存储是不一样的,因此,会使用流的方式来进行交互.流交互方式与语言和设备无关.流是在通信隧道中串行传输的连续的比特位序列.从编码的角度来说,流是单">
+  
+    <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4dca9e623f7fdea5fb0b76cf874ec84f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">翔妖除魔</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+					        
+								<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Akka/" style="font-size: 14.29px;">Akka</a> <a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 14.29px;">Docker</a> <a href="/tags/GIT/" style="font-size: 12.86px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.43px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.43px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.43px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.43px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.43px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 14.29px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 12.86px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Nutch/" style="font-size: 10px;">Nutch</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18.57px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.43px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 11.43px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 17.14px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/日志挖掘/" style="font-size: 10px;">日志挖掘</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15.71px;">集群</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://fedcuit.github.io">尔东的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://chensunhao.github.io">沉寂头颅的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">85后码农一枚,主攻JAVA,辅助Swift.对检索,大数据,软件架构,IOS有浓厚兴趣.苹果脑残粉...</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">翔妖除魔</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://cn.gravatar.com/userimage/59576603/20a4c13c78880c762190780266641c8e.jpg?size=200" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">翔妖除魔</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="oschina" target="_blank" href="https://git.oschina.net/xycm" title="oschina">oschina</a>
+			        
+						<a class="github" target="_blank" href="https://github.com/sunxiang0918" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/shou-son" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:sunxiang0918@gmail.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Swift中使用NSStream" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/20/Swift中使用NSStream/" class="article-date">
+  	<time datetime="2016-02-20T07:11:41.000Z" itemprop="datePublished">2016-02-20</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Swift中使用NSStream
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <div id="toc" class="article-toc">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Swift中使用NSStream"><span class="toc-number">1.</span> <span class="toc-text">Swift中使用NSStream</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#流交互"><span class="toc-number">1.1.</span> <span class="toc-text">流交互</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Swift中的流"><span class="toc-number">1.2.</span> <span class="toc-text">Swift中的流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用NSInputStream读取数据"><span class="toc-number">1.3.</span> <span class="toc-text">使用NSInputStream读取数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#从数据源中创建和初始化一个NSInputStream"><span class="toc-number">1.3.1.</span> <span class="toc-text">从数据源中创建和初始化一个NSInputStream</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将InputStream实例放入一个runloop中,并打开流"><span class="toc-number">1.3.2.</span> <span class="toc-text">将InputStream实例放入一个runloop中,并打开流</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用scheduleInRunLoop:forMode:"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">使用scheduleInRunLoop:forMode:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用CFReadStreamSetDispatchQueue"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">使用CFReadStreamSetDispatchQueue</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#处理流对象的事件代理"><span class="toc-number">1.3.3.</span> <span class="toc-text">处理流对象的事件代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从NSInputStream中读取数据"><span class="toc-number">1.3.4.</span> <span class="toc-text">从NSInputStream中读取数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#当完成数据读取时,关闭并销毁流对象"><span class="toc-number">1.3.5.</span> <span class="toc-text">当完成数据读取时,关闭并销毁流对象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用NSOutputStream写入数据"><span class="toc-number">1.4.</span> <span class="toc-text">使用NSOutputStream写入数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流的错误处理"><span class="toc-number">1.5.</span> <span class="toc-text">流的错误处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流的其他设置"><span class="toc-number">1.6.</span> <span class="toc-text">流的其他设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.7.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+          <hr/>
+        </div>
+        
+        
+        <h1 id="Swift中使用NSStream">Swift中使用NSStream</h1><p>因为我的开源项目<a href="https://github.com/sunxiang0918/zkClient4Swift" target="_blank" rel="external">zkClient4Swift</a>的需要,要在Swift连接Socket,因此涉及到了使用NSStream来进行网络的流交互.特此把使用的过程整理出来供大家参考.</p>
+<h2 id="流交互">流交互</h2><p>通常在跨语言的交互中,由于语言对于数据结构的存储是不一样的,因此,会使用流的方式来进行交互.流交互方式与语言和设备无关.流是在通信隧道中串行传输的连续的比特位序列.从编码的角度来说,流是单向同步的.因此,一般流都分为了输入流(InputStream)和输出流(OutputStream).这些流的数据通常只能使用一次,消耗完后,就无法从流对象中再次的获取或写入.</p>
+<h2 id="Swift中的流">Swift中的流</h2><p>在Swift中,与流相关的主要是三个类:<code>NSStream</code>,<code>NSInputStream</code>,<code>NSOutputStream</code>.除开<code>NSStream</code>是一个抽象的基类外,剩下的两个类分别对应了输入流和输出流的所有属性和操作.</p>
+<p>在<code>NSInputStream</code>或<code>NSOutputStream</code>中,可以对<code>文件</code>,<code>Socket</code>,<code>NSData</code>中获取数据.由于我这次是进行网络交互,因此,主要说下针对<code>Socket</code>进行的操作.</p>
+<p><code>NSStream</code>对象中有一个属性<code>delegate</code>用来指定流事件的代理对象,这个也是整个<code>NSStream</code>最总要的方法.我们可以自己实现<code>NSStreamDelegate</code>协议并复制给<code>NSInputStream</code>或<code>NSOutputStream</code>的<code>delegate</code>属性,每当有流事件的时候,就会调用<code>NSStreamDelegate</code>协议的<code>public func stream(aStream: NSStream, handleEvent eventCode: NSStreamEvent)</code>方法实现,从而处理流相关的所有处理.</p>
+<p>而对于输入流来说,我们可以使用<code>public func read(buffer: UnsafeMutablePointer&lt;UInt8&gt;, maxLength len: Int) -&gt; Int</code>方法来获取数据.<br>而对于输出流来说,我们可以使用<code>public func write(buffer: UnsafePointer&lt;UInt8&gt;, maxLength len: Int) -&gt; Int</code>方法来写入数据.</p>
+<p>对于<code>NSStreamDelegate</code>协议的<code>public func stream(aStream: NSStream, handleEvent eventCode: NSStreamEvent)</code>方法,主要是需要了解<code>NSStreamEvent</code>事件类型,它们主要有:</p>
+<ul>
+<li><strong>None</strong> : </li>
+<li><strong>OpenCompleted</strong> : 当连接创建完毕时触发</li>
+<li><strong>HasBytesAvailable</strong> : 当有数据可读取时触发</li>
+<li><strong>HasSpaceAvailable</strong> : 当可以发送数据时触发</li>
+<li><strong>ErrorOccurred</strong> : 当出现错误时触发</li>
+<li><strong>EndEncountered</strong> : 当连接结束时触发</li>
+</ul>
+<a id="more"></a>
+<h2 id="使用NSInputStream读取数据">使用NSInputStream读取数据</h2><p>在Swift中使用<code>NSInputStream</code>读取数据主要有两种方式,一种是使用<code>NSStreamDelegate</code>的事件代理机制,当接收到<code>NSStreamEvent.HasBytesAvailable</code>事件的时候,在事件的响应中使用<code>read</code>方法来获取. 另外一种是直接启动一个永远循环的线程,然后在线程中不断的调用<code>read</code>方法来获取数据即可.一般来说我们推荐使用第一种方式.</p>
+<p>对于第一种方式读取数据主要有以下几个步骤:</p>
+<ol>
+<li>从数据源中创建和初始化一个NSInputStream</li>
+<li>将InputStream实例放入一个runloop中,并打开流</li>
+<li>处理流对象的事件代理</li>
+<li>当完成数据读取时,关闭并销毁流对象</li>
+</ol>
+<p>下面我们分别来说:</p>
+<h3 id="从数据源中创建和初始化一个NSInputStream">从数据源中创建和初始化一个NSInputStream</h3><p>由于我们这篇文章主要讲的是在Socket中使用NSStream.那么我们的数据源就是Socket.</p>
+<p>创建Socket的事件流的方式为:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">private <span class="keyword">var</span> inputStream:<span class="type">NSInputStream</span>?</span><br><span class="line">private <span class="keyword">var</span> outputStream:<span class="type">NSOutputStream</span>?</span><br><span class="line"></span><br><span class="line"><span class="type">NSStream</span>.getStreamsToHostWithName(addr, port: port, inputStream: &amp;inputStream, outputStream: &amp;outputStream)</span><br></pre></td></tr></table></figure>
+<p>因为<code>NSStream</code>其实还是Objective-C的方法签名.因此,后面的inputStream和outputStream的方法入参是类似于<code>C</code>语言方式的指针传入.<br>调用了这个方法后,如果inputStream就应该会有值了,如果没有值,那么就说明Socket没有打开:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">guard <span class="keyword">let</span> inputStream = inputStream,outputStream = outputStream <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//这里说明没有开启流</span></span><br><span class="line">            <span class="keyword">return</span> (<span class="literal">false</span>,<span class="string">"Can not open stream"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就是设置事件的代理:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">inputStream.delegate = <span class="keyword">self</span></span><br></pre></td></tr></table></figure>
+<h3 id="将InputStream实例放入一个runloop中,并打开流">将InputStream实例放入一个runloop中,并打开流</h3><p>由于需要监听InputStream的事件,并异步的进行处理.因此,就需要在其他线程上异步的注册事件处理的操作.这个步骤主要有两种方式来实现:</p>
+<h4 id="使用scheduleInRunLoop:forMode:">使用<code>scheduleInRunLoop:forMode:</code></h4><p>这种方式可能是最常用的方式了,就是直接调用<code>NSStream</code>的<code>public func scheduleInRunLoop(aRunLoop: NSRunLoop, forMode mode: String)</code>方法,把事件回调的代理绑定到某一个RunLoop上.通常的写法为:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> loop = <span class="type">NSRunLoop</span>.currentRunLoop()</span><br><span class="line">inputStream.scheduleInRunLoop(loop, forMode: <span class="type">NSDefaultRunLoopMode</span>)</span><br></pre></td></tr></table></figure>
+<p>这样的话,他就会在当前线程的RunLoop来执行这个<code>schedule</code>.同时,由于一般来说,当前线程都是主线程,那么如果在主线程来进行监听的话.进行命令处理的时候会把主线程阻塞.因此,就需要在调用<code>scheduleInRunLoop</code>的时候启动子线程,让inputStream的<code>schedule</code>在子线程中进行监听:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async(dispatch_get_global_queue(<span class="type">DISPATCH_QUEUE_PRIORITY_HIGH</span>, <span class="number">0</span>)) &#123; () -&gt; <span class="type">Void</span> <span class="keyword">in</span></span><br><span class="line">    <span class="keyword">let</span> loop = <span class="type">NSRunLoop</span>.currentRunLoop()</span><br><span class="line">    inputStream.scheduleInRunLoop(loop, forMode: <span class="type">NSDefaultRunLoopMode</span>)</span><br><span class="line">    inputStream.open()</span><br><span class="line">    loop.run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是最后一句的<code>loop.run()</code>,这个是必须要要的.否则不能阻塞新的异步队列.</p>
+<p>采用这种方式存在一个问题,那就是如果要想关闭<code>NSStream</code>的时候,是没有办法关闭启动的异步线程的.由于我们在异步线程的内部没有进行循环的操作,而是使用<code>loop.run</code>的方式来阻塞的.所以,那怕是使用标志位的方式都是不能结束这个异步loop的.</p>
+<h4 id="使用CFReadStreamSetDispatchQueue">使用<code>CFReadStreamSetDispatchQueue</code></h4><p>针对上一种方式无法关闭的问题,我们可以直接使用<code>CFStream</code>中提供的<code>public func CFReadStreamSetDispatchQueue(stream: CFReadStream!, _ q: dispatch_queue_t!)</code>方法来给<code>NSStream</code>指定异步的队列:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> sharedWorkQueue = dispatch_queue_create(<span class="string">"socketWork.queue"</span>, <span class="type">DISPATCH_QUEUE_CONCURRENT</span>)</span><br><span class="line"></span><br><span class="line"> <span class="type">CFReadStreamSetDispatchQueue</span>(inputStream, sharedWorkQueue)</span><br></pre></td></tr></table></figure>
+<p>它同样可以达到和<code>RunLoop</code>相同的效果.并且他的优势是由于没有显示的启动新的异步线程,使用了异步队列的方式,在我们关闭<code>NSStream</code>的时候就可以做相反的操作即可.</p>
+<h3 id="处理流对象的事件代理">处理流对象的事件代理</h3><p>这个就是实现<code>func stream(aStream: NSStream, handleEvent eventCode: NSStreamEvent)</code>方法即可.我们可以通过<code>switch</code>语法来分别的处理<code>eventCode</code>.然后通过调用<code>NSStream</code>的<code>streamStatus</code>来获取流对象的状态,以及调用<code>streamError</code>来获取流对象可能存在的错误.</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">public <span class="func"><span class="keyword">func</span> <span class="title">stream</span><span class="params">(aStream: NSStream, handleEvent eventCode: NSStreamEvent)</span></span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> (eventCode) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="type">NSStreamEvent</span>.<span class="type">HasSpaceAvailable</span>:</span><br><span class="line">                reconnectionLock.readLock()</span><br><span class="line">                defer&#123;reconnectionLock.readUnlock()&#125;</span><br><span class="line">                hasSpaceAvailableDelegate?(aStream)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">case</span> <span class="type">NSStreamEvent</span>.<span class="type">HasBytesAvailable</span>:</span><br><span class="line">                reconnectionLock.readLock()</span><br><span class="line">                defer&#123;reconnectionLock.readUnlock()&#125;</span><br><span class="line">                hasBytesAvailableDelegate?(aStream)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">case</span> <span class="type">NSStreamEvent</span>.<span class="type">EndEncountered</span>:  </span><br><span class="line">                connected = <span class="literal">false</span></span><br><span class="line">                endEncounteredDelegate?(aStream)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">case</span> <span class="type">NSStreamEvent</span>.<span class="type">ErrorOccurred</span>:</span><br><span class="line">                errorOccurredDelegate?(aStream)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">case</span> <span class="type">NSStreamEvent</span>.<span class="type">OpenCompleted</span>:</span><br><span class="line">                <span class="keyword">if</span> aStream <span class="keyword">is</span> <span class="type">NSInputStream</span> &#123;</span><br><span class="line">                    inputLock.writeUnlock()</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> aStream <span class="keyword">is</span> <span class="type">NSOutputStream</span> &#123;</span><br><span class="line">                    outputLock.writeUnlock()</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"接收到事件:<span class="subst">\(eventCode)</span> :<span class="subst">\(aStream)</span>"</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>我这个例子里面使用了闭包来处理事件的响应,其实完全是可以把事件的响应直接写到这个函数中的.</p>
+<h3 id="从NSInputStream中读取数据">从NSInputStream中读取数据</h3><p>从NSInputStream中读取数据需要使用<code>public func read(buffer: UnsafeMutablePointer&lt;UInt8&gt;, maxLength len: Int) -&gt; Int</code>方法,他的入参是一个[UInt8]的指针以及期望读取的长度,返回值是实际读取的字节数.因此,我们通常需要预先的初始化一个<code>UInt8</code>的数组,并根据<code>maxLength</code>赋初始值,然后调用<code>read</code>方法来填充这个<code>UInt8</code>的数组,并进行返回:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> buff:[<span class="type">UInt8</span>] = [<span class="type">UInt8</span>](<span class="built_in">count</span>:expectlen,repeatedValue:<span class="number">0x0</span>)</span><br><span class="line">     </span><br><span class="line">     <span class="keyword">let</span> len = inputStream.read(&amp;buff, maxLength: expectlen)</span><br><span class="line">     </span><br><span class="line">     <span class="keyword">if</span> len &gt; <span class="number">0</span> &#123;</span><br><span class="line">         <span class="keyword">let</span> result = buff[<span class="number">0</span>..&lt;len]</span><br><span class="line">         <span class="keyword">return</span> <span class="type">Array</span>(result)</span><br><span class="line">     &#125;</span><br><span class="line">     </span><br><span class="line">     <span class="built_in">print</span>(<span class="string">"读取出来的len为0,错误:<span class="subst">\(inputStream.streamError)</span>"</span>)</span><br><span class="line">     </span><br><span class="line">     <span class="keyword">return</span> <span class="literal">nil</span></span><br></pre></td></tr></table></figure>
+<p>当然,在Swift中,<code>NSData</code>类型通常会比<code>[UInt8]</code>类型有更多的使用场景,那么就牵涉到<code>[UInt8]</code>和<code>NSData</code>类型之间的转换了.由于<code>[UInt8]</code>其实就是一个字节数组,因此完全可以使用<code>NSData(bytes:UnsafePointer&lt;Void&gt;,length:Int)</code>的方式进行初始化的,为了方便书写,我们可以写一个NSData的扩展:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">extension</span> <span class="title">NSData</span> </span>&#123;</span><br><span class="line">	convenience <span class="keyword">init</span>(<span class="keyword">var</span> uints:[<span class="type">UInt8</span>]) &#123;</span><br><span class="line">        <span class="keyword">self</span>.<span class="keyword">init</span>(bytes:&amp;uints,length:uints.<span class="built_in">count</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样就可以把从<code>NSInputStream</code>中获取的<code>[UInt8]</code>转换成<code>NSData</code>了:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">guard <span class="keyword">let</span> uints = _connection.read(<span class="number">102400</span>, timeout: _sessionTimeout) <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"读取错误"</span>)</span><br><span class="line">    <span class="keyword">continue</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> data = <span class="type">NSData</span>(uints: uints)</span><br></pre></td></tr></table></figure>
+<h3 id="当完成数据读取时,关闭并销毁流对象">当完成数据读取时,关闭并销毁流对象</h3><p>当需要关闭流的时候,只需要反向进行操作即可. 但是对于使用<code>RunLoop</code>的方式进行监听事件的来说,是无法跳出<code>RunLoop</code>的. </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public <span class="func"><span class="keyword">func</span> <span class="title">close</span><span class="params">()</span></span>-&gt;(<span class="type">Bool</span>,<span class="type">String</span>)&#123;</span><br><span class="line">        _closed = <span class="literal">true</span></span><br><span class="line">        </span><br><span class="line">        outputStream?.delegate = <span class="literal">nil</span></span><br><span class="line">        inputStream?.delegate = <span class="literal">nil</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">let</span> stream = inputStream &#123;</span><br><span class="line">            <span class="type">CFReadStreamSetDispatchQueue</span>(stream, <span class="literal">nil</span>)</span><br><span class="line">            stream.close()</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">let</span> stream = outputStream &#123;</span><br><span class="line">            <span class="type">CFWriteStreamSetDispatchQueue</span>(stream, <span class="literal">nil</span>)</span><br><span class="line">            stream.close()</span><br><span class="line">        &#125;</span><br><span class="line">        outputStream = <span class="literal">nil</span></span><br><span class="line">        inputStream = <span class="literal">nil</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">self</span>.connected = <span class="literal">false</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> (<span class="literal">true</span>,<span class="string">""</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果使用的是<code>RunLoop</code>的方式,那么就把代码中的<code>CFReadStreamSetDispatchQueue(stream, nil)</code>修改为:<code>stream.removeFromRunLoop(NSRunLoop.currentRunLoop(),forMode:NSDefaultRunLoopMode)</code>即可</p>
+<h2 id="使用NSOutputStream写入数据">使用NSOutputStream写入数据</h2><p>NSOutputStream写入数据和使用NSInputStream读取数据其实在大体上是一模一样的,他们两个通常都会成对的出现,同样是有以下几个步骤:</p>
+<ol>
+<li>从数据源中创建和初始化一个NSOutputStream</li>
+<li>将NSOutputStream实例放入一个runloop中,并打开流</li>
+<li>处理流对象的事件代理</li>
+<li>当完成数据写入后,关闭并销毁流对象</li>
+</ol>
+<p>具体的步骤细节这就不说了,我们主要介绍一下不同的地方:</p>
+<ol>
+<li>在<code>stream:handleEvent:</code>方法中,主要是监听的<code>HasSpaceAvailable</code>事件.</li>
+<li>写入数据的方法为:<code>public func write(buffer: UnsafePointer&lt;UInt8&gt;, maxLength len: Int) -&gt; Int</code>,他的入参同样是<code>[UInt8]</code>的指针以及<code>maxLength</code></li>
+<li>绑定异步队列时使用<code>CFWriteStreamSetDispatchQueue</code>方法</li>
+</ol>
+<p>同样,在swift中我们更多的是使用<code>NSData</code>或<code>String</code>来表示数据,这同样会有<code>NSData</code>或<code>String</code>到<code>[UInt8]</code>的转换:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public <span class="func"><span class="keyword">func</span> <span class="title">send</span><span class="params">(<span class="keyword">var</span> data d:[UInt8])</span></span>-&gt;(<span class="type">Bool</span>,<span class="type">String</span>)&#123;</span><br><span class="line">        outputLock.readLock()</span><br><span class="line">        defer&#123;outputLock.readUnlock()&#125;</span><br><span class="line">        </span><br><span class="line">        guard <span class="keyword">let</span> outputStream = outputStream <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> (<span class="literal">false</span>,<span class="string">"outputStream is closed"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">let</span> len = outputStream.write(&amp;d, maxLength: d.<span class="built_in">count</span>)</span><br><span class="line">        <span class="keyword">return</span> len==d.<span class="built_in">count</span> ? (<span class="literal">true</span>,<span class="string">""</span>) : (<span class="literal">false</span>,<span class="string">"send error"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    public <span class="func"><span class="keyword">func</span> <span class="title">send</span><span class="params">(str s:String)</span></span>-&gt;(<span class="type">Bool</span>,<span class="type">String</span>)&#123;</span><br><span class="line">        </span><br><span class="line">        guard <span class="keyword">let</span> data = s.dataUsingEncoding(<span class="type">NSUTF8StringEncoding</span>) <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> (<span class="literal">false</span>,<span class="string">"string format error"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> send(data: data)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public <span class="func"><span class="keyword">func</span> <span class="title">send</span><span class="params">(data d:NSData)</span></span>-&gt;(<span class="type">Bool</span>,<span class="type">String</span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> buff:[<span class="type">UInt8</span>] = [<span class="type">UInt8</span>](<span class="built_in">count</span>:d.length,repeatedValue:<span class="number">0x0</span>)</span><br><span class="line">        d.getBytes(&amp;buff, length: d.length)</span><br><span class="line">        <span class="keyword">return</span> send(data: buff)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="流的错误处理">流的错误处理</h2><p>当流出现错误的时候,会停止对数据的处理.<br>在<code>NSStream</code>中可以由以下的几种方式来知道错误的发生:</p>
+<ol>
+<li>如果流被绑定到<code>RunLoop</code>或使用<code>CFReadStreamSetDispatchQueue</code>来打开.那么,可以在<code>stream:handleEvent:</code>方法中监听并处理<code>ErrorOccurred</code>事件.</li>
+<li>在任何时候,都可以调用<code>streamStatus</code>和<code>streamError</code>属性来获取错误.</li>
+<li>如果在调用<code>write:maxLength:</code>或者<code>read:maxLength:</code>方法写入或读取的实际数量为-1时,则表示发生了一个错误.</li>
+</ol>
+<h2 id="流的其他设置">流的其他设置</h2><p>当需要在连接中使用SSL等的时候,需要对<code>NSInputStream</code>和<code>NSInputStream</code>的属性进行特别的设置.在<code>NSStream</code>中有<code>public func setProperty(property: AnyObject?, forKey key: String) -&gt; Bool</code>方法来给<code>NSStream</code>的连接添加上特别的属性.它要求是在调用<code>open</code>方法前使用.</p>
+<p>比如如果要创建SSL连接,就可以这样设置:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">inputStream.setProperty(<span class="type">NSStreamSocketSecurityLevelNegotiatedSSL</span>, forKey: <span class="type">NSStreamSocketSecurityLevelKey</span>)</span><br><span class="line"><span class="keyword">let</span> settings: [<span class="type">NSObject</span>: <span class="type">NSObject</span>] = [kCFStreamSSLValidatesCertificateChain: <span class="type">NSNumber</span>(bool:<span class="literal">false</span>), kCFStreamSSLPeerName: kCFNull]</span><br><span class="line">        inputStream.setProperty(settings, forKey: kCFStreamPropertySSLSettings <span class="keyword">as</span> <span class="type">String</span>)</span><br></pre></td></tr></table></figure>
+<p>同样,如果需要获取连接中的特殊属性,可以使用<code>public func propertyForKey(key: String) -&gt; AnyObject?</code>方法</p>
+<h2 id="总结">总结</h2><p>本文介绍了<code>NSStream</code>的常用方法.以及通过例子,讲解了具体如何的创建,使用,销毁<code>NSStream</code>.<br>如果有其他的使用细节,我们会在后面再详细讨论.</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/02/15/Swift中基本数据类型与NSData转换/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Swift中基本数据类型与NSData转换</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Swift中使用NSStream" data-title="Swift中使用NSStream" data-url="http://sunxiang0918.github.io/2016/02/20/Swift中使用NSStream/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xycm"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 翔妖除魔
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

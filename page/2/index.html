@@ -198,6 +198,66 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-再见2015" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/12/31/再见2015/" class="article-date">
+  	<time datetime="2015-12-31T14:13:48.000Z" itemprop="datePublished">2015-12-31</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/31/再见2015/">再见2015</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="再见2015">再见2015</h1><p>时光匆匆,转眼2015年就要过去了.2015开年的事情仿佛刚过去没有多久,2016又要来了.今年是忙碌的一年,不管是在生活上还是在工作上都发生了很多的变化.本文将回顾一下作为程序猿的自己在今年的成长,做一个简单的总结.</p>
+<h2 id="博客">博客</h2><p>今年年中,自己在github.io上搭建了自己的个人博客,并且把以前的一些文章从evernote上迁移了过来.以前,从来没有写博客的习惯,一个是觉得写博客比较麻烦,因为可能不是自己一个人看,不能像在evernote上那样随便乱写.还有一个就是觉得东西有个地方保存就好了,没必要分享出来.不过,最后还是决定把博客搭建出来,既能锻炼自己的书写,也能强迫自己把东西记录的更规范更细致,最后也能分享给有需要的人.从事了5年的软件行业了,渐渐的开始理解开源人的心态了,也从各位开源的大神中得到了很多的好处,是时候把自己力所能及的东西分享出来了.</p>
+<p>今年一共写了<a href="/archives/2015">43篇博客</a>,从数量上来说不算多.主要涉及的是<code>JAVA研发体系</code>以及<code>Swift</code>方面的内容.<br>对于明年,目标是60篇博客,内容上更有深度与广度.希望能够达成.</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/其他/">其他</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/12/31/再见2015/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-Swift-LOG输出" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -719,67 +779,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/11/27/为自己的APP增加OpenIn功能/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Swift中使用NSUserDefaults保存自定义对象" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/11/24/Swift中使用NSUserDefaults保存自定义对象/" class="article-date">
-  	<time datetime="2015-11-24T03:32:07.000Z" itemprop="datePublished">2015-11-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/11/24/Swift中使用NSUserDefaults保存自定义对象/">Swift中使用NSUserDefaults保存自定义对象</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Swift中使用NSUserDefaults保存自定义对象">Swift中使用NSUserDefaults保存自定义对象</h1><p>NSUserDefaults适合存储轻量级的本地客户端数据,比如保存一些系统的基本配置等东西,使用NSUserDefaults是首选,它非常的简单,不依赖其他的什么东西,屏蔽了Plist文件的读写等等.</p>
-<p>但是NSUserDefaults支持的数据格式比较有限,只支持了<code>Int</code>、<code>Float</code>、<code>Double</code>，<code>String</code>，<code>NSDate</code>，<code>NSArray</code>，<code>NSDictionary</code>，<code>Bool</code>.不支持自定义对象的存取.</p>
-<p>这个特性对于简单的数值来说还算比较容易.只需要简单的操作(一个Value 一个Key ),例如，想要保存一个NSString的对象，代码实现为：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//存</span></span><br><span class="line"><span class="type">NSUserDefaults</span>.standardUserDefaults().setInteger(<span class="number">10</span>, forKey: <span class="string">"aaa"</span>)</span><br><span class="line"><span class="comment">//取</span></span><br><span class="line"><span class="type">NSUserDefaults</span>.standardUserDefaults().integerForKey(<span class="string">"aaaa"</span>)</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/11/24/Swift中使用NSUserDefaults保存自定义对象/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
