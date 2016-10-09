@@ -198,6 +198,68 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-MacOS下JAVA开发使用经验-二" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/10/11/MacOS下JAVA开发使用经验-二/" class="article-date">
+  	<time datetime="2015-10-11T13:39:59.000Z" itemprop="datePublished">2015-10-11</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/11/MacOS下JAVA开发使用经验-二/">MacOS下JAVA开发使用经验(二)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="MacOS下JAVA开发使用经验(二)">MacOS下JAVA开发使用经验(二)</h1><p><a href="http://sunxiang0918.cn/2015/09/21/MacOS下JAVA开发使用经验(一">上一篇文章</a>)写了最常用的一些工具,接下来再介绍一下提高开发生产力的工具.</p>
+<h2 id="软件">软件</h2><h3 id="BetterZip">BetterZip</h3><p>这个是MAC下很常用的压缩/解压的软件.它对于Windows下的中文支持的比较好.<br>基本上没有遇到在Windows下压缩的中文字符,到Mac下就无法打开的问题了.<br>同时他也支持rar格式. 对于我们JAVA的各种<code>ear</code>,<code>war</code>,<code>jar</code>等 都是可以直接打开,然后编辑的.当双击某个jar中的xml文件后会自动打开关联的文件编辑器,然后保存文本编辑器也会自动的更新jar包.</p>
+<p><img src="/img/2015/10/11/1.png" alt=""></p>
+<h3 id="Beyond_Compare">Beyond Compare</h3><p>这个是我们搞IT的大杀器.以前只有在Windows上有,当时为了这一个软件,我不得不装上了虚拟机.<br>不得不说,用过这么多文件比较工具,这个始终是神话般的存在.什么<code>DiffMerge</code> <code>FileMerge</code> <code>Araxis Merge</code> <code>Kaleidoscope</code> 都弱爆了.<br>这个工具可以配合你的<code>sourceTree</code>等代码管理工具使用,直接清晰地对比和合并代码.同时也可以和<code>JD</code>反编译工具配合直接对比<code>class</code>文件的差异(这个可以参考我的<a href="http://sunxiang0918.cn/2014/09/20/在MAC下使用beyondcompare比较JAVA-Class文件/">另一篇文章</a>).</p>
+<p><img src="/img/2015/10/11/2.png" alt=""></p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MAC/">MAC</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/10/11/MacOS下JAVA开发使用经验-二/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-Redis集群部署" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -785,71 +847,6 @@ var _hmt = _hmt || [];
 
       
 
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Docker入门" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/27/Docker入门/" class="article-date">
-  	<time datetime="2015-08-27T13:29:31.000Z" itemprop="datePublished">2015-08-27</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/27/Docker入门/">Docker入门</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Docker入门">Docker入门</h1><p>Docker是一种新型的虚拟化技术,他释放了虚拟化的性能,极大的降低了云计算资源供应的成本,同时让应用的分发,测试,部署都变得非常的高效的容易!</p>
-<h2 id="Docker简介">Docker简介</h2><p>Docker是一个开源项目,诞生于2013年初.使用的是Google的Go语言实现,遵循了Apache2.0协议.代码放在了<a href="https://github.com/docker/docker">GitHub</a>上.<br>它使用了Linux的LXC等技术,实现了轻量级的操作系统虚拟化.</p>
-<h2 id="使用Docker的好处">使用Docker的好处</h2><ol>
-<li>更快速的交付和部署<br> 开发者可以使用一个标准的镜像来构建一套开发容器，开发完成之后，运维人员可以直接使用这个容器来部署代码。</li>
-<li>更高效的虚拟化<br> Docker 容器的启动可以在秒级实现，这相比传统的虚拟机方式要快得多。</li>
-<li>更轻松的迁移和扩展<br> Docker 容器几乎可以在任意的平台上运行，包括物理机、虚拟机、公有云、私有云、个人电脑、服务器等。 这种兼容性可以让用户把一个应用程序从一个平台直接迁移到另外一个。</li>
-<li>更简单的管理<br> 所有的修改都以增量的方式被分发和更新，从而实现自动化并且高效的管理。</li>
-</ol>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/08/27/Docker入门/#more">more >></a>
-        </p>
       
       <div class="clearfix"></div>
     </div>

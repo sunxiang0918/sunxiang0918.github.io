@@ -198,6 +198,61 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-使用Mockito和SpringTest进行单元测试" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/28/使用Mockito和SpringTest进行单元测试/" class="article-date">
+  	<time datetime="2016-03-28T14:19:04.000Z" itemprop="datePublished">2016-03-28</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/28/使用Mockito和SpringTest进行单元测试/">使用Mockito和SpringTest进行单元测试</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <h1 id="使用Mockito和SpringTest进行单元测试">使用Mockito和SpringTest进行单元测试</h1>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-Swift-2-2-的新特性" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -793,78 +848,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2016/01/13/Akka-in-JAVA-2/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Akka-in-JAVA-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/10/Akka-in-JAVA-1/" class="article-date">
-  	<time datetime="2016-01-10T08:46:28.000Z" itemprop="datePublished">2016-01-10</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/10/Akka-in-JAVA-1/">Akka in JAVA(一)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Akka_in_JAVA(一)">Akka in JAVA(一)</h1><h2 id="AKKA简介">AKKA简介</h2><h3 id="什么是AKKA">什么是AKKA</h3><p>Akka是一个由<code>Scala</code>编写的,能兼容<code>Sacala</code>和<code>JAVA</code>的,用于编写高可用和高伸缩性的<code>Actor模型</code>框架.它基于了事件驱动的并发处理模式,性能非常的高,并且有很高的可用性.大大的简化了我们在应用系统中开发并发处理的过程.它在各个领域都有很好的表现.</p>
-<h3 id="使用AKKA的好处">使用AKKA的好处</h3><p>就如上面简介中所说的,AKKA把并发操作的各种复杂的东西都统一的做了封装.我们主要关心的是业务逻辑的实现,只需要少量的关心<code>Actor模型</code>的串联即可构建出高可用,高性能,高扩展的应用.</p>
-<h3 id="Akka_for_JAVA">Akka for JAVA</h3><p>由于AKKA是使用<code>Scala</code>编写的,而<code>Scala</code>是一种基于JVM的语言.因此<code>JAVA</code>对AKKA的支持也是很不错的.Akka自身又是采用微内核的方式来实现的,这就意味着能很容易的在自己的项目中应用AKKA,只需要引入几个akka的Lib包即可.而官方直接就提供了<code>Maven</code>库供我们在JAVA中使用AKKA.<br>这些AKKA的依赖包主要有:</p>
-<ul>
-<li><strong>akka-actor</strong>:最核心的依赖包,里面实现了Actor模型的大部分东西</li>
-<li><strong>akka-agent</strong>:代理/整合了Scala中的一些STM特性</li>
-<li><strong>akka-camel</strong>:整合了Apache的Camel</li>
-<li><strong>akka-cluster</strong>:akka集群依赖,封装了集群成员的管理和路由</li>
-<li><strong>akka-kernel</strong>:akka的一个极简化的应用服务器,可以脱离项目单独运行.</li>
-<li><strong>akka-osgi</strong>:对OSGI容器的支持,有akka的最基本的Bundle</li>
-<li><strong>akka-remote</strong>:akka远程调用</li>
-<li><strong>akka-slf4j</strong>:Akka的日志事件监听</li>
-<li><strong>akka-testkit</strong>:Akka的各种测试工具</li>
-<li><strong>akka-zeromq</strong>:整合ZeroMQ<br>其中最总要的就是<code>akka-actor</code>,最简单的AKKA使用的话,只需要引入这个包就可以了.</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Akka/">Akka</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/10/Akka-in-JAVA-1/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

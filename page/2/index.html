@@ -198,6 +198,78 @@ var _hmt = _hmt || [];
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Akka-in-JAVA-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/10/Akka-in-JAVA-1/" class="article-date">
+  	<time datetime="2016-01-10T08:46:28.000Z" itemprop="datePublished">2016-01-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/10/Akka-in-JAVA-1/">Akka in JAVA(一)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Akka_in_JAVA(一)">Akka in JAVA(一)</h1><h2 id="AKKA简介">AKKA简介</h2><h3 id="什么是AKKA">什么是AKKA</h3><p>Akka是一个由<code>Scala</code>编写的,能兼容<code>Sacala</code>和<code>JAVA</code>的,用于编写高可用和高伸缩性的<code>Actor模型</code>框架.它基于了事件驱动的并发处理模式,性能非常的高,并且有很高的可用性.大大的简化了我们在应用系统中开发并发处理的过程.它在各个领域都有很好的表现.</p>
+<h3 id="使用AKKA的好处">使用AKKA的好处</h3><p>就如上面简介中所说的,AKKA把并发操作的各种复杂的东西都统一的做了封装.我们主要关心的是业务逻辑的实现,只需要少量的关心<code>Actor模型</code>的串联即可构建出高可用,高性能,高扩展的应用.</p>
+<h3 id="Akka_for_JAVA">Akka for JAVA</h3><p>由于AKKA是使用<code>Scala</code>编写的,而<code>Scala</code>是一种基于JVM的语言.因此<code>JAVA</code>对AKKA的支持也是很不错的.Akka自身又是采用微内核的方式来实现的,这就意味着能很容易的在自己的项目中应用AKKA,只需要引入几个akka的Lib包即可.而官方直接就提供了<code>Maven</code>库供我们在JAVA中使用AKKA.<br>这些AKKA的依赖包主要有:</p>
+<ul>
+<li><strong>akka-actor</strong>:最核心的依赖包,里面实现了Actor模型的大部分东西</li>
+<li><strong>akka-agent</strong>:代理/整合了Scala中的一些STM特性</li>
+<li><strong>akka-camel</strong>:整合了Apache的Camel</li>
+<li><strong>akka-cluster</strong>:akka集群依赖,封装了集群成员的管理和路由</li>
+<li><strong>akka-kernel</strong>:akka的一个极简化的应用服务器,可以脱离项目单独运行.</li>
+<li><strong>akka-osgi</strong>:对OSGI容器的支持,有akka的最基本的Bundle</li>
+<li><strong>akka-remote</strong>:akka远程调用</li>
+<li><strong>akka-slf4j</strong>:Akka的日志事件监听</li>
+<li><strong>akka-testkit</strong>:Akka的各种测试工具</li>
+<li><strong>akka-zeromq</strong>:整合ZeroMQ<br>其中最总要的就是<code>akka-actor</code>,最简单的AKKA使用的话,只需要引入这个包就可以了.</li>
+</ul>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Akka/">Akka</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/01/10/Akka-in-JAVA-1/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-在IOS中使用swift调用系统相机" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -780,64 +852,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a  href="/2015/12/02/MYSQL支持utf8mb4/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-在自己的App中嵌入onePassword密码管理" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/11/30/在自己的App中嵌入onePassword密码管理/" class="article-date">
-  	<time datetime="2015-11-30T11:36:31.000Z" itemprop="datePublished">2015-11-30</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/11/30/在自己的App中嵌入onePassword密码管理/">在自己的App中嵌入onePassword密码管理</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="在自己的App中嵌入onePassword密码管理">在自己的App中嵌入onePassword密码管理</h1><p><a href="https://agilebits.com/onepassword/">1Password</a>是一个密码管理软件,它可以方便和安全的管理你的密码.它提供反钓鱼保护功能和卓越的密码管理,并具有自动生成强密码功能.所有的机密资料,包括密码,身份卡和信用卡,都是保存在一个安全的地方.在OSX和IOS系统上非常的流行.在我的博文<a href="/2015/09/21/MacOS下JAVA开发使用经验(一">MacOS下JAVA开发使用经验(一)</a> )也有介绍.<br>自从我的账号被CSDN泄露的干干净净以后的一段时间里,我的其他账号是不是的就会收到更改密码的邮件.于是,一下狠心购买了<code>1Password</code>,并且把我所有的差不多200多个账号的密码通过<code>1Password</code>都给改成了14位的随机字符,以后就不用担心一个密码丢失导致其他的账号也丢失了(1Password自己本身在它的网上没有所谓的用户名密码,密码是通过加密文件整体在WIFI或iCloud中同步的.).但是这就带来了一个麻烦,就是我的密码都变成了类似于这样的<code>RxCa9vdBUB3fCU</code>的字符串.当使用safari这些的时候还好,它有浏览器的插件可以自动填充.遇到一些App,就只能手动的输入了(类似于光大银行和QQ不允许粘贴密码).这相当的麻烦,又容易出错.因此,自己开发APP的时候,就特别的注意了在输入密码的地方要与<code>1Password</code>的整合,这点网易系的APP就做的比较好,<code>网易云音乐</code>和<code>考拉海淘</code>就是支持了<code>1Password</code>的.<br>要在自己的App中引入<code>1Password</code>其实也不麻烦,可以说是相当的简单.<code>1Password</code>在<code>GitHub</code>上开源了App与它的软件交互的扩展<a href="https://github.com/AgileBits/onepassword-app-extension">1PasswordExtension</a>.我们通过这个扩展就可以在自己的App中嵌入<code>1Password</code>的密码管理了.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/11/30/在自己的App中嵌入onePassword密码管理/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
