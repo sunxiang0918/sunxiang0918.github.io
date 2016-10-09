@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2016-10-09T14:48:50.000Z</updated>
+  <updated>2016-10-09T16:09:04.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -14,28 +14,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title><![CDATA[Hello World]]></title>
-    <link href="http://sunxiang0918.github.io/2016/10/10/hello-world/"/>
-    <id>http://sunxiang0918.github.io/2016/10/10/hello-world/</id>
-    <published>2016-10-09T16:10:41.000Z</published>
-    <updated>2016-10-09T14:48:50.000Z</updated>
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.]]>
-    </summary>
-    
-  </entry>
   
   <entry>
     <title><![CDATA[使用Mockito和SpringTest进行单元测试]]></title>
@@ -1862,6 +1840,39 @@ org.apache.avro.util.Utf8</code>的异常,开始折腾了我很久.最后发现�
     </summary>
     
       <category term="Swift" scheme="http://sunxiang0918.github.io/tags/Swift/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[MYSQL支持utf8mb4]]></title>
+    <link href="http://sunxiang0918.github.io/2015/12/02/MYSQL%E6%94%AF%E6%8C%81utf8mb4/"/>
+    <id>http://sunxiang0918.github.io/2015/12/02/MYSQL支持utf8mb4/</id>
+    <published>2015-12-02T14:41:52.000Z</published>
+    <updated>2015-12-02T14:59:54.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="MYSQL支持utf8mb4">MYSQL支持utf8mb4</h1><p>MYSQL默认的utf8字符集采用了3个字节来进行保存.这就存在了一个问题,那就是有部分的UTF8的字符其实是保存不进MYSQL的,比如现在流行的emoji表情,这和以前的认知是不同的.为了避免以后出现问题,找了这方面的信息.推荐如果有保存扩展字符的用户,提前就把MYSQL的字符集给修改了.具体MYSQL的默认utf8支持哪些字符编码,可以参见这个:<a href="http://witmax.cn/unicode-list.html" target="_blank" rel="external">Unicode编码表</a>,前126行就是它支持的,后面的就是不支持的.</p>
+<p>发现这个问题其实相当的偶然,在知乎上看到了一个问题<a href="http://www.zhihu.com/question/35901422/answer/64960598" target="_blank" rel="external">为什么知乎不支持non-BMP的汉字？</a>.突然发现了这个问题,一验证果然如此.<br>具体来说就是MYSQL的utf8字符集只使用了3个字节来保存字符.因此UTF8扩展区的字符就无法保存.这个在MYSQL5.5后引入了<code>utf8mb4</code>的字符集来解决这个问题,它使用了4个字节来存储字符,扩展了存储的数量.因此,如果各位是使用的MYSQL5.5以上的版本,推荐在可能存入扩展字符的字段上设置字符集为utf8mb4.虽然这样可能会造成空间的浪费,但是比以后在上线的系统上升级数据库的风险要小的多.</p>
+<a id="more"></a>
+<h2 id="修改方法">修改方法</h2><h3 id="MYSQL服务器端">MYSQL服务器端</h3><p>只需要修改数据库的配置文件 <code>/etc/my.cnf</code>,增加或修改以下两行:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">character-set-server=utf8mb4 </span><br><span class="line">collation_server=utf8mb4_unicode_ci</span><br></pre></td></tr></table></figure>
+<p>然后重启数据库即可.<br>对于已有的表,执行:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> tbl_name <span class="keyword">CONVERT</span> <span class="keyword">TO</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8mb4;</span></span><br></pre></td></tr></table></figure>
+<p>即可.</p>
+<h3 id="客户端">客户端</h3><p>由于JDBC的MYSQL驱动现在不支持显示的设置<code>utf8mb4</code>字符集,所以不能在url连接上增加<code>characterEncoding=utf8mb4</code>.<br>那么就只能采取以下的三种方法了(都需要高版本的JDBC驱动):</p>
+<ol>
+<li>在服务器上设置了<code>character-set-server=utf8mb4</code>后,在客户端url上不显示的设置字符集,它会自动继承服务器的设置</li>
+<li>在执行SQL之前,运行<code>set names utf8mb4</code>.例如:<code>connection.prepareStatement(&quot;set names utf8mb4&quot;).executeQuery();</code></li>
+<li>设置MYSQL的 init_connect参数,设置<code>set names utf8mb4</code>.</li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="MYSQL支持utf8mb4">MYSQL支持utf8mb4</h1><p>MYSQL默认的utf8字符集采用了3个字节来进行保存.这就存在了一个问题,那就是有部分的UTF8的字符其实是保存不进MYSQL的,比如现在流行的emoji表情,这和以前的认知是不同的.为了避免以后出现问题,找了这方面的信息.推荐如果有保存扩展字符的用户,提前就把MYSQL的字符集给修改了.具体MYSQL的默认utf8支持哪些字符编码,可以参见这个:<a href="http://witmax.cn/unicode-list.html">Unicode编码表</a>,前126行就是它支持的,后面的就是不支持的.</p>
+<p>发现这个问题其实相当的偶然,在知乎上看到了一个问题<a href="http://www.zhihu.com/question/35901422/answer/64960598">为什么知乎不支持non-BMP的汉字？</a>.突然发现了这个问题,一验证果然如此.<br>具体来说就是MYSQL的utf8字符集只使用了3个字节来保存字符.因此UTF8扩展区的字符就无法保存.这个在MYSQL5.5后引入了<code>utf8mb4</code>的字符集来解决这个问题,它使用了4个字节来存储字符,扩展了存储的数量.因此,如果各位是使用的MYSQL5.5以上的版本,推荐在可能存入扩展字符的字段上设置字符集为utf8mb4.虽然这样可能会造成空间的浪费,但是比以后在上线的系统上升级数据库的风险要小的多.</p>]]>
+    
+    </summary>
+    
+      <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
+    
+      <category term="Mysql" scheme="http://sunxiang0918.github.io/tags/Mysql/"/>
     
   </entry>
   
