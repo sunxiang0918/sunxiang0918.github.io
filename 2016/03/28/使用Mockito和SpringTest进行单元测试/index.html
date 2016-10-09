@@ -5,16 +5,19 @@
   
   <title>使用Mockito和SpringTest进行单元测试 | 翔妖除魔的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="使用Mockito和SpringTest进行单元测试SpringTest单元测试Mock测试Mockito特性Mockito简单入门Mockito与SpringTest整合">
+  <meta name="description" content="使用Mockito和SpringTest进行单元测试单元测试的作用以及重要性其实不用在这里不断的重复了.为了保证
+SpringTest单元测试Mock测试Mockito特性Mockito简单入门项目中引用Mockito#Mockito与SpringTest整合">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Mockito和SpringTest进行单元测试">
 <meta property="og:url" content="http://sunxiang0918.github.io/2016/03/28/使用Mockito和SpringTest进行单元测试/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
-<meta property="og:description" content="使用Mockito和SpringTest进行单元测试SpringTest单元测试Mock测试Mockito特性Mockito简单入门Mockito与SpringTest整合">
-<meta property="og:updated_time" content="2016-10-09T14:24:52.000Z">
+<meta property="og:description" content="使用Mockito和SpringTest进行单元测试单元测试的作用以及重要性其实不用在这里不断的重复了.为了保证
+SpringTest单元测试Mock测试Mockito特性Mockito简单入门项目中引用Mockito#Mockito与SpringTest整合">
+<meta property="og:updated_time" content="2016-10-09T14:40:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Mockito和SpringTest进行单元测试">
-<meta name="twitter:description" content="使用Mockito和SpringTest进行单元测试SpringTest单元测试Mock测试Mockito特性Mockito简单入门Mockito与SpringTest整合">
+<meta name="twitter:description" content="使用Mockito和SpringTest进行单元测试单元测试的作用以及重要性其实不用在这里不断的重复了.为了保证
+SpringTest单元测试Mock测试Mockito特性Mockito简单入门项目中引用Mockito#Mockito与SpringTest整合">
   
     <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
   
@@ -125,7 +128,7 @@ var _hmt = _hmt || [];
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Akka/" style="font-size: 14.29px;">Akka</a> <a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 14.29px;">Docker</a> <a href="/tags/GIT/" style="font-size: 12.86px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Hibernate/" style="font-size: 11.43px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.43px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.43px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.43px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.43px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 14.29px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 12.86px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Nutch/" style="font-size: 10px;">Nutch</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18.57px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.43px;">Zookeeper</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/其他/" style="font-size: 11.43px;">其他</a> <a href="/tags/博客/" style="font-size: 10px;">博客</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 17.14px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/日志挖掘/" style="font-size: 10px;">日志挖掘</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15.71px;">集群</a>
+						<a href="/tags/Akka/" style="font-size: 14.29px;">Akka</a> <a href="/tags/DB2/" style="font-size: 10px;">DB2</a> <a href="/tags/Docker/" style="font-size: 14.29px;">Docker</a> <a href="/tags/GIT/" style="font-size: 12.86px;">GIT</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Hibernate/" style="font-size: 11.43px;">Hibernate</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/JAVA/" style="font-size: 20px;">JAVA</a> <a href="/tags/JBOSS/" style="font-size: 11.43px;">JBOSS</a> <a href="/tags/JVM/" style="font-size: 11.43px;">JVM</a> <a href="/tags/Kafka/" style="font-size: 11.43px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 11.43px;">Linux</a> <a href="/tags/Lucene/" style="font-size: 14.29px;">Lucene</a> <a href="/tags/MAC/" style="font-size: 12.86px;">MAC</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/tags/Neo4j/" style="font-size: 10px;">Neo4j</a> <a href="/tags/Nutch/" style="font-size: 10px;">Nutch</a> <a href="/tags/Solr/" style="font-size: 10px;">Solr</a> <a href="/tags/Swift/" style="font-size: 18.57px;">Swift</a> <a href="/tags/Zookeeper/" style="font-size: 11.43px;">Zookeeper</a> <a href="/tags/其他/" style="font-size: 11.43px;">其他</a> <a href="/tags/团队管理/" style="font-size: 10px;">团队管理</a> <a href="/tags/大数据/" style="font-size: 17.14px;">大数据</a> <a href="/tags/敏捷开发/" style="font-size: 10px;">敏捷开发</a> <a href="/tags/日志挖掘/" style="font-size: 10px;">日志挖掘</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/集群/" style="font-size: 15.71px;">集群</a>
 					</div>
 				</section>
 				
@@ -237,12 +240,13 @@ var _hmt = _hmt || [];
       
       
         <div id="toc" class="article-toc">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用Mockito和SpringTest进行单元测试"><span class="toc-number">1.</span> <span class="toc-text">使用Mockito和SpringTest进行单元测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringTest单元测试"><span class="toc-number">1.1.</span> <span class="toc-text">SpringTest单元测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mock测试"><span class="toc-number">1.2.</span> <span class="toc-text">Mock测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mockito特性"><span class="toc-number">1.3.</span> <span class="toc-text">Mockito特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mockito简单入门"><span class="toc-number">1.4.</span> <span class="toc-text">Mockito简单入门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mockito与SpringTest整合"><span class="toc-number">1.5.</span> <span class="toc-text">Mockito与SpringTest整合</span></a></li></ol></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用Mockito和SpringTest进行单元测试"><span class="toc-number">1.</span> <span class="toc-text">使用Mockito和SpringTest进行单元测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringTest单元测试"><span class="toc-number">1.1.</span> <span class="toc-text">SpringTest单元测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mock测试"><span class="toc-number">1.2.</span> <span class="toc-text">Mock测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mockito特性"><span class="toc-number">1.3.</span> <span class="toc-text">Mockito特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mockito简单入门"><span class="toc-number">1.4.</span> <span class="toc-text">Mockito简单入门</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#项目中引用Mockito"><span class="toc-number">1.4.1.</span> <span class="toc-text">项目中引用Mockito</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="##"><span class="toc-number">1.5.</span> <span class="toc-text">#</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mockito与SpringTest整合"><span class="toc-number">1.6.</span> <span class="toc-text">Mockito与SpringTest整合</span></a></li></ol></li></ol>
           <hr/>
         </div>
         
         
-        <h1 id="使用Mockito和SpringTest进行单元测试">使用Mockito和SpringTest进行单元测试</h1><h2 id="SpringTest单元测试">SpringTest单元测试</h2><h2 id="Mock测试">Mock测试</h2><h2 id="Mockito特性">Mockito特性</h2><h2 id="Mockito简单入门">Mockito简单入门</h2><h2 id="Mockito与SpringTest整合">Mockito与SpringTest整合</h2>
+        <h1 id="使用Mockito和SpringTest进行单元测试">使用Mockito和SpringTest进行单元测试</h1><p>单元测试的作用以及重要性其实不用在这里不断的重复了.为了保证</p>
+<h2 id="SpringTest单元测试">SpringTest单元测试</h2><h2 id="Mock测试">Mock测试</h2><h2 id="Mockito特性">Mockito特性</h2><h2 id="Mockito简单入门">Mockito简单入门</h2><h3 id="项目中引用Mockito">项目中引用Mockito</h3><h2 id="#">#</h2><h2 id="Mockito与SpringTest整合">Mockito与SpringTest整合</h2>
       
     </div>
     
@@ -250,6 +254,15 @@ var _hmt = _hmt || [];
   
     
 <nav id="article-nav">
+  
+    <a href="/2016/10/09/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Hello World
+        
+      </div>
+    </a>
   
   
     <a href="/2016/03/24/Swift-2-2-的新特性/" id="article-nav-older" class="article-nav-link-wrap">
