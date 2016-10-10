@@ -15,7 +15,7 @@ JAVA生态圈里面说起单元测试一般都会使用JUnit或者TestNG.其中J
 JAVA生态圈里面说起单元测试一般都会使用JUnit或者TestNG.其中JUnit">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2016/03/28/1.jpg">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2016/03/28/2.jpg">
-<meta property="og:updated_time" content="2016-10-10T02:26:21.000Z">
+<meta property="og:updated_time" content="2016-10-10T02:29:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Mockito和SpringTest进行单元测试">
 <meta name="twitter:description" content="使用Mockito和SpringTest进行单元测试单元测试的作用以及重要性其实不用在这里不断的重复了.为了保证软件的可靠性,单元测试可能是最容易执行的一个可靠的手段了.一方面，程序员通过编写单元测试来验证自己程序的有效性,另外一方面,管理者通过持续自动的执行单元测试和分析单元测试的覆盖率等来确保软件本身的质量.
@@ -273,7 +273,7 @@ var _hmt = _hmt || [];
 <p>然后把SQL文件命名为<code>TestPoolService.sql</code>,放入<code>test/resources</code>中即可。</p>
 <h2 id="Mock测试">Mock测试</h2><p>经过上面所说的<code>JUnit</code>+<code>SpringTest</code>,基本上可以满足80%的单元测试了。但是，由于现在的系统越来越复杂，相互之间的依赖越来越多。特别是微服务化以后的系统，往往一个模块的代码需要依赖几个其他模块的东西。因此，在做单元测试的时候，往往很难构造出需要的依赖。一个单元测试，我们只关心一个小的功能，但是为了这个小的功能能跑起来，可能需要依赖一堆其他的东西，这就导致了单元测试无法进行。所以，我们就需要再测试过程中引入<code>Mock</code>测试。</p>
 <p>所谓的<code>Mock</code>测试就是在测试过程中，对于一些不容易构造的、或者和这次单元测试无关但是上下文又有依赖的对象，用一个虚拟的对象（Mock对象）来模拟，以便单元测试能够进行。</p>
-<p>比如有一段代码的依赖为：<br><img src="img/2016/03/28/1.jpg" alt=""><br>当我们要进行单元测试的时候，就需要给<code>A</code>注入<code>B</code>和<code>C</code>,但是<code>C</code>又依赖了<code>D</code>，<code>D</code>又依赖了<code>E</code>。这就导致了，A的单元测试很难得进行。<br>但是，当我们使用了Mock来进行模拟对象后，我们就可以把这种依赖解耦，只关心A本身的测试，它所依赖的B和C，全部使用<strong>Mock出来</strong>的对象，并且给<code>MockB</code>和<code>MockC</code>指定一个明确的行为。就像这样：<br><img src="img/2016/03/28/2.jpg" alt=""></p>
+<p>比如有一段代码的依赖为：<br><img src="/img/2016/03/28/1.jpg" alt=""><br>当我们要进行单元测试的时候，就需要给<code>A</code>注入<code>B</code>和<code>C</code>,但是<code>C</code>又依赖了<code>D</code>，<code>D</code>又依赖了<code>E</code>。这就导致了，A的单元测试很难得进行。<br>但是，当我们使用了Mock来进行模拟对象后，我们就可以把这种依赖解耦，只关心A本身的测试，它所依赖的B和C，全部使用<strong>Mock出来</strong>的对象，并且给<code>MockB</code>和<code>MockC</code>指定一个明确的行为。就像这样：<br><img src="/img/2016/03/28/2.jpg" alt=""></p>
 <h2 id="Mockito特性">Mockito特性</h2><h2 id="Mockito简单入门">Mockito简单入门</h2><h3 id="项目中引用Mockito">项目中引用Mockito</h3><h2 id="Mockito与SpringTest整合">Mockito与SpringTest整合</h2>
       
     </div>
