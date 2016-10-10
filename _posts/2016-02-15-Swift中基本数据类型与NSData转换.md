@@ -75,6 +75,9 @@ public func CFConvertDoubleSwappedToHost(arg: CFSwappedFloat64) -> Double
 ```
 使用这些函数就可以对字节序进行转换. 更多的可以参考[Apple的官方手册](https://developer.apple.com/library/prerelease/ios/documentation/CoreFoundation/Reference/CFByteOrderUtils/index.html)
 
+**2016-02-16 Update**
+最新的swift中,对`UInt64`和`UInt32`,已经自带了成员方法:`public var bigEndian: UInt32 { get }` `public var littleEndian: UInt32 { get }`等等. 也就是说,不需要使用`CFSwapInt32BigToHost(val)`这样转换了,直接`val.bigEndian`即可.
+
 ##基础数据与NSData的转换
 为了能让Swift和JAVA进行网络的交互,那么就必须把它们的基础数据转换成为Bytes字节数组.
 在Swift中使用`NSData`或者`NSMutableData`来表示.因此,也就是需要把基础数据放入到NSData中.
@@ -119,6 +122,33 @@ public extension NSMutableData {
 首先,使用`CFSwapInt32HostToBig`函数把字节序给改变了.然后调用`NSMutableData.appendBytes`方法,赋值给`NSData`.由于`NSMutableData`现在还是`Objective-C`的实现,因此,调用方式稍微有点奇怪,是使用指针的方式进行赋值的.更多的可以参见[Using Swift with Cocoa and Objective-C](https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/BuildingCocoaApps/InteractingWithCAPIs.html).
 
 反序列化也是相似的,首先定义了一个变量.然后使用`NSMutableData.getBytes`,同样传入一个指针以及数据的返回.然后最后在进行一次字节序的转换即可.
+
+**2016-02-16 Update:**
+对于需要在网络传输中传输负数的情况需要先把负数的`Int`转换为无符号的整数`UInt`.在计算机中,负数的表示方法是采用补码的形式.在swift中,可以使用`UInt32(bitPattern:Int32)`以及`Int32(bitPattern:UInt32)`方法来相互的转换.比如,`-5`转换为无符号的补码形式为:`fffffffb`. 因此我们的`appendInt`和`getInt`可以改成这样:
+
+```swift
+	public func appendInt(value:Int){
+        var networkOrderVal = UInt32(bitPattern:Int32(value)).bigEndian
+        self.appendBytes(&networkOrderVal, length: sizeof(UInt32))
+    }
+    
+    public func appendLong(value:Int) {
+        var networkOrderVal = UInt64(bitPattern:Int64(value)).bigEndian
+        self.appendBytes(&networkOrderVal, length: sizeof(UInt64))
+    }
+    
+    public func getInt(range:NSRange = NSRange(location:0,length:sizeof(UInt32))) -> Int {
+        var val: UInt32 = 0
+        self.getBytes(&val, range: range)
+        return Int(Int32(bitPattern:val.bigEndian))
+    }
+    
+    public func getLong(range:NSRange = NSRange(location:0,length:sizeof(UInt64))) -> Int {
+        var val: UInt64 = 0
+        self.getBytes(&val, range: range)
+        return Int(Int64(bitPattern:val.bigEndian))
+    }
+```
 
 ###Float32与Float64
 它的情况与`Int`的非常相似.同样需要经历字节序的转换,以及`NSMutableData.appendBytes`的调用.
