@@ -446,7 +446,7 @@
     <link href="http://sunxiang0918.github.io/2016/02/10/Akka-in-JAVA-4/"/>
     <id>http://sunxiang0918.github.io/2016/02/10/Akka-in-JAVA-4/</id>
     <published>2016-02-10T12:35:02.000Z</published>
-    <updated>2016-02-14T02:45:50.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Akka_in_JAVA(四)">Akka in JAVA(四)</h1><p>最后这个部分讲一讲AKKA中的事件消息类型. 在Akka中主要是有三种消息类型,每一种类型对应了不同的使用场景.他们分别是:<code>Fire and Forget模式</code>,<code>Send and Receive模式</code>和<code>Publisher-Subscriber模式</code>.</p>
 <h2 id="Fire_and_Forget模式">Fire and Forget模式</h2><p>这种发送消息的模式是Akka中所推荐的,也是我们前面一直在使用的方式.也就是单向消息模式,Actor在发送消息之后,并不需要获取响应.这种方式在JAVA中需要使用<code>ActorRef</code>或<code>ActorSelection</code>的<code>tell</code>方法.和消息队列类似,直接调用该方法即可,程序不会阻塞,会直接执行后面的操作,但是消息已经发送给目标的Actor了.这种方式的具体使用方法前面已经列举了很多了,这里就不再重复的举例了.</p>
 <h2 id="Send_and_Receive模式">Send and Receive模式</h2><p>这种发送消息的模式是双向的,当Actor在发送消息之后,会接收到一个Future对象.和JAVA的Future一样,通过这个可以异步的接收到对方的结果消息.</p>
@@ -531,7 +531,7 @@
     <link href="http://sunxiang0918.github.io/2016/02/01/%E4%BD%BF%E7%94%A8Swift%E7%9A%84%E9%9D%A2%E5%90%91%E5%8D%8F%E8%AE%AE%E7%BC%96%E7%A8%8B%E5%AE%9A%E4%B9%89Segue%E6%A0%87%E8%AF%86/"/>
     <id>http://sunxiang0918.github.io/2016/02/01/使用Swift的面向协议编程定义Segue标识/</id>
     <published>2016-02-01T03:57:15.000Z</published>
-    <updated>2016-02-01T05:33:10.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="使用Swift的面向协议编程定义Segue标识">使用Swift的面向协议编程定义Segue标识</h1><p>作者：<a href="https://www.natashatherobot.com/protocol-oriented-segue-identifiers-swift/" target="_blank" rel="external">Natasha</a>，原文链接，原文日期：2015-12-17<br>译者：<a href="http://www.jianshu.com/users/3b40e55ec6d5/latest_articles" target="_blank" rel="external">小锅</a>；校对：<a href="http://swift.gg/2016/02/01/protocol-oriented-segue-identifiers-swift/undefined" target="_blank" rel="external">&amp;nbsp</a>；定稿：<a href="http://weibo.com/xiaoxxiao" target="_blank" rel="external">千叶知风</a></p>
 <p>回溯到八月份，我观看了 <a href="https://developer.apple.com/videos/play/wwdc2015-411/" target="_blank" rel="external">Swift in Practice WWDC15 </a>这个超赞的视频。视频的第一部分让我印象十分深刻，因此我针对这部分写了一篇博客—— <a href="http://natashatherobot.com/non-optional-uiimage-named-swift/" target="_blank" rel="external">A Beautiful Solution to Non-Optional UIImage Named in Swift</a> ——然后我最终开始准备写关于这个视频的第二部分，甚至其它更多令人激动的部分（毕竟，假期是最好的写博客的时机）（译者注：大神就是这样啊，假期不是用来玩的，反而是写博客的大好时机）。<br>这次，我准备写的是：<strong>处理多个 segue 标识的优雅解决方案。</strong>你猜对了！就是使用协议。</p>
 <p>今天就让我们开始针对你的选择展开旅程吧。你会选择：红色药丸还是蓝色药丸…（译者注：如果你看不懂这个梗的话，我建议你去补习一下黑客帝国）<br><img src="/img/2016/02/01/1.png" alt=""></p>
@@ -588,7 +588,7 @@
     <link href="http://sunxiang0918.github.io/2016/01/24/%E5%B8%B8%E7%94%A8UniqueID%E7%9A%84%E7%94%9F%E6%88%90%E6%96%B9%E6%B3%95/"/>
     <id>http://sunxiang0918.github.io/2016/01/24/常用UniqueID的生成方法/</id>
     <published>2016-01-24T12:58:39.000Z</published>
-    <updated>2016-01-27T08:57:50.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="常用UniqueID的生成方法">常用UniqueID的生成方法</h1><p>这几天在与其他的系统进行联调的时候,出现了对方的唯一ID使用的是<code>Int32</code>来存储,而我们提供的UniqueID是标准的UUID,从而导致他们无法存储的问题.由于他们是一个历史的老系统,牵扯很深,所以无法进行改造,只能我们来适应它(幸好和它们交互的数据不会太多.应该不会超过Int32的上限).从而引出了对UniqueID生成方法的思考.这里列出了几种常用的UniqueID的生成办法.</p>
 <h2 id="基于数据库的发号器">基于数据库的发号器</h2><p>这个是最常见和最容易想到的生成UniqueID的方法.也就是依赖数据库的自增ID来获取唯一ID,由于在分布式系统中数据库都是做了分布式或同步的,因此能保证数据库的自增键或序列是不会重复的.</p>
 <ul>
@@ -639,7 +639,7 @@
     <link href="http://sunxiang0918.github.io/2016/01/20/%E8%B6%85%E8%B6%8A%E7%BB%A7%E6%89%BF%E4%B9%8B%E8%B7%AF%EF%BC%9A%E5%8D%8F%E8%AE%AE%E6%B7%B7%E5%90%88/"/>
     <id>http://sunxiang0918.github.io/2016/01/20/超越继承之路：协议混合/</id>
     <published>2016-01-20T11:29:27.000Z</published>
-    <updated>2016-01-20T11:45:48.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="超越继承之路：协议混合">超越继承之路：协议混合</h1><p>只要你学习过面向对象的语言比如 ObjC ，都知道继承的概念，他的一个用途是在多个类之间共享代码。但是这种解决方案存在一些问题。这篇文章我们来初探一下 Swift 的协议扩展，以及如何混合使用这些协议 - Mixins，英文原文<a href="http://alisoftware.github.io/swift/protocol/2015/11/08/mixins-over-inheritance/#fnref2" target="_blank" rel="external">地址</a></p>
 <p>如果感觉太长了，读不下去，可以直接下载代码 <a href="http://alisoftware.github.io/assets/Mixins.playground.zip" target="_blank" rel="external">Swift Playground Code</a></p>
 <h2 id="继承的问题">继承的问题</h2><p>比如你有个 app，其中有大量的<code>UIViewController</code>类都要共享相同的行为，例如他们都有一个相同样式的汉堡菜单。你不想在每个<code>View Controllers</code>中都实现一遍『汉堡菜单』的逻辑（设置 <code>leftBarButtonItem</code>，按钮点击时打开/关闭菜单）</p>
@@ -735,7 +735,7 @@
     <link href="http://sunxiang0918.github.io/2016/01/18/Akka-in-JAVA-3/"/>
     <id>http://sunxiang0918.github.io/2016/01/18/Akka-in-JAVA-3/</id>
     <published>2016-01-18T13:23:13.000Z</published>
-    <updated>2016-02-13T14:54:11.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Akka_in_JAVA(三)">Akka in JAVA(三)</h1><p>上两个部分讲了<code>Akka</code>的基本知识和常见的用法.接下来讲一讲<code>Akka</code>的远程调用以及集群的使用.因为在现在的项目中,基本上都是分布式的,单个的应用程序都快成为”熊猫”了.因此<code>Akka</code>的远程以及集群调用就是非常有必要的了.</p>
 <h2 id="Remote调用">Remote调用</h2><p><code>Akka-Remoting</code>是采用了P2P(peer-to-peer)的通信方式设计的,也就是端对端的方式.特别是Akka-Remoting不能与网络地址转换和负载均衡一起的工作.<br>但是,由于<code>Akka</code>在设计的时候就考虑了远程调用以及分布式的情况.因此,<code>Akka-Remoting</code>在使用上就非常的简单,几乎等于是透明的,和本地调用几乎相同.除了传递的消息需要可序列化以及创建和查找Actor的时候路径稍有不同外,没有其他的区别了.</p>
 <h3 id="远程调用的准备">远程调用的准备</h3><p>要在项目中使用<code>Akka-Remoting</code>非常的简单,只需要引入Maven中的<code>akka-remote</code>就可以了.</p>
@@ -907,7 +907,7 @@
     <link href="http://sunxiang0918.github.io/2016/01/13/Akka-in-JAVA-2/"/>
     <id>http://sunxiang0918.github.io/2016/01/13/Akka-in-JAVA-2/</id>
     <published>2016-01-13T14:43:04.000Z</published>
-    <updated>2016-02-13T14:54:05.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Akka_in_JAVA(二)">Akka in JAVA(二)</h1><p>继续<a href="/2016/01/10/Akka-in-JAVA-1/">Akka in JAVA(一)</a>中所讲.</p>
 <h2 id="Actor调用">Actor调用</h2><p>从上面的例子中,我们可以大概的对AKKA在JAVA中的使用有一个全局的概念.这里我们在稍微细致的讲解一下.</p>
 <p>在JAVA中使用AKKA进行开发主要有这几个步骤:</p>
@@ -1080,7 +1080,7 @@
     <link href="http://sunxiang0918.github.io/2016/01/10/Akka-in-JAVA-1/"/>
     <id>http://sunxiang0918.github.io/2016/01/10/Akka-in-JAVA-1/</id>
     <published>2016-01-10T08:46:28.000Z</published>
-    <updated>2016-02-13T14:53:59.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Akka_in_JAVA(一)">Akka in JAVA(一)</h1><h2 id="AKKA简介">AKKA简介</h2><h3 id="什么是AKKA">什么是AKKA</h3><p>Akka是一个由<code>Scala</code>编写的,能兼容<code>Sacala</code>和<code>JAVA</code>的,用于编写高可用和高伸缩性的<code>Actor模型</code>框架.它基于了事件驱动的并发处理模式,性能非常的高,并且有很高的可用性.大大的简化了我们在应用系统中开发并发处理的过程.它在各个领域都有很好的表现.</p>
 <h3 id="使用AKKA的好处">使用AKKA的好处</h3><p>就如上面简介中所说的,AKKA把并发操作的各种复杂的东西都统一的做了封装.我们主要关心的是业务逻辑的实现,只需要少量的关心<code>Actor模型</code>的串联即可构建出高可用,高性能,高扩展的应用.</p>
 <h3 id="Akka_for_JAVA">Akka for JAVA</h3><p>由于AKKA是使用<code>Scala</code>编写的,而<code>Scala</code>是一种基于JVM的语言.因此<code>JAVA</code>对AKKA的支持也是很不错的.Akka自身又是采用微内核的方式来实现的,这就意味着能很容易的在自己的项目中应用AKKA,只需要引入几个akka的Lib包即可.而官方直接就提供了<code>Maven</code>库供我们在JAVA中使用AKKA.<br>这些AKKA的依赖包主要有:</p>
@@ -1176,7 +1176,7 @@
     <link href="http://sunxiang0918.github.io/2016/01/02/%E5%9C%A8IOS%E4%B8%AD%E4%BD%BF%E7%94%A8swift%E8%B0%83%E7%94%A8%E7%B3%BB%E7%BB%9F%E7%9B%B8%E6%9C%BA/"/>
     <id>http://sunxiang0918.github.io/2016/01/02/在IOS中使用swift调用系统相机/</id>
     <published>2016-01-02T12:03:41.000Z</published>
-    <updated>2016-01-10T13:48:59.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="在IOS中使用swift调用系统相机">在IOS中使用swift调用系统相机</h1><p>在IOS的APP开发中,很容易就会遇到使用拍照或录制视频的功能.如果要求并不是太多的话,最简单方式就是调用系统自带的图像获取器<code>UIImagePickerController</code>. </p>
 <p>由于<code>UIImagePickerController</code>继承自<code>UINavigationController</code>,所以它的<code>delegate</code>需要实现<code>UIImagePickerControllerDelegate</code>和<code>UINavigationControllerDelegate</code>两个协议.</p>
 <h2 id="基本知识">基本知识</h2><p>要使用这个类主要要做以下几件事情:</p>
@@ -1366,7 +1366,7 @@
     <link href="http://sunxiang0918.github.io/2015/12/31/%E5%86%8D%E8%A7%812015/"/>
     <id>http://sunxiang0918.github.io/2015/12/31/再见2015/</id>
     <published>2015-12-31T14:13:48.000Z</published>
-    <updated>2016-01-01T16:12:46.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="再见2015">再见2015</h1><p>时光匆匆,转眼2015年就要过去了.2015开年的事情仿佛刚过去没有多久,2016又要来了.今年是忙碌的一年,不管是在生活上还是在工作上都发生了很多的变化.本文将回顾一下作为程序猿的自己在今年的成长,做一个简单的总结.</p>
 <h2 id="博客">博客</h2><p>今年年中,自己在github.io上搭建了自己的个人博客,并且把以前的一些文章从evernote上迁移了过来.以前,从来没有写博客的习惯,一个是觉得写博客比较麻烦,因为可能不是自己一个人看,不能像在evernote上那样随便乱写.还有一个就是觉得东西有个地方保存就好了,没必要分享出来.不过,最后还是决定把博客搭建出来,既能锻炼自己的书写,也能强迫自己把东西记录的更规范更细致,最后也能分享给有需要的人.从事了5年的软件行业了,渐渐的开始理解开源人的心态了,也从各位开源的大神中得到了很多的好处,是时候把自己力所能及的东西分享出来了.</p>
 <p>今年一共写了<a href="/archives/2015">43篇博客</a>,从数量上来说不算多.主要涉及的是<code>JAVA研发体系</code>以及<code>Swift</code>方面的内容.<br>对于明年,目标是60篇博客,内容上更有深度与广度.希望能够达成.</p>
@@ -1445,7 +1445,7 @@
     <link href="http://sunxiang0918.github.io/2015/12/30/Swift-LOG%E8%BE%93%E5%87%BA/"/>
     <id>http://sunxiang0918.github.io/2015/12/30/Swift-LOG输出/</id>
     <published>2015-12-30T14:17:30.000Z</published>
-    <updated>2015-12-30T14:23:03.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="LOG输出">LOG输出</h1><p>Log 输出是程序开发中很重要的组成部分，虽然它并不是直接的业务代码，但是却可以忠实地反映我们的程序是如何工作的，以及记录程序运行的过程中发生了什么。</p>
 <p>在 Swift 中，最简单的输出方法就是使用 print，在我们关心的地方输出字符串和值。但是这并不够，试想一下当程序变得非常复杂的时候，我们可能会输出很多内容，而想在其中寻找到我们希望的输出其实并不容易。我们往往需要更好更精确的输出，这包括输出这个 log 的文件，调用的行号以及所处的方法名字等等。</p>
 <p>我们当然可以在 print 的时候将当前的文件名字和那些必要的信息作为参数同我们的消息一起进行打印：</p>
@@ -1511,7 +1511,7 @@
     <link href="http://sunxiang0918.github.io/2015/12/27/%E5%9C%A8Swift%E4%B8%AD%E4%BD%BF%E7%94%A8%E9%9A%8F%E6%9C%BA%E6%95%B0/"/>
     <id>http://sunxiang0918.github.io/2015/12/27/在Swift中使用随机数/</id>
     <published>2015-12-27T12:27:49.000Z</published>
-    <updated>2015-12-27T13:11:22.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="在Swift中使用随机数">在Swift中使用随机数</h1><p>在我们的开发过程中,有时需要产生一些随机数.而Swift中并没有像JAVA中一样提供一个专门的<code>Random</code>类来集中的生成随机数.<br>在Swift中,提供了几个全局的函数来生成随机数.一个是<code>random()</code>,还有一个是<code>arc4random()</code>,以及专门生成浮点的<code>srand48(Int)</code>和<code>drand48()</code>.<br>这些方法并没有进行封装,其实并不符合面向对象的思想.并且如果想要限制生成的随机数的最大最小值也不得行.因此,我们有必要对他们进行一个封装.</p>
 <a id="more"></a>
 <h2 id="arc4random()">arc4random()</h2><p>arc4random 是一个非常优秀的随机数算法,它会返回给我们一个任意的整数,如果我们想要在某一个范围里的话,做一次取模运算取余数就可以了.但是由于<code>arc4random()</code>函数返回的值无论上什么平台上都是返回一个<code>UInt32</code>(无符号32位整数)的值.因此,在32位的平台上进行<code>Int(arc4random())</code>转换的话,就有一半的几率出现转换越界,这就会造成程序的崩溃.</p>
@@ -1541,7 +1541,7 @@
     <link href="http://sunxiang0918.github.io/2015/12/21/ELK%E5%88%9D%E5%AE%9E%E8%B7%B5/"/>
     <id>http://sunxiang0918.github.io/2015/12/21/ELK初实践/</id>
     <published>2015-12-21T12:07:47.000Z</published>
-    <updated>2015-12-22T03:00:26.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="ELK(ElasticSearch+Logstash+Kiabana)初实践">ELK(ElasticSearch+Logstash+Kiabana)初实践</h1><p>ELK是由<a href="https://www.elastic.co" target="_blank" rel="external">elastic</a>公司维护的开源的实时日志采集与分析三剑客.它能够在分布式的架构下,使用<a href="https://www.elastic.co/products/logstash" target="_blank" rel="external">Logstash</a>实时的采集各种不同来源的日志,并通过清洗/ETL转换,形成有意义的数据,存入到<a href="https://www.elastic.co/products/elasticsearch" target="_blank" rel="external">ElasticSearch</a>全文检索引擎中,再通过<a href="https://www.elastic.co/products/kibana" target="_blank" rel="external">Kiabana</a>呈现出来.<br>我们可以通过这套开源系统实时的了解服务器的软硬件信息,业务负载,错误异常等等.同时也能统一收集日志并做归档处理.当管理的机器非常多的时候这就非常的有意义了.</p>
 <p><img src="/img/2015/12/21/1.png" alt=""></p>
 <a id="more"></a>
@@ -1632,7 +1632,7 @@
     <link href="http://sunxiang0918.github.io/2015/12/10/%E5%A6%82%E4%BD%95%E5%85%B3%E9%97%ADOSX-10-11-SIP/"/>
     <id>http://sunxiang0918.github.io/2015/12/10/如何关闭OSX-10-11-SIP/</id>
     <published>2015-12-10T14:27:09.000Z</published>
-    <updated>2015-12-10T14:35:43.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="如何关闭OSX_10-11_SIP_(System_Integrity_Protection)">如何关闭OSX 10.11 SIP (System Integrity Protection)</h1><p>2015.10.8 01:50更新：实在忍不住，看完池老师的公众号，就升级了。问题果然是有的，池老师你还我睡眠时间，又整到凌晨……</p>
 <ol>
 <li>关于Homebrew的安装参考链接</li>
@@ -1690,7 +1690,7 @@
     <link href="http://sunxiang0918.github.io/2015/12/08/Nutch2-3-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2/"/>
     <id>http://sunxiang0918.github.io/2015/12/08/Nutch2-3-安装与部署/</id>
     <published>2015-12-08T14:15:32.000Z</published>
-    <updated>2015-12-08T15:26:00.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Nutch2-3_安装与部署">Nutch2.3 安装与部署</h1><p><a href="http://nutch.apache.org" target="_blank" rel="external">Nutch</a>是由JAVA开发的开源的全文检索引擎.不过更多的被用来当成Web爬虫来使用.现在Nutch分为了1.x和2.x两个版本在维护.而这两个版本的最主要的区别在于底层存储的抽象.1.x版本是基于Hadoop架构的,底层存储只能使用HDFS.而2.x版本通过<a href="http://gora.apache.org" target="_blank" rel="external">Apache Gora</a>对底层存储做了抽象,能访问HBase,MYSQL,MongoDB,Solr,AvroStore等等.</p>
 <p>但是从2.X开始,官方就只提供源码的下载了,不再提供编译后的发布版本,因此就需要我们自己去进行编译.</p>
 <a id="more"></a>
@@ -1756,7 +1756,7 @@ org.apache.avro.util.Utf8</code>的异常,开始折腾了我很久.最后发现�
     <link href="http://sunxiang0918.github.io/2015/12/05/%E5%9C%A8Linux%E4%B8%8A%E8%BF%90%E8%A1%8CSwift/"/>
     <id>http://sunxiang0918.github.io/2015/12/05/在Linux上运行Swift/</id>
     <published>2015-12-05T15:26:26.000Z</published>
-    <updated>2015-12-05T16:29:59.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="在Linux上运行Swift">在Linux上运行Swift</h1><p>盼星星盼月亮,等了半年,终于在12月的头几天,苹果开源了<code>Swift</code>语言.并建立了一个<a href="http://swift.org" target="_blank" rel="external">Swift.org</a>社区以及<a href="http://github.com/apple" target="_blank" rel="external">Github</a>来维护.开源以后,最大的好处当然是有更多的人来参与Swift语言的发展,让Swift语言增加更多的新的特性,更多的开源框架,工作在更多的平台上面.这对于一个开发语言来说无疑是一个很好的消息.而对于我来说,除了在编写代码的时候能更了解Swift某些函数的参数意义和工作的原理(作为一个JAVA Coder,平时如果遇到搞不定的问题或者是不明白的地方,习惯了直接翻它的源码来了解原委的)外,让我基本上抛弃了<code>Python</code>脚本,平时有什么小东西小程序需要写一下的话,现在可以直接写一个Swift文件,然后在命令行直接调用<code>swift xxx.swift</code>或者<code>swiftc -O xxxx.swift</code>即可.</p>
 <h2 id="在Linux上安装Swift">在Linux上安装Swift</h2><p>前面废话说了这么多.现在就来看看如何在Linux上安装Swift的运行环境.MACOS上的就不用说了,直接安装一个Xcode就可以了.</p>
 <a id="more"></a>
@@ -1848,7 +1848,7 @@ org.apache.avro.util.Utf8</code>的异常,开始折腾了我很久.最后发现�
     <link href="http://sunxiang0918.github.io/2015/12/02/MYSQL%E6%94%AF%E6%8C%81utf8mb4/"/>
     <id>http://sunxiang0918.github.io/2015/12/02/MYSQL支持utf8mb4/</id>
     <published>2015-12-02T14:41:52.000Z</published>
-    <updated>2015-12-02T14:59:54.000Z</updated>
+    <updated>2016-10-10T01:12:11.000Z</updated>
     <content type="html"><![CDATA[<h1 id="MYSQL支持utf8mb4">MYSQL支持utf8mb4</h1><p>MYSQL默认的utf8字符集采用了3个字节来进行保存.这就存在了一个问题,那就是有部分的UTF8的字符其实是保存不进MYSQL的,比如现在流行的emoji表情,这和以前的认知是不同的.为了避免以后出现问题,找了这方面的信息.推荐如果有保存扩展字符的用户,提前就把MYSQL的字符集给修改了.具体MYSQL的默认utf8支持哪些字符编码,可以参见这个:<a href="http://witmax.cn/unicode-list.html" target="_blank" rel="external">Unicode编码表</a>,前126行就是它支持的,后面的就是不支持的.</p>
 <p>发现这个问题其实相当的偶然,在知乎上看到了一个问题<a href="http://www.zhihu.com/question/35901422/answer/64960598" target="_blank" rel="external">为什么知乎不支持non-BMP的汉字？</a>.突然发现了这个问题,一验证果然如此.<br>具体来说就是MYSQL的utf8字符集只使用了3个字节来保存字符.因此UTF8扩展区的字符就无法保存.这个在MYSQL5.5后引入了<code>utf8mb4</code>的字符集来解决这个问题,它使用了4个字节来存储字符,扩展了存储的数量.因此,如果各位是使用的MYSQL5.5以上的版本,推荐在可能存入扩展字符的字段上设置字符集为utf8mb4.虽然这样可能会造成空间的浪费,但是比以后在上线的系统上升级数据库的风险要小的多.</p>
 <a id="more"></a>
