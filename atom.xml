@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2016-10-09T16:09:04.000Z</updated>
+  <updated>2016-10-10T01:18:56.000Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -20,11 +20,12 @@
     <link href="http://sunxiang0918.github.io/2016/03/28/%E4%BD%BF%E7%94%A8Mockito%E5%92%8CSpringTest%E8%BF%9B%E8%A1%8C%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/"/>
     <id>http://sunxiang0918.github.io/2016/03/28/使用Mockito和SpringTest进行单元测试/</id>
     <published>2016-03-28T14:19:04.000Z</published>
-    <updated>2016-10-09T16:09:04.000Z</updated>
+    <updated>2016-10-10T01:18:56.000Z</updated>
     <content type="html"><![CDATA[<h1 id="使用Mockito和SpringTest进行单元测试">使用Mockito和SpringTest进行单元测试</h1><p>单元测试的作用以及重要性其实不用在这里不断的重复了.为了保证软件的可靠性,单元测试可能是最容易执行的一个可靠的手段了.一方面，程序员通过编写单元测试来验证自己程序的有效性,另外一方面,管理者通过持续自动的执行单元测试和分析单元测试的覆盖率等来确保软件本身的质量.</p>
 <p>JAVA生态圈里面说起单元测试一般都会使用<code>JUnit</code>或者<code>TestNG</code>.其中<code>JUnit</code>可能使用的更加频繁一些,<code>JUnit4</code>使用注解以及各种其他框架对它的支持,形成了一个完善的单元测试的生态圈.</p>
 <h2 id="SpringTest单元测试">SpringTest单元测试</h2><p>现在的JAVA WEB项目中,起码一半以上的项目是使用了Spring的.因此,单纯的使用<code>JUnit</code>来进行单元测试并不是十分的好用,对于由Spring管理的<code>Bean</code>要进行单元测试,首先需要实例化Spring上下文,然后又需要手动的去注入依赖的<code>Bean</code>,比较麻烦.特别是对于有事务的单元测试,或数据库数据测试,单独使用<code>JUnit</code>几乎无法完成.</p>
 <p>所幸,SpringFramework也意识到了这点,于是推出了<code>spring-test</code>模块,他能完成Spring环境与Junit单元测试环境的对接.让我们只专注于单元测试本身进行书写,而由它来完成Spring容器的初始化、<code>Bean</code>的获取、数据库事务的管理、数据操作正确性检查等等。</p>
+<a id="more"></a>
 <h3 id="项目中引用spring-test">项目中引用spring-test</h3><p>要在项目中使用Spring测试框架非常的简单，在Maven中依赖<code>spring-test</code>即可：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependencies</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--test--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="title">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-test<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">version</span>&gt;</span>4.2.0.RELEASE<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="title">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>Maven会自动的完成依赖包的引用。</p>
@@ -42,7 +43,11 @@
 <h3 id="优化基于数据库数据的单元测试">优化基于数据库数据的单元测试</h3><p>其实这个和要讲的Spring-test不是必然的联系。</p>
 <h2 id="Mock测试">Mock测试</h2><h2 id="Mockito特性">Mockito特性</h2><h2 id="Mockito简单入门">Mockito简单入门</h2><h3 id="项目中引用Mockito">项目中引用Mockito</h3><h2 id="Mockito与SpringTest整合">Mockito与SpringTest整合</h2>]]></content>
     <summary type="html">
-    <![CDATA[<h1 id="使用Mockito和SpringTest进行单元测试">使用Mockito和SpringTest进行单元测试</h1><p>单元测试的作用以及重要性其实不用在这里不断的重复了.为了保证软件的可靠性,单元测试可能是最容易执行的一个可靠的手段了.一方面，程序员通过编写]]>
+    <![CDATA[<h1 id="使用Mockito和SpringTest进行单元测试">使用Mockito和SpringTest进行单元测试</h1><p>单元测试的作用以及重要性其实不用在这里不断的重复了.为了保证软件的可靠性,单元测试可能是最容易执行的一个可靠的手段了.一方面，程序员通过编写单元测试来验证自己程序的有效性,另外一方面,管理者通过持续自动的执行单元测试和分析单元测试的覆盖率等来确保软件本身的质量.</p>
+<p>JAVA生态圈里面说起单元测试一般都会使用<code>JUnit</code>或者<code>TestNG</code>.其中<code>JUnit</code>可能使用的更加频繁一些,<code>JUnit4</code>使用注解以及各种其他框架对它的支持,形成了一个完善的单元测试的生态圈.</p>
+<h2 id="SpringTest单元测试">SpringTest单元测试</h2><p>现在的JAVA WEB项目中,起码一半以上的项目是使用了Spring的.因此,单纯的使用<code>JUnit</code>来进行单元测试并不是十分的好用,对于由Spring管理的<code>Bean</code>要进行单元测试,首先需要实例化Spring上下文,然后又需要手动的去注入依赖的<code>Bean</code>,比较麻烦.特别是对于有事务的单元测试,或数据库数据测试,单独使用<code>JUnit</code>几乎无法完成.</p>
+<p>所幸,SpringFramework也意识到了这点,于是推出了<code>spring-test</code>模块,他能完成Spring环境与Junit单元测试环境的对接.让我们只专注于单元测试本身进行书写,而由它来完成Spring容器的初始化、<code>Bean</code>的获取、数据库事务的管理、数据操作正确性检查等等。</p>]]>
+    
     </summary>
     
       <category term="JAVA" scheme="http://sunxiang0918.github.io/tags/JAVA/"/>
