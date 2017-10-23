@@ -19,8 +19,8 @@ Data Import Request Handler
 
 除了这篇文章外,还可以参见[DataImportHandlerFaq](https://wiki.apache.org/solr/DataImportHandlerFaq).如果想快速开始,可以浏览[DIHQuickStart](https://wiki.apache.org/solr/DIHQuickStart)
 
-#概况
-##目标
+# 概况
+## 目标
 
 * 能从关系型数据库中读取数据
 * 能通过配置从多个表以及列数据中构造Solr的文档(`Document`)
@@ -33,7 +33,7 @@ Data Import Request Handler
 
 <!--more-->
 
-#设计概况
+# 设计概况
 要使用这个`Handler`,就必须在`solrconfig.xml`文件中做如下的注册:
 
 ```xml
@@ -52,7 +52,7 @@ Data Import Request Handler
     * 读取什么数据(结果集(`resultset`)列,`xml`的字段等等)
     * 如果处理数据(修改/新增/删除 字段)
 
-#从关系型数据库导入的用法
+# 从关系型数据库导入的用法
 为了使用这个Handler,需要参照以下几个步骤:
 
 * 定义一个`data-config.xml`文件,并且在`solrconfig.xml`文件的`DataImportHandler`小节指定它的存放位置
@@ -61,7 +61,7 @@ Data Import Request Handler
 * 使用全导入命令(`full-import`)执行从数据库到Solr索引的全导入操作
 * 使用增量导入命令(`delta-import`)执行Solr索引的增量导入(获取新的 插入与更新)
 
-##配置数据源
+## 配置数据源
 在`dataConfig`标签下直接增加`dataSource`标签
 
 ```xml
@@ -74,14 +74,14 @@ Data Import Request Handler
 * 剩下的其他属性全是特定的数据源实现所特有的.
 * 如果你要自己实现数据源插件,可以看[这里](https://wiki.apache.org/solr/DataImportHandler#datasource)
 
-###Oracle数据库实例
+### Oracle数据库实例
 首先你需要下载并安装[Oralce JDBC驱动](http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html)到Solr安装目录的`lib`文件夹下.
 
 ```xml
 <dataSource name="jdbc" driver="oracle.jdbc.driver.OracleDriver" url="jdbc:oracle:thin:@//hostname:port/SID" user="db_username" password="db_password"/>
 ```
 
-###多数据源
+### 多数据源
 在实现中有一种可能就是需要不止一个数据源.为了配置多个数据源,需要再配置多个`dataSource`标签.这时数据源的`name`属性就有意义了.当有多个数据源的时候,每一个数据源的`name`属性都不能重复,是唯一的.比如:
 
 ```xml
@@ -101,7 +101,7 @@ Data Import Request Handler
 ..
 ```
 
-##配置JDBC数据源
+## 配置JDBC数据源
 `JdbcDataSource` 允许有以下属性:
 
 * **driver**(必填):Jdbc驱动的类名
@@ -117,14 +117,14 @@ Data Import Request Handler
 
 直接放入`dataSource`标签的其他标签会直接被传入到JDBC驱动
 
-##在data-config.xml中进行配置
+## 在data-config.xml中进行配置
 一个Solr的文档可以被认为是一个去标准化的、拥有多个字段、其值来自不同表的`schema`.
 
 `data-config.xml`首先定义了一个`Document`元素.一个`document`代表了一种文档.一个文档包含了一个或多个根实体(`root entity`).一个根实体又可以包含多个子实体,这些子实体反过来又可以再包含其他的实体.一个实体就是关系数据库中的一个表或试图.每一个实体都可以包含多个字段.每一个字段相当于关系型数据库查询语句的结果中的返回字段.对于每一个字段,都是查询结果集中的列名.如果结果集的列名与Solr的字段名不相同,那么就需要填写`name`属性.而其他的必要属性比如`type`可以直接从`SolrSchema.xml`中继承(当然,也可以被重写)
 
 为了从数据库中获取数据,我们的设计理念围绕着为每一个实体都提供给用户**模板化的SQL**(`templatized sql`).它能当用户需要时,提供给用户完整的`SQL`功能.而根实体就是其字段能被其他子实体所关联的中心表.
 
-###data-config的Schema定义
+### data-config的Schema定义
 `dataconfig`并没有严格的schema定义.实体与字段的属性取决于它们依赖的`processeor`处理器和`transformer`转换器
 
 一个实体默认的属性都有:
@@ -151,7 +151,7 @@ Data Import Request Handler
 * **deletedPkQuery**:当增量导入时所使用的查询语句
 * **deltaImportQuery**:(当增量导入时所使用的查询语句).如果不提供这个语句,DIH会在识别增量后尝试构建查询语句(这是非常容易出错的).命名空间`${dih.delta.<column-name>}`可以在这个查询语句中使用,比如:`select * from tbl where id=${dih.delta.id}`. [Solr1.4](https://wiki.apache.org/solr/Solr1.4)
 
-##操作命令
+## 操作命令
 DIH提供了基于HTTP请求的API.这些就是他能执行的操作:
 
 * full-import:当请求`http://<host>:<port>/solr/dataimport?command=full-import`地址的时候,全导入操作会开始执行.
@@ -172,7 +172,7 @@ DIH提供了基于HTTP请求的API.这些就是他能执行的操作:
 * reload-config:当`data-config`文件被改变了,并且你想不重启Solr而重新加载这个文件的时候,执行`http://<host>:<port>/solr/dataimport?command=reload-config`
 * abort:使用`http://<host>:<port>/solr/dataimport?command=abort`这个来中止数据的导入
 
-##全导入实例
+## 全导入实例
 让我们来看一个例子,假如在数据库中我们有如下的定义:
 ![](https://wiki.apache.org/solr/DataImportHandler?action=AttachFile&do=get&target=example-schema.png)
 这是一个可以满足Solr Schema定义的关系模型.我们会使用这个例子来给`DataImportHandler`创建一个`data-config.xml`.我们使用[HSQLDB](http://hsqldb.org/)数据库来创建这个Schema.要运行它,请执行以下的步骤:
@@ -229,7 +229,7 @@ DIH提供了基于HTTP请求的API.这些就是他能执行的操作:
             </entity>
 ```
 
-###一个更短的dataConfig配置
+### 一个更短的dataConfig配置
 在上一个例子中,它映射了多个数据库字段到Solr的字段中.而还有一种可能是我们会映射所有的数据库字段到Solr字段中,并且它们字段的名字都是相同的(忽略大小写).也许当任何内置的转换器被使用的时候(见 转换器章节),你才需要添加一个字段.  
 一个更短的版本例子如下:
 
@@ -247,14 +247,14 @@ DIH提供了基于HTTP请求的API.这些就是他能执行的操作:
 </dataConfig>
 ```
 
-##使用增量导入命令
+## 使用增量导入命令
 当访问[http://localhost:8983/solr/dataimport?command=delta-import](http://localhost:8983/solr/dataimport?command=delta-import)地址的时候,增量导入操作会被执行.这个操作会在一个新的线程开始执行,并且相应中的`status`属性会显示`busy`.取决于你数据的大小,这个操作会花费一些时间.在任何时候,你都可以访问[http://localhost:8983/solr/dataimport](http://localhost:8983/solr/dataimport)来查看当前的状态.
 
 当增量导入命令被执行的时候,它会从`conf/dataimport.properties`文件中读取开始的时间.这个时间会被用于执行增量查询,并且当完成增量导入后,会更新`conf/dataimport.properties`文件中的时间戳.
 
 **提示**:在Solr中,增量导入是一种比全导入跟有效率的方式,但是它需要一些少量的配置:[DataImportHandlerDeltaQueryViaFullImport](https://wiki.apache.org/solr/DataImportHandlerDeltaQueryViaFullImport)
 
-###增量导入的实例
+### 增量导入的实例
 我们会使用与全导入相同的数据库例子.请注意,这个例子中的数据库schema已经被更新了,在每一个表中现在都包含了一个`last_modified`的时间戳字段.你可能需要重新下载数据库,因为它最近已经更新了.我们使用这个时间戳字段来决定每一个表中的哪些记录自从上一次被索引后有所变动.
 
 请看一下一下的data-config.xml配置
@@ -350,7 +350,7 @@ SELECT MAX(did) FROM ${dataimporter.request.dataView}
 SELECT MAX(did) AS did FROM ${dataimporter.request.dataView}
 ```
 
-#配置属性写入器
+# 配置属性写入器
 [Solr4.1](https://wiki.apache.org/solr/Solr4.1)中,在`dataConfig`节点下新增加了一个`propertyWriter`节点.属性`last_index_time`的值会被这个处理器转换成文本并且保存到`properties`文件中.并且会在下一次的导入时被当做`${dih.last_index_time}`变量被使用.这一个节点就是用来描述如何控制属性值写入`properties`文件的. 
 
 ```xml
@@ -364,10 +364,10 @@ SELECT MAX(did) AS did FROM ${dataimporter.request.dataView}
 * `dateFormat`:(`SimplePropertiesWriter`/`ZKPropertiesWriter`)使用`java.text.SimpleDateFormat`的正则表达式来把日期转换为文本.默认值是`yyyy-MM-dd HH:mm:ss`.而对于JDBC的转义语法,需要使用`{'ts' yyyy-MM-dd HH:mm:ss}`
 * `locale`:(`SimplePropertiesWriter`/`ZKPropertiesWriter`)在Solr4.1中,默认的语言环境是根语言环境.这一点与Solr4.0以及之前都不同.之前的版本始终使用的是机器的默认语言环境
 
-#使用XML/HTTP数据源
+# 使用XML/HTTP数据源
 `DataImportHandler`同样能使用基于HTTP的数据源来创建索引.包括从`REST/XML`的API和`RSS/ATOM`的订阅来创建索引.
 
-##配置URLDataSource或HttpDataSource数据源
+## 配置URLDataSource或HttpDataSource数据源
 在[Solr1.4](https://wiki.apache.org/solr/Solr1.4)开始,`HttpDataSource`已经由`URLDataSource`所替代而被废弃.
 
 一个简单的配置在`dataConfig.xml`中的`URLDataSource`和`HttpDataSource`的配置样例如下所示:
@@ -384,7 +384,7 @@ SELECT MAX(did) AS did FROM ${dataimporter.request.dataView}
 * **connectionTimeout**(可选):默认的超时时间为5000毫秒
 * **readTimeout**(可选):默认的读取超时时间为10000毫秒
 
-##在data-config.xml文件中进行配置
+## 在data-config.xml文件中进行配置
 一个由`xml/http`数据源提供的实体除了上面所说的默认属性外,还有以下这些属性:
 
 * processor(必须):并且其值必须是`XPathEntityProcessor`
@@ -412,7 +412,7 @@ SELECT MAX(did) AS did FROM ${dataimporter.request.dataView}
  xpath="/a//b..."
 ```
 
-##HttpDataSource的例子
+## HttpDataSource的例子
 在[Solr1.4](https://wiki.apache.org/solr/Solr1.4)开始,`HttpDataSource`已经由`URLDataSource`所替代而被废弃.
 
 下载在数据库章节提供的完整的导入例子,然后我们会尝试在这个例子中索引[Slashdot RSS feed](http://rss.slashdot.org/Slashdot/slashdot).
@@ -459,7 +459,7 @@ SELECT MAX(did) AS did FROM ${dataimporter.request.dataView}
 
 注意:并不像数据库,你并不能在使用`XPathEntityProcessor`的时候省略字段的定义声明.它依赖于在定义中声明的字段的XPATH,才能从xml中提取出来值.
 
-##从维基百科提取索引的例子
+## 从维基百科提取索引的例子
 下面的`data-config.xml`被用于提取维基百科dump全部的索引(只有最近的英文的文章).这个文件从维基百科网站下载下来的时候是`pages-articles.xml.bz2`,解压后有将近40GB的大小.
 
 ```xml
@@ -504,19 +504,19 @@ SELECT MAX(did) AS did FROM ${dataimporter.request.dataView}
 
 请注意:有许多维基百科的文章是被重定向到其他的文章中,在Solr1.4后使用`$skipDoc`可以忽略这些文章.同样的,`$skipDoc`只有在正则表达式匹配的情况下被返回.
 
-##使用增量导入命令
+## 使用增量导入命令
 仅仅只有`SqlEntityProcessor`的实体处理器支持增量操作.`XPathEntityProcessor`处理器目前还没有实现增量的操作.因此,不幸的是,目前还没有方法来支持XML的增量导入.如果你想在`XPathEntityProcessor`中实现这些方法:这些方法在`EntityProcessor.java`中有解释.
 
-#从邮件中创建索引
+# 从邮件中创建索引
 请参见[MailEntityProcessor](https://wiki.apache.org/solr/MailEntityProcessor)
 
-#Tika的集成
+# Tika的集成
 请参见[TikaEntityProcessor](https://wiki.apache.org/solr/TikaEntityProcessor)
 
-#扩展功能的API工具
+# 扩展功能的API工具
 我们目前展示过的例子都是非常简单的.不可能将用户的所有需求都通过一个xml配置文件就满足的.所以我们提供了一些抽象的类让用户自己来实现,从而实现更高级的功能.
 
-##Transformer
+## Transformer
 每一个被实体所使用的字段值都可以直接被索引处理器所使用或者是通过`Transformer`转换器加工一下再使用,甚至有可能完全的生成新的字段值也是可能的.`transformer`转换器必须被配置在实体的属性中:
 
 ```xml
@@ -530,7 +530,7 @@ SELECT MAX(did) AS did FROM ${dataimporter.request.dataView}
 
 一个转换器可以被用于修改一个从数据源中获取的字段的值.也可以用于创建一个新的未定义的字段.如果转换器的操作执行失败,或者正则匹配失败,那么字段会保持原样,已存在的字段不会被修改,未定义的字段也不会被生成.上述的链式处理允许一个字段的值一次又一次不断的被转换器所改变.并且一个转换器还允许使用其他实体的字段用于处理字段的值.
 
-###RegexTransformer
+### RegexTransformer
 有一个名为由DIH提供的内置的名为`RegexTransformer`的转换器.它能帮助我们使用正则表达式来提取和操作字段的值.它真正的实现类是`org.apache.solr.handler.dataimport.RegexTransformer`,但是在使用的时候我们可以省略它的包名.
 
 **属性**
@@ -569,7 +569,7 @@ query="select full_name , emailids from foo"/>
 ```
 注意:这个转换器可以被用于使用`splitBy`属性来分隔字符串,或者使用`replaceWith`属性来替换字符串中的每一个值,又或者使用` groupNames`来表示一组正则表达式组.到底是用来做什么这取决于它定义时`splitBy`、`replaceWith`和`groupNames`这几个属性到底哪一个最前面.当它匹配到第一个动作后,后面的属性标签会被忽略.
 
-###ScriptTransformer
+### ScriptTransformer
 这个转换器能让你书写`Javascript`或者其他JAVA支持的脚本语言.你必须在`JAVA6`中才能使用此功能.
 
 ```xml
@@ -621,7 +621,7 @@ query="select full_name , emailids from foo"/>
 * 在上面的例子中,`f1`这个`javascript`函数会在实体e返回的每一行记录上执行一次.
 * 它会被当成一个java的转换器来执行.抽象类`Transformer`的`transformRow(Map<String,Object> , Context context)`方法有两个入参.但由于它是一个`javascript`脚本,因此第二个参数有可能被忽略,并且还能正常工作.
 
-###DateFormatTransformer
+### DateFormatTransformer
 DIH内置了一个名为`DateFormatTransformer`的转换器.这个转换器对于把`java.util.Date`实例转换成日期/时间字符串非常的有用.
 
 ```xml
@@ -637,7 +637,7 @@ DIH内置了一个名为`DateFormatTransformer`的转换器.这个转换器对�
 
 上述的字段被定义在`RSS`的例子中用来解析RSS摘要中的发布时间.
 
-###NumberFormatTransformer
+### NumberFormatTransformer
 它可以用来把一个字符串解析成一个数字.它使用了JAVA中的`NumberFormat`类:
 
 ```xml
@@ -656,7 +656,7 @@ DIH内置了一个名为`DateFormatTransformer`的转换器.这个转换器对�
 * **sourceColName**:指明哪一列的数据会被NumberFormat处理.如果不提供这个属性,那么源和目标字段相同
 * **locale**:解析字符串时所使用的语言环境(可选).如果没有设置语言环境,在Solr4.1以及之后的版本默认是`ROOT`语言环境(在Solr4.1之前使用的是机器默认的语言环境)
 
-###TemplateTransformer
+### TemplateTransformer
 可用于覆盖或修改已经存在的任意Solr字段或者创建一个新的Solr字段.分配给该属性的值是一个基于静态模板的可使用DIH变量的字符串.如果模板字符串包含占位符或变量,那么在转换器开始执行前必须定义它们.一个未定义的变量会导致整个模板的转换会被忽略.比如:
 
 ```xml
@@ -671,7 +671,7 @@ DIH内置了一个名为`DateFormatTransformer`的转换器.这个转换器对�
 
 * template:模板字符串.在上面的例子中有`${e.name}`和`$eparent.surname`两个占位符.他们必须在被执行前提供值.
 
-###HTMLStripTransformer
+### HTMLStripTransformer
 [Solr1.4](https://wiki.apache.org/solr/Solr1.4)
 可以在一个字符串字段中去掉HTML标签
 
@@ -688,7 +688,7 @@ DIH内置了一个名为`DateFormatTransformer`的转换器.这个转换器对�
 
 * **stripHTML**:一个用于标记是否在这个字段上执行`HTMLStripTransformer`的布尔值
 
-###ClobTransformer
+### ClobTransformer
 [Solr1.4](https://wiki.apache.org/solr/Solr1.4)
 它可以用来从数据库的`Clob`类型字段中获取一个字符串.比如:
 
@@ -704,7 +704,7 @@ DIH内置了一个名为`DateFormatTransformer`的转换器.这个转换器对�
 * **clob**:用于标记是否在这个字段上执行`ClobTransformer`转换的布尔值
 * **sourceColName**:标记数据来源字段是哪一个.如果不设置这个属性,那么来源和目标字段相同.
 
-###LogTransformer
+### LogTransformer
 [Solr1.4](https://wiki.apache.org/solr/Solr1.4)
 它可以用来处理控制台或日志文件中的日志数据,比如:
 
@@ -724,7 +724,7 @@ logTemplate="The name is ${e.name}" logLevel="debug" >
 5. error
 这些值是区分大小写的(要求全小写)
 
-###转换器的例子
+### 转换器的例子
 [Solr1.4](https://wiki.apache.org/solr/Solr1.4)
 下面的例子展示了使用转换器链来大量重复的处理变量.
 我们保持`solrconfig.xml`不变并且重用一些转换器.两个实体的列名同样会在转换器中使用.
@@ -789,20 +789,20 @@ logTemplate="The name is ${e.name}" logLevel="debug" >
   </dataConfig>
 ```
 
-###实现自定义的转换器
+### 实现自定义的转换器
 你可以非常简单的实现一个你自己的转换器,具体的文档请参阅[DIHCustomTransformer](https://wiki.apache.org/solr/DIHCustomTransformer)
 
-##EntityProcessor
+## EntityProcessor
 
 每一个的实体都会被一个名叫`SqlEntityProcessor`的默认实体处理器处理.它非常适合处理使用关系型数据库作为数据源的系统.而对于其他种类的数据源,比如REST或者NOSQL数据库,你可以选择扩展`org.apache.solr.handler.dataimport.Entityprocessor`这个抽象类.它被设计为流式逐行的处理实体.一个最简单的实现自己的实体处理类的方式就是继承自`EntityProcessorBase`类并且重写它的`public Map<String,Object> nextRow()`方法.`EntityProcessor`依赖于数据源来获取数据.数据源的返回类型对于`EntityProcessor`非常的重要.
 
-###SqlEntityProcessor
+### SqlEntityProcessor
 它是默认处理器.它的数据源必须是`DataSource<Iterator<Map<String, Object>>>`种类的.`JdbcDataSource`就可以被它使用.
 
-###XPathEntityProcessor
+### XPathEntityProcessor
 它用于索引XML类型的数据.它的数据源必须是`DataSource<Reader>`类型的.`URLDataSource`或者`FileDataSource`都可以提供给`XPathEntityProcessor`使用.
 
-###FileListEntityProcessor
+### FileListEntityProcessor
 这是一个简单的实体处理器.它可以被用来基于某些条件枚举文件系统上的一系列文件.它不需要使用数据源.它的实体的属性有:
 
 * fileName:(必须)标示文件的一个正则表达式
@@ -833,7 +833,7 @@ logTemplate="The name is ${e.name}" logLevel="debug" >
 
 不要忘了`rootEntity`属性.如上所示,`FileListEntityProcessor`会隐式的在实体`X`中生成`fileDir`、`file`、`fileAbsolutePath`、`fileSize`、`fileLastModified`字段.需要特别指出的是`FileListEntityProcessor`返回的路径列表和随后的实体必须使用`FileDataSource`来获取文件的内容.
 
-###CachedSqlEntityProcessor
+### CachedSqlEntityProcessor
 这个处理器是`SqlEntityProcessor`的一个扩展.这个实体处理器可以通过命中缓存来减少真正执行数据库的查询.对于只有一个SQL执行的根实体,在大多数情况下是不起作用的.
 
 例1:
@@ -871,7 +871,7 @@ logTemplate="The name is ${e.name}" logLevel="debug" >
 
 关于DIH的更多缓存的选项可以看[SOLR-2382](https://issues.apache.org/jira/browse/SOLR-2382).这些额外的选项包括:在NOSQL的实体中使用缓存,扩展缓存的实现,持久化缓存,把DIH的输出写入缓存而不是Solr,使用已经创建了的缓存作为DIH实体的输入以及增量更新缓存数据.其中的一些特性会在`Solr3.6` `Solr4.0` 中提供.
 
-###PlainTextEntityProcessor
+### PlainTextEntityProcessor
 这个实体处理器会从数据源中读取所有的内容,并且写入到一个被称为`plainText`的隐藏字段中.文本的内容不会做任何的解析,但是你可以根据需要,自己增加转换器来处理`plainText`中的数据,甚至是增加一些字段出来.
 例子:
 
@@ -883,7 +883,7 @@ logTemplate="The name is ${e.name}" logLevel="debug" >
 ```
 需要确保数据源是`DataSource<Reader> (FileDataSource, URLDataSource)`类型的
 
-###LineEntityProcessor
+### LineEntityProcessor
 这个实体处理会会从数据源中一行一行的读取所有的内容.每读取一行都会把返回值放入一个叫`rawLine`的字段中.同样,文本的内容不会做任何的解析,但是你可以根据需要,自己增加转换器来处理`rawLine`中的数据,甚至是增加一些字段出来.
 
 读取的行数据可以使用`acceptLineRegex`和`omitLineRegex`这两个正则表达式来进行过滤.给实体增加的属性有:
@@ -910,7 +910,7 @@ logTemplate="The name is ${e.name}" logLevel="debug" >
 
 [SOLR-2549](https://issues.apache.org/jira/browse/SOLR-2549)补丁让`LineEntityProcessor`支持了可变长度和带有分隔符的文件,这在之前是需要使用转换器的.
 
-###SolrEntityProcessor
+### SolrEntityProcessor
 [Solr3.6](https://wiki.apache.org/solr/Solr3.6)
 这个实体处理器可以从其他的Solr实例与核心(`cores`)中导入数据.这个数据是根据一个指定的查询来获取.这个实体处理器在你想从你的Solr索引中稍微修改一下然后放入其他的索引中时非常的有用.在一些情况下,所有的数据可能会只存放在Solr的索引中.那么`SolrEntityProcessor`只能复制那些在源索引中`stored`了的字段.`SolrEntityProcessor`支持以下一些属性:
 
@@ -933,7 +933,7 @@ logTemplate="The name is ${e.name}" logLevel="debug" >
 </dataConfig>
 ```
 
-##DataSource
+## DataSource
 可以从`org.apache.solr.handler.dataimport.DataSource`([源码](http://svn.apache.org/viewvc/lucene/dev/trunk/solr/contrib/dataimporthandler/src/java/org/apache/solr/handler/dataimport/DataSource.java?view=markup))扩展一个类用来作为数据源.它必须在数据源的配置中被定义.
 
 ```xml
@@ -941,7 +941,7 @@ logTemplate="The name is ${e.name}" logLevel="debug" >
 ```
 它可以在标准的实体中使用.
 
-###JdbcDataSource
+### JdbcDataSource
 这是默认的实现.例子可以见[这里](#jdbcdatasource).它的签名为:
 
 ```java
@@ -949,17 +949,17 @@ public class JdbcDataSource extends DataSource<Iterator<Map<String, Object>>>
 ```
 它被设计来从数据库中一行一行的读取数据.每一行就是一个Map
 
-###URLDataSource
+### URLDataSource
 这个数据源通常为`XPathEntityProcessor`从`file://`或`http://`地址提供数据.请参阅[这里](#httpds).它的签名为:
 
 ```java
 public class URLDataSource extends DataSource<Reader>
 ```
 
-###HttpDataSource
+### HttpDataSource
 `HttpDataSource`数据源已经在Solr1.4以后被`URLDataSource`所替代.它和`URLDataSource`的功能是一样的,仅仅是名字不同而已.
 
-###FileDataSource
+### FileDataSource
 它可以向`URLDataSource`那样被使用,只是他是用磁盘上的文件中获取数据.唯一与`URLDataSource`不同的地方在于访问磁盘文件的时候,路径名定义不一样.它的签名是这样的:
 
 ```java
@@ -970,7 +970,7 @@ public class FileDataSource extends DataSource<Reader>
 * **basePath**:(可选)当不是绝对路径的时候的一个相对的基础路径.
 * **encoding**:(可选)在Solr4.1以后的版本中,默认是UTF-8编码(在4.1之前,默认的编码是和机器的默认编码一致)
 
-###FieldReaderDataSource
+### FieldReaderDataSource
 它可以像`URLDataSource`那样被使用,它的签名是:
 
 ```java
@@ -989,10 +989,10 @@ public class FieldReaderDataSource extends DataSource<Reader>
 <entity dataSource="f" processor="XPathEntityProcessor" dataField="dbEntity.xmlData"/>
 ```
 
-###ContentStreamDataSource
+### ContentStreamDataSource
 它会使用POST的数据作为数据源.它可以在任何使用`DataSource<Reader>`作为数据源的实体处理器中被使用.
 
-##EventListeners
+## EventListeners
 事件监听器会注册`onImportStart`和`onImportEnd`两个事件.他们必须实现[EventListener](http://lucene.apache.org/solr/api/org/apache/solr/handler/dataimport/EventListener.html)接口.
 
 ```xml
@@ -1003,7 +1003,7 @@ public class FieldReaderDataSource extends DataSource<Reader>
 </dataConfig>
 ```
 
-##特殊指令
+## 特殊指令
 一些特殊的指令可以给DIH的任何组件加入某些变量,从而影响它们的返回.
 
 * **$skipDoc**:跳过当前的文档.不把它加入到Solr中.这个是一个布尔值
@@ -1014,7 +1014,7 @@ public class FieldReaderDataSource extends DataSource<Reader>
 
 注意:在Solr3.4,`$deleteDocById`和`$deleteDocByQuery`不会增加已删除数(`#deletes processed`)的统计.同样的,如果一个组件只是使用这些特殊的指令来删除文档.那么DIH是不会提交数据变化的.在Solr3.4以后,`commit`动作会始终被执行.并且在每一次调用`$deleteDocById`或`$deleteDocByQuery`后,已删除数的统计也会加1.并且被删除的文档数量在一次调用可以删除多个文档的情况下(特别是使用$deleteDocByQuery)统计可能不准确.更多的信息可以参阅[SOLR-2492](https://issues.apache.org/jira/browse/SOLR-2492)
 
-##在solrConfig.xml中增加数据源
+## 在solrConfig.xml中增加数据源
 你可以像在`data-config.xml`增加数据源那样在`solrconfig.xml`中配置数据源.只是数据源的属性可能有些不同:
 
 ```xml
@@ -1031,7 +1031,7 @@ public class FieldReaderDataSource extends DataSource<Reader>
   </requestHandler>
 ```
 
-#架构
+# 架构
 下面的图展示了一个样例配置的逻辑流程.
 ![](https://wiki.apache.org/solr/DataImportHandler?action=AttachFile&do=get&target=DataImportHandlerOverview.png)
 
@@ -1051,23 +1051,23 @@ public class FieldReaderDataSource extends DataSource<Reader>
 * 所有实体的输出最后都会被组合成一个文档
     * 需要注意的是来自C的中间记录`C.1`,`C.2`,`f(C.1)`,`f(C1)`会被忽略
 
-##字段声明
+## 字段声明
 在`entity`标签中声明字段可以帮助我们提供更多的不能被自动得出的信息.它依赖于从结果中获取的`column`的值.你显示的在配置中增加的字段,这等于在Solr的schema.xml中增加了一些隐式的字段.在schema.xml中会自动的从配置文件中继承所有的属性.当你增加字段条目的时候,你不能增加额外的配置.
 
 * 实体处理器提供的字段与schema.xml中所配置的字段名字不相同.
 * 内置的转换器需要额外的信息来决定哪些字段会被处理,以及如何处理.
 * `XPathEntityprocessor`或其他的处理器需要每一个字段都提供额外的信息.
 
-##什么是一行记录?
+## 什么是一行记录?
 在DIH中,一行记录就是一个Map(`Map<String, Object>`).在这个map中,key是字段的名字.value可以是任意合法的Solr类型的数据.value同样可以是任意合法的Solr类型的集合(这可能会映射到一个多值字段(`multiValued field`)中去).在关系型数据库中一条查询不能提供一个多值字段.但是可以通过关联其他的实体查询来创建一个多值字段.如果一个父实体的记录关联了子实体返回的多条记录,那么他们就可以被放入一个多值字段中去.如果数据源是`xml`.那就可以直接返回一个多值字段.
 
-##变量解算器
+## 变量解算器
 变量解算器(`VariableResolver`)可以替换那些像`${name}`的占位符.它是一个多级Map.每一个命名空间就是第一个Map.同时命名空间以`.`符号分隔.例如这有一个占位符`${item.ID}`,`item`就是一个命名空间(是一个Map),`ID`就是那个命名空间中的一个值.命名空间可以像`${item.x.ID}`那样嵌套,`x`又是另外一个命名空间.可以从上下文中获取当前的变量解算器结果的引用.或者可以在关系型数据库的`query`或HTTP的`url`中直接使用`${name}`这样的占位符.
         
-##识别器--在查询或URL地址中自定义格式
+## 识别器--在查询或URL地址中自定义格式
 虽然命名空间的概念十分的有用,当时有可能用户希望在查询或url地址中插入一些计算后的值.比如:有一个日期对象并且你的数据源也能接受一些自定义的日期格式化.
 
-###formatDate
+### formatDate
 使用这个函数来把日期格式化成字符串,它有4个参数(在Solr4.1以前,它只有两个):
 
 1. 一个日期类型的变量或者日期计算表达式(`datemath expression`)
@@ -1080,13 +1080,13 @@ public class FieldReaderDataSource extends DataSource<Reader>
 * 指定语言环境的例子:`${dataimporter.functions.formatDate(item.ID, 'yyyy-MM-dd HH:mm', 'th_TH')}`
 * 指定时区的例子:`'${dataimporter.functions.formatDate(item.ID, 'yyyy-MM-dd HH:mm', 'en_US', 'GMT-8:00')}`
 
-###escapeSql
+### escapeSql
 使用这个可以对特殊的SQL字符进行转义.例如`${dataimporter.functions.escapeSql(item.ID)}`.它只需要一个参数,并且这个值必须是在`VaraiableResolver`中合法的.
 
-###encodeUrl
+### encodeUrl
 使用这个可以编码URL地址.比如:`${dataimporter.functions.encodeUrl(item.ID)}`.它只需要一个参数,并且这个值必须是在`VaraiableResolver`中合法的.
 
-##自定义识别器
+## 自定义识别器
 在DIH中提供了插件机制来自定义函数.只要实现[Evaluator](http://lucene.apache.org/solr/api/org/apache/solr/handler/dataimport/Evaluator.html)接口,并且把它配置在`data-config.xml`中即可.下面的例子展示了如果定义一个转换字符串为小写的识别器.
 
 ```xml
@@ -1116,10 +1116,10 @@ public class LowerCaseFunctionEvaluator extends Evaluator{
 ```
 像`decode` `load` `run`等函数可以帮助我们使用复杂SQL语句
 
-###访问请求参数
+### 访问请求参数
 当使用DIH时,所有的HTTP请求参数都会发送给Solr.这时你能使用`${dataimporter.request.command}`命名空间来访问请求中的命令是什么.
 
-#交互开发模式
+# 交互开发模式
 要开启这个模式,需要在DIH的UI界面上把`Debug Mode`按钮滑向右边.它会在HTML文本区中显示当前你DIH的配置,并且你能修改它.在配置的下面有一个名为`Raw Debug-Response`的区域,它包含了你点击在屏幕左边的`Execute with this Configuration`蓝色按钮后从DIH得到的响应.
 
 一些注意事项:
@@ -1129,7 +1129,7 @@ public class LowerCaseFunctionEvaluator extends Evaluator{
 * 如果在运行过程中发生异常,错误堆栈信息会显示在这里
 * 一些实体提供的字段,如果这些字段没有在schema.xml中显示的被`field`标签声明,那么转换器可能不能在文档中访问它们.
 
-#调度(Scheduling)
+# 调度(Scheduling)
 
 * DataImportScheduler
 * 版本: 1.2
@@ -1151,7 +1151,7 @@ TODO:
 * 尽可能的使用Solr的类
 * 增加`javadoc`文档
 
-##已具备:
+## 已具备:
 
 * 在DIH配置同一地方工作.
 * `solr.home/conf/`文件夹下的`dataimport.properties`文件有强制属性(具体见下面例子中的dataimport.properties文件)
@@ -1171,7 +1171,7 @@ TODO:
 * v1.0:
     * 初始化版本
 
-##SolrDataImportProperties
+## SolrDataImportProperties
 
 * 使用[java.util.Properties](http://download.oracle.com/javase/6/docs/api/java/util/Properties.html)来从`dataimport.properties`中加载配置
 
@@ -1234,7 +1234,7 @@ public class SolrDataImportProperties {
 }
 ```
 
-##ApplicationListener
+## ApplicationListener
 
 * 这个类实现了[javax.servlet.ServletContextListener](http://download.oracle.com/javaee/6/api/javax/servlet/ServletContextListener.html)接口(用于监听Web应用初始化及销毁事件)
 * 使用了`HTTPPostScheduler`.提供[java.util.Timer](http://download.oracle.com/javase/6/docs/api/java/util/Timer.html)和上下文属性Map方便定时方法的调用
@@ -1318,7 +1318,7 @@ public class ApplicationListener implements ServletContextListener {
 }
 ```
 
-##HTTPPostScheduler
+## HTTPPostScheduler
 
 * 这个类继承至[java.util.TimerTask](http://download.oracle.com/javase/6/docs/api/java/util/TimerTask.html),它实现了`java.lang.Runnable`
 * 它表示了`DIHScheduler`的主线程
@@ -1493,7 +1493,7 @@ public class HTTPPostScheduler extends TimerTask {
 }
 ```
 
-##dataimport.properties 例子
+## dataimport.properties 例子
 
 * 从下面的导入调度配置中拷贝所有的东西到你的`dataimport.properties`文件,并修改它们的参数
 * 无论你是多核心还是单核心的Solr,把`dataimport.properties`文件放入你的`solr.home/conf`下(不是`solr.home/core/conf`)
@@ -1541,7 +1541,7 @@ params=/select?qt=/dataimport&command=delta-import&clean=false&commit=true
 interval=10
 ```
 
-#哪里可以下载
+# 哪里可以下载
 `DataImportHandler`是Solr新加的功能,你可以从这找到它:
 
 * 从[Solr website](http://lucene.apache.org/solr/)下载每日构建版
@@ -1553,7 +1553,7 @@ interval=10
 
 我们希望通过更多的例子来展示这个工具的强大.我们会不定时的更新这个文档.
 
-#故障排除
+# 故障排除
 
 * 如果你在索引国际字符中遇到了问题,请尝试在数据源的配置中设置`encoding`属性为`UTF-8`(见上面的例子).这应该能确保你的国际字符能正确的被索引(使用UTF8).
 

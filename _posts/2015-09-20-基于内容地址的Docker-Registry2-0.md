@@ -7,12 +7,12 @@ tags:
 comments: true
 ---
 
-#基于内容地址的Docker Registry2.0
+# 基于内容地址的Docker Registry2.0
 
 由于最近在项目中需要使用`Docker`,并且需要持续集成,因此就研究了一下Docker的`Registry`.突然发现`V1`版本的[Registry](https://github.com/docker/docker-registry)已经被官方打为**废弃**了.新的第二个版本的[Registry](https://github.com/docker/distribution)已经开始提供服务.因此就着重的研究了一下这个,无奈现在相关的文档还非常的少.找到一篇日文的文章感觉还不错,因此就翻译了一下.先申明下我日语也就是玩票的性质,肯定有很多不正确的地方,还望海涵.
 
 ---
-##[Content Addressable DockerイメージとRegistry2.0](http://deeeet.com/writing/2015/04/20/docker-1_6_distribution/)
+## [Content Addressable DockerイメージとRegistry2.0](http://deeeet.com/writing/2015/04/20/docker-1_6_distribution/)
 Docker1.6已经出了.它增加了很多新的功能,比如:容器与镜像的标记(具体更多的信息可以看RancherOS的[“Adding Label Support to Docker 1.6”](http://rancher.com/docker-labels/)),日志记录的多种驱动等等.这次的Release更新中,我最感兴趣的就是Docker的Image开始基于内容进行寻址(Content-addressable) ([#11109](https://github.com/docker/docker/pull/11109))
 
 到目前为止,Docker Registry通过镜像的名字与Tag与Image进行交互(比如:`tcnksm/golang:1.2`).而Tag是由镜像的作者自己定义的.这就不能保证在相同的Tag下的镜像内容是完全相同的(在GIG中由于使用了commit的哈希值,因此标签不会出现这种情况.)
@@ -21,7 +21,7 @@ Docker1.6已经出了.它增加了很多新的功能,比如:容器与镜像的�
 
 <!--more-->
 
-###尝试
+### 尝试
 DockerHub已经开始支持`Registry2.0`,因此可以马上使用这个功能.但是,这次是尝试自己搭建一个私有的注册环境来尝试它的新功能(环境是在OSX上使用 boot2docker)
 
 首先需要安装Registry.与V1相同,Docker已经提供了相应的镜像.
@@ -74,7 +74,7 @@ REPOSITORY                               TAG                 DIGEST             
 192.168.59.103:5000/tcnksm/test-digest   <none>              sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6fc775b24d5ae26477c96fb5eaa4   8c2e06607696        3 days ago          2.433 MB
 ```
 
-###Dockerfile
+### Dockerfile
 `Dockerfile`的`FROM`语句现在也可以使用`digest`来指定镜像的名字.如果发现通过原来的镜像捕捉任何的东西就更新成为新的镜像,那么这样的操作可以被避免(気がついたら元のイメージ更新されていて完成イメージが意図しないものになっていたということが避けられる．)
 
 ```bash
@@ -88,7 +88,7 @@ Step 0 : FROM 192.168.59.103:5000/tcnksm/test-digest@sha256:e4c425e28a3cfe41efdf
 Successfully built 8c2e06607696
 ```
 
-###镜像的更新
+### 镜像的更新
 可以通过编辑`Dockerfile`文件然后通过`build`命令来构建新的镜像.
 
 ```bash
@@ -108,7 +108,7 @@ $ docker push $(boot2docker ip):5000/tcnksm/test-digest:latest
 Digest: sha256:4675f7a9d45932e3043058ef032680d76e8aacccda94b74374efe156e2940ee5
 ```
 
-###机制
+### 机制
 简单的说明一下机制.`digest`不是本地生成的,而是通过`push`操作,在`Registry`一方生成的.
 
 当客户端推送镜像到`Registry`时会同时附带`Image Manifest`(也就是签名).`Image Manifest`也就是Docker镜像内容的一些JSON话的定义.在Golang中的结构就如下所示,包含了镜像的名字,FSLayer的信息等等(manifest的具体定义参见[这里](https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-1.md))
@@ -146,7 +146,7 @@ Content-Length: 0
 Docker-Content-Digest: <digest>
 ```
 
-###Registry不同的话?
+### Registry不同的话?
 如果发送的`Manifest`内容是相同的话,那么推送到不同的Registry其实是会生成相同的`digest`的.`digest`对于`Registry`来说是全局唯一的.
 
 所以通过上面的方式制作的镜像,如果推送到`DockerHub`中的话,是会得到相同的`digest`的.
@@ -161,7 +161,7 @@ $ docker push tcnksm/test-digest:latest
 Digest: sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6fc775b24d5ae26477c96fb5eaa4
 ```
 
-###Registry2.0
+### Registry2.0
 
 [Faster and Better Image Distribution with Registry 2.0 and Engine 1.6 | Docker Blog](http://blog.docker.com/2015/04/faster-and-better-image-distribution-with-registry-2-0-and-engine-1-6/)
 
@@ -176,7 +176,7 @@ Digest: sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6fc775b24d5ae26477c96fb5eaa4
 
 目前`dist`命令还只有一些基本框架而已([dist](https://github.com/docker/distribution/tree/master/cmd/dist)).这对Docker镜像的pull/push操作只能使用命令行.作为Docker镜像的下载与运行来说,现在不是分离的了,这点有点讨厌.它试图全部都在这里进行解决.
 
-###References
+### References
 
 * [Docker Registry 2.0](https://docs.docker.com/registry/overview/)
 * [Docker Registry v2 authentication via central service](https://github.com/docker/distribution/blob/master/docs/spec/auth/token.md)
@@ -234,3 +234,4 @@ Digest: sha256:e4c425e28a3cfe41efdfceda7ccce6be4efd6fc775b24d5ae26477c96fb5eaa4
 	* API缺失:   delete, search,list 没有
 	* push/pull 速度有待优化 (gzip解压压缩)
 	* 镜像格式和V1 **不兼容**
+

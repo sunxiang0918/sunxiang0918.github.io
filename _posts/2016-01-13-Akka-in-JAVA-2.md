@@ -6,11 +6,11 @@ tags:
 - Akka
 ---
 
-#Akka in JAVA(二)
+# Akka in JAVA(二)
 
 继续[Akka in JAVA(一)](/2016/01/10/Akka-in-JAVA-1/)中所讲.
 
-##Actor调用
+## Actor调用
 从上面的例子中,我们可以大概的对AKKA在JAVA中的使用有一个全局的概念.这里我们在稍微细致的讲解一下.
 
 在JAVA中使用AKKA进行开发主要有这几个步骤:
@@ -26,7 +26,7 @@ tags:
 ### 定义消息模型
 在AKKA中的消息模型可以是任意实现了`Serializable`接口的对象.和大多数的远程调用框架一样,为了AKKA的高可用,以后可能会牵涉到远程调用和集群,那么消息模型就需要跨网络的进行传输,这就要求对消息模型进行序列化和反序列化.因此,要求消息模型必须实现`Serializable`接口.具体的序列化和反序列化在后面讲解远程调用的时候再细谈.
 
-###创建Actor的实现.
+### 创建Actor的实现.
 有了消息模型后,就需要有Actor对这些消息进行消费了.
 在AKKA中Actor分为了`TypedActor`和`UnTypedActor`.
 
@@ -36,7 +36,7 @@ tags:
 
 事实也是如此,在AKKA中我们更多的是倾向于使用`UnTypedActor`向`Actor`系统间传递消息,而`TypedActor`更多的是用来桥接`Actor`系统和`非Actor`的.
 
-####创建`UnTypedActor`
+#### 创建`UnTypedActor`
 在`AKKA for JAVA`中,创建一个`UnTypedActor`非常的简单.直接继承`UnTypedActor`类,并实现`public void onReceive(Object message) throws Exception`方法即可.在`onReceive`方法中就是需要实现的业务逻辑.比如:
 
 ```java
@@ -50,7 +50,7 @@ public class GreetPrinter extends UntypedActor{
 }
 ```
 
-####创建`TypedActor`
+#### 创建`TypedActor`
 由于AKKA是由`scala`写的,因此它其实最切合的就是使用`scala`进行开发,而JAVA作为一个强类型的静态语言,很多`scala`的特性其实是不好模仿出来的.因此,在JAVA中使用`TypedActor`其实是比较麻烦的.
 
 1. 首先需要定义`Actor`的接口.对于异步的方法,需要返回`scala.concurrent.Future`对象.阻塞的异步调用,需要返回`akka.japi.Option`.同步调用直接返回结果对象.比如:
@@ -142,17 +142,17 @@ public class GreetPrinter extends UntypedActor{
 	```
 从这个结果很容易的看出成功的异步调用了Actor.
 
-####小结
+#### 小结
 从上面的例子可以看出`TypedActor`其实在JAVA中是比较麻烦的,因此我们会更多的使用`UnTypedActor`.后面的例子中`Actor`指的都是`UnTypedActor`
 
-###获取Actor
+### 获取Actor
 在创建了Actor后,接下来就是需要实例化或获取Actor了.其主要是通过`ActorSystem`中的`actorOf`和`actorSelection`以及`actorFor`三个方法.
 
 * **actorOf**：创建一个新的Actor。创建的Actor为调用该方法时所属的Context下的直接子Actor；
 * **actorSelection**：当消息传递来时，只查找现有的Actor，而不会创建新的Actor；在创建了selection时，也不会验证目标Actors是否存在；
 * **actorFor**(*已经被actorSelection所deprecated*):只会查找现有的Actor，而不会创建新的Actor。
 
-##Actor生命周期
+## Actor生命周期
 AKKA为Actor生命周期的每个阶段都提供了一个钩子(hook),我们可以在必要的时候重载这些方法来完成一些事情。如下图所示:
 
 ![](/img/2016/01/13/2.png)
@@ -170,7 +170,7 @@ actorOf -> preStart -> start -> receive -> stop -> postStop
 
 与`ActorRef`不同,`ActorSelection`只关心`Path`而不关心具体是哪一个`Actor`.也就是说对一个明确路径的`ActorSelection`来说,无论对应的`Actor`是重启还是重新创建,只要是路径一样的,那么都是有效的.如果要通过`ActorSelection`来获取一个具体的`Actor`,需要调用`ActorSelection`的`resolveOne`的方法来获取.
 
-##Dispatcher
+## Dispatcher
 在AKKA中,actor之间都是通过消息的传递来完成彼此的交互的.而当Actor的数量比较多后,彼此之间的通信就需要协调,从而能更好的平衡整个系统的执行性能.
 
 在AKKA中,负责协调Actor之间通信的就是`Dispatcher`.它在自己独立的线程上不断的进行协调,把来自各个Actor的消息分配到执行线程上.
@@ -324,15 +324,15 @@ demo5-writer-dispatcher-14
 
 而如果把Dispatcher的类型改成`PinnedDispatcher`的话,系统就会创建100个线程出来.符合开始说的区别.
 
-##Router
+## Router
 在真实的情况中,通常针对某一种消息,会启动很多个相同的Actor来进行处理.当然,你可以在程序中循环的启动很多个相同的Actor来实现,就如上一小结中启动100个Actor那样,但是这就牵涉到Actor任务的平衡,Actor个数的维护等等,比较的麻烦.因此,在AKKA中存在一种特殊的Actor,即`Router`.Akka通过`Router`机制,来有效的分配消息给actor来完成工作.而在AKKA中,被`Router`管理的actor被称作`Routee`.
 
 根据项目的需求,可以使用不同的路由策略来分发一个消息到actor中.Akka附带了几个常用的路由策略,配置起就可以使用.当然,也可以自定义一个路由器.
 
-###使用Router
+### 使用Router
 要使用Router非常的简单,可以在Actor内通过实例化`Router`对象的方式来使用,也可以在Actor外通过`withRouter`的方式直接创建一个`RouterActor`来使用.
 
-####Actor内使用
+#### Actor内使用
 这种方式是通过AKKA提供的API,手动的创建`Router`对象,然后调用`addRoutee`方法手动的添加`Actor`(需要注意,每一次调用addRoutee都会返回一个新的Router对象),然后通过`route`来发送消息.
 
 ```java
@@ -349,7 +349,7 @@ demo5-writer-dispatcher-14
 ```
 这段代码首先创建了100个相同类型的Actor,然后实例化了一个`Router`,路由策略是轮询.然后把这100个Actor显式的加入到Router中. 最后,发送消息的时候通过`router.route`的方式进行发送.AKKA会把这个消息按照路由策略分发给某一个Actor中执行.
 
-####Actor外使用
+#### Actor外使用
 这种方式是通过创建一个`RouteActor`来使用路由.`RouteActor`和一般的`Actor`没有什么不同,区别在于它没有什么业务逻辑,在创建它的时候,它会创建N个具备业务逻辑的子Actor.当它接收到消息后,会把消息转发给它的某个子Actor.
 
 ```java
@@ -360,7 +360,7 @@ demo5-writer-dispatcher-14
 ```
 这段代码确定了子Actor的类型,然后定义了路由策略.而后创建了`RouteActor`.最后发送消息的时候通过给路由Actor发送消息的方式进行处理.
 
-####配置使用
+#### 配置使用
 这种方式是通过在AKKA的配置中来定义`Router`,创建的时候直接读取配置来获取`Router`.
 
 ```java
@@ -378,7 +378,7 @@ ActorRef router = system.actorOf(new Props(ExampleActor.class).withRouter(new Fr
 ```
 然后通过`FromConfig()`配置加载`Router`.加载的时候需要指定`router`的名字.这个名字需要和配置中的`Router`的路径相对应.
 
-###内置Router
+### 内置Router
 AKKA中一共内置了8种路由策略,他们分别是:
 
 * **RoundRobinPool**:	这个是最常用的,轮询方式分发消息
@@ -469,7 +469,7 @@ AKKA中一共内置了8种路由策略,他们分别是:
   		}
 	}
 	```
-###动态改变Routee数量
+### 动态改变Routee数量
 上述的大多数Route除了在配置或实例化的时候指定固定数量的Routee外,还能配置一个resize的策略,指定最大最小的Routee的数量:
 
 ```
@@ -491,7 +491,7 @@ DefaultResizer resizer = new DefaultResizer(lowerBound, upperBound);
 ActorRef router3 = system.actorOf(new Props(ExampleActor.class).withRouter(new RoundRobinRouter(nrOfInstances)));
 ```
 
-##Scheduler
+## Scheduler
 在实际使用AKKA中,可能会需要定时或重复的发送消息给某些Actor.要处理这类的问题,除了直接使用JAVA的API或`Quartz`显式的重复调用`ActorRef.tell`外,AKKA还提供了一个简单的Scheduler.
 
 AKKA的`Scheduler`比较简单,是由`ActorSystem`提供的,可以简单的对Actor发送重复或定时任务.
@@ -516,3 +516,4 @@ system.scheduler().schedule(Duration.Zero(),Duration.create(1, TimeUnit.SECONDS)
 需要注意的是`Scheduler`的这两个方法都会返回一个`Cancellable`对象.通过这个对象,我们可以显式的调用`cancellable.cancel();`来取消重复任务.
 
 其实,除了能重复的给Actor发送消息外,AKKA的`scheduler`由于可以接收`Runnable`接口,所以基本上可以做任何的事情.例如,在Spark中,AppClient中的ClientActor需要与Master这个Remote Actor通信,从而注册所有的Spark Master.由于注册过程中牵涉到远程通信,可能会因为网络原因导致通信错误,因此需要引入重试的机会.
+

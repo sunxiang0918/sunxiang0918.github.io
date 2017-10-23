@@ -5,21 +5,21 @@ tags:
 - JAVA
 ---
 
-#使用Mockito和SpringTest进行单元测试
+# 使用Mockito和SpringTest进行单元测试
 
 单元测试的作用以及重要性其实不用在这里不断的重复了.为了保证软件的可靠性,单元测试可能是最容易执行的一个可靠的手段了.一方面，程序员通过编写单元测试来验证自己程序的有效性,另外一方面,管理者通过持续自动的执行单元测试和分析单元测试的覆盖率等来确保软件本身的质量.
 
 JAVA生态圈里面说起单元测试一般都会使用`JUnit`或者`TestNG`.其中`JUnit`可能使用的更加频繁一些,`JUnit4`使用注解以及各种其他框架对它的支持,形成了一个完善的单元测试的生态圈.
 
-##SpringTest单元测试
+## SpringTest单元测试
 
 现在的JAVA WEB项目中,起码一半以上的项目是使用了Spring的.因此,单纯的使用`JUnit`来进行单元测试并不是十分的好用,对于由Spring管理的`Bean`要进行单元测试,首先需要实例化Spring上下文,然后又需要手动的去注入依赖的`Bean`,比较麻烦.特别是对于有事务的单元测试,或数据库数据测试,单独使用`JUnit`几乎无法完成.
 
 所幸,SpringFramework也意识到了这点,于是推出了`spring-test`模块,他能完成Spring环境与Junit单元测试环境的对接.让我们只专注于单元测试本身进行书写,而由它来完成Spring容器的初始化、`Bean`的获取、数据库事务的管理、数据操作正确性检查等等。
 
 <!--more-->
-
-###项目中引用spring-test
+ 
+### 项目中引用spring-test
 要在项目中使用Spring测试框架非常的简单，在Maven中依赖`spring-test`即可：
 
 ```xml
@@ -42,7 +42,7 @@ JAVA生态圈里面说起单元测试一般都会使用`JUnit`或者`TestNG`.其
 
 Maven会自动的完成依赖包的引用。
 
-###创建单元测试类
+### 创建单元测试类
 Spring-test以及Junit4都推荐使用注解的方式来进行配置。因此，我们要进行单元测试，需要的就是创建一个自己的测试类。然后在类上面进行少许的注解，表明我们要如何初始化spring，需要引用spring的哪些配置，然后再指明需要在单元测试类中注入哪些bean即可，比如：
 
 ```java
@@ -88,7 +88,7 @@ public class TestPoolService{
 
 经过以上的处理，我们就可以进行spring框架下的单元测试了，而且基本上能满足80%以上的需求。更多更高级的用法，可以参考：[JUnit官网](http://junit.org/junit4/)以及[Spring-test官网](http://docs.spring.io/spring/docs/4.3.4.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#overview-testing)
 
-###基于数据库数据的单元测试数据准备
+### 基于数据库数据的单元测试数据准备
 
 其实这个和要讲的Spring-test没有必然的联系。但是在很多的情况下，我们都会对数据库访问层进行单元测试。那么，往往就涉及到了数据库的数据打桩。为了能实现单元测试的自动化和可重复化，我们可以把桩数据写入一个单元测试的SQL中，在每次执行单元测试的时候，先执行这个SQL，给数据库准备数据，然后再执行单元测试。而这一切，我们可以写一个测试的基类来进行处理（JDK1.8中允许给接口增加默认方法，因此，这个地方我们可以定义一个接口来实现这个功能）：
 
@@ -174,7 +174,7 @@ public class TestPoolService implements DBTestBase {
 ```
 然后把SQL文件命名为`TestPoolService.sql`,放入`test/resources`中即可。
 
-##Mock测试
+## Mock测试
 
 经过上面所说的`JUnit`+`SpringTest`,基本上可以满足80%的单元测试了。但是，由于现在的系统越来越复杂，相互之间的依赖越来越多。特别是微服务化以后的系统，往往一个模块的代码需要依赖几个其他模块的东西。因此，在做单元测试的时候，往往很难构造出需要的依赖。一个单元测试，我们只关心一个小的功能，但是为了这个小的功能能跑起来，可能需要依赖一堆其他的东西，这就导致了单元测试无法进行。所以，我们就需要再测试过程中引入`Mock`测试。
 
@@ -188,11 +188,11 @@ public class TestPoolService implements DBTestBase {
 
 因此，当我们使用Mock后，对于那些难以构建的对象，就变成了个模拟对象，只需要提前的做`Stubbing`（桩）即可，所谓做桩数据，也就是告诉Mock对象，当与之交互时执行何种行为过程。比如当调用B对象的b()方法时，我们期望返回一个`true`，这就是一个设置桩数据的预期。
 
-##Mockito简单入门
+## Mockito简单入门
 
 在JAVA中，Mock测试框架主要有[Mockito](http://mockito.org/),[Jmock](http://www.jmock.org/),[EsayMock](http://easymock.org/),[PowerMock](https://github.com/jayway/powermock)等等。其中`Mockito`最为方便和简单，用的人也最多。而`PowerMock`是对`Mockito`的一个增强,增加了对静态、final、私有方法的Mock，但是基本用法和`Mockito`大致相同。对因此，我们使用`Mockito`作为Mock的框架。
 
-###项目中引用Mockito
+### 项目中引用Mockito
 
 要在项目中使用`Mockito`非常的简单，只需要在项目的Maven中引入：
 
@@ -205,7 +205,7 @@ public class TestPoolService implements DBTestBase {
         </dependency>
 ```
 
-###使用Mockito进行测试
+### 使用Mockito进行测试
 
 我们这里使用一个最简单的用户基本信息管理来做演示。这个功能有一个模型对象`UserPO`,一个数据库访问层`UserDao`,一个服务层`UserService`。
 
@@ -284,7 +284,7 @@ public interface IUserDao {
 }
 ```
 
-###创建单元测试类
+### 创建单元测试类
 当我们准备好上面的例子后，就可以开始创建单元测试类了。
 在这里，我们假设`IUserDao`是个很复杂的访问集群数据库的对象，并且这个类已经经过完整的测试保证是正确了的。而我们现在只需要单元测试`UserService#updateUserName`这个方法。因此，就需要对`IUserDao`进行*Mock*并打桩。
 
@@ -366,7 +366,7 @@ public class UserServiceTest {
 
 我们从头来分析一下这个单元测试类。
 
-####标明需要Mock的对象
+#### 标明需要Mock的对象
 程序一来，先定义了被测试的对象实例`userService`以及需要被模拟的`IUserDao`对象。需要注意的是，我们在`userDao`成员变量上增加了一个`@Mock`注解。这个注解的作用就是告诉*Mockito*，这个对象是需要被Mock的。
 
 接着，我们创建了一个`setUp()`方法，并使用了`JUnit`的注解`@Before`，用于在执行单元测试前执行一些代码，我们在这里需要对Mock的对象进行打桩。
@@ -431,7 +431,7 @@ public class UserServiceTest {
             return null;
         }).when(fileRecordDao).insert(Mockito.any());
     ```
-####验证Mock对象的调用
+#### 验证Mock对象的调用
 其实，一个最简单的Mock单元测试到这里已经算是完成了。我们已经验证了*userService*中的方法的正确性。但是，在复杂的方法调用堆栈中，往往可能出现结果正确，但是过程不正确的情况。比如，`updateUserName`方法返回false是有两种可能的，一种可能是用户没有找到，还有一种可能就是`userDao.updateUser(userPO)`返回false。因此，如果我们只是使用`Assert.assertFalse(updated);`来验证结果，可能就会忽略某些错误。
 
 *Mockito*同时提供了一些列的方法来对调用过程中的Mock对象的方法调用进行跟踪。我们可以对这些调用的过程进行断言验证，保证单元测试的结果与过程都是符合我们预期的。
@@ -471,7 +471,7 @@ public class UserServiceTest {
 * 除了`times`函数外，还提供了`after`、`atLeast`、`only`、`atMost`、`timeout`等等。
 * `verifyZeroInteractions`和`verifyNoMoreInteractions`这两个方法的实现其实是一样的，只是名字不一样，作用就是验证被Mock的对象的所有被调用的方法是否都被Verify过了。这样就能保证调用没有被遗漏。当有方法被调用了，但是我们在测试用例中没有*verify*的话，那么调用这两个方法就会抛异常。
 
-##Mockito与SpringTest整合
+## Mockito与SpringTest整合
 经过前面的讲解，`Mockito`的基本用法基本上应该都了解了。那么现在就需要整合`Mockito`和`SpringTest`了。
 
 其实这两者的整合也非常的简单。和他们单独使用的时候并没有什么区别。

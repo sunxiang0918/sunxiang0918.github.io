@@ -6,7 +6,7 @@ tags:
 toc: false
 ---
 
-#升级CentOS7的Linux内核
+# 升级CentOS7的Linux内核
 
 默认刚安装的CentOS7的内核是3.10的.
 
@@ -22,7 +22,7 @@ uname -r
 
 <!--more-->
 
-##步骤
+## 步骤
 
 1. 首先在命令行中输入:`uname -r` 来确定你现在的版本是什么
 

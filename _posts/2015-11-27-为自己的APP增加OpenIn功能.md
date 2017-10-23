@@ -5,7 +5,7 @@ tags:
 toc: false
 ---
 
-#为自己的APP增加OpenIn功能
+# 为自己的APP增加OpenIn功能
 
 在做App的时候,可能会遇到你的程序可以打开某种类型的文档.比如用户在safari中下载了一个torrent类型的文件,然后需要直接使用你写的App打开.那么这个时候就需要在编写App的时候进行文档类型的注册了.
 
@@ -13,7 +13,7 @@ toc: false
 
 <!--more-->
 
-##1.在Info.plist中注册文档类型
+## 1.在Info.plist中注册文档类型
 
 首先要做的就是在Info.plist中增加文档类型的注册,表示这个程序能处理哪些文档.
 
@@ -73,7 +73,7 @@ toc: false
 
 通过这个的指定,现在程序就能关联到某种文档文件了.
 
-##处理文档的打开操作
+## 处理文档的打开操作
 
 有了与文档的关联后,还需要进行的操作就是当用户指定APP打开文档后需要执行的操作了.
 
@@ -111,3 +111,4 @@ func application(application: UIApplication, openURL url: NSURL,options: [String
 最后返回一个true,表示是这个程序是能处理这个文档的.
 
 到此,我们的自己的程序就能打开任意的文档并进行相应的处理了.
+

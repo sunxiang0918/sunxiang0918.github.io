@@ -5,11 +5,11 @@ tags:
 - Swift
 ---
 
-#Swift中基本数据类型与NSData转换
+# Swift中基本数据类型与NSData转换
 
 最近由于程序的需要,要与JAVA的服务端进行Socket的交互,那么这就牵涉到了数据的交互.Socket的数据交互一般都是直接采用二进制Bytes的方式来传递,那么就需要把Swift中的各种基本数据转换成为JAVA服务器可以认可的Bytes字节数组,以及把JAVA的字节数组反序列化为Swift中的基本数据.
 
-##big-endian and little-endian
+## big-endian and little-endian
 要在不同程序中进行字节数组的数据交换,有个很重要的东西就是`字节序`.`字节序`顾名思义就是字节的顺序,也就是大于1个字节类型的数据在内存中存放的顺序.这个在跨平台以及网络程序交互中非常的重要.
 
 常见的字节序主要有两类:`Big-Endian`和`Little-Endian`.它们的定义为:
@@ -78,11 +78,11 @@ public func CFConvertDoubleSwappedToHost(arg: CFSwappedFloat64) -> Double
 **2016-02-16 Update**
 最新的swift中,对`UInt64`和`UInt32`,已经自带了成员方法:`public var bigEndian: UInt32 { get }` `public var littleEndian: UInt32 { get }`等等. 也就是说,不需要使用`CFSwapInt32BigToHost(val)`这样转换了,直接`val.bigEndian`即可.
 
-##基础数据与NSData的转换
+## 基础数据与NSData的转换
 为了能让Swift和JAVA进行网络的交互,那么就必须把它们的基础数据转换成为Bytes字节数组.
 在Swift中使用`NSData`或者`NSMutableData`来表示.因此,也就是需要把基础数据放入到NSData中.
 
-###Int32与Int64
+### Int32与Int64
 在Swift中,`Int`是一个特殊的整数类型,它的长度与当前平台的原生字长相同:
 
 * 在32位平台上,`Int`与`Int32`长度相同
@@ -150,7 +150,7 @@ public extension NSMutableData {
     }
 ```
 
-###Float32与Float64
+### Float32与Float64
 它的情况与`Int`的非常相似.同样需要经历字节序的转换,以及`NSMutableData.appendBytes`的调用.
 
 ```swift
@@ -186,7 +186,7 @@ public extension NSMutableData {
 }
 ```
 
-###Bool
+### Bool
 `Bool`类型由于是单字节的数据,不存在字节序的问题.因此,它与NSData的转换最为简单.
 
 ```swift
@@ -204,7 +204,7 @@ public extension NSMutableData {
 }
 ```
 
-###String
+### String
 字符串的处理又相对的要麻烦些了.因为字符串的长度是可变的.不像其他的数据类型是有固定的长度的.因此,一般在网络传输中,都会在字符串的bytes前接上一个`Int32`的字节数组来表示这个字符串的长度.
 
 因此,我们在转换`String`到`NSData`的时候,实际上是两个步骤.首先计算出字符串的字节长度.然后把这个字节长度放入NSData中,接着,再把字符串的内容转换为字节数组放入NSData中:
@@ -249,5 +249,7 @@ public extension NSMutableData {
 }
 ```
 
-##总结
+## 总结
 以上就是简单的介绍了在Swift中如何把几种常用的数据类型转换为网络交互格式的Bytes数组的.至于其他的数据类型,或者自定义的数据结构,无外乎都是从这几种基础数据类型上拼接出来的,稍微灵活修改下即可.
+
+

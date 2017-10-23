@@ -141,5 +141,6 @@ $ npm install hexo-deployer-git --save
 ```
 
 ---
-###后续
+### 后续
 这样就搭建完毕了, 后续我会慢慢的把以前记录到 evernote的东西 精选一些转过来. 
+

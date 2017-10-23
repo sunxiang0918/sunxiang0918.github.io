@@ -1,21 +1,22 @@
 ---
 title: Akka in JAVA(三)
 date: 2016-01-18 21:23:13
+toc: true
 tags:
 - JAVA
 - Akka
 ---
 
-#Akka in JAVA(三)
+# Akka in JAVA(三)
 
 上两个部分讲了`Akka`的基本知识和常见的用法.接下来讲一讲`Akka`的远程调用以及集群的使用.因为在现在的项目中,基本上都是分布式的,单个的应用程序都快成为"熊猫"了.因此`Akka`的远程以及集群调用就是非常有必要的了.
 
-##Remote调用
+## Remote调用
 
 `Akka-Remoting`是采用了P2P(peer-to-peer)的通信方式设计的,也就是端对端的方式.特别是Akka-Remoting不能与网络地址转换和负载均衡一起的工作.
 但是,由于`Akka`在设计的时候就考虑了远程调用以及分布式的情况.因此,`Akka-Remoting`在使用上就非常的简单,几乎等于是透明的,和本地调用几乎相同.除了传递的消息需要可序列化以及创建和查找Actor的时候路径稍有不同外,没有其他的区别了.
 
-###远程调用的准备
+### 远程调用的准备
 要在项目中使用`Akka-Remoting`非常的简单,只需要引入Maven中的`akka-remote`就可以了.
 
 ```xml
@@ -27,7 +28,7 @@ tags:
 ```
 
 <!--more-->
-###配置
+### 配置
 由于Akka几乎没有特别的为`Remoting`提供专门的API,区别仅仅在于配置.因此,接下来就是要修改项目中的akka的配置了:
 
 ```
@@ -226,7 +227,7 @@ akka {
 }
 ```
 
-###创建远程Actor
+### 创建远程Actor
 通过上面的配置后,在程序里面创建远程的Actor就非常的简单了,基本上感觉不到是创建的远程Actor.
 
 只需要在创建`ActorSystem`的时候使用上面所说的配置文件即可,接下来的就和本地的Actor没有任何的区别:
@@ -255,7 +256,7 @@ akka {
 这个配置文件告诉akka,在创建一个`/sampleActor`的时候,即`system.actorOf()`.指定的actor并不会在本地创建,而是会请求远程的actorSystem创建这个actor.
 
 
-###查找远程Actor
+### 查找远程Actor
 当客户端发布了一个远程的Actor后,客户端就需要调用它.而向它发送消息的先决条件就是要找到这个Actor.
 
 查询远程的Actor也非常的简单.每一个远程的Actor都会有一个它自己的Path.其格式是:`akka://<actorsystemname>@<hostname>:<port>/<actor path>`,比如上面所说的`akka.tcp://WCMapReduceApp@127.0.0.1:2552/user/remoteActor`.那么获取这个Actor的`ActorRef`,就是通过`actorFor`或`actorSelection`方法传入这个`ActorPath`即可.
@@ -265,7 +266,7 @@ final ActorRef remoteActor = system.actorFor("akka.tcp://WCMapReduceApp@127.0.0.
 ```
 接下来的操作就和本地的Actor一模一样了.
 
-###序列化
+### 序列化
 既然是远程调用,那么就涉及到消息的序列化.Akka内置了集中序列化的方式,也提供了序列化的扩展,你可以使用内置的序列化方式,也可以自己实现一个.
 
 要选择使用何种序列化,需要修改配置文件.在`akka`一节中配置`serializers`选项,指定序列化的实现类:
@@ -334,7 +335,7 @@ import com.typesafe.config.*;
     }
 ```
 
-###远程Actor的路由
+### 远程Actor的路由
 由于`Akka-remoting`是基于点对点的.因此,并不能很好的使用网络提供的负载均衡等功能.其实,要解决这个问题,我们可以使用`Akka`的路由功能.即在配置远程Actor的时候,增加`router`的参数.
 
 ```java
@@ -348,7 +349,7 @@ akka.actor.deployment {
 ```
 那么当向这个`/parent/remotePool`发送消息的时候,会轮询的把消息分发到不同的远程服务上,从而实现了高可用和负载均衡.
 
-###远程事件
+### 远程事件
 同Akka的本地Actor的生命周期Hook相同,Akka为远程的Actor申明了很多的事件.我们可以监听这些远程调用中发生的事件,也可以订阅这些事件.只需要在`ActorSystem.eventStream`中为下面的事件增加注册监听器即可. 需要注意的是如果要订阅任意的远程事件,是订阅`RemotingLifecycleEvent`,如果只订阅涉及链接的生命周期,需要订阅`akka.remote.AssociationEvent`.
 
 * DisassociatedEvent : 链接结束事件,这个事件包含了链接方向以及参与方的地址.
@@ -358,7 +359,7 @@ akka.actor.deployment {
 * RemotingShutdownEvent :	远程子系统被关闭的事件
 * RemotingErrorEvent : 	远程相关的所有错误
 
-###Demo
+### Demo
 
 这里举一个稍微复杂点的例子----单词计数.这个是Hadoop的入门的例子,我们使用Akka配合远程调用来实现一次. 功能是这样的,服务端提供了map/reduce方式的单词数量的计算功能,而服务端提供了文本内容的.
 它大概的运行流程是这样的:
@@ -900,15 +901,15 @@ All lines send !
 ```
 到此,我们就实现了通过`AKKA-remoting` 来进行`map/reduce`的简单计算.
 
-##Cluster调用
+## Cluster调用
 
-###原理
+### 原理
 
 Akka除了remoting远程调用外,还提供了支持去中心化的基于P2P的集群服务,并且不会出现单点故障.Akka的集群是基于Gossip协议实现的,支持服务自动失效检测,能够自动发现出现问题而离开集群的成员节点,通过事件驱动的方式,将状态传播到整个集群的其他成员节点中去.Gossip协议是点对点通信协议的一种,它受社交网络中的流言传播的特点所启发,解决了在超大规模集群下其他方式无法解决的单点等问题.
 
 一个Akka集群是由一组成员节点组成的,每一个成员节点都是通过`hostname:port:uid`来唯一标识,并且每一个成员节点间是完全解耦合的.
 
-####节点状态
+#### 节点状态
 
 Akka集群内部为集群中的成员定义了6种状态,并提供了状态转换矩阵,这6种状态分别是:
 
@@ -923,13 +924,13 @@ Akka集群内部为集群中的成员定义了6种状态,并提供了状态转�
 
 在Akka集群中的每一个成员节点,都只可能处在这6种状态中的一种中.当节点状态发生变化的时候,会发出节点状态事件.需要注意的是,除了Down和Removed状态外,其他状态是有可能随时变为Down状态的,即节点故障而无法提供服务.处于Down状态的节点如果想要再次加入Akka集群中,需要重新启动,并加入Joining状态,然后才能进行后续状态的变化,加入集群.
 
-####故障监控
+#### 故障监控
 
 在Akka集群中,集群的每一个成员节点,都会被其他另外一组节点(默认是5个)所监控,这一组节点会通过心跳来检测被监控的节点是否处于Unreachable状态,如果不可达则这一组节点会将被监控的节点的Unreachable状态向集群中的其他所有节点传播,最终使集群中的每个成员节点都知道被监控的节点已经故障.
 
 Akka集群中任一一个成员节点都有可能成为集群的Leader,这是基于Gossip协议收敛过程得到的确定性结果,并不是通过选举产生,从而避免了单点故障.在Akka集群中,Leader只是一种角色,在各轮Gossip收敛过程中Leader可能是不断变化的.Leader的职责就是让成员节点加入和离开集群.一个成员节点最开始是处于Joining状态,一旦所有其他节点都看到了新加入的该节点,则Leader会设置这个节点的状态为up.如果一个节点安全离开Akka集群,那么这个节点的状态会变为Leaving状态,当Leader看到该节点为Leaving状态,会将其状态修改为Exiting,然后通知所有其他节点,当所有节点看到该节点状态为exiting后,Leader将该节点移除,状态修改为removed状态.
 
-###配置
+### 配置
 
 要在项目中使用Akka集群,首先需要的就是在项目的Maven中引入akka-Cluster:
 
@@ -975,7 +976,7 @@ akka {
 
 更多的集群配置请参见:[config-akka-cluster](http://doc.akka.io/docs/akka/snapshot/general/configuration.html#config-akka-cluster)
 
-###集群事件
+### 集群事件
 
 正如上文所说,当节点发生变化的时候,Leader会发送状态的事件给集群中的所有成员节点.因此,接收和处理这些事件也是非常重要的.
 
@@ -991,7 +992,7 @@ akka {
 
 要说明这些节点的变化可以参考官方给出的最最简单的Akka集群的Demo,它不仅列出了一个最简单的Akka的集群要如何构建,也说明了这几个事件状态的变化.
 
-####集群事件Demo
+#### 集群事件Demo
 在官方的文档中,编写了一个最简单的Akka-Cluster的例子,这个例子就是启动三个Akka的节点,并且监听了节点的所有事件,接收到事件后,打印出来.
 
 **demo6.conf**
@@ -1151,9 +1152,9 @@ public class SimpleClusterApp {
 ```
 从日志中就可以看出各种状态的变化
 
-###集群实践
+### 集群实践
 
-####阶乘服务Demo
+#### 阶乘服务Demo
 这里通过一个简单的阶乘计算,来展示Akka-Cluster的使用.
 这个Demo分为了前台和后台两个部分,前台只用来输入阶乘的大小以及打印计算的结果,后台节点负责真正的阶乘的计算.
 

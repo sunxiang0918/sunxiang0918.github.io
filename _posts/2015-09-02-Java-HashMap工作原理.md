@@ -8,11 +8,11 @@ comments: true
 
 Java中HashMap的工作原理其实以前就看过很多次了,也仔细的分析过它的源码.但是一直没有写一篇文章来记录一下,这篇文章写的非常的清楚,非常的透彻.是我见过讲的最详细的.值得保存下来.
 
-#Java HashMap工作原理 
+# Java HashMap工作原理 
 
 大部分Java开发者都在使用Map，特别是HashMap。HashMap是一种简单但强大的方式去存储和获取数据。但有多少开发者知道HashMap内部如何工作呢？几天前，我阅读了java.util.HashMap的大量源代码（包括Java 7 和Java 8），来深入理解这个基础的数据结构。在这篇文章中，我会解释java.util.HashMap的实现，描述Java 8实现中添加的新特性，并讨论性能、内存以及使用HashMap时的一些已知问题。
 
-##内部存储
+## 内部存储
 
 Java HashMap类实现了Map<K, V>接口。这个接口中的主要方法包括：
 
@@ -90,7 +90,7 @@ static int indexFor(int h, int length) {
 
 这种机制对于开发者来说是透明的：如果他选择一个长度为37的HashMap，Map会自动选择下一个大于37的2的幂值（64）作为内部数组的长度。
 
-##自动调整大小
+## 自动调整大小
 
 在获取索引后，get()、put()或者remove()方法会访问对应的链表，来查看针对指定键的Entry对象是否已经存在。在不做修改的情况下，这个机制可能会导致性能问题，因为这个方法需要迭代整个列表来查看Entry对象是否存在。假设内部数组的长度采用默认值16，而你需要存储2，000,000条记录。在最好的情况下，每个链表会有125,000个Entry对象（2,000,000/16）。get()、remove()和put()方法在每一次执行时，都需要进行125,000次迭代。为了避免这种情况，HashMap可以增加内部数组的长度，从而保证链表中只保留很少的Entry对象。
 
@@ -113,7 +113,7 @@ public HashMap(int initialCapacity, float loadFactor)
 
 这幅图片描述了调整前和调整后的内部数组的情况。在调整数组长度之前，为了得到Entry对象E，Map需要迭代遍历一个包含5个元素的链表。在调整数组长度之后，同样的get()方法则只需要遍历一个包含2个元素的链表，这样get()方法在调整数组长度后的运行速度提高了2倍。
 
-##线程安全
+## 线程安全
 
 如果你已经非常熟悉HashMap，那么你肯定知道它不是线程安全的，但是为什么呢？例如假设你有一个Writer线程，它只会向Map中插入已经存在的数据，一个Reader线程，它会从Map中读取数据，那么它为什么不工作呢？
 
@@ -125,7 +125,7 @@ public HashMap(int initialCapacity, float loadFactor)
 
 从Java 5开始，我们就拥有一个更好的、保证线程安全的HashMap实现：**ConcurrentHashMap**。对于ConcurrentMap来说，只有桶是同步的，这样如果多个线程不使用同一个桶或者调整内部数组的大小，它们可以同时调用get()、remove()或者put()方法。**在一个多线程应用程序中，这种方式是更好的选择**。
 
-##键的不变性
+## 键的不变性
 
 为什么将字符串和整数作为HashMap的键是一种很好的实现？主要是因为它们是不可变的！如果你选择自己创建一个类作为键，但不能保证这个类是不可变的，那么你可能会在HashMap内部丢失数据。
 
@@ -197,7 +197,7 @@ public class MutableKeyTest {
 
 上述代码的输出是“test1=null test2=test 2”。如我们期望的那样，Map没有能力获取经过修改的键 1所对应的字符串1。
 
-##Java 8 中的改进
+## Java 8 中的改进
 
 在Java 8中，HashMap中的内部实现进行了很多修改。的确如此，Java 7使用了1000行代码来实现，而Java 8中使用了2000行代码。我在前面描述的大部分内容在Java 8中依然是对的，除了使用链表来保存Entry对象。在Java 8中，我们仍然使用数组，但它会被保存在Node中，Node中包含了和之前Entry对象一样的信息，并且也会使用链表：
 
@@ -239,9 +239,9 @@ static final class TreeNode<K,V> extends LinkedHashMap.Entry<K,V> {
 
 这张图片描述了在Java 8 HashMap中的内部数组，它既包含树（桶0），也包含链表（桶1，2和3）。桶0是一个树结构是因为它包含的节点大于8个。
 
-##内存开销
+## 内存开销
 
-###JAVA 7
+### JAVA 7
 
 使用HashMap会消耗一些内存。在Java 7中，HashMap将键值对封装成Entry对象，一个Entry对象包含以下信息：
 
@@ -265,7 +265,7 @@ static final class TreeNode<K,V> extends LinkedHashMap.Entry<K,V> {
 
 注意：从Java 7开始，HashMap采用了延迟加载的机制。这意味着即使你为HashMap指定了大小，在我们第一次使用put()方法之前，记录使用的内部数组（耗费4*CAPACITY字节）也不会在内存中分配空间。
 
-###JAVA 8
+### JAVA 8
 
 在Java 8实现中，计算内存使用情况变得复杂一些，因为Node可能会和Entry存储相同的数据，或者在此基础上再增加6个引用和一个Boolean属性（指定是否是TreeNode）。
 
@@ -277,9 +277,9 @@ static final class TreeNode<K,V> extends LinkedHashMap.Entry<K,V> {
 
 在大部分标准JVM中，上述公式的结果是44 * N + 4 * CAPACITY 字节。
 
-##性能问题
+## 性能问题
 
-###非对称HashMap vs 均衡HashMap
+### 非对称HashMap vs 均衡HashMap
 
 在最好的情况下，get()和put()方法都只有O(1)的复杂度。但是，如果你不去关心键的哈希函数，那么你的put()和get()方法可能会执行非常慢。put()和get()方法的高效执行，取决于数据被分配到内部数组（桶）的不同的索引上。如果键的哈希函数设计不合理，你会得到一个非对称的分区（不管内部数据的是多大）。所有的put()和get()方法会使用最大的链表，这样就会执行很慢，因为它需要迭代链表中的全部记录。在最坏的情况下（如果大部分数据都在同一个桶上），那么你的时间复杂度就会变为O(n)。
 
@@ -354,7 +354,7 @@ return i;
 
 在使用HashMap时，你需要针对键找到一种哈希函数，可以**将键扩散到最可能的桶上**。为此，你需要**避免哈希冲突**。String对象是一个非常好的键，因为它有很好的哈希函数。Integer也很好，因为它的哈希值就是它自身的值。
 
-###调整大小的开销
+### 调整大小的开销
 
 如果你需要存储大量数据，你应该在创建HashMap时指定一个初始的容量，这个容量应该接近你期望的大小。
 
@@ -362,7 +362,7 @@ return i;
 
 但这里也有一个**缺点**：如果你将数组设置的非常大，例如2^28，但你只是用了数组中的2^26个桶，那么你将会浪费大量的内存（在这个示例中大约是2^30字节）。
 
-##结论
+## 结论
 
 对于简单的用例，你没有必要知道HashMap是如何工作的，因为你不会看到O(1)、O(n)以及O(log(n))之间的区别。但是如果能够理解这一经常使用的数据结构背后的机制，总是有好处的。另外，对于Java开发者职位来说，这是一道典型的面试问题。
 
@@ -373,3 +373,4 @@ return i;
 ---
 原文链接： [coding-geek](http://coding-geek.com/how-does-a-hashmap-work-in-java/) 翻译： [ImportNew.com](http://www.importnew.com/) - [Wing](http://www.importnew.com/author/wing011203)
 译文链接： [http://www.importnew.com/16599.html](http://www.importnew.com/16599.html)
+

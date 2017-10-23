@@ -8,14 +8,14 @@ comments: true
 toc: false
 ---
 
-#Zookeeper 数据清理
+# Zookeeper 数据清理
 
-##问题现象:
+## 问题现象:
 情况是这样的,我在自己的笔记本上安装了`Zookeeper`,并使用了默认的配置作为开发的时候使用.
 因为平时会关机等等,所以重启`zookeeper`的次数也是比较频繁的.突然最近发现系统磁盘空间就不够用了.
 这不查不知道,一查吓一跳,`zookeeper`的data数据文件夹占了大概**5个G**的空间,而我zookeeper里面其实也没有什么东西,怎么会这么大呢?于是有了这篇文章的诞生.
 
-##问题分析:
+## 问题分析:
 首先我就在网上找了一圈,都说使用`zk/bin`里面的`zkClean.sh`就可以了.
 其调用语法是:`./zkClean.sh -n 3` 这样就可以保留最近的三个Log文件.
 但是我执行了后,发现然并卵.点反应都没有.一个文件都没有删除掉..
@@ -100,7 +100,7 @@ public static void purge(File dataDir, File snapDir, int num) throws IOException
 到此,问题解决.
 
 
-##其他补充:
+## 其他补充:
 除了使用`zkClean.sh`文件手工的删除外.还可以在`zoo.cfg`文件中配置`autopurge.snapRetainCount`和`autopurge.purgeInterval`两个参数.
 第一个参数指明了需要保留的快照数量,默认值和最小值是`3`.
 第二个参数是两次清楚数据的时间间隔,单位是小时.如果设置为`0`,那么就不开启自动清理.
@@ -108,8 +108,10 @@ public static void purge(File dataDir, File snapDir, int num) throws IOException
 除此之外,建议把`data`和`dataLog`两个文件夹分开.不要存放到一起,因为`data`文件存放的其实是快照,对磁盘的性能要求不高.而`dataLog`文件夹里面存放的是事务日志文件,每执行一次事务,都会写数据到这个文件夹中去.因此对磁盘的要求是非常高的. 再者,他`org.apache.zookeeper.server.PurgeTxnLog`这个类的处理逻辑其实有一定的问题.首先它会把MacOS系统里面的`.DS_Store`文件计算进去,这个获取最新的文件的时候有可能是会出问题的.其二就是他在查找最新的几个文件的时候是没有单独的过滤`snapshot`文件的.如果没有区分`data`和`dataLog`文件夹,`snapshot`和`log`文件都混在一起,那么最后获取的处理就会找不到`snapshot`文件.那么又会照成什么都不能删除的情况.
 
 
-##问题总结:
+## 问题总结:
 1. 修改配置中的`snapCount`,根据自己业务的需要,适当的修改这个数值.比如我们系统修改成`5000`比较合适.
 2. 修改配置中的`preAllocSize`,根据自己业务的需要,适当的修改这个数值.比如我们系统修改成`1000`比较合适.
 3. 修改配置中的`dataDir`和`dataLogDir`.分开存放事务日志和快照文件
 4. 修改配置中的`autopurge.snapRetainCount`和`autopurge.purgeInterval`.增加自动删除多余日志的检测.
+
+

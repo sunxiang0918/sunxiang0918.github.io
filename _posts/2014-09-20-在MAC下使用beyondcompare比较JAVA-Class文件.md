@@ -8,7 +8,7 @@ toc: false
 comments: true
 ---
 
-#在MAC下使用beyondcompare比较JAVA Class文件
+# 在MAC下使用beyondcompare比较JAVA Class文件
 
 2014年9月1日.beyondCompare终于推出了Mac版了.真的是大快人心的大好事,大了又大.
 以前用过很多MAC上的比较工具,像什么`Araxis Merge` `DiffFork` `DiffMerge` `Kaleidoscope`等等. 都没有很好用. 对比Windows平台上的BeyondCompare,差的不是一点半点.
@@ -28,3 +28,5 @@ comments: true
 8. 在[http://varaneckas.com/jad/](http://varaneckas.com/jad/)上面下载适用于MAC使用的JAD软件.并解压到第三步配置的地方.
 
 这样就OK了.使用beyondCompare直接比较JAVA Class文件
+
+

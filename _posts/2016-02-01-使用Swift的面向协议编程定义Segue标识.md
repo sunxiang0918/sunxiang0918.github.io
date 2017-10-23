@@ -5,7 +5,7 @@ tags:
 - Swift
 ---
 
-#使用Swift的面向协议编程定义Segue标识
+# 使用Swift的面向协议编程定义Segue标识
 
 作者：[Natasha](https://www.natashatherobot.com/protocol-oriented-segue-identifiers-swift/)，原文链接，原文日期：2015-12-17
 译者：[小锅](http://www.jianshu.com/users/3b40e55ec6d5/latest_articles)；校对：[&nbsp](http://swift.gg/2016/02/01/protocol-oriented-segue-identifiers-swift/undefined)；定稿：[千叶知风](http://weibo.com/xiaoxxiao)
@@ -17,7 +17,7 @@ tags:
 ![](/img/2016/02/01/1.png)
 
 <!--more-->
-##问题的出现
+## 问题的出现
 很不幸地，Segue 标识一般都是基于字符串的硬编码。当它们与 Storyboard 一起使用时，你必须在代码当中到处复制这些字符串 – 这确实很容易产生错误拼写的情况。
 
 ```swift
@@ -107,7 +107,7 @@ tags:
 
 毕竟，在整个app中的每个视图控制器都会碰到这个问题。你会如何来让这些代码更加整洁呢？机智如你，应该已经猜到了，协议可以用来解决这个问题。
 
-##解决方案
+## 解决方案
 这是一个靠我自己无法想出的优雅解决方案。感谢苹果在今年 WWDC 中关于架构的超赞演讲。我是认真的，真的超赞。
 首先，创建一个 SegueHandlerType 来将 Segueidentifier 枚举标识为一个类型：
 
@@ -194,7 +194,7 @@ class ViewController: UIViewController, SegueHandlerType {
 }
 ```
 
-##总结
+## 总结
 在视频中提到的关于使用 **SegueHandlerType** 的好处有：
 
 * 如果使用了未定义的 segue 标识，就会有编译期错误
@@ -216,3 +216,5 @@ class ViewController: UIViewController, SegueHandlerType {
 原文链接: [http://swift.gg/2016/02/01/protocol-oriented-segue-identifiers-swift/](http://swift.gg/2016/02/01/protocol-oriented-segue-identifiers-swift/)
 
 转载这篇文章的主要原因就是我也遇到了这个问题.在开发IOS程序的时候遇到了大量的这类的东西,当时是使用了全局的常量类来解决的,也是很不优雅.  同时,这个文章也提供了一个思路,以后遇到类似的问题都可以使用 协议扩展的方式来有眼的解决.
+
+

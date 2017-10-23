@@ -6,20 +6,20 @@ tags:
 - Akka
 ---
 
-#Akka in JAVA(四)
+# Akka in JAVA(四)
 最后这个部分讲一讲AKKA中的事件消息类型. 在Akka中主要是有三种消息类型,每一种类型对应了不同的使用场景.他们分别是:`Fire and Forget模式`,`Send and Receive模式`和`Publisher-Subscriber模式`.
 
-##Fire and Forget模式
+## Fire and Forget模式
 这种发送消息的模式是Akka中所推荐的,也是我们前面一直在使用的方式.也就是单向消息模式,Actor在发送消息之后,并不需要获取响应.这种方式在JAVA中需要使用`ActorRef`或`ActorSelection`的`tell`方法.和消息队列类似,直接调用该方法即可,程序不会阻塞,会直接执行后面的操作,但是消息已经发送给目标的Actor了.这种方式的具体使用方法前面已经列举了很多了,这里就不再重复的举例了.
 
-##Send and Receive模式
+## Send and Receive模式
 这种发送消息的模式是双向的,当Actor在发送消息之后,会接收到一个Future对象.和JAVA的Future一样,通过这个可以异步的接收到对方的结果消息.
 
 在整个AKKA中,提供了一套完整的Future机制,不光是在Actor传递消息间可以使用,也可以在非Actor中直接使用.
 
 <!--more-->
 
-###在代码中用来异步运算
+### 在代码中用来异步运算
 在一般的代码中,我们除了可以直接使用JAVA提供了`Future`机制实现异步处理外,还可以使用`Akka`提供了`Future`机制来实现异步处理,这样的好处在于可以直接的与Akka做无缝的集成.
 
 与`Future`相关的类和方法都在`akka.dispatch`和`akka.pattern.Patterns`中.
@@ -85,7 +85,7 @@ f.andThen(new OnComplete<String>() {
 
 除此之外,`Future`还有很多有用的方法,比如`foreach` `transform` `map` `filter`等等.这些个方法和JDK1.8中的`StreamAPI`非常的相似.具体的可以参考[这里](http://doc.akka.io/docs/akka/2.4.1/java/futures.html).
 
-###在Actor中用来发送消息
+### 在Actor中用来发送消息
 除了直接在代码中使用`Future`功能来使用异步操作外,另外一个用法就是真正的在Actor中进行消息的传递了. 在[Akka in JAVA(一)](/2016/01/10/Akka-in-JAVA-1/)中我们已经演示过通过`MailInbox`的方式来接收消息的反馈,而使用Akka的`Future`方式进行`Send and Receive模式`的消息传递是第二种方式.
 
 Akka提供了`ask`和`pipe`两个方法来实现`Send and Receive模式`的消息通信.
@@ -129,12 +129,12 @@ public void onReceive(Object message) {
 
 它使用`future`函数,异步的计算阶乘.并且把计算结果进行封装处理.然后通过`pipe`方法,把这个异步的结果尝试发送给`getSender()`,从而达到整个代码完全非阻塞的结果.
 
-##Publisher-Subscriber模式
+## Publisher-Subscriber模式
 这种模式也就是消息的订阅和发布.用处非常的广泛,比如一个Publisher和多个Subscriber的组合应用,形成事件的广播,前者会将消息同时发送给所有的订阅者,实现分布式的并行处理.比如针对订单的处理,当用户下了订单后,既要生成订单数据,又要通知库存还要通知卖方和买房.于是,就可以将这些不同的任务交给不同的Subscriber,当接收到消息后,同时对订单进行处理.另外,这种模式还可以对Actor的生命周期进行完整的监听,当Actor的节点成员发生变化后,其他节点可以及时的进行各种处理.
 具体的例子,可以参考上一篇博客中的`SimpleClusterListener`,它就是在`preStart`方法中调用了`cluster.subscribe`方法订阅了集群中的`MemberEvent.class` `UnreachableMember.class`两个事件.
 除了监听集群中的状态外,还可以通过调用`system.eventStream()`来获取消息总线,从而调用`subscribe`和`publish`方法来发布和订阅消息.
 
-##Demo
+## Demo
 
 这里使用一个稍微复杂点的例子来对Akka做一个简单的总结.它涉及到了Akka中的远程调用,本地调用,集群调用.使用了`Future` `Publisher-Subscriber`等特性,算是一个比较全面的例子.
 
@@ -825,7 +825,8 @@ public class Demo8App {
 {"installid":"0000lAOX","sessionid":"25371384b2eb1a5dc5643e14626ecbd41440152875362","operator":"1","timestamp":"1440152954","eventcode":"300039","eventdate":"2015-08-21 18:29:19","realip":"121.25.190.146"}
 ```
 
-##总结
+## 总结
 经过这四篇的博客,简单的介绍了一下Akka是什么,大概的用处是什么,以及Akka在JAVA中该如何的使用.由于篇幅以及本人经验的原因,还有很多都没有讲到,以后如有涉及,再慢慢的补上.总之,Akka是一个非常强大的框架,在现在大数据,高性能,分布式的环境下可以发挥很多的作用,各位可以试一试.
 
 PS:本系列文章中所有的Demo的源码已上传至[GitHub](https://github.com/sunxiang0918/AkkaDemo)中.
+

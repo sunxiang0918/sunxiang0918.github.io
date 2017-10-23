@@ -6,7 +6,7 @@ tags:
 toc: false
 ---
 
-#Swift中使用NSUserDefaults保存自定义对象
+# Swift中使用NSUserDefaults保存自定义对象
 
 NSUserDefaults适合存储轻量级的本地客户端数据,比如保存一些系统的基本配置等东西,使用NSUserDefaults是首选,它非常的简单,不依赖其他的什么东西,屏蔽了Plist文件的读写等等.
 
@@ -143,3 +143,4 @@ public extension NSUserDefaults {
 ```
 
 PS:按照这个思路,其实把自定义对象转换成JSON字符串等都是可以的.
+

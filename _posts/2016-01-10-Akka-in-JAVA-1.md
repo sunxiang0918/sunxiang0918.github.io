@@ -6,17 +6,17 @@ tags:
 - Akka
 ---
 
-#Akka in JAVA(一)
+# Akka in JAVA(一)
 
-##AKKA简介
+## AKKA简介
 
-###什么是AKKA
+### 什么是AKKA
 Akka是一个由`Scala`编写的,能兼容`Sacala`和`JAVA`的,用于编写高可用和高伸缩性的`Actor模型`框架.它基于了事件驱动的并发处理模式,性能非常的高,并且有很高的可用性.大大的简化了我们在应用系统中开发并发处理的过程.它在各个领域都有很好的表现.
 
-###使用AKKA的好处
+### 使用AKKA的好处
 就如上面简介中所说的,AKKA把并发操作的各种复杂的东西都统一的做了封装.我们主要关心的是业务逻辑的实现,只需要少量的关心`Actor模型`的串联即可构建出高可用,高性能,高扩展的应用.
 
-###Akka for JAVA
+### Akka for JAVA
 由于AKKA是使用`Scala`编写的,而`Scala`是一种基于JVM的语言.因此`JAVA`对AKKA的支持也是很不错的.Akka自身又是采用微内核的方式来实现的,这就意味着能很容易的在自己的项目中应用AKKA,只需要引入几个akka的Lib包即可.而官方直接就提供了`Maven`库供我们在JAVA中使用AKKA.
 这些AKKA的依赖包主要有:
 
@@ -34,9 +34,9 @@ Akka是一个由`Scala`编写的,能兼容`Sacala`和`JAVA`的,用于编写高�
 
 <!--more-->
 
-##Actor模型
+## Actor模型
 
-###什么是Actor
+### 什么是Actor
 既然说AKKA是一个`Actor模型`框架,那么就需要搞清楚什么是`Actor模型`.`Actor模型`是由`Carl Hewitt`于上世纪70年代提出的,目的是为了解决分布式编程中的一系列问题而产生.
 在`Actor模型`中,**一切都可以抽象为Actor**.
 而Actor是封装了状态和行为的对象,他们的唯一通讯方式就是交换消息,交换的消息放在接收方的邮箱(Inbox)里.也就是说Actor之间并不直接通信,而是通过了消息来相互沟通,每一个Actor都把它要做的事情都封装在了它的内部.
@@ -49,14 +49,14 @@ Akka是一个由`Scala`编写的,能兼容`Sacala`和`JAVA`的,用于编写高�
 
 要在JAVA中实现一个`Actor`也非常的简单,直接继承`akka.actor.UntypedActor`类,然后实现`public void onReceive(Object message) throws Exception`方法即可.
 
-###Actor系统
+### Actor系统
 光有一个一个独立的Actor显然是不行的.Akka中还有一个`Actor System`.
 `Actor System`统管了`Actor`,是Actor的系统工厂或管理者,掌控了Actor的生命周期.
 
 ![](/img/2016/01/10/1.png)
 如上图所示,我们可以通过`ActorSystem.create`来创建一个ActorSystem的实例.然后通过`actorOf`等方法来获取`ActorRef`对象.`ActorRef`即为`Actor Reference`.它是Actor的一个引用,主要的作用是发送消息给它表示的Actor.而Actor可以通过访问`self()`或`sender()`方法来获取到自身或消息发送者的Actor引用.通过引用发送消息.在Akka中,Actor之间永远都不能直接的通信,必须通过他们的代理`ActorRef`建立通信.
 
-###Actor路径
+### Actor路径
 为了实现一切事物都是Actor,为了能把一个复杂的事物划分的更细致.Akka引入了父子Actor.也就是Actor是有树形结构的关系的.这样的父子结构就能递归的把任何复杂的事物原子化.这也是Actor模型的精髓所在.这样做不仅使任务本身被清晰地划分出结构,而且最终的Actor也能按照他们明确的消息类型以及处理流程来进行解析.这样的递归结构使得消息能够在正确的层次进行处理.
 
 ![](/img/2016/01/10/2.png)
@@ -98,7 +98,7 @@ selection.tell(xxx);
 ```
 这个就表示把消息发送给当前Actor之外的所有同级的Actor.
 
-##Hello AKKA Demo
+## Hello AKKA Demo
 原理讲了这么多,那么我们就来看一看一个最简单的Akka的例子吧.
 这个是一个最简单的打招呼的例子,这个例子中,定义了招呼,打招呼的人两个对象或者说消息.然后定义了执行打招呼和打印招呼两个Actor.然后通过ActorSystem整合整个打招呼的过程.
 

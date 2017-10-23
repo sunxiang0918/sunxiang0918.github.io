@@ -8,41 +8,41 @@ tags:
 comments: true
 ---
 
-#zookeeper 集群部署
+# zookeeper 集群部署
 
 在现在的软件系统中,通常都会搭建集群或者分布式环境了.而在这种情况下,通常都需要一个分布式程序协调者的服务.这最常用的就是zookeeper了.
 在我们的系统中,会使用zookeeper来做`统一的配置管理`,集群`节点状态管理`,以及`分布式锁`的功能.
 为了保证zookeeper本身的高可用性,那么这就需要对ZK进行集群.
 
-##安装环境
+## 安装环境
 操作系统:Ubuntu 12.04 64位
 JDK:1.7.0_55 64位
 机器: `192.168.1.100` `192.168.1.101`  `192.168.1.101`
 
-##安装步骤
+## 安装步骤
 <!--more-->
-###1. 下载Zookeeper
+### 1. 下载Zookeeper
 直接到他的官网上下载最新的zookeeper软件: [http://zookeeper.apache.org/releases.html#download](http://zookeeper.apache.org/releases.html#download)
 
 ![](/img/2014/09/20/1.png)
 
-###2. 上传Zookeeper安装包到服务器
+### 2. 上传Zookeeper安装包到服务器
 这个随便使用什么东西上传都可以, `sft` `scp` 等等
 
-###3. 为Zookeeper创建目录.
+### 3. 为Zookeeper创建目录.
 在bash中创建文件夹. 我把目录建到 /usr/local/下的.
 
 ```bash
 $ mkdir /usr/local/zookeeper
 ```
 
-###4. 解压安装包到zk的目录
+### 4. 解压安装包到zk的目录
 
 ```bash
 $ tar –xzvf zookeeper-3.4.6.tar.gz /usr/local/zookeeper
 ```
 
-###5. 再创建几个ZK必要的文件夹
+### 5. 再创建几个ZK必要的文件夹
 ZK还需要创建几个运行时必要的文件夹: 一个用来存放数据`data`,一个用来存放数据日志的`datalog`,以及一个存放ZK运行时日志的目录`logs`
 
 ```bash
@@ -51,18 +51,18 @@ $ mkdir /usr/local/zookeeper/datalog
 $ mkdir /usr/local/zookeeper/logs
 ```
 
-###6. 在data目录中创建一个myid文件
+### 6. 在data目录中创建一个myid文件
 这个文件主要是用于标示自己是哪一个服务器的.文件的内容很简单,里面就是一个数字.
 比如自己的server1,那么里面就写一个`1`.如果是server2,那么里面就写一个`2`.
 
-###7. 配置ZK的配置文件zoo.cfg
+### 7. 配置ZK的配置文件zoo.cfg
 接下来进入zk的conf目录.这个目录中应该有一个`zoo_sample.cfg`的文件.拷贝这个文件,并重命名为`zoo.cfg`
 
 ```bash
 $ cp zoo_sample.cfg zoo.cfg
 ```
 
-###8. 修改zoo.cfg文件的内容
+### 8. 修改zoo.cfg文件的内容
 配置的内容如下:
 
 ```bash
@@ -123,7 +123,7 @@ server.3=192.168.1.102:2888:3888
 
 `maxSessionTimeout `: 最大的会话超时时间
 
-###9. 启动Zookeeper
+### 9. 启动Zookeeper
 配置到这里就完了.其实ZK的集群配置非常的简单.
 启动也非常的简单.直接在命令行中调用:
 
@@ -140,12 +140,12 @@ PS: 需要注意的是,ZK集群提供了过半存活的能力.也就是说2n+1�
 
 Update: 2015-12-05 10:25:04
 
-##在Docker1.9下部署跨物理机的ZK集群.
+## 在Docker1.9下部署跨物理机的ZK集群.
 现在虚拟化非常的流行.Docker的使用也越来越多了.因此,在我们的系统中也使用Docker来封装了各种服务,ZK也不例外.
 
 要在Docker中搭建ZK集群,主要有两种方法.第一种方法就是使用`Docker1.9`的`network`.另外一种就是使用`--net=host`模式来实现.
 
-###network方式实现
+### network方式实现
 首先搭建好`Docker1.9`,并创建一个网络`my-net`.这方面可以参考我的博文[Docker1.9新特性-跨物理机的多容器网络连接](/2015/11/09/Docker1-9新特性-跨物理机的多容器网络连接/).
 然后在宿主机上创建两个目录,一个是 `conf` 一个是 `data`. 在`data`文件夹中照样的创建`myid`文件,并写上号码. 在`conf`文件夹中修改`zoo.cfg`配置文件:
 
@@ -176,7 +176,7 @@ b5dfc1977efd        jplock/zookeeper    "/opt/zookeeper/bin/z"   24 minutes ago 
 1e605a32885d        jplock/zookeeper    "/opt/zookeeper/bin/z"   24 minutes ago      Up 2 seconds                  2888/tcp, 3888/tcp, 0.0.0.0:3381->2181/tcp   zk3
 ```
 
-###host方式实现
+### host方式实现
 host模式要求docker1.5以上. 这种方式就是使用宿主机的网络直接当成容器的网络.因此,配置ZK集群也很简单.相当于是在多台真实的物理机上进行部署. 这种方式的缺点就是 一个宿主机上只能部署一个ZK.否则会端口冲突.
 
 在宿主机上创建两个目录,一个是 `conf` 一个是 `data`. 在`data`文件夹中照样的创建`myid`文件,并写上号码. 在`conf`文件夹中修改`zoo.cfg`配置文件:
@@ -216,3 +216,5 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                        PORTS                                        NAMES
 11cbbd9s7fb7        jplock/zookeeper    "/opt/zookeeper/bin/z"   10 minutes ago      Up 10 minutes                                                          z_k3
 ```
+
+
