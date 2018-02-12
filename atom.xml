@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2017-10-23T03:39:39.000Z</updated>
+  <updated>2018-02-12T09:12:09.577Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -14,6 +14,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[解决mac下的Sourcetree每次拉取提交都需要输入密码]]></title>
+    <link href="http://sunxiang0918.github.io/2016/04/12/%E8%A7%A3%E5%86%B3mac%E4%B8%8B%E7%9A%84Sourcetree%E6%AF%8F%E6%AC%A1%E6%8B%89%E5%8F%96%E6%8F%90%E4%BA%A4%E9%83%BD%E9%9C%80%E8%A6%81%E8%BE%93%E5%85%A5%E5%AF%86%E7%A0%81/"/>
+    <id>http://sunxiang0918.github.io/2016/04/12/解决mac下的Sourcetree每次拉取提交都需要输入密码/</id>
+    <published>2016-04-12T08:58:20.000Z</published>
+    <updated>2018-02-12T09:12:09.577Z</updated>
+    <content type="html"><![CDATA[<h1 id="解决mac下的Sourcetree每次拉取提交都需要输入密码">解决mac下的Sourcetree每次拉取提交都需要输入密码</h1><p>最近重装了一次mac,并且重做了一下开发环境,结果以前的sourceTree项目的GIT密码始终保存不到Mac的钥匙串中,明明在钥匙串中是存在的.但是在使用sourceTree pull/push代码的时候还是需要再输入密码,很是繁琐. </p>
+<a id="more"></a>
+<p>于是,网上搜索了一下,说的在https模式下,Mac需要使用osxkeychain凭据助手,并在Git中设置使用. 并且如果已经安装了<code>brew</code>的应该会自带了<code>osxkeychain</code>.但是奇怪的是,我安装了brew的,使用brew安装应用也没有问题.那就只能手动的再设置一次了.</p>
+<h2 id="方法">方法</h2><ol>
+<li><p>先使用命令下载 <code>git-credential-osxkeychain</code><br> <code>curl http://github-media-downloads.s3.amazonaws.com/osx/git-credential-osxkeychain -o git-credential-osxkeychain</code></p>
+</li>
+<li><p>把<code>git-credential-osxkeychain</code> 放入 bin目录<br> <code>mv git-credential-osxkeychain /usr/local/bin</code></p>
+</li>
+<li><p>给<code>git-credential-osxkeychain</code>赋权限<br> <code>chmod u+x /usr/local/bin/git-credential-osxkeychain</code></p>
+</li>
+<li><p>在Git全局配置中进行设置(也可以在某一个项目里面设置):<br> <code>git config --global credential.helper osxkeychain</code></p>
+</li>
+</ol>
+<p>经过上面的设置，下次访问https的项目时只需要输入一次密码,就会存储到osx的钥匙串中了,以后再也不会在Git中询问了.</p>
+<p>问题解决.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="解决mac下的Sourcetree每次拉取提交都需要输入密码">解决mac下的Sourcetree每次拉取提交都需要输入密码</h1><p>最近重装了一次mac,并且重做了一下开发环境,结果以前的sourceTree项目的GIT密码始终保存不到Mac的钥匙串中,明明在钥匙串中是存在的.但是在使用sourceTree pull/push代码的时候还是需要再输入密码,很是繁琐. </p>]]>
+    
+    </summary>
+    
+      <category term="GIT" scheme="http://sunxiang0918.github.io/tags/GIT/"/>
+    
+      <category term="Mac" scheme="http://sunxiang0918.github.io/tags/Mac/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[使用Mockito和SpringTest进行单元测试]]></title>
@@ -1847,98 +1880,6 @@ org.apache.avro.util.Utf8</code>的异常,开始折腾了我很久.最后发现�
       <category term="爬虫" scheme="http://sunxiang0918.github.io/tags/%E7%88%AC%E8%99%AB/"/>
     
       <category term="Nutch" scheme="http://sunxiang0918.github.io/tags/Nutch/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[在Linux上运行Swift]]></title>
-    <link href="http://sunxiang0918.github.io/2015/12/05/%E5%9C%A8Linux%E4%B8%8A%E8%BF%90%E8%A1%8CSwift/"/>
-    <id>http://sunxiang0918.github.io/2015/12/05/在Linux上运行Swift/</id>
-    <published>2015-12-05T15:26:26.000Z</published>
-    <updated>2017-10-23T03:42:19.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="在Linux上运行Swift">在Linux上运行Swift</h1><p>盼星星盼月亮,等了半年,终于在12月的头几天,苹果开源了<code>Swift</code>语言.并建立了一个<a href="http://swift.org" target="_blank" rel="external">Swift.org</a>社区以及<a href="http://github.com/apple" target="_blank" rel="external">Github</a>来维护.开源以后,最大的好处当然是有更多的人来参与Swift语言的发展,让Swift语言增加更多的新的特性,更多的开源框架,工作在更多的平台上面.这对于一个开发语言来说无疑是一个很好的消息.而对于我来说,除了在编写代码的时候能更了解Swift某些函数的参数意义和工作的原理(作为一个JAVA Coder,平时如果遇到搞不定的问题或者是不明白的地方,习惯了直接翻它的源码来了解原委的)外,让我基本上抛弃了<code>Python</code>脚本,平时有什么小东西小程序需要写一下的话,现在可以直接写一个Swift文件,然后在命令行直接调用<code>swift xxx.swift</code>或者<code>swiftc -O xxxx.swift</code>即可.</p>
-<h2 id="在Linux上安装Swift">在Linux上安装Swift</h2><p>前面废话说了这么多.现在就来看看如何在Linux上安装Swift的运行环境.MACOS上的就不用说了,直接安装一个Xcode就可以了.</p>
-<a id="more"></a>
-<h3 id="环境">环境</h3><p>目前Swift提供了<code>Ubuntu</code>上编译好了的安装包. 因此需要Ubuntu14.04以上的操作系统.<br>同时,Swift的编译环境还需要<code>clang</code>.这个也是需要安装的.</p>
-<ol>
-<li><p>由于<code>clang</code>目前才出来,比较的新.因此在<code>cn.archive.ubuntu.com</code>上还没有,需要切换到官方源上去.</p>
-<ol>
-<li>备份原来的源列表 <code>sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak</code></li>
-<li><p>使用编辑器打开<code>sources.list</code>文件,修改里面的内容为:</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">deb http://archive.ubuntu.com/ubuntu/ vivid main restricted universe multiverse  </div><div class="line">deb http://archive.ubuntu.com/ubuntu/ vivid-security main restricted universe multiverse  </div><div class="line">deb http://archive.ubuntu.com/ubuntu/ vivid-updates main restricted universe multiverse  </div><div class="line">deb http://archive.ubuntu.com/ubuntu/ vivid-proposed main restricted universe multiverse  </div><div class="line">deb http://archive.ubuntu.com/ubuntu/ vivid-backports main restricted universe multiverse  </div><div class="line">deb-src http://archive.ubuntu.com/ubuntu/ vivid main restricted universe multiverse  </div><div class="line">deb-src http://archive.ubuntu.com/ubuntu/ vivid-security main restricted universe multiverse  </div><div class="line">deb-src http://archive.ubuntu.com/ubuntu/ vivid-updates main restricted universe multiverse  </div><div class="line">deb-src http://archive.ubuntu.com/ubuntu/ vivid-proposed main restricted universe multiverse  </div><div class="line">deb-src http://archive.ubuntu.com/ubuntu/ vivid-backports main restricted universe multiverse</div></pre></td></tr></table></figure>
-</li>
-<li><p>然后更新一下源 <code>sudo apt-get update</code></p>
-</li>
-<li><p>安装<code>clang</code></p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install clang libicu-dev</div></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-<li><p>下载,并安装<code>Swift</code></p>
-<ol>
-<li>在<a href="https://swift.org/download/" target="_blank" rel="external">官方网站</a>上下载与你操作系统对应的安装包.比如我用的<code>Ubuntu 14.10</code>操作系统,那么就下载<a href="https://swift.org/builds/ubuntu1404/swift-2.2-SNAPSHOT-2015-12-01-b/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu14.04.tar.gz" target="_blank" rel="external">swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu14.04.tar.gz</a></li>
-<li><p>下载后,解压到本地目录.由于它都是安排好了目录的.都是<code>/usr</code>下面.因此.只需要拷贝到/usr下面即可.</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp -R /swift/usr/ /</div></pre></td></tr></table></figure>
-</li>
-<li><p>这样,Swift的运行环境就算是安装完成了.我们可以输入<code>swift --version</code>来做验证</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@Parallels-Virtual-Platform:~$ swift --versionSwift version 2.2-dev (LLVM 46be9ff861, Clang 4deb154edc, Swift 778f82939c)Target: x86_64-unknown-linux-gnu</div></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-</ol>
-<h2 id="在命令行中执行一个简单程序">在命令行中执行一个简单程序</h2><p>既然安装完成了运行环境,那么接下来我们就试着编写一个最简单的程序.然后执行.</p>
-<ol>
-<li>创建一个<code>test.swift</code>文件.</li>
-<li>在其中写上</li>
-</ol>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">test</span><span class="params">()</span></span> &#123;</div><div class="line">	<span class="built_in">print</span>(<span class="string">"Hello Swift!"</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line">test()</div></pre></td></tr></table></figure>
-<ol>
-<li>保存文件后,在命令行中执行 <code>swift test.swift</code>.即可得到程序执行的结果.</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">root@Parallels-Virtual-Platform:~$ swift test.swift</div><div class="line">Hello Swift!</div></pre></td></tr></table></figure>
-<ol>
-<li>我们也可以把这个文件直接编译成可执行的程序:<code>swift -O test.swift</code>.执行了这个命令后,会在当前目录生成一个<code>test</code>可执行文件. 直接在命令行中执行<code>./test</code>也是可以得到结果的.</li>
-</ol>
-<p>Swift的命令行程序与其他的语言不同,它不需要一个特殊约定的<code>main</code>函数. 只要你执行的命令的作用于是全局的,那么在就会在执行的时候按顺序的先执行这些全局作用于的语句.相当于它的全局作用域就是一个大的<code>main</code>函数.<br>又由于一个Swift文件中可以写很多的类或方法,不想<code>JAVA</code>一样,一个<code>java</code>文件只能有一个公开的类.因此,对于一个简单的小程序来说,我们完全可以把所有的代码都写在一个<code>swift</code>文件中,然后进行执行,不用考虑什么包依赖等等,非常的方便.</p>
-<h2 id="在命令行中执行一个多文件编译的程序">在命令行中执行一个多文件编译的程序</h2><p>当然,除了最最简单的只有1个文件的程序外,更多的程序都是有代码结构的,都是由多个<code>swift</code>文件组成的.<br>在这种情况下,就需要使用<code>swift build</code>命令来 多文件协同编译了.</p>
-<ol>
-<li><p>这种情况下的swift程序源码需要按照一定的约定来创建.</p>
-<ol>
-<li>项目的名称即为目录的名称. 比如我现在有个<code>TestProgram</code>的项目,那么就需要创建一个<code>TestProgram</code>的目录.</li>
-<li>在这个目录下创建一个<code>Package.swift</code>文件,这个文件是必须的,它用于提供给包管理器进行包依赖的信息.这就类似于JAVA中的<code>package-info.java</code></li>
-<li>创建一个<code>Sources</code>文件夹,所有的源码都应该放在这里</li>
-<li>在<code>Sources</code>文件夹下,创建一个<code>main.swift</code>文件,这个就是应用的入口文件.</li>
-<li><p>最终,项目的结构就是这样的</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/TestProgram</div><div class="line">/TestProgram/Package.swift</div><div class="line">/TestProgram/Sources/main.swift</div></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-<li><p>为了体现多文件协同编译,现在再在<code>Sources</code>目录下新增加一个文件<code>Hello.swif</code></p>
-</li>
-</ol>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">hello</span><span class="params">(a:<span class="params">(name:String)</span></span></span>-&gt;<span class="type">Void</span>) &#123;</div><div class="line">		<span class="keyword">let</span> args = <span class="type">Process</span>.arguments</div><div class="line">		<span class="keyword">if</span> args.<span class="built_in">count</span> &gt;= <span class="number">2</span>&#123;</div><div class="line">			a(name:args[<span class="number">1</span>])</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			<span class="built_in">print</span>(<span class="string">"Hello Swift!"</span>)</div><div class="line">		&#125;       &#125;</div></pre></td></tr></table></figure>
-<ol>
-<li><p>然后在<code>main.swift</code>中编写:</p>
- <figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hello(&#123;name <span class="keyword">in</span> <span class="built_in">print</span>(<span class="string">"Hello \(name) on Linux!"</span>)&#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>回到项目的根目录<code>/TestProgram</code>.执行<code>swift build</code>编译即可.正确的话它会输出以下信息</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@Parallels-Virtual-Platform:~/TestProject$ swift buildCompiling Swift Module <span class="string">'TestProject'</span> (2 sources)Linking Executable:  .build/debug/TestProjectroot@Parallels-Virtual-Platform:~/TestProject$ .build/debug/TestProject</div></pre></td></tr></table></figure>
-<p> 需要注意的是,<code>swift build</code>会在工程目录下生成一个<code>.build</code>文件夹,里面就是编译后的可执行的文件,默认是使用的<code>debug target</code>. 并且<code>Linux</code>下编译的可执行文件是不能直接在<code>OSX</code>上使用的,反之亦然.</p>
-</li>
-<li><p>直接调用<code>.build/debug/TestProject</code> 便可执行程序.</p>
-</li>
-<li><p>第二步的代码中有一句<code>let args = Process.arguments</code>.我们可以通过此函数获取命令行的输入,它肯定是一个大于等于1的数组,第一个元素就是程序自己的名字.后面是用户在命令行中输入的参数,并且不仅仅限于<code>main.swift</code>才能获取,任何的Swift文件中都可以取得这个值.因此,我们刚才的程序也可以这样输入:<code>.build/debug/TestProject SUN</code>.那么程序的<code>args[1]</code>即为<code>SUN</code>.</p>
-</li>
-<li>由于Swift不需要像<code>JAVA</code>或者<code>OC</code>一样,如果源码在两个源文件中就需要编写一堆无用的<code>import</code>语句,只要在同一个项目中,<code>Swift</code>的不同源文件定义的类或函数都可以直接的调用,只有在跨工程或<code>Framework</code>的时候,才需要<code>import Package</code>.这大大的方便了我们编写项目.</li>
-</ol>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="在Linux上运行Swift">在Linux上运行Swift</h1><p>盼星星盼月亮,等了半年,终于在12月的头几天,苹果开源了<code>Swift</code>语言.并建立了一个<a href="http://swift.org" target="_blank" rel="external">Swift.org</a>社区以及<a href="http://github.com/apple" target="_blank" rel="external">Github</a>来维护.开源以后,最大的好处当然是有更多的人来参与Swift语言的发展,让Swift语言增加更多的新的特性,更多的开源框架,工作在更多的平台上面.这对于一个开发语言来说无疑是一个很好的消息.而对于我来说,除了在编写代码的时候能更了解Swift某些函数的参数意义和工作的原理(作为一个JAVA Coder,平时如果遇到搞不定的问题或者是不明白的地方,习惯了直接翻它的源码来了解原委的)外,让我基本上抛弃了<code>Python</code>脚本,平时有什么小东西小程序需要写一下的话,现在可以直接写一个Swift文件,然后在命令行直接调用<code>swift xxx.swift</code>或者<code>swiftc -O xxxx.swift</code>即可.</p>
-<h2 id="在Linux上安装Swift">在Linux上安装Swift</h2><p>前面废话说了这么多.现在就来看看如何在Linux上安装Swift的运行环境.MACOS上的就不用说了,直接安装一个Xcode就可以了.</p>]]>
-    
-    </summary>
-    
-      <category term="Swift" scheme="http://sunxiang0918.github.io/tags/Swift/"/>
     
   </entry>
   

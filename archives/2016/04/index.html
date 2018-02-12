@@ -6,20 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://sunxiang0918.github.io">
-  <title>Swift中基本数据类型与NSData转换 | 翔妖除魔的个人博客</title>
+  <title>Archives: 2016/4 | 翔妖除魔的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Swift中基本数据类型与NSData转换最近由于程序的需要,要与JAVA的服务端进行Socket的交互,那么这就牵涉到了数据的交互.Socket的数据交互一般都是直接采用二进制Bytes的方式来传递,那么就需要把Swift中的各种基本数据转换成为JAVA服务器可以认可的Bytes字节数组,以及把JAVA的字节数组反序列化为Swift中的基本数据. big-endian and little-en">
-<meta name="keywords" content="Swift">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Swift中基本数据类型与NSData转换">
-<meta property="og:url" content="http://sunxiang0918.github.io/2016/02/15/Swift中基本数据类型与NSData转换/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="翔妖除魔的个人博客">
+<meta property="og:url" content="http://sunxiang0918.github.io/archives/2016/04/index.html">
 <meta property="og:site_name" content="翔妖除魔的个人博客">
-<meta property="og:description" content="Swift中基本数据类型与NSData转换最近由于程序的需要,要与JAVA的服务端进行Socket的交互,那么这就牵涉到了数据的交互.Socket的数据交互一般都是直接采用二进制Bytes的方式来传递,那么就需要把Swift中的各种基本数据转换成为JAVA服务器可以认可的Bytes字节数组,以及把JAVA的字节数组反序列化为Swift中的基本数据. big-endian and little-en">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-10-23T03:28:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Swift中基本数据类型与NSData转换">
-<meta name="twitter:description" content="Swift中基本数据类型与NSData转换最近由于程序的需要,要与JAVA的服务端进行Socket的交互,那么这就牵涉到了数据的交互.Socket的数据交互一般都是直接采用二进制Bytes的方式来传递,那么就需要把Swift中的各种基本数据转换成为JAVA服务器可以认可的Bytes字节数组,以及把JAVA的字节数组反序列化为Swift中的基本数据. big-endian and little-en">
+<meta name="twitter:title" content="翔妖除魔的个人博客">
   
     <link rel="alternative" href="/atom.xml" title="翔妖除魔的个人博客" type="application/atom+xml">
   
@@ -159,276 +154,64 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Swift中基本数据类型与NSData转换" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      Swift中基本数据类型与NSData转换
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2016" class="archive-year">2016</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2016/04/12/解决mac下的Sourcetree每次拉取提交都需要输入密码/" class="archive-article-date">
+  	<time datetime="2016-04-12T08:58:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-04-12</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2016/04/12/解决mac下的Sourcetree每次拉取提交都需要输入密码/">解决mac下的Sourcetree每次拉取提交都需要输入密码</a>
     </h1>
   
 
-        
-        <a href="/2016/02/15/Swift中基本数据类型与NSData转换/" class="archive-article-date">
-  	<time datetime="2016-02-15T10:01:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-02-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Swift中基本数据类型与NSData转换">Swift中基本数据类型与NSData转换</h1><p>最近由于程序的需要,要与JAVA的服务端进行Socket的交互,那么这就牵涉到了数据的交互.Socket的数据交互一般都是直接采用二进制Bytes的方式来传递,那么就需要把Swift中的各种基本数据转换成为JAVA服务器可以认可的Bytes字节数组,以及把JAVA的字节数组反序列化为Swift中的基本数据.</p>
-<h2 id="big-endian_and_little-endian">big-endian and little-endian</h2><p>要在不同程序中进行字节数组的数据交换,有个很重要的东西就是<code>字节序</code>.<code>字节序</code>顾名思义就是字节的顺序,也就是大于1个字节类型的数据在内存中存放的顺序.这个在跨平台以及网络程序交互中非常的重要.</p>
-<p>常见的字节序主要有两类:<code>Big-Endian</code>和<code>Little-Endian</code>.它们的定义为:</p>
-<ul>
-<li>Big-Endian:高位字节排放在内存的低地址端,地位字节排放在内存的高地址端.</li>
-<li>Little-Endian:地位字节排放在内存的低地址端,高位字节排放在内存的高地址端.<br>这样说可能比较抽象,我们来举个例子就非常清楚了:<br>比如一个32位的Int类型数据: <code>let a = Int32(2)</code>分别采用<code>Big-Endian</code>和<code>Little-Endian</code>的情况如下:</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">字节号</th>
-<th style="text-align:center">0</th>
-<th style="text-align:center">1</th>
-<th style="text-align:center">2</th>
-<th style="text-align:center">3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">Big-endian</td>
-<td style="text-align:center">00</td>
-<td style="text-align:center">00</td>
-<td style="text-align:center">00</td>
-<td style="text-align:center">02</td>
-</tr>
-<tr>
-<td style="text-align:center">Little-Endian</td>
-<td style="text-align:center">02</td>
-<td style="text-align:center">00</td>
-<td style="text-align:center">00</td>
-<td style="text-align:center">00</td>
-</tr>
-</tbody>
-</table>
-<p>也就是他们两个是相反的.<code>Big-Endian</code>和<code>Little-Endian</code>跟CPU的指令有关,每一种CPU不是<code>Big-Endian</code>就是<code>Little-Endian</code>.常见的IA架构的CPU,比如Intel或AMD的都是使用的<code>Little-Endian</code>,而PowerPC活着SPARC的处理器则是<code>Big-Endian</code>的.而在互联网的网络交互以及TCP协议中使用的是<code>Big-Endian</code>,JAVA的虚拟机中的字节序是<code>Big-Endian</code>的.而Swift由于是运行在IA架构的CPU上的,因此,它的字节序是<code>Little-Endian</code>的.</p>
-<p>正是由于运行在X86上的<code>Swift</code>和<code>JAVA</code>的字节序是相反的,因此,它们两个进行跨语言的网络数据交互的时候,就需要对数据进行字节序的转换.否则就会出现数据读取错误的情况,比如用<code>JAVA</code>采用<code>Big-Endian</code>序的Int32<code>02000000</code>,<code>Swift</code>采用<code>Little-Endian</code>序解析出来是<code>33554432</code>而不是期望的<code>2</code>.</p>
-<a id="more"></a>
-<p>在Swift中,Apple在<code>CoreFoundation</code>中提供了一些列的函数来提供字节序的转换.它们都在<code>CFByteOrder</code>中有所定义:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFSwapInt16BigToHost</span><span class="params">(arg: UInt16)</span></span> -&gt; <span class="type">UInt16</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFSwapInt32BigToHost</span><span class="params">(arg: UInt32)</span></span> -&gt; <span class="type">UInt32</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFSwapInt64BigToHost</span><span class="params">(arg: UInt64)</span></span> -&gt; <span class="type">UInt64</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFSwapInt16HostToBig</span><span class="params">(arg: UInt16)</span></span> -&gt; <span class="type">UInt16</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFSwapInt32HostToBig</span><span class="params">(arg: UInt32)</span></span> -&gt; <span class="type">UInt32</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFSwapInt64HostToBig</span><span class="params">(arg: UInt64)</span></span> -&gt; <span class="type">UInt64</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFSwapInt16LittleToHost</span><span class="params">(arg: UInt16)</span></span> -&gt; <span class="type">UInt16</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFSwapInt32LittleToHost</span><span class="params">(arg: UInt32)</span></span> -&gt; <span class="type">UInt32</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFSwapInt64LittleToHost</span><span class="params">(arg: UInt64)</span></span> -&gt; <span class="type">UInt64</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFSwapInt16HostToLittle</span><span class="params">(arg: UInt16)</span></span> -&gt; <span class="type">UInt16</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFSwapInt32HostToLittle</span><span class="params">(arg: UInt32)</span></span> -&gt; <span class="type">UInt32</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFSwapInt64HostToLittle</span><span class="params">(arg: UInt64)</span></span> -&gt; <span class="type">UInt64</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFConvertFloat32HostToSwapped</span><span class="params">(arg: Float32)</span></span> -&gt; <span class="type">CFSwappedFloat32</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFConvertFloat32SwappedToHost</span><span class="params">(arg: CFSwappedFloat32)</span></span> -&gt; <span class="type">Float32</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFConvertFloat64HostToSwapped</span><span class="params">(arg: Float64)</span></span> -&gt; <span class="type">CFSwappedFloat64</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFConvertFloat64SwappedToHost</span><span class="params">(arg: CFSwappedFloat64)</span></span> -&gt; <span class="type">Float64</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFConvertFloatHostToSwapped</span><span class="params">(arg: Float)</span></span> -&gt; <span class="type">CFSwappedFloat32</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFConvertFloatSwappedToHost</span><span class="params">(arg: CFSwappedFloat32)</span></span> -&gt; <span class="type">Float</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFConvertDoubleHostToSwapped</span><span class="params">(arg: Double)</span></span> -&gt; <span class="type">CFSwappedFloat64</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">CFConvertDoubleSwappedToHost</span><span class="params">(arg: CFSwappedFloat64)</span></span> -&gt; <span class="type">Double</span></div></pre></td></tr></table></figure>
-<p>使用这些函数就可以对字节序进行转换. 更多的可以参考<a href="https://developer.apple.com/library/prerelease/ios/documentation/CoreFoundation/Reference/CFByteOrderUtils/index.html" target="_blank" rel="external">Apple的官方手册</a></p>
-<p><strong>2016-02-16 Update</strong><br>最新的swift中,对<code>UInt64</code>和<code>UInt32</code>,已经自带了成员方法:<code>public var bigEndian: UInt32 { get }</code> <code>public var littleEndian: UInt32 { get }</code>等等. 也就是说,不需要使用<code>CFSwapInt32BigToHost(val)</code>这样转换了,直接<code>val.bigEndian</code>即可.</p>
-<h2 id="基础数据与NSData的转换">基础数据与NSData的转换</h2><p>为了能让Swift和JAVA进行网络的交互,那么就必须把它们的基础数据转换成为Bytes字节数组.<br>在Swift中使用<code>NSData</code>或者<code>NSMutableData</code>来表示.因此,也就是需要把基础数据放入到NSData中.</p>
-<h3 id="Int32与Int64">Int32与Int64</h3><p>在Swift中,<code>Int</code>是一个特殊的整数类型,它的长度与当前平台的原生字长相同:</p>
-<ul>
-<li>在32位平台上,<code>Int</code>与<code>Int32</code>长度相同</li>
-<li>在64位平台上,<code>Int</code>与<code>Int64</code>长度相同.相当于C中的Long.</li>
-</ul>
-<p>因此,在网络传输的时候,是需要区分的对待Int32和Int64的.需要把一个<code>Int</code>类型强转为需要的长度.<br>具体的代码为:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">extension</span> <span class="title">NSMutableData</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">appendInt</span><span class="params">(value:Int)</span></span>&#123;</div><div class="line">        <span class="keyword">var</span> networkOrderVal = <span class="type">CFSwapInt32HostToBig</span>(<span class="type">UInt32</span>(value))</div><div class="line">        <span class="keyword">self</span>.appendBytes(&amp;networkOrderVal, length: <span class="built_in">sizeof</span>(<span class="type">UInt32</span>))</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">appendLong</span><span class="params">(value:Int)</span></span> &#123;</div><div class="line">        <span class="keyword">var</span> networkOrderVal = <span class="type">CFSwapInt64HostToBig</span>(<span class="type">UInt64</span>(value));</div><div class="line">        <span class="keyword">self</span>.appendBytes(&amp;networkOrderVal, length: <span class="built_in">sizeof</span>(<span class="type">UInt64</span>))</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">getInt</span><span class="params">(range:NSRange = NSRange<span class="params">(location:<span class="number">0</span>,length:<span class="built_in">sizeof</span><span class="params">(UInt32)</span></span></span></span>)) -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">var</span> val: <span class="type">UInt32</span> = <span class="number">0</span></div><div class="line">        <span class="keyword">self</span>.getBytes(&amp;val, range: range)</div><div class="line">        <span class="keyword">return</span> <span class="type">Int</span>(<span class="type">CFSwapInt32BigToHost</span>(val))</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">getLong</span><span class="params">(range:NSRange = NSRange<span class="params">(location:<span class="number">0</span>,length:<span class="built_in">sizeof</span><span class="params">(UInt64)</span></span></span></span>)) -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">var</span> val: <span class="type">UInt64</span> = <span class="number">0</span></div><div class="line">        <span class="keyword">self</span>.getBytes(&amp;val, range: range)</div><div class="line">        <span class="keyword">return</span> <span class="type">Int</span>(<span class="type">CFSwapInt64BigToHost</span>(val))</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里使用了扩展机制,直接在<code>NSMutableData</code>上增加扩展.</p>
-<p>首先,使用<code>CFSwapInt32HostToBig</code>函数把字节序给改变了.然后调用<code>NSMutableData.appendBytes</code>方法,赋值给<code>NSData</code>.由于<code>NSMutableData</code>现在还是<code>Objective-C</code>的实现,因此,调用方式稍微有点奇怪,是使用指针的方式进行赋值的.更多的可以参见<a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/BuildingCocoaApps/InteractingWithCAPIs.html" target="_blank" rel="external">Using Swift with Cocoa and Objective-C</a>.</p>
-<p>反序列化也是相似的,首先定义了一个变量.然后使用<code>NSMutableData.getBytes</code>,同样传入一个指针以及数据的返回.然后最后在进行一次字节序的转换即可.</p>
-<p><strong>2016-02-16 Update:</strong><br>对于需要在网络传输中传输负数的情况需要先把负数的<code>Int</code>转换为无符号的整数<code>UInt</code>.在计算机中,负数的表示方法是采用补码的形式.在swift中,可以使用<code>UInt32(bitPattern:Int32)</code>以及<code>Int32(bitPattern:UInt32)</code>方法来相互的转换.比如,<code>-5</code>转换为无符号的补码形式为:<code>fffffffb</code>. 因此我们的<code>appendInt</code>和<code>getInt</code>可以改成这样:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">appendInt</span><span class="params">(value:Int)</span></span>&#123;</div><div class="line">       <span class="keyword">var</span> networkOrderVal = <span class="type">UInt32</span>(bitPattern:<span class="type">Int32</span>(value)).bigEndian</div><div class="line">       <span class="keyword">self</span>.appendBytes(&amp;networkOrderVal, length: <span class="built_in">sizeof</span>(<span class="type">UInt32</span>))</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">appendLong</span><span class="params">(value:Int)</span></span> &#123;</div><div class="line">       <span class="keyword">var</span> networkOrderVal = <span class="type">UInt64</span>(bitPattern:<span class="type">Int64</span>(value)).bigEndian</div><div class="line">       <span class="keyword">self</span>.appendBytes(&amp;networkOrderVal, length: <span class="built_in">sizeof</span>(<span class="type">UInt64</span>))</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">getInt</span><span class="params">(range:NSRange = NSRange<span class="params">(location:<span class="number">0</span>,length:<span class="built_in">sizeof</span><span class="params">(UInt32)</span></span></span></span>)) -&gt; <span class="type">Int</span> &#123;</div><div class="line">       <span class="keyword">var</span> val: <span class="type">UInt32</span> = <span class="number">0</span></div><div class="line">       <span class="keyword">self</span>.getBytes(&amp;val, range: range)</div><div class="line">       <span class="keyword">return</span> <span class="type">Int</span>(<span class="type">Int32</span>(bitPattern:val.bigEndian))</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">getLong</span><span class="params">(range:NSRange = NSRange<span class="params">(location:<span class="number">0</span>,length:<span class="built_in">sizeof</span><span class="params">(UInt64)</span></span></span></span>)) -&gt; <span class="type">Int</span> &#123;</div><div class="line">       <span class="keyword">var</span> val: <span class="type">UInt64</span> = <span class="number">0</span></div><div class="line">       <span class="keyword">self</span>.getBytes(&amp;val, range: range)</div><div class="line">       <span class="keyword">return</span> <span class="type">Int</span>(<span class="type">Int64</span>(bitPattern:val.bigEndian))</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-<h3 id="Float32与Float64">Float32与Float64</h3><p>它的情况与<code>Int</code>的非常相似.同样需要经历字节序的转换,以及<code>NSMutableData.appendBytes</code>的调用.</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">extension</span> <span class="title">NSMutableData</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="comment">// MARK: Float32与Float64</span></div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">appendFloat</span><span class="params">(value:Float)</span></span> &#123;</div><div class="line">        <span class="keyword">var</span> networkOrderVal = <span class="type">CFConvertFloat32HostToSwapped</span>(<span class="type">Float32</span>(value))</div><div class="line">        <span class="keyword">self</span>.appendBytes(&amp;networkOrderVal, length: <span class="built_in">sizeof</span>(<span class="type">Float32</span>))</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">appendDouble</span><span class="params">(value:Double)</span></span> &#123;</div><div class="line">        <span class="keyword">var</span> networkOrderVal = <span class="type">CFConvertFloat64HostToSwapped</span>(<span class="type">Float64</span>(value))</div><div class="line">        <span class="keyword">self</span>.appendBytes(&amp;networkOrderVal, length: <span class="built_in">sizeof</span>(<span class="type">Float64</span>))</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">getFloat</span><span class="params">(range:NSRange = NSRange<span class="params">(location:<span class="number">0</span>,length:<span class="built_in">sizeof</span><span class="params">(Float32)</span></span></span></span>)) -&gt; <span class="type">Float</span> &#123;</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> val: <span class="type">CFSwappedFloat32</span> = <span class="type">CFSwappedFloat32</span>(v: <span class="number">0</span>)</div><div class="line">        <span class="keyword">self</span>.getBytes(&amp;val, range: range)</div><div class="line">        <span class="keyword">let</span> result = <span class="type">CFConvertFloat32SwappedToHost</span>(val)</div><div class="line">        <span class="keyword">return</span> result</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">getDouble</span><span class="params">(range:NSRange = NSRange<span class="params">(location:<span class="number">0</span>,length:<span class="built_in">sizeof</span><span class="params">(Float64)</span></span></span></span>)) -&gt; <span class="type">Double</span> &#123;</div><div class="line">        <span class="keyword">var</span> val: <span class="type">CFSwappedFloat64</span> = <span class="type">CFSwappedFloat64</span>(v: <span class="number">0</span>)</div><div class="line">        <span class="keyword">self</span>.getBytes(&amp;val, range: range)</div><div class="line">        <span class="keyword">let</span> result = <span class="type">CFConvertFloat64SwappedToHost</span>(val)</div><div class="line">        <span class="keyword">return</span> result</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="Bool">Bool</h3><p><code>Bool</code>类型由于是单字节的数据,不存在字节序的问题.因此,它与NSData的转换最为简单.</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">extension</span> <span class="title">NSMutableData</span> </span>&#123;</div><div class="line">	<span class="comment">// MARK: Bool</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">appendBool</span><span class="params">(<span class="keyword">var</span> val:Bool)</span></span>&#123;</div><div class="line">        <span class="keyword">self</span>.appendBytes(&amp;val, length: <span class="built_in">sizeof</span>(<span class="type">Bool</span>))</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">getBool</span><span class="params">(range:NSRange = NSRange<span class="params">(location:<span class="number">0</span>,length:<span class="built_in">sizeof</span><span class="params">(Bool)</span></span></span></span>)) -&gt; <span class="type">Bool</span> &#123;</div><div class="line">        <span class="keyword">var</span> val:<span class="type">Bool</span> = <span class="literal">false</span></div><div class="line">        <span class="keyword">self</span>.getBytes(&amp;val, range: range)</div><div class="line">        <span class="keyword">return</span> val</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="String">String</h3><p>字符串的处理又相对的要麻烦些了.因为字符串的长度是可变的.不像其他的数据类型是有固定的长度的.因此,一般在网络传输中,都会在字符串的bytes前接上一个<code>Int32</code>的字节数组来表示这个字符串的长度.</p>
-<p>因此,我们在转换<code>String</code>到<code>NSData</code>的时候,实际上是两个步骤.首先计算出字符串的字节长度.然后把这个字节长度放入NSData中,接着,再把字符串的内容转换为字节数组放入NSData中:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">extension</span> <span class="title">NSMutableData</span> </span>&#123;</div><div class="line">	<span class="comment">// MARK: String</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">appendString</span><span class="params">(val:String,encoding:NSStringEncoding = NSUTF8StringEncoding)</span></span>&#123;</div><div class="line">        </div><div class="line">        <span class="comment">//获取到字节的长度,使用某一种编码</span></div><div class="line">        <span class="keyword">let</span> pLength : <span class="type">Int</span> = val.lengthOfBytesUsingEncoding(encoding)</div><div class="line"></div><div class="line">        <span class="comment">//放入字符串的长度</span></div><div class="line">        <span class="keyword">self</span>.appendInt(pLength)</div><div class="line">        </div><div class="line">        <span class="comment">//把字符串按照某种编码转化为字节数组</span></div><div class="line">        <span class="keyword">let</span> data = val.dataUsingEncoding(encoding)</div><div class="line">        </div><div class="line">        <span class="comment">//放入NSData中</span></div><div class="line">        <span class="keyword">self</span>.appendData(data!)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">getString</span><span class="params">(location:Int = <span class="number">0</span>,encoding:NSStringEncoding = NSUTF8StringEncoding)</span></span> <span class="keyword">throws</span> -&gt; (<span class="type">String</span>,<span class="type">Int</span>)&#123;</div><div class="line">        </div><div class="line">        <span class="comment">//先获取到长度</span></div><div class="line">        <span class="keyword">let</span> len = <span class="keyword">self</span>.getInt(<span class="type">NSRange</span>(location:location,length:<span class="built_in">sizeof</span>(<span class="type">UInt32</span>)))</div><div class="line">        </div><div class="line">        <span class="comment">//找到子字节数组</span></div><div class="line">        <span class="keyword">let</span> subData = <span class="keyword">self</span>.subdataWithRange(<span class="type">NSRange</span>(location: location+<span class="built_in">sizeof</span>(<span class="type">UInt32</span>), length: len))</div><div class="line">        </div><div class="line">        <span class="comment">//直接使用String的构造函数,采用某种编码格式获取字符串</span></div><div class="line">        <span class="keyword">let</span> string = <span class="type">String</span>(data: subData, encoding: encoding)</div><div class="line">        </div><div class="line">        <span class="comment">//如果凑不起字符串,就表示数据不正确,那么就抛出异常</span></div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> _string = string <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="type">AppException</span>.<span class="type">FormatCastException</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="comment">//返回结果</span></div><div class="line">        <span class="keyword">return</span> (_string,len+<span class="built_in">sizeof</span>(<span class="type">UInt32</span>))</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="总结">总结</h2><p>以上就是简单的介绍了在Swift中如何把几种常用的数据类型转换为网络交互格式的Bytes数组的.至于其他的数据类型,或者自定义的数据结构,无外乎都是从这几种基础数据类型上拼接出来的,稍微灵活修改下即可.</p>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/2017/01/01/IMG_0352.JPG">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/2017/01/01/IMG_0353.JPG">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Swift</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">GIT</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Mac</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://sunxiang0918.github.io/2016/02/15/Swift中基本数据类型与NSData转换/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2016/02/20/Swift中使用NSStream/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Swift中使用NSStream
-        
-      </div>
-    </a>
   
   
-    <a href="/2016/02/10/Akka-in-JAVA-4/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Akka in JAVA(四)</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-        <div class="toc-container tooltip-left">
-            <i class="icon-font icon-category"></i>
-            <div class="tooltip tooltip-east">
-                <span class="tooltip-item">
-                </span>
-                <span class="tooltip-content">
-                    <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Swift中基本数据类型与NSData转换"><span class="toc-number">1.</span> <span class="toc-text">Swift中基本数据类型与NSData转换</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#big-endian_and_little-endian"><span class="toc-number">1.1.</span> <span class="toc-text">big-endian and little-endian</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基础数据与NSData的转换"><span class="toc-number">1.2.</span> <span class="toc-text">基础数据与NSData的转换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Int32与Int64"><span class="toc-number">1.2.1.</span> <span class="toc-text">Int32与Int64</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Float32与Float64"><span class="toc-number">1.2.2.</span> <span class="toc-text">Float32与Float64</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bool"><span class="toc-number">1.2.3.</span> <span class="toc-text">Bool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#String"><span class="toc-number">1.2.4.</span> <span class="toc-text">String</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
-                    </div>
-                </span>
-            </div>
-        </div>
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
-  <div id="gitment-ctn"></div> 
-<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
-<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-var gitment = new Gitment({
-  id: "http://sunxiang0918.github.io/2016/02/15/Swift中基本数据类型与NSData转换/",
-  owner: 'sunxiang0918',
-  repo: 'sunxiang0918.github.io',
-  oauth: {
-    client_id: '0b03f0c72904e35a7dd7',
-    client_secret: 'c7bdd43baab7487307f87a234a6a79a3a0e89d8f',
-  },
-})
-gitment.render('gitment-ctn')
-</script>
-  
+    
 
 
           </div>
@@ -451,8 +234,8 @@ gitment.render('gitment-ctn')
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
