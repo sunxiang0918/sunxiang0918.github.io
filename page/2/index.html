@@ -156,6 +156,95 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Akka-in-JAVA-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/13/Akka-in-JAVA-2/">Akka in JAVA(二)</a>
+    </h1>
+  
+
+        
+        <a href="/2016/01/13/Akka-in-JAVA-2/" class="archive-article-date">
+  	<time datetime="2016-01-13T14:43:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-01-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Akka_in_JAVA(二)">Akka in JAVA(二)</h1><p>继续<a href="/2016/01/10/Akka-in-JAVA-1/">Akka in JAVA(一)</a>中所讲.</p>
+<h2 id="Actor调用">Actor调用</h2><p>从上面的例子中,我们可以大概的对AKKA在JAVA中的使用有一个全局的概念.这里我们在稍微细致的讲解一下.</p>
+<p>在JAVA中使用AKKA进行开发主要有这几个步骤:</p>
+<ol>
+<li>定义消息模型.</li>
+<li>创建Actor的实现,以及业务逻辑</li>
+<li>在需要使用AKKA的地方获取到ActorSystem,然后根据业务的数据流,获取到合适的Actor,给Actor发送消息.</li>
+<li>在Actor的实现用,对接收到的消息进行具体的处理或转发.从而形成业务逻辑流.</li>
+</ol>
+<p>下面我们分别讲解一下这几个步骤.</p>
+        
+          <a class="article-more-a" href="/2016/01/13/Akka-in-JAVA-2/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Akka</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/01/13/Akka-in-JAVA-2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Akka-in-JAVA-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -945,90 +1034,9 @@
 
 
   
-    <article id="post-MYSQL支持utf8mb4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/02/MYSQL支持utf8mb4/">MYSQL支持utf8mb4</a>
-    </h1>
-  
-
-        
-        <a href="/2015/12/02/MYSQL支持utf8mb4/" class="archive-article-date">
-  	<time datetime="2015-12-02T14:41:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-12-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="MYSQL支持utf8mb4">MYSQL支持utf8mb4</h1><p>MYSQL默认的utf8字符集采用了3个字节来进行保存.这就存在了一个问题,那就是有部分的UTF8的字符其实是保存不进MYSQL的,比如现在流行的emoji表情,这和以前的认知是不同的.为了避免以后出现问题,找了这方面的信息.推荐如果有保存扩展字符的用户,提前就把MYSQL的字符集给修改了.具体MYSQL的默认utf8支持哪些字符编码,可以参见这个:<a href="http://witmax.cn/unicode-list.html" target="_blank" rel="external">Unicode编码表</a>,前126行就是它支持的,后面的就是不支持的.</p>
-<p>发现这个问题其实相当的偶然,在知乎上看到了一个问题<a href="http://www.zhihu.com/question/35901422/answer/64960598" target="_blank" rel="external">为什么知乎不支持non-BMP的汉字？</a>.突然发现了这个问题,一验证果然如此.<br>具体来说就是MYSQL的utf8字符集只使用了3个字节来保存字符.因此UTF8扩展区的字符就无法保存.这个在MYSQL5.5后引入了<code>utf8mb4</code>的字符集来解决这个问题,它使用了4个字节来存储字符,扩展了存储的数量.因此,如果各位是使用的MYSQL5.5以上的版本,推荐在可能存入扩展字符的字段上设置字符集为utf8mb4.虽然这样可能会造成空间的浪费,但是比以后在上线的系统上升级数据库的风险要小的多.</p>
-        
-          <a class="article-more-a" href="/2015/12/02/MYSQL支持utf8mb4/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/12/02/MYSQL支持utf8mb4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 
@@ -1040,7 +1048,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2017 翔妖除魔
+    		&copy; 2018 翔妖除魔
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1120,11 +1128,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
+                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
+                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1144,19 +1152,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DB2</a>
+                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Mac</a>
+                <a href="javascript:void(0)" class="js-tag color4">DB2</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1169,6 +1173,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Mac</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1200,15 +1208,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">MAC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
+                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1217,6 +1221,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hive</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
               </li>
              
               <li class="article-tag-list-item">

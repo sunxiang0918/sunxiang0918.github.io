@@ -156,6 +156,92 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Docker从私服中下载镜像遇到的问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/29/Docker从私服中下载镜像遇到的问题/">Docker从私服中下载镜像遇到的问题</a>
+    </h1>
+  
+
+        
+        <a href="/2015/08/29/Docker从私服中下载镜像遇到的问题/" class="archive-article-date">
+  	<time datetime="2015-08-29T13:54:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-08-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Docker从私服中下载镜像遇到的问题">Docker从私服中下载镜像遇到的问题</h1><p>由于从docker1.3.2版本开始默认docker registry使用的是https,并且在centos7和centos6.5中默认开启了SSL安全.因此 如果你的私服搭建到centos7上的话.那么其他的机器如果要从这个私服pull镜像的话,很可能会报错:<br><code>If this private registry supports only HTTP or HTTPS with an unknown CA certificate, please add</code>—insecure-registry 192.168.112.136:5000<code>to the daemon&#39;s arguments. In the case of HTTPS, if you have access to the registry&#39;s CA certificate, no need for the flag; simply place the CA certificate at /etc/docker/certs.d/192.168.112.136:5000/ca.crt</code></p>
+<p>那么解决的办法就是在连接私服的客户端上,修改docker-server的配置.<br>具体位置在:ubuntu的 <code>/etc/init/docker.conf</code><br>           centos的 <code>/etc/default/docker</code></p>
+<p>增加一个:<code>--insecure-registry 192.168.112.136:5000</code> 即可. 其中的IP就是私服的IP</p>
+<p>具体如下:</p>
+<ul>
+<li>$ sudo vi /etc/init/docker.conf</li>
+</ul>
+<p><img src="/img/2015/08/29/1.jpg" alt=""></p>
+<p>修改完之后，重启Docker服务即可</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/08/29/Docker从私服中下载镜像遇到的问题/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Docker入门" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -951,97 +1037,9 @@
 
 
   
-    <article id="post-neo4j-底层存储结构分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/27/neo4j-底层存储结构分析/">&lt;转&gt;Neo4j 底层存储结构分析</a>
-    </h1>
-  
-
-        
-        <a href="/2015/06/27/neo4j-底层存储结构分析/" class="archive-article-date">
-  	<time datetime="2015-06-27T13:08:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Neo4j_底层存储结构分析">Neo4j 底层存储结构分析</h1><h2 id="neo4j_中节点和关系的物理存储模型">neo4j 中节点和关系的物理存储模型</h2><h3 id="neo4j存储模型">neo4j存储模型</h3><p><img src="/img/2015/06/27/1.jpg" alt=""></p>
-<p>The node records contain only a pointer to their first property and their first relationship (in what is oftentermed the _relationship chain). From here, we can follow the (doubly) linked-list of relationships until we find the one we’re interested in, the  LIKES relationship from  Node 1 to  Node 2 in this case. Once we’ve found the relationship record of interest, we can simply read its properties if there are any via the same singly-linked list structure as node properties, or we can examine the node records that it relates via its start node and end node IDs. These IDs, multiplied by the node record size, of course give the immediate offset of both nodes in the node store file.</p>
-<p>上面的英文摘自<code>&lt;Graph Databases&gt;</code>(作者：IanRobinson) 一书，描述了 neo4j 的存储模型。Node和Relationship 的 Property 是用一个 Key-Value 的双向列表来保存的； Node 的 Relatsionship 是用一个双向列表来保存的，通过关系，可以方便的找到关系的 from-to Node. Node 节点保存第1个属性和第1个关系ID。</p>
-<p>通过上述存储模型，从一个Node-A开始，可以方便的遍历以该Node-A为起点的图。下面给个示例，来帮助理解上面的存储模型，存储文件的具体格式在第2章详细描述。</p>
-<h3 id="示例1">示例1</h3><p><img src="/img/2015/06/27/2.png" alt=""><br>在这个例子中，A~E表示Node 的编号，R1~R7 表示 <code>Relationship</code> 编号，P1~P10 表示<code>Property</code> 的编号。</p>
-<ul>
-<li>Node 的存储示例图如下,每个<code>Node</code> 保存了第1个<code>Property</code> 和 第1个<code>Relationship</code>：<br><img src="/img/2015/06/27/3.png" alt=""></li>
-<li>关系的存储示意图如下：<br><img src="/img/2015/06/27/4.png" alt=""><br>从示意图可以看出，从 Node-B 开始，可以通过关系的 next 指针，遍历Node-B 的所有关系，然后可以到达与其有关系的第1层Nodes,在通过遍历第1层Nodes的关系，可以达到第2层Nodes,…</li>
-</ul>
-        
-          <a class="article-more-a" href="/2015/06/27/neo4j-底层存储结构分析/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Neo4j</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/06/27/neo4j-底层存储结构分析/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
     </nav>
   
 
@@ -1053,7 +1051,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2017 翔妖除魔
+    		&copy; 2018 翔妖除魔
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1133,11 +1131,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
+                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
+                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1157,19 +1155,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DB2</a>
+                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Mac</a>
+                <a href="javascript:void(0)" class="js-tag color4">DB2</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1182,6 +1176,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Mac</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1213,15 +1211,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">MAC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
+                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1230,6 +1224,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hive</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
               </li>
              
               <li class="article-tag-list-item">

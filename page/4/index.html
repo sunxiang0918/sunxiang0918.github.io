@@ -156,6 +156,85 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-3DTouch尝鲜" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/18/3DTouch尝鲜/">3DTouch尝鲜</a>
+    </h1>
+  
+
+        
+        <a href="/2015/10/18/3DTouch尝鲜/" class="archive-article-date">
+  	<time datetime="2015-10-18T07:50:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-10-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="3DTouch尝鲜">3DTouch尝鲜</h1><p>随着IOS9和iphone6S的推出,苹果新提供了3D Touch功能,让以往平面的操作,扩展到了3维.<br>让我们对应用的操作增加了新的方式.<br>目前最常用的3DTouch方式就是快捷菜单已经内容浏览了.于是我也把我练手的一个<code>知乎日报</code>的<a href="http://git.oschina.net/xycm/ZhiHuDaily-Swift" target="_blank" rel="external">DEMO</a>程序增加上了3DTouch.</p>
+<p>由于在xcode的模拟器上是没有办法模拟出3DTouch的操作,因此如果想在模拟器上开发这个功能的话,需要参考github上的一位大神的<a href="https://github.com/DeskConnect/SBShortcutMenuSimulator" target="_blank" rel="external">解决方案</a>,当然这种方案只能模拟快捷菜单,其他的3DTouch的操作是没法模拟的,最好的方式还是去买一个iphone6S.</p>
+<h2 id="快捷菜单">快捷菜单</h2><p>所谓的快捷菜单就是 在应用的图标上重按,然后会出现几个快捷项.直接点击这些菜单项就可以执行某些操作.</p>
+<p><img src="/img/2015/10/18/1.gif" alt=""></p>
+        
+          <a class="article-more-a" href="/2015/10/18/3DTouch尝鲜/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Swift</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/10/18/3DTouch尝鲜/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-MacOS下JAVA开发使用经验-二" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -958,95 +1037,9 @@
 
 
   
-    <article id="post-Docker从私服中下载镜像遇到的问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/29/Docker从私服中下载镜像遇到的问题/">Docker从私服中下载镜像遇到的问题</a>
-    </h1>
-  
-
-        
-        <a href="/2015/08/29/Docker从私服中下载镜像遇到的问题/" class="archive-article-date">
-  	<time datetime="2015-08-29T13:54:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-08-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Docker从私服中下载镜像遇到的问题">Docker从私服中下载镜像遇到的问题</h1><p>由于从docker1.3.2版本开始默认docker registry使用的是https,并且在centos7和centos6.5中默认开启了SSL安全.因此 如果你的私服搭建到centos7上的话.那么其他的机器如果要从这个私服pull镜像的话,很可能会报错:<br><code>If this private registry supports only HTTP or HTTPS with an unknown CA certificate, please add</code>—insecure-registry 192.168.112.136:5000<code>to the daemon&#39;s arguments. In the case of HTTPS, if you have access to the registry&#39;s CA certificate, no need for the flag; simply place the CA certificate at /etc/docker/certs.d/192.168.112.136:5000/ca.crt</code></p>
-<p>那么解决的办法就是在连接私服的客户端上,修改docker-server的配置.<br>具体位置在:ubuntu的 <code>/etc/init/docker.conf</code><br>           centos的 <code>/etc/default/docker</code></p>
-<p>增加一个:<code>--insecure-registry 192.168.112.136:5000</code> 即可. 其中的IP就是私服的IP</p>
-<p>具体如下:</p>
-<ul>
-<li>$ sudo vi /etc/init/docker.conf</li>
-</ul>
-<p><img src="/img/2015/08/29/1.jpg" alt=""></p>
-<p>修改完之后，重启Docker服务即可</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/08/29/Docker从私服中下载镜像遇到的问题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
     </nav>
   
 
@@ -1058,7 +1051,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2017 翔妖除魔
+    		&copy; 2018 翔妖除魔
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1138,11 +1131,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
+                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
+                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1162,19 +1155,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DB2</a>
+                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Mac</a>
+                <a href="javascript:void(0)" class="js-tag color4">DB2</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1187,6 +1176,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Mac</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1218,15 +1211,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">MAC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
+                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1235,6 +1224,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hive</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Hadoop</a>
               </li>
              
               <li class="article-tag-list-item">
