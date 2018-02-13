@@ -156,6 +156,113 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-卷积神经网络工作原理解释" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/13/卷积神经网络工作原理解释/">&lt;转&gt;卷积神经网络工作原理解释</a>
+    </h1>
+  
+
+        
+        <a href="/2017/12/13/卷积神经网络工作原理解释/" class="archive-article-date">
+  	<time datetime="2017-12-13T03:41:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="卷积神经网络工作原理解释">卷积神经网络工作原理解释</h1><p>从最基础的开始</p>
+<p>对二维数字信号（图像）的操作，可以写成矩阵形式。<br><img src="/img/2017/12/13/1.jpg" alt=""></p>
+<p>比如对图像做平滑，一个典型的8领域平滑，其结果中的每个值都来源于原对应位置和其周边8个元素与一个3X3矩阵的乘积：</p>
+<p><img src="/img/2017/12/13/2.jpg" alt="2"></p>
+<p>也就相当于对原矩阵，按照顺序将各区域元素与W矩阵相乘，W 矩阵为<br><img src="/img/2017/12/13/3.jpg" alt="3"></p>
+<p>这也被称作核(Kernel, 3X3)</p>
+<p>其处理效果如下：<br><img src="/img/2017/12/13/4.jpg" alt=""></p>
+<p>也就是，这个核对图像进行操作，相当于对图像进行了低通滤波。因此这个核也被称为滤波器，整个操作过程按照概念称为卷积。</p>
+<p>扩展来讲，对二维图像的滤波操作可以写成卷积，比如常见的高斯滤波、拉普拉斯滤波（算子）等。<br><img src="/img/2017/12/13/5.jpg" alt=""></p>
+<p>滤波器跟卷积神经网络有什么关系呢。不如我们预想一个识别问题：我们要识别图像中的某种特定曲线，也就是说，这个滤波器要对这种曲线有很高的输出，对其他形状则输出很低，这也就像是神经元的激活。</p>
+<p>我们设计的滤波器和想要识别的曲线如下：<br><img src="/img/2017/12/13/6.jpg" alt=""></p>
+<p>假设上面的核（滤波器）按照卷积顺序沿着下图移动：<br><img src="/img/2017/12/13/7.jpg" alt=""></p>
+<p>那么当它移动到上面的位置时，按照矩阵操作，将这个区域的图像像素值与滤波器相乘，我们得到一个很大的值（6600）：<br><img src="/img/2017/12/13/8.jpg" alt=""></p>
+<p>而当这个滤波器移动到其他区域时，我们得到一个相对很小的值：<br><img src="/img/2017/12/13/9.jpg" alt=""></p>
+<p>如此，我们对整个原图进行一次卷积，得到的结果中，在那个特定曲线和周边区域，值就很高，在其他区域，值相对低。这就是一张激活图。对应的高值区域就是我们所要检测曲线的位置。</p>
+<p>在训练卷积审计网络（CNN）的某一个卷积层时，我们实际上是在训练一系列的滤波器(filter)。比如，对于一个32x32x3（宽32像素x高32像素xRGB三通道）的图像，如果我们在CNN的第一个卷积层定义训练12个滤波器，那就这一层的输出便是32X32X12.按照不同的任务，我们可以对这个输出做进一步的处理，这包括激活函数，池化，全连接等。<br><img src="/img/2017/12/13/10.jpg" alt=""></p>
+<p>简单来说，训练CNN在相当意义上是在训练每一个卷积层的滤波器。让这些滤波器组对特定的模式有高的激活，以达到CNN网络的分类/检测等目的。<br><img src="/img/2017/12/13/11.jpg" alt=""></p>
+<fig. 一个实际cnn（alexnet）第一个卷积层的滤波器="">
+
+<p>卷积神经网络的第一个卷积层的滤波器用来检测低阶特征，比如边、角、曲线等。随着卷积层的增加，对应滤波器检测的特征就更加复杂（理性情况下，也是我们想要的情况）。比如第二个卷积层的输入实际上是第一层的输出（滤波器激活图），这一层的滤波器便是用来检测低价特征的组合等情况（半圆、四边形等），如此累积，以检测越来越复杂的特征。实际上，我们的人类大脑的视觉信息处理也遵循这样的低阶特征到高阶特征的模式（Owl of Minerva：为什么无彩色系（黑白灰色）在色彩搭配中可以和谐地与任何彩色搭配？）。最后一层的滤波器按照训练CNN目的的不同，可能是在检测到人脸、手写字体等时候激活[1]。</p>
+<p>所以，在相当程度上，构建卷积神经网络的任务就在于构建这些滤波器。也就是，将这些滤波器变成这样(改变滤波器矩阵的值，也就是Weight)的——能识别特定的特征。这个过程叫做训练。</p>
+<p>在训练开始之时，卷积层的滤波器是完全随机的，它们不会对任何特征激活（不能检测任何特征）。这就像刚出生的孩子，TA不知道什么是人脸、什么是狗，什么是上下左右。TA需要学习才知道这些概念，也就是通过接触人脸、狗、上下左右，并被告知这些东西分别是人脸、狗、上下左右。然后TA才能在头脑中记住这些概念，并在之后的某一次见到之后能准确的给出结果。</p>
+<p>把一个空白的滤波其，修改其权重(weights)以使它能检测特定的模式，整个过程就如工程里面的反馈。<br><img src="/img/2017/12/13/12.jpg" alt=""></p>
+<p>想想一下，如果有一只无意识的猴子，完全随机的修改一个5X5滤波器矩阵的25个值，那完全可能经过一定的轮次之后，这个滤波器能够检测棱角等特征。这是一种无反馈的训练情况。对神经网络的训练当然不能如此，我们不可能靠运气去做这件事情。</p>
+<p>举个例子，我们要训练一个用于分类的神经网络，让它能判定输入图像中的物体最可能是十个类别的哪一类。那么，训练过程就是这样的：</p>
+<p>第一次训练，输入一张图像，这个图像通过各层卷积处理输出量一组向量[1,1,1,1,1,1,1,1,1,1], 也就是，对于完全由随机滤波器构建的网络，其输出认为这张图等概率的是十个类别中的某一种。但是对于训练，我们有一个Gound Thuth, 也就是这张图中物体所属的类别：[0，0，1，0，0，0，0，0，0，0]，也就是属于第三类。这时候我们可以定义一个损失函数，比如常见的MSE（mean squared error）.我们假定L是这个损失函数的输出。这时候我们的目的就是，让L的值反馈(这种神经网络概念下称为 back propagation， 反向传输)给整个卷积神经网络，以修改各个滤波器的权重，使得损失值L最小。</p>
+<p><img src="/img/2017/12/13/13.jpg" alt=""></p>
+<p>这是一个典型的最优化问题。当然地，在工程上我们几乎不可能一次就把滤波器的权重W修改到使L最小的情况，而是需要多次训练和多次修改。</p>
+<p><img src="/img/2017/12/13/14.jpg" alt=""></p>
+<p>如果情况理想的话，权重修改的方向是使得L的变化收敛的。这也就是说很可能达到了我们训练这个神经网络的目的——让各个卷积层的滤波器能够组合起来最优化的检测特定的模式。</p>
+<hr>
+<p>[1] Zeiler, M. D., &amp; Fergus, R. (2014, September). Visualizing and understanding convolutional networks. In European conference on computer vision (pp. 818-833). Springer, Cham.</p>
+<hr>
+<p>转自 知乎问答: <a href="https://www.zhihu.com/question/39022858" target="_blank" rel="external">能否对卷积神经网络工作原理做一个直观的解释？</a></p>
+</fig.>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/12/13/卷积神经网络工作原理解释/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-解决mac下的Sourcetree每次拉取提交都需要输入密码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -924,88 +1031,6 @@
 
 
   
-    <article id="post-超越继承之路：协议混合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/20/超越继承之路：协议混合/">&lt;转&gt;超越继承之路：协议混合</a>
-    </h1>
-  
-
-        
-        <a href="/2016/01/20/超越继承之路：协议混合/" class="archive-article-date">
-  	<time datetime="2016-01-20T11:29:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-01-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="超越继承之路：协议混合">超越继承之路：协议混合</h1><p>只要你学习过面向对象的语言比如 ObjC ，都知道继承的概念，他的一个用途是在多个类之间共享代码。但是这种解决方案存在一些问题。这篇文章我们来初探一下 Swift 的协议扩展，以及如何混合使用这些协议 - Mixins，英文原文<a href="http://alisoftware.github.io/swift/protocol/2015/11/08/mixins-over-inheritance/#fnref2" target="_blank" rel="external">地址</a></p>
-<p>如果感觉太长了，读不下去，可以直接下载代码 <a href="http://alisoftware.github.io/assets/Mixins.playground.zip" target="_blank" rel="external">Swift Playground Code</a></p>
-<h2 id="继承的问题">继承的问题</h2><p>比如你有个 app，其中有大量的<code>UIViewController</code>类都要共享相同的行为，例如他们都有一个相同样式的汉堡菜单。你不想在每个<code>View Controllers</code>中都实现一遍『汉堡菜单』的逻辑（设置 <code>leftBarButtonItem</code>，按钮点击时打开/关闭菜单）</p>
-<p>解决方法很简单，创建一个通用的<code>CommonViewController</code>，继承自<code>UIViewController</code>，然后实现所有的行为，接着让其他的<code>UIViewController</code>继承自这个<code>CommonViewController</code>，而不是直接继承自<code>UIViewController</code>。通过这种方式，这些 VC 将拥有这些相同的方法和行为，不需要再每次都自己实现一遍了。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CommonViewController</span>: <span class="title">UIViewController</span> </span>&#123;  </div><div class="line">  <span class="function"><span class="keyword">func</span> <span class="title">setupBurgerMenu</span><span class="params">()</span></span> &#123; … &#125;</div><div class="line">  <span class="function"><span class="keyword">func</span> <span class="title">onBurgerMenuTapped</span><span class="params">()</span></span> &#123; … &#125;</div><div class="line">  <span class="keyword">var</span> burgerMenuIsOpen: <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">didSet</span> &#123; … &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyViewController</span>: <span class="title">CommonViewController</span> </span>&#123;  </div><div class="line">  <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</div><div class="line">    <span class="keyword">super</span>.viewDidLoad()</div><div class="line">    setupBurgerMenu()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>但是在随后的开发过程中，你突然需要一个<code>UITableViewController</code>或 <code>UICollectionViewController</code>…靠！不能使用<code>CommonViewController</code>了，因为他是 <code>UIViewController</code> 而不是<code>UITableViewController</code>！</p>
-<p>我们该怎么做？新建一个<code>CommonTableViewController</code>实现和<code>CommonViewController</code>一样的功能，但只是继承改为<code>UITableViewController</code>？这会产生好多重复代码，绝对是个糟糕透顶的设计。</p>
-        
-          <a class="article-more-a" href="/2016/01/20/超越继承之路：协议混合/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Swift</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/01/20/超越继承之路：协议混合/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1100,11 +1125,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
+                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
+                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1120,7 +1145,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1128,15 +1153,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DB2</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Mac</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DB2</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1164,10 +1189,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Neo4j</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
@@ -1180,11 +1201,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">MAC</a>
+                <a href="javascript:void(0)" class="js-tag color1">Neo4j</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">MAC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1217,6 +1242,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Akka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
               </li>
              
               <li class="article-tag-list-item">

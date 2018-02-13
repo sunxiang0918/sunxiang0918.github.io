@@ -156,6 +156,88 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-超越继承之路：协议混合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/20/超越继承之路：协议混合/">&lt;转&gt;超越继承之路：协议混合</a>
+    </h1>
+  
+
+        
+        <a href="/2016/01/20/超越继承之路：协议混合/" class="archive-article-date">
+  	<time datetime="2016-01-20T11:29:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-01-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="超越继承之路：协议混合">超越继承之路：协议混合</h1><p>只要你学习过面向对象的语言比如 ObjC ，都知道继承的概念，他的一个用途是在多个类之间共享代码。但是这种解决方案存在一些问题。这篇文章我们来初探一下 Swift 的协议扩展，以及如何混合使用这些协议 - Mixins，英文原文<a href="http://alisoftware.github.io/swift/protocol/2015/11/08/mixins-over-inheritance/#fnref2" target="_blank" rel="external">地址</a></p>
+<p>如果感觉太长了，读不下去，可以直接下载代码 <a href="http://alisoftware.github.io/assets/Mixins.playground.zip" target="_blank" rel="external">Swift Playground Code</a></p>
+<h2 id="继承的问题">继承的问题</h2><p>比如你有个 app，其中有大量的<code>UIViewController</code>类都要共享相同的行为，例如他们都有一个相同样式的汉堡菜单。你不想在每个<code>View Controllers</code>中都实现一遍『汉堡菜单』的逻辑（设置 <code>leftBarButtonItem</code>，按钮点击时打开/关闭菜单）</p>
+<p>解决方法很简单，创建一个通用的<code>CommonViewController</code>，继承自<code>UIViewController</code>，然后实现所有的行为，接着让其他的<code>UIViewController</code>继承自这个<code>CommonViewController</code>，而不是直接继承自<code>UIViewController</code>。通过这种方式，这些 VC 将拥有这些相同的方法和行为，不需要再每次都自己实现一遍了。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CommonViewController</span>: <span class="title">UIViewController</span> </span>&#123;  </div><div class="line">  <span class="function"><span class="keyword">func</span> <span class="title">setupBurgerMenu</span><span class="params">()</span></span> &#123; … &#125;</div><div class="line">  <span class="function"><span class="keyword">func</span> <span class="title">onBurgerMenuTapped</span><span class="params">()</span></span> &#123; … &#125;</div><div class="line">  <span class="keyword">var</span> burgerMenuIsOpen: <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">didSet</span> &#123; … &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyViewController</span>: <span class="title">CommonViewController</span> </span>&#123;  </div><div class="line">  <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</div><div class="line">    <span class="keyword">super</span>.viewDidLoad()</div><div class="line">    setupBurgerMenu()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>但是在随后的开发过程中，你突然需要一个<code>UITableViewController</code>或 <code>UICollectionViewController</code>…靠！不能使用<code>CommonViewController</code>了，因为他是 <code>UIViewController</code> 而不是<code>UITableViewController</code>！</p>
+<p>我们该怎么做？新建一个<code>CommonTableViewController</code>实现和<code>CommonViewController</code>一样的功能，但只是继承改为<code>UITableViewController</code>？这会产生好多重复代码，绝对是个糟糕透顶的设计。</p>
+        
+          <a class="article-more-a" href="/2016/01/20/超越继承之路：协议混合/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Swift</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/01/20/超越继承之路：协议混合/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Akka-in-JAVA-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -955,91 +1037,6 @@
 
 
   
-    <article id="post-Nutch2-3-安装与部署" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/08/Nutch2-3-安装与部署/">Nutch2.3 安装与部署</a>
-    </h1>
-  
-
-        
-        <a href="/2015/12/08/Nutch2-3-安装与部署/" class="archive-article-date">
-  	<time datetime="2015-12-08T14:15:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-12-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Nutch2-3_安装与部署">Nutch2.3 安装与部署</h1><p><a href="http://nutch.apache.org" target="_blank" rel="external">Nutch</a>是由JAVA开发的开源的全文检索引擎.不过更多的被用来当成Web爬虫来使用.现在Nutch分为了1.x和2.x两个版本在维护.而这两个版本的最主要的区别在于底层存储的抽象.1.x版本是基于Hadoop架构的,底层存储只能使用HDFS.而2.x版本通过<a href="http://gora.apache.org" target="_blank" rel="external">Apache Gora</a>对底层存储做了抽象,能访问HBase,MYSQL,MongoDB,Solr,AvroStore等等.</p>
-<p>但是从2.X开始,官方就只提供源码的下载了,不再提供编译后的发布版本,因此就需要我们自己去进行编译.</p>
-        
-          <a class="article-more-a" href="/2015/12/08/Nutch2-3-安装与部署/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">爬虫</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Nutch</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/12/08/Nutch2-3-安装与部署/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1134,11 +1131,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
+                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
+                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1154,7 +1151,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1162,15 +1159,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DB2</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Mac</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DB2</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1198,10 +1195,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Neo4j</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
@@ -1214,11 +1207,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">MAC</a>
+                <a href="javascript:void(0)" class="js-tag color1">Neo4j</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">MAC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1251,6 +1248,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Akka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
               </li>
              
               <li class="article-tag-list-item">

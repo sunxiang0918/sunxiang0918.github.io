@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunxiang0918.github.io//"/>
-  <updated>2018-02-12T09:12:09.577Z</updated>
+  <updated>2018-02-13T05:09:24.794Z</updated>
   <id>http://sunxiang0918.github.io//</id>
   
   <author>
@@ -14,6 +14,57 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[<转>卷积神经网络工作原理解释]]></title>
+    <link href="http://sunxiang0918.github.io/2017/12/13/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E8%A7%A3%E9%87%8A/"/>
+    <id>http://sunxiang0918.github.io/2017/12/13/卷积神经网络工作原理解释/</id>
+    <published>2017-12-13T03:41:55.000Z</published>
+    <updated>2018-02-13T05:09:24.794Z</updated>
+    <content type="html"><![CDATA[<h1 id="卷积神经网络工作原理解释">卷积神经网络工作原理解释</h1><p>从最基础的开始</p>
+<p>对二维数字信号（图像）的操作，可以写成矩阵形式。<br><img src="/img/2017/12/13/1.jpg" alt=""></p>
+<p>比如对图像做平滑，一个典型的8领域平滑，其结果中的每个值都来源于原对应位置和其周边8个元素与一个3X3矩阵的乘积：</p>
+<p><img src="/img/2017/12/13/2.jpg" alt="2"></p>
+<p>也就相当于对原矩阵，按照顺序将各区域元素与W矩阵相乘，W 矩阵为<br><img src="/img/2017/12/13/3.jpg" alt="3"></p>
+<p>这也被称作核(Kernel, 3X3)</p>
+<p>其处理效果如下：<br><img src="/img/2017/12/13/4.jpg" alt=""></p>
+<p>也就是，这个核对图像进行操作，相当于对图像进行了低通滤波。因此这个核也被称为滤波器，整个操作过程按照概念称为卷积。</p>
+<p>扩展来讲，对二维图像的滤波操作可以写成卷积，比如常见的高斯滤波、拉普拉斯滤波（算子）等。<br><img src="/img/2017/12/13/5.jpg" alt=""></p>
+<p>滤波器跟卷积神经网络有什么关系呢。不如我们预想一个识别问题：我们要识别图像中的某种特定曲线，也就是说，这个滤波器要对这种曲线有很高的输出，对其他形状则输出很低，这也就像是神经元的激活。</p>
+<p>我们设计的滤波器和想要识别的曲线如下：<br><img src="/img/2017/12/13/6.jpg" alt=""></p>
+<p>假设上面的核（滤波器）按照卷积顺序沿着下图移动：<br><img src="/img/2017/12/13/7.jpg" alt=""></p>
+<p>那么当它移动到上面的位置时，按照矩阵操作，将这个区域的图像像素值与滤波器相乘，我们得到一个很大的值（6600）：<br><img src="/img/2017/12/13/8.jpg" alt=""></p>
+<p>而当这个滤波器移动到其他区域时，我们得到一个相对很小的值：<br><img src="/img/2017/12/13/9.jpg" alt=""></p>
+<p>如此，我们对整个原图进行一次卷积，得到的结果中，在那个特定曲线和周边区域，值就很高，在其他区域，值相对低。这就是一张激活图。对应的高值区域就是我们所要检测曲线的位置。</p>
+<p>在训练卷积审计网络（CNN）的某一个卷积层时，我们实际上是在训练一系列的滤波器(filter)。比如，对于一个32x32x3（宽32像素x高32像素xRGB三通道）的图像，如果我们在CNN的第一个卷积层定义训练12个滤波器，那就这一层的输出便是32X32X12.按照不同的任务，我们可以对这个输出做进一步的处理，这包括激活函数，池化，全连接等。<br><img src="/img/2017/12/13/10.jpg" alt=""></p>
+<p>简单来说，训练CNN在相当意义上是在训练每一个卷积层的滤波器。让这些滤波器组对特定的模式有高的激活，以达到CNN网络的分类/检测等目的。<br><img src="/img/2017/12/13/11.jpg" alt=""></p>
+<fig. 一个实际cnn（alexnet）第一个卷积层的滤波器="">
+
+<p>卷积神经网络的第一个卷积层的滤波器用来检测低阶特征，比如边、角、曲线等。随着卷积层的增加，对应滤波器检测的特征就更加复杂（理性情况下，也是我们想要的情况）。比如第二个卷积层的输入实际上是第一层的输出（滤波器激活图），这一层的滤波器便是用来检测低价特征的组合等情况（半圆、四边形等），如此累积，以检测越来越复杂的特征。实际上，我们的人类大脑的视觉信息处理也遵循这样的低阶特征到高阶特征的模式（Owl of Minerva：为什么无彩色系（黑白灰色）在色彩搭配中可以和谐地与任何彩色搭配？）。最后一层的滤波器按照训练CNN目的的不同，可能是在检测到人脸、手写字体等时候激活[1]。</p>
+<p>所以，在相当程度上，构建卷积神经网络的任务就在于构建这些滤波器。也就是，将这些滤波器变成这样(改变滤波器矩阵的值，也就是Weight)的——能识别特定的特征。这个过程叫做训练。</p>
+<p>在训练开始之时，卷积层的滤波器是完全随机的，它们不会对任何特征激活（不能检测任何特征）。这就像刚出生的孩子，TA不知道什么是人脸、什么是狗，什么是上下左右。TA需要学习才知道这些概念，也就是通过接触人脸、狗、上下左右，并被告知这些东西分别是人脸、狗、上下左右。然后TA才能在头脑中记住这些概念，并在之后的某一次见到之后能准确的给出结果。</p>
+<p>把一个空白的滤波其，修改其权重(weights)以使它能检测特定的模式，整个过程就如工程里面的反馈。<br><img src="/img/2017/12/13/12.jpg" alt=""></p>
+<p>想想一下，如果有一只无意识的猴子，完全随机的修改一个5X5滤波器矩阵的25个值，那完全可能经过一定的轮次之后，这个滤波器能够检测棱角等特征。这是一种无反馈的训练情况。对神经网络的训练当然不能如此，我们不可能靠运气去做这件事情。</p>
+<p>举个例子，我们要训练一个用于分类的神经网络，让它能判定输入图像中的物体最可能是十个类别的哪一类。那么，训练过程就是这样的：</p>
+<p>第一次训练，输入一张图像，这个图像通过各层卷积处理输出量一组向量[1,1,1,1,1,1,1,1,1,1], 也就是，对于完全由随机滤波器构建的网络，其输出认为这张图等概率的是十个类别中的某一种。但是对于训练，我们有一个Gound Thuth, 也就是这张图中物体所属的类别：[0，0，1，0，0，0，0，0，0，0]，也就是属于第三类。这时候我们可以定义一个损失函数，比如常见的MSE（mean squared error）.我们假定L是这个损失函数的输出。这时候我们的目的就是，让L的值反馈(这种神经网络概念下称为 back propagation， 反向传输)给整个卷积神经网络，以修改各个滤波器的权重，使得损失值L最小。</p>
+<p><img src="/img/2017/12/13/13.jpg" alt=""></p>
+<p>这是一个典型的最优化问题。当然地，在工程上我们几乎不可能一次就把滤波器的权重W修改到使L最小的情况，而是需要多次训练和多次修改。</p>
+<p><img src="/img/2017/12/13/14.jpg" alt=""></p>
+<p>如果情况理想的话，权重修改的方向是使得L的变化收敛的。这也就是说很可能达到了我们训练这个神经网络的目的——让各个卷积层的滤波器能够组合起来最优化的检测特定的模式。</p>
+<hr>
+<p>[1] Zeiler, M. D., &amp; Fergus, R. (2014, September). Visualizing and understanding convolutional networks. In European conference on computer vision (pp. 818-833). Springer, Cham.</p>
+<hr>
+<p>转自 知乎问答: <a href="https://www.zhihu.com/question/39022858" target="_blank" rel="external">能否对卷积神经网络工作原理做一个直观的解释？</a></p>
+</fig.>]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="卷积神经网络工作原理解释">卷积神经网络工作原理解释</h1><p>从最基础的开始</p>
+<p>对二维数字信号（图像）的操作，可以写成矩阵形式。<br><img src="/img/2017/12/13/1.jpg" alt=""></p>
+<p>比如对图像做平]]>
+    </summary>
+    
+      <category term="深度学习" scheme="http://sunxiang0918.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[解决mac下的Sourcetree每次拉取提交都需要输入密码]]></title>
@@ -1814,72 +1865,6 @@
     </summary>
     
       <category term="MAC" scheme="http://sunxiang0918.github.io/tags/MAC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Nutch2.3 安装与部署]]></title>
-    <link href="http://sunxiang0918.github.io/2015/12/08/Nutch2-3-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%83%A8%E7%BD%B2/"/>
-    <id>http://sunxiang0918.github.io/2015/12/08/Nutch2-3-安装与部署/</id>
-    <published>2015-12-08T14:15:32.000Z</published>
-    <updated>2017-10-23T02:18:37.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="Nutch2-3_安装与部署">Nutch2.3 安装与部署</h1><p><a href="http://nutch.apache.org" target="_blank" rel="external">Nutch</a>是由JAVA开发的开源的全文检索引擎.不过更多的被用来当成Web爬虫来使用.现在Nutch分为了1.x和2.x两个版本在维护.而这两个版本的最主要的区别在于底层存储的抽象.1.x版本是基于Hadoop架构的,底层存储只能使用HDFS.而2.x版本通过<a href="http://gora.apache.org" target="_blank" rel="external">Apache Gora</a>对底层存储做了抽象,能访问HBase,MYSQL,MongoDB,Solr,AvroStore等等.</p>
-<p>但是从2.X开始,官方就只提供源码的下载了,不再提供编译后的发布版本,因此就需要我们自己去进行编译.</p>
-<a id="more"></a>
-<h2 id="编译">编译</h2><p>为了简便起见,我们准备底层的存储使用mongoDB. 因此,这个演示是基于 Nutch+MongoDB的.</p>
-<ol>
-<li><p>下载源码<br> 从官网上下载<a href="http://www.apache.org/dyn/closer.lua/nutch/2.3/apache-nutch-2.3-src.tar.gz" target="_blank" rel="external">http://www.apache.org/dyn/closer.lua/nutch/2.3/apache-nutch-2.3-src.tar.gz</a>.然后执行命令 <code>tar -xvf apache-nutch-2.3-src.tar.gz</code>进行解压.</p>
-</li>
-<li><p>修改<code>$NUTCH_HOME/conf/nutch-site.xml</code>,增加以下内容:</p>
- <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>storage.data.store.class<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.gora.mongodb.store.MongoStore<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">description</span>&gt;</span>Default class for storing data<span class="tag">&lt;/<span class="name">description</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>http.agent.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>My Nutch Spider<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">```</div></pre></td></tr></table></figure>
-</li>
-<li><p>修改<code>$NUTCH_HOME/conf/gora.properties</code>,在最下面找到<code># MongoDBStore properties  #</code>,然后打开注释:</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">############################</span></div><div class="line"><span class="comment"># MongoDBStore properties  #</span></div><div class="line"><span class="comment">############################</span></div><div class="line">gora.datastore.default=org.apache.gora.mongodb.store.MongoStore</div><div class="line">gora.mongodb.override_hadoop_configuration=<span class="literal">false</span></div><div class="line">gora.mongodb.mapping.file=/gora-mongodb-mapping.xml</div><div class="line">gora.mongodb.servers=localhost:27017</div><div class="line">gora.mongodb.db=mytestdatabase</div><div class="line"><span class="comment">#gora.mongodb.login=login</span></div><div class="line"><span class="comment">#gora.mongodb.secret=secret</span></div></pre></td></tr></table></figure>
-<p> 注意,如果你的mongo数据库没有auth,最后两行需要注释掉.</p>
-</li>
-<li><p>修改<code>$NUTCH_HOME/ivy/ivy.xml</code>.去掉下面的注释,使用gora-hbase:</p>
- <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- Uncomment this to use MongoDB as Gora backend. --&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">dependency</span> <span class="attr">org</span>=<span class="string">"org.apache.gora"</span> <span class="attr">name</span>=<span class="string">"gora-mongodb"</span> <span class="attr">rev</span>=<span class="string">"0.5"</span> <span class="attr">conf</span>=<span class="string">"*-&gt;default"</span> /&gt;</span></div></pre></td></tr></table></figure>
-<p> 这个地方需要特别注意一下,这里虽然使用了<code>gora-mongodb-0.5</code>,但是这个版本其实是有问题的,会在后面抓取记录保存到MongoDB的时候报:<code>java.lang.IllegalArgumentException: can&#39;t serialize class
-org.apache.avro.util.Utf8</code>的异常,开始折腾了我很久.最后发现了这个是<code>gora-mongodb-0.5</code>自身的一个<a href="https://issues.apache.org/jira/browse/GORA-388" target="_blank" rel="external">Bug</a>,在0.6中是被修复了的.因此,我最开始想把整个gora升级成为0.6,结果Nutch不能执行.因此,目前阶段如果你底层想要使用MongoDB进行存储的话,需要单个把<code>gora-mongodb</code>升级到<code>0.6</code>版本,而其他的不动.</p>
-</li>
-<li><p>接下来就是编译了,直接在<code>$NUTCH_HOME</code>根目录上执行<code>ant runtime</code>即可.<br> 但是这个速度不得不吐槽.非常的坑爹,基本上下了我3个多小时.不知道是什么原因,我平时使用JAVA的Maven环境的时候下载其实是非常的快的.但是IVY的依赖下载就非常非常非常的慢.理论上他们是同一个网络地址啊. 为了能加速那么一丢丢.可以把<code>$NUTCH_HOME/ivy/ivysettings.xml</code>中的<code>repo.maven.org</code>给替换成国内的镜像.比如:</p>
- <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"repo.maven.org"</span></span></div><div class="line"><span class="tag">   <span class="attr">value</span>=<span class="string">"http://maven.oschina.net/content/groups/public/"</span></span></div><div class="line"><span class="tag">   <span class="attr">override</span>=<span class="string">"false"</span>/&gt;</span></div></pre></td></tr></table></figure>
-<p> 其他的两个不能替换,我换了以后会找不到包的.</p>
-<p> 如果你的编译长时间的停在<code>[ivy:resolve] :: loading settings :: file = $NUTCH_HOME/ivy/ivysettings.xml</code>.那么你可以把进程杀了重新执行一次<code>ant runtime</code>.可能执行个十来次就能编译成功了.</p>
-<p> 最终,会显示:</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">job:</div><div class="line">     [jar] Building jar: <span class="variable">$NUTCH_HOME</span>/build/apache-nutch-2.3.job</div><div class="line">runtime:</div><div class="line">    [copy] Copying 1 file to <span class="variable">$NUTCH_HOME</span>/nutch/runtime/deploy</div><div class="line">    [copy] Copying 2 files to <span class="variable">$NUTCH_HOME</span>/nutch/runtime/<span class="built_in">local</span>/lib</div><div class="line">BUILD SUCCESSFUL</div></pre></td></tr></table></figure>
-<p> 然后会在你的<code>$NUTCH_HOME</code>目录下,创建<code>runtime</code>和<code>build</code>目录. 其中的<code>runtime</code>目录即为你编译好了的<code>Nutch2.3</code>.</p>
-<p> 如果在编译过程中出现<code>Could not load definitions from resource org/sonar/ant/antlib.xml.It could not be found.</code>的警告的话,不要着急,这个错误不影响你最后的编译是否成功.如果你有强迫症,见不得有警告的话.那么可以到<a href="http://search.maven.org" target="_blank" rel="external">Maven</a>中下载<code>sonar-ant-task-2.2.jar</code>包,然后放入<code>$NUTCH_HOME/lib</code>,然后修改<code>$NTUCH_HOME/build.xml</code>即可:</p>
- <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- Define the Sonar task if this hasn't been done in a common script --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">taskdef</span> <span class="attr">uri</span>=<span class="string">"antlib:org.sonar.ant"</span> <span class="attr">resource</span>=<span class="string">"org/sonar/ant/antlib.xml"</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">classpath</span> <span class="attr">path</span>=<span class="string">"$&#123;ant.library.dir&#125;"</span> /&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">classpath</span> <span class="attr">path</span>=<span class="string">"$&#123;mysql.library.dir&#125;"</span> /&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">classpath</span>&gt;</span><span class="tag">&lt;<span class="name">fileset</span> <span class="attr">dir</span>=<span class="string">"lib/"</span> <span class="attr">includes</span>=<span class="string">"sonar*.jar"</span> /&gt;</span><span class="tag">&lt;/<span class="name">classpath</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">taskdef</span>&gt;</span></div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="部署">部署</h2><p>其实编译完成后的<code>runtime</code>文件夹就已经是一个完整的可以运行的环境了.<br>我们在这里做一个简单的测试:使用Nutch爬取<a href="http://www.cnbeta.com" target="_blank" rel="external">cnbeta</a>中的新闻文章.</p>
-<ol>
-<li><p>在<code>$NUTCH_HOME/runtime/local</code>下创建一个文件<code>seed.txt</code>. 里面就是需要爬取的网站,一行一个.我们在这里只写一行:<code>www.cnbeta.com</code></p>
-</li>
-<li><p>修改<code>$NUTCH_HOME/runtime/cong/automaton-urlfilter.txt</code>文件,这个文件就是URL的过滤.避免爬取到不需要的网站.</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># accept anything else</span></div><div class="line">+^http://www.cnbeta.com/$</div><div class="line">+^http://www.cnbeta.com/articles/\d\.htm$</div><div class="line"><span class="comment"># skip everything else</span></div><div class="line">-.</div></pre></td></tr></table></figure>
-</li>
-<li><p>然后在命令行中执行<code>$NUTCH_HOME/runtime/bin/crawl seed.txt test 2</code>.<br> 这个时候就会开始爬取目标网站了.你会看到很多的日志信息:</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">	fetching http://www.cnbeta.com/topics/8.htm (queue crawl delay=5000ms)</div><div class="line">50/50 spinwaiting/active, 71 pages, 10 errors, 0.2 0 pages/s, 67 102 kb/s, 28 URLs <span class="keyword">in</span> 1 queues</div><div class="line">fetching http://www.cnbeta.com/topics/464.htm (queue crawl delay=5000ms)</div><div class="line">50/50 spinwaiting/active, 72 pages, 10 errors, 0.2 0 pages/s, 67 102 kb/s, 27 URLs <span class="keyword">in</span> 1 queues</div><div class="line">fetching http://www.cnbeta.com/topics/455.htm (queue crawl delay=5000ms)</div><div class="line">50/50 spinwaiting/active, 73 pages, 10 errors, 0.2 0 pages/s, 68 102 kb/s, 26 URLs <span class="keyword">in</span> 1 queues</div><div class="line">fetching http://www.cnbeta.com/topics/83.htm (queue crawl delay=5000ms)</div><div class="line">49/50 spinwaiting/active, 73 pages, 10 errors, 0.2 0 pages/s, 67 0 kb/s, 25 URLs <span class="keyword">in</span> 1 queues</div><div class="line">50/50 spinwaiting/active, 74 pages, 10 errors, 0.2 0 pages/s, 67 102 kb/s, 25 URLs <span class="keyword">in</span> 1 queues</div><div class="line">fetching http://www.cnbeta.com/topics/444.htm (queue crawl delay=5000ms)</div><div class="line">50/50 spinwaiting/active, 75 pages, 10 errors, 0.2 0 pages/s, 68 102 kb/s, 24 URLs <span class="keyword">in</span> 1 queues</div><div class="line">fetching http://www.cnbeta.com/commentrss.php (queue crawl delay=5000ms)</div><div class="line">50/50 spinwaiting/active, 76 pages, 10 errors, 0.2 0 pages/s, 67 0 kb/s, 23 URLs <span class="keyword">in</span> 1 queues</div><div class="line">fetching http://www.cnbeta.com/topics/197.htm (queue crawl delay=5000ms)</div><div class="line">50/50 spinwaiting/active, 77 pages, 10 errors, 0.2 0 pages/s, 67 102 kb/s, 22 URLs <span class="keyword">in</span> 1 queues</div></pre></td></tr></table></figure>
-<p> 等一段时间后,爬取就完成了.然后打开Mongo数据库,就会看到有一个<code>mytestdatabase</code>的库.里面有一个<code>test_webpage</code>的表,其中的东西就是爬虫爬取的内容了.随便抓取一个举例:</p>
- <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">	&#123;</div><div class="line">  <span class="attr">"_id"</span>: <span class="string">"com.cnbeta.www:http/articles/447355.htm"</span>,</div><div class="line">  <span class="attr">"status"</span>: <span class="number">2</span>,</div><div class="line">  <span class="attr">"fetchTime"</span>: NumberLong(<span class="number">1449587050404</span>),</div><div class="line">  <span class="attr">"fetchInterval"</span>: <span class="number">2592000</span>,</div><div class="line">  <span class="attr">"retriesSinceFetch"</span>: <span class="number">0</span>,</div><div class="line">  <span class="attr">"score"</span>: <span class="number">0.0</span>,</div><div class="line">  <span class="attr">"inlinks"</span>: &#123;</div><div class="line">    <span class="attr">"http://www·cnbeta·com/"</span>: <span class="string">""</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"markers"</span>: &#123;</div><div class="line">    <span class="attr">"_gnmrk_"</span>: <span class="string">"1449586889-28161"</span>,</div><div class="line">    <span class="attr">"_ftcmrk_"</span>: <span class="string">"1449586889-28161"</span>,</div><div class="line">    <span class="attr">"dist"</span>: <span class="string">"1"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"metadata"</span>: &#123;</div><div class="line">    "_rs_": BinData(0, "AAABzw==")</div><div class="line">  &#125;,</div><div class="line">  "batchId": "1449586889-28161",</div><div class="line">  "baseUrl": "http://www.cnbeta.com/articles/447355.htm",</div><div class="line">  "prevFetchTime": NumberLong(1449586888595),</div><div class="line">  "protocolStatus": &#123;</div><div class="line">    "code": 1,</div><div class="line">    "args": [</div><div class="line"></div><div class="line">    ],</div><div class="line">    "lastModified": NumberLong(0)</div><div class="line">  &#125;,</div><div class="line">  "content": BinData(0, "XXXXXX网页的内容,太长了,就省略了"),</div><div class="line">  "contentType": "application/xhtml+xml",</div><div class="line">  "headers": &#123;</div><div class="line">    "Vary": "Accept-Encoding",</div><div class="line">    "Date": "Tue, 08 Dec 2015 15:04:10 GMT",</div><div class="line">    "Last-Modified": "Sun, 06 Dec 2015 02:11:14 GMT",</div><div class="line">    "Content-Encoding": "gzip",</div><div class="line">    "Content-Type": "text/html",</div><div class="line">    "Accept-Ranges": "bytes",</div><div class="line">    "Connection": "close",</div><div class="line">    "Server": "grid-cache/1.4.4",</div><div class="line">    "X-CDNZZ-FCACHE": "EXPIRED"</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p> 这就是爬取下来的内容.就可以通过我们进一步处理了.<br> 而这个字段的定义是在<code>$NUTCH_HOME/runtime/local/conf/gora-mongodb-mapping.xml</code>中定义的.</p>
-</li>
-</ol>
-<h2 id="结束语">结束语</h2><p>这样,一个最简单的Nutch的运行环境就搭建成功了.更多的更高级的功能,我们后面再慢慢来试验.</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="Nutch2-3_安装与部署">Nutch2.3 安装与部署</h1><p><a href="http://nutch.apache.org" target="_blank" rel="external">Nutch</a>是由JAVA开发的开源的全文检索引擎.不过更多的被用来当成Web爬虫来使用.现在Nutch分为了1.x和2.x两个版本在维护.而这两个版本的最主要的区别在于底层存储的抽象.1.x版本是基于Hadoop架构的,底层存储只能使用HDFS.而2.x版本通过<a href="http://gora.apache.org" target="_blank" rel="external">Apache Gora</a>对底层存储做了抽象,能访问HBase,MYSQL,MongoDB,Solr,AvroStore等等.</p>
-<p>但是从2.X开始,官方就只提供源码的下载了,不再提供编译后的发布版本,因此就需要我们自己去进行编译.</p>]]>
-    
-    </summary>
-    
-      <category term="大数据" scheme="http://sunxiang0918.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    
-      <category term="爬虫" scheme="http://sunxiang0918.github.io/tags/%E7%88%AC%E8%99%AB/"/>
-    
-      <category term="Nutch" scheme="http://sunxiang0918.github.io/tags/Nutch/"/>
     
   </entry>
   
