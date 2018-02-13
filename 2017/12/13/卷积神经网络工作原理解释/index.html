@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2017/12/13/12.jpg">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2017/12/13/13.jpg">
 <meta property="og:image" content="http://sunxiang0918.github.io/img/2017/12/13/14.jpg">
-<meta property="og:updated_time" content="2018-02-13T05:09:24.794Z">
+<meta property="og:updated_time" content="2018-02-13T05:57:06.806Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;转&gt;卷积神经网络工作原理解释">
 <meta name="twitter:description" content="卷积神经网络工作原理解释从最基础的开始 对二维数字信号（图像）的操作，可以写成矩阵形式。 比如对图像做平滑，一个典型的8领域平滑，其结果中的每个值都来源于原对应位置和其周边8个元素与一个3X3矩阵的乘积：  也就相当于对原矩阵，按照顺序将各区域元素与W矩阵相乘，W 矩阵为 这也被称作核(Kernel, 3X3) 其处理效果如下： 也就是，这个核对图像进行操作，相当于对图像进行了低通滤波。因此这个核">
@@ -202,6 +202,7 @@
 <p>这也被称作核(Kernel, 3X3)</p>
 <p>其处理效果如下：<br><img src="/img/2017/12/13/4.jpg" alt=""></p>
 <p>也就是，这个核对图像进行操作，相当于对图像进行了低通滤波。因此这个核也被称为滤波器，整个操作过程按照概念称为卷积。</p>
+<a id="more"></a>
 <p>扩展来讲，对二维图像的滤波操作可以写成卷积，比如常见的高斯滤波、拉普拉斯滤波（算子）等。<br><img src="/img/2017/12/13/5.jpg" alt=""></p>
 <p>滤波器跟卷积神经网络有什么关系呢。不如我们预想一个识别问题：我们要识别图像中的某种特定曲线，也就是说，这个滤波器要对这种曲线有很高的输出，对其他形状则输出很低，这也就像是神经元的激活。</p>
 <p>我们设计的滤波器和想要识别的曲线如下：<br><img src="/img/2017/12/13/6.jpg" alt=""></p>
@@ -500,6 +501,10 @@ gitment.render('gitment-ctn')
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">GIT</a>
               </li>
              
@@ -516,23 +521,19 @@ gitment.render('gitment-ctn')
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Mac</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">DB2</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Mac</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -560,6 +561,10 @@ gitment.render('gitment-ctn')
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Neo4j</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
@@ -569,10 +574,6 @@ gitment.render('gitment-ctn')
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">团队管理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Neo4j</a>
               </li>
              
               <li class="article-tag-list-item">
