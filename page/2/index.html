@@ -156,6 +156,93 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-常用UniqueID的生成方法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/24/常用UniqueID的生成方法/">常用UniqueID的生成方法</a>
+    </h1>
+  
+
+        
+        <a href="/2016/01/24/常用UniqueID的生成方法/" class="archive-article-date">
+  	<time datetime="2016-01-24T12:58:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-01-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="常用UniqueID的生成方法">常用UniqueID的生成方法</h1><p>这几天在与其他的系统进行联调的时候,出现了对方的唯一ID使用的是<code>Int32</code>来存储,而我们提供的UniqueID是标准的UUID,从而导致他们无法存储的问题.由于他们是一个历史的老系统,牵扯很深,所以无法进行改造,只能我们来适应它(幸好和它们交互的数据不会太多.应该不会超过Int32的上限).从而引出了对UniqueID生成方法的思考.这里列出了几种常用的UniqueID的生成办法.</p>
+<h2 id="基于数据库的发号器">基于数据库的发号器</h2><p>这个是最常见和最容易想到的生成UniqueID的方法.也就是依赖数据库的自增ID来获取唯一ID,由于在分布式系统中数据库都是做了分布式或同步的,因此能保证数据库的自增键或序列是不会重复的.</p>
+<ul>
+<li>在Oracle中,可以创建一个序列,然后使用序列的<code>nextVal</code>来获取.</li>
+<li>在Mysql中,由于没有序列的概念,只能创建一个表,表的主键设置为自增.要获取UniqueID的时候就不断的往这个表中插入记录,获取<code>last_insert_id()</code>即可.为了避免表的记录数过多,可以考虑采用使用回滚的方式来规避.</li>
+<li>在redis中,可以使用<code>INCR key</code>这个命令来获取一个自增的key,每调用一次,key值增加1.如果没有这个key值,则初始化key值为0.</li>
+</ul>
+<p>使用这种方案的优点就是可以满足像<code>Int32</code>这种短数据的唯一.而缺点就是增加了系统的复杂性.需要在系统中强依赖数据库,并且获取<code>UniqueID</code>是需要与数据库交互的,虽然可以一次批量的获取几个ID,但是总体来说,性能会有损失.</p>
+        
+          <a class="article-more-a" href="/2016/01/24/常用UniqueID的生成方法/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/01/24/常用UniqueID的生成方法/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-超越继承之路：协议混合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -954,89 +1041,6 @@
 
 
   
-    <article id="post-如何关闭OSX-10-11-SIP" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/10/如何关闭OSX-10-11-SIP/">&lt;转&gt;如何关闭OSX 10.11 SIP</a>
-    </h1>
-  
-
-        
-        <a href="/2015/12/10/如何关闭OSX-10-11-SIP/" class="archive-article-date">
-  	<time datetime="2015-12-10T14:27:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-12-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="如何关闭OSX_10-11_SIP_(System_Integrity_Protection)">如何关闭OSX 10.11 SIP (System Integrity Protection)</h1><p>2015.10.8 01:50更新：实在忍不住，看完池老师的公众号，就升级了。问题果然是有的，池老师你还我睡眠时间，又整到凌晨……</p>
-<ol>
-<li>关于Homebrew的安装参考链接</li>
-<li>Cocoapods使用这个命令安装sudo gem install -n /usr/local/bin cocoapods原因是原来使用的/usr/bin这个目录被rootless保护了，那个-n参数作用是把二进制文件安装到指定目录，参考stackoverflow解决Cocoapods无法安装 注意stackoverflow中提到的使用这个参数「rootless=0」就不要用了，该方法apple官方已经封了，要停用rootless就用我下述的方法（也是官方推荐方法）</li>
-<li>……暂时就这些，有问题在更新，或者留言给我你的问题，我看看能不能解决</li>
-</ol>
-<p>注意：SIP功能是Apple在OSX上推出的系统完整性保护功能，对于普通MAC用户来说是一项安全保护功能，如果不了解他的作用请不要随意关闭，对于开发者来说，因为会使用到很多的第三方辅助工具（例如：Cocoapods、Homebrew），而这些工具可能会修改系统目录，在这些工具未推出适应OSX 10.11的版本时，有必要临时关闭SIP以确保开发工具的使用。</p>
-<p>建议：普通用户随意，开发者目前请谨慎升级，如果你已经升级，相信你可能需要恶心一阵了，因为有些工具没有更新不能正常使用或部分功能失效，甚至在关闭SIP后也有点问题，当然你只要耐心等待软件更新和网友的智慧或是自己动手丰衣足食，很多问题还是可以解决的。</p>
-        
-          <a class="article-more-a" href="/2015/12/10/如何关闭OSX-10-11-SIP/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">MAC</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/12/10/如何关闭OSX-10-11-SIP/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1131,19 +1135,19 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">GIT</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">JBOSS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1155,11 +1159,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1211,11 +1215,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
+                <a href="javascript:void(0)" class="js-tag color4">MAC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">MAC</a>
+                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1248,6 +1252,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Akka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Kotlin</a>
               </li>
              
               <li class="article-tag-list-item">

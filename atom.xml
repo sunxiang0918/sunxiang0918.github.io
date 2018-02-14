@@ -74,6 +74,71 @@
   </entry>
   
   <entry>
+    <title><![CDATA[Kotlin中常见扩展函数和顶层函数]]></title>
+    <link href="http://sunxiang0918.github.io/2017/07/30/Kotlin%E4%B8%AD%E5%B8%B8%E8%A7%81%E6%89%A9%E5%B1%95%E5%87%BD%E6%95%B0%E5%92%8C%E9%A1%B6%E5%B1%82%E5%87%BD%E6%95%B0/"/>
+    <id>http://sunxiang0918.github.io/2017/07/30/Kotlin中常见扩展函数和顶层函数/</id>
+    <published>2017-07-30T03:39:43.000Z</published>
+    <updated>2018-02-14T05:14:03.747Z</updated>
+    <content type="html"><![CDATA[<h1 id="Kotlin中常见扩展函数和顶层函数">Kotlin中常见扩展函数和顶层函数</h1><p>为了编程的方便,kotlin中为我们提供了一些常用的扩展函数和顶层函数,掌握好这些函数可以大大的提高我们的编程效率</p>
+<h2 id="let函数">let函数</h2><p>let函数扩展了所有的泛型对象,默认当前这个对象作为闭包的it参数,而返回值是闭包函数的最后一行,或者指定其return.</p>
+<p>函数定义为:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> T.<span class="title">let</span><span class="params">(block: (<span class="type">T</span>)</span></span> -&gt; R): R</div><div class="line">``` </div><div class="line"></div><div class="line">通过这个函数,我们可以用来安全执行可空变量的一些操作.例如:</div><div class="line"></div><div class="line">```kotlin</div><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">letTest</span><span class="params">(a:<span class="type">Int</span>?)</span></span>&#123;</div><div class="line">    <span class="comment">//当a不为空的时候才执行let中的语句, 为空的时候略过</span></div><div class="line">    <span class="keyword">val</span> let = a?.let &#123;</div><div class="line">        println(it)     <span class="comment">//it 即为a</span></div><div class="line">        println(a)  <span class="comment">//上下文智能推断出不为空,因此不需要!!</span></div><div class="line">        <span class="keyword">return</span><span class="symbol">@let</span> <span class="number">2</span>    <span class="comment">//返回值2   也可以直接写一个2 即可</span></div><div class="line">    &#125;</div><div class="line">    println(let)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="apply函数">apply函数</h2><p>apply函数扩展了所有的泛型对象,在闭包范围内可以任意调用该对象的任意方法,并在最后返回该对象.</p>
+<p>函数定义为:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> T.<span class="title">apply</span><span class="params">(block: <span class="type">T</span>.()</span></span> -&gt; <span class="built_in">Unit</span>): T</div><div class="line">``` </div><div class="line"></div><div class="line">它的一个主要作用是可以用来简化初始化对象的功能.例如我们在JAVA中的这样的写法:</div><div class="line"></div><div class="line">```java</div><div class="line"><span class="keyword">public</span> void applyTest(B b) &#123;</div><div class="line">        </div><div class="line">        A a = new A();</div><div class="line">        a.setXXX(<span class="number">1</span>);</div><div class="line">        a.setYYY(<span class="number">1</span>);</div><div class="line">        a.doZZZZ(<span class="number">1</span>);</div><div class="line"></div><div class="line">        <span class="comment">/* b的doAction需要一个A对象,并且必须是初始化后的A对象.</span></div><div class="line"><span class="comment">        * 那么,在JAVA中就只能先实例化出来一个A,然后调用A的方法进行一些处理,</span></div><div class="line"><span class="comment">        * 最后再作为参数 传入到b的方法中去.*/</span></div><div class="line">        b.doAction(a);     </div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>而在Kotlin中,我们可以使用apply函数来简化这个事情:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">applyTest</span><span class="params">(b: <span class="type">B</span>)</span></span> &#123;</div><div class="line"></div><div class="line">    b.doAction(</div><div class="line">       A().apply &#123;</div><div class="line">        <span class="keyword">this</span>.setXXX(<span class="number">1</span>)</div><div class="line">        <span class="keyword">this</span>.setYYY(<span class="number">1</span>)</div><div class="line">        <span class="keyword">this</span>.doZZZZ(<span class="number">1</span>)</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>特别需要注意的是apply函数中表示对象本身使用的是<code>this</code>关键字而不是<code>it</code></p>
+<h1 id="run函数">run函数</h1><p>run函数的用法和apply函数基本相同,唯一的区别在于 apply函数返回的是对象本身,而run函数返回的是闭包的返回.</p>
+<p>函数定义:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> T.<span class="title">run</span><span class="params">(block: <span class="type">T</span>.()</span></span> -&gt; R): R</div></pre></td></tr></table></figure>
+<h1 id="also函数">also函数</h1><p>这个函数是kotlin1.1新增的, 起用法和apply函数也基本相同,也是返回对象本身,区别在于 在also函数内我们使用<code>it</code>来指代对象本身而不是使用<code>this</code>关键字.</p>
+<p>函数定义:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> T.<span class="title">also</span><span class="params">(block: (<span class="type">T</span>)</span></span> -&gt; <span class="built_in">Unit</span>): T</div></pre></td></tr></table></figure>
+<h1 id="with函数">with函数</h1><p>with函数不是扩展函数,而是顶层函数,它是将某个对象作为函数的参数,在函数块中可以通过this来指代该对象,返回值为闭包函数的最后一行或者return表达式</p>
+<p>函数定义:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> <span class="title">with</span><span class="params">(receiver: <span class="type">T</span>, block: <span class="type">T</span>.()</span></span> -&gt; R): R</div></pre></td></tr></table></figure>
+<p>with函数主要可以用来简化和集中对某一个对象的操作. </p>
+<p>比如在JAVA中:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">A a = <span class="keyword">new</span> A();</div><div class="line">a.setXXX(<span class="number">1</span>);</div><div class="line">a.setYYY(<span class="number">1</span>);</div><div class="line">a.doZZZZ(<span class="number">1</span>);</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>而在kotlin中就可以:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">with(A())&#123;</div><div class="line">    setXXX(<span class="number">1</span>)</div><div class="line">    setYYY(<span class="number">1</span>)</div><div class="line">    doZZZZ(<span class="number">1</span>)</div><div class="line">    <span class="keyword">this</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="repeat函数">repeat函数</h1><p>repeat为顶层函数,其实就是简化了for循环,允许重复执行闭包中的事情.</p>
+<p>函数定义为:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="title">repeat</span><span class="params">(times: <span class="type">Int</span>, action: (<span class="type">Int</span>)</span></span> -&gt; <span class="built_in">Unit</span>)</div></pre></td></tr></table></figure>
+<p>例如:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">repeat(<span class="number">10</span>)&#123;</div><div class="line">    println(it)     <span class="comment">//it表示的是循环的index</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="takeIf函数_takeUnless函数">takeIf函数 takeUnless函数</h1><p>这两个函数都是kotlin1.1中新增加的,都是扩展函数,允许传入一个闭包.<br>taskIf函数如果传入的闭包返回为真,那么就返回对象T,否则返回null.<br>taskUnless函数与taskIf函数相反.</p>
+<p>函数定义:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public inline fun &lt;T&gt; T.takeIf(predicate: (T) -&gt; Boolean): T?</div><div class="line"></div><div class="line">public inline fun &lt;T&gt; T.takeUnless(predicate: (T) -&gt; Boolean): T?</div></pre></td></tr></table></figure>
+<p>这两个函数可以用来简化filter的实现或者条件过滤</p>
+<h1 id="lazy函数">lazy函数</h1><p>lazy表示延迟运算, 只有当第一次访问的时候,才调用lazy内部的初始化闭包,通过这个方式,很容易的实现一些延迟的处理.通常和<code>by</code>关键字配合,实现属性的延迟加载.</p>
+<p>函数定义:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> <span class="title">lazy</span><span class="params">(initializer: ()</span></span> -&gt; T): Lazy&lt;T&gt; = SynchronizedLazyImpl(initializer)</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> <span class="title">lazy</span><span class="params">(mode: <span class="type">LazyThreadSafetyMode</span>, initializer: ()</span></span> -&gt; T): Lazy&lt;T&gt;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> <span class="title">lazy</span><span class="params">(lock: <span class="type">Any</span>?, initializer: ()</span></span> -&gt; T): Lazy&lt;T&gt;</div></pre></td></tr></table></figure>
+<p>这个函数看似神奇,内部的实现其实很简单,在内部主要是把函数闭包给封装成了Lazy<t>的对象, 当第一次访问的时候,触发调用<code>getValue</code>,然后在内部执行闭包函数,从而延迟运行.</t></p>
+<p>例子:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">val</span> graphDef: ByteArray <span class="keyword">by</span> lazy &#123;</div><div class="line">        ClassifierTest::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>.<span class="title">getResource</span></span>(<span class="string">"/models/tensorflow_inception_graph.pb"</span>).readBytes()</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h1 id="use函数">use函数</h1><p>在JDK1.7中引入了<code>try-with-resources</code>表达式,允许自动的关闭某一些对象,比如最常见的<code>InputStream</code>这些.<br>在Kotlin1.2 中也有相同功能的函数实现,那就是<code>use函数</code>. use函数是一个扩展函数,扩展自<code>Closeable</code>接口,因此,所有实现了<code>Closeable</code>的对象都可以调用use函数来达到相同的目的.并且语法还要更简单,避免了写复杂的<code>try-catch-finally</code></p>
+<p>函数定义:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T : Closeable?, R&gt;</span> T.<span class="title">use</span><span class="params">(block: (<span class="type">T</span>)</span></span> -&gt; R): R (source)</div></pre></td></tr></table></figure>
+<p>例子:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Graph().use &#123; g -&gt;  </div><div class="line">    println(g)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同java中的<code>try-catch-finally</code>一样,无论如何,是否抛出异常,kotlin都是会执行use对象的close方法的.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="Kotlin中常见扩展函数和顶层函数">Kotlin中常见扩展函数和顶层函数</h1><p>为了编程的方便,kotlin中为我们提供了一些常用的扩展函数和顶层函数,掌握好这些函数可以大大的提高我们的编程效率</p>
+<h2 id="let函数">let函数</h2><p>let函数扩展了所有的泛型对象,默认当前这个对象作为闭包的it参数,而返回值是闭包函数的最后一行,或者指定其return.</p>
+<p>函数定义为:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> T.<span class="title">let</span><span class="params">(block: (<span class="type">T</span>)</span></span> -&gt; R): R</div><div class="line">``` </div><div class="line"></div><div class="line">通过这个函数,我们可以用来安全执行可空变量的一些操作.例如:</div><div class="line"></div><div class="line">```kotlin</div><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">letTest</span><span class="params">(a:<span class="type">Int</span>?)</span></span>&#123;</div><div class="line">    <span class="comment">//当a不为空的时候才执行let中的语句, 为空的时候略过</span></div><div class="line">    <span class="keyword">val</span> let = a?.let &#123;</div><div class="line">        println(it)     <span class="comment">//it 即为a</span></div><div class="line">        println(a)  <span class="comment">//上下文智能推断出不为空,因此不需要!!</span></div><div class="line">        <span class="keyword">return</span><span class="symbol">@let</span> <span class="number">2</span>    <span class="comment">//返回值2   也可以直接写一个2 即可</span></div><div class="line">    &#125;</div><div class="line">    println(let)</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]>
+    
+    </summary>
+    
+      <category term="Kotlin" scheme="http://sunxiang0918.github.io/tags/Kotlin/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[解决mac下的Sourcetree每次拉取提交都需要输入密码]]></title>
     <link href="http://sunxiang0918.github.io/2016/04/12/%E8%A7%A3%E5%86%B3mac%E4%B8%8B%E7%9A%84Sourcetree%E6%AF%8F%E6%AC%A1%E6%8B%89%E5%8F%96%E6%8F%90%E4%BA%A4%E9%83%BD%E9%9C%80%E8%A6%81%E8%BE%93%E5%85%A5%E5%AF%86%E7%A0%81/"/>
     <id>http://sunxiang0918.github.io/2016/04/12/解决mac下的Sourcetree每次拉取提交都需要输入密码/</id>
@@ -1814,64 +1879,6 @@
       <category term="大数据" scheme="http://sunxiang0918.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
       <category term="日志挖掘" scheme="http://sunxiang0918.github.io/tags/%E6%97%A5%E5%BF%97%E6%8C%96%E6%8E%98/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[<转>如何关闭OSX 10.11 SIP]]></title>
-    <link href="http://sunxiang0918.github.io/2015/12/10/%E5%A6%82%E4%BD%95%E5%85%B3%E9%97%ADOSX-10-11-SIP/"/>
-    <id>http://sunxiang0918.github.io/2015/12/10/如何关闭OSX-10-11-SIP/</id>
-    <published>2015-12-10T14:27:09.000Z</published>
-    <updated>2017-10-23T02:15:23.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="如何关闭OSX_10-11_SIP_(System_Integrity_Protection)">如何关闭OSX 10.11 SIP (System Integrity Protection)</h1><p>2015.10.8 01:50更新：实在忍不住，看完池老师的公众号，就升级了。问题果然是有的，池老师你还我睡眠时间，又整到凌晨……</p>
-<ol>
-<li>关于Homebrew的安装参考链接</li>
-<li>Cocoapods使用这个命令安装sudo gem install -n /usr/local/bin cocoapods原因是原来使用的/usr/bin这个目录被rootless保护了，那个-n参数作用是把二进制文件安装到指定目录，参考stackoverflow解决Cocoapods无法安装 注意stackoverflow中提到的使用这个参数「rootless=0」就不要用了，该方法apple官方已经封了，要停用rootless就用我下述的方法（也是官方推荐方法）</li>
-<li>……暂时就这些，有问题在更新，或者留言给我你的问题，我看看能不能解决</li>
-</ol>
-<p>注意：SIP功能是Apple在OSX上推出的系统完整性保护功能，对于普通MAC用户来说是一项安全保护功能，如果不了解他的作用请不要随意关闭，对于开发者来说，因为会使用到很多的第三方辅助工具（例如：Cocoapods、Homebrew），而这些工具可能会修改系统目录，在这些工具未推出适应OSX 10.11的版本时，有必要临时关闭SIP以确保开发工具的使用。</p>
-<p>建议：普通用户随意，开发者目前请谨慎升级，如果你已经升级，相信你可能需要恶心一阵了，因为有些工具没有更新不能正常使用或部分功能失效，甚至在关闭SIP后也有点问题，当然你只要耐心等待软件更新和网友的智慧或是自己动手丰衣足食，很多问题还是可以解决的。</p>
-<a id="more"></a>
-<ol>
-<li><p><strong>进入RecoveryHD</strong><br>开机按住<code>Option</code>键在出现的启动选择菜单中选择<code>RecoveryHD</code>进入恢复模式</p>
-</li>
-<li><p><strong>使用csrutil命令</strong><br>打开终端Terminal，键入<code>csrutil</code>可以显示该命令的使用方法</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">usage: csrutil &lt;<span class="built_in">command</span>&gt;</div><div class="line">Modify the System Integrity Protection configuration. All configuration changes apply to the entire machine.</div><div class="line">Available commands:</div><div class="line"></div><div class="line">    clear</div><div class="line">        Clear the existing configuration. Only available <span class="keyword">in</span> Recovery OS.</div><div class="line">    <span class="built_in">disable</span></div><div class="line">        Disable the protection on the machine. Only available <span class="keyword">in</span> Recovery OS.</div><div class="line">    <span class="built_in">enable</span></div><div class="line">        Enable the protection on the machine. Only available <span class="keyword">in</span> Recovery OS.</div><div class="line">    status</div><div class="line">        Display the current configuration.</div><div class="line"></div><div class="line">    netboot</div><div class="line">        add &lt;address&gt;</div><div class="line">            Insert a new IPv4 address <span class="keyword">in</span> the list of allowed NetBoot sources.</div><div class="line">        list</div><div class="line">            Print the list of allowed NetBoot sources.</div><div class="line">        remove &lt;address&gt;</div><div class="line">            Remove an IPv4 address from the list of allowed NetBoot sources.</div></pre></td></tr></table></figure>
-<p> 可以看到在正常系统模式下中仅可以用status命令查询SIP状态</p>
-</li>
-<li><p><strong>常用参数</strong></p>
-<ul>
-<li>clear：清除配置设置，等同于完全开启SIP(<code>仅在恢复模式下有效</code>)</li>
-<li>disable：关闭SIP(<code>仅在恢复模式下有效</code>)</li>
-<li>enable：开启SIP(<code>仅在恢复模式下有效</code>)</li>
-<li>status：查询SIP状态</li>
-</ul>
-</li>
-<li><p><strong>常用参数进阶</strong><br>除了可以完全关闭/打开，还可以进行单项和多项组合关闭相关功能，用法如下</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">csrutil <span class="built_in">enable</span> [--without kext|fs|debug|dtrace|nvram] [--no-internal]</div></pre></td></tr></table></figure>
-<p> 单项使用：</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo csrutil <span class="built_in">enable</span> –without fs：Filesystem Protections <span class="built_in">disable</span></div><div class="line">sudo csrutil <span class="built_in">enable</span> –without kext：Kext Signing <span class="built_in">disable</span></div><div class="line">sudo csrutil <span class="built_in">enable</span> –without debug：Debugging Restrictions <span class="built_in">disable</span></div><div class="line">sudo csrutil <span class="built_in">enable</span> –without nvram：NVRAM Protections <span class="built_in">disable</span></div><div class="line">sudo csrutil <span class="built_in">enable</span> –without dtrace：DTrace Restrictions <span class="built_in">disable</span></div></pre></td></tr></table></figure>
-<p> 组合使用：</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo csrutil <span class="built_in">enable</span> –without kext –without fs：Filesystem Protections and Kext Signing are disabled</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>更多详情请参考：<br><a href="http://cms.35g.tw/coding/關閉-osx-10-11-sip-system-integrity-protection-功能/zh-hans/" target="_blank" rel="external">可丁丹尼@一路往前走2.0</a><br><a href="https://pikeralpha.wordpress.com/2015/08/19/csrutil-updated/" target="_blank" rel="external">csrutil updated in DP7</a><br><a href="http://www.idelta.info/archives/sip-rootless-internal-in-el-capitan/" target="_blank" rel="external">SIP/Rootless Internal in El Capitan</a></p>
-<hr>
-<p>原文链接:<a href="http://www.jianshu.com/p/0572336a0771" target="_blank" rel="external">http://www.jianshu.com/p/0572336a0771</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="如何关闭OSX_10-11_SIP_(System_Integrity_Protection)">如何关闭OSX 10.11 SIP (System Integrity Protection)</h1><p>2015.10.8 01:50更新：实在忍不住，看完池老师的公众号，就升级了。问题果然是有的，池老师你还我睡眠时间，又整到凌晨……</p>
-<ol>
-<li>关于Homebrew的安装参考链接</li>
-<li>Cocoapods使用这个命令安装sudo gem install -n /usr/local/bin cocoapods原因是原来使用的/usr/bin这个目录被rootless保护了，那个-n参数作用是把二进制文件安装到指定目录，参考stackoverflow解决Cocoapods无法安装 注意stackoverflow中提到的使用这个参数「rootless=0」就不要用了，该方法apple官方已经封了，要停用rootless就用我下述的方法（也是官方推荐方法）</li>
-<li>……暂时就这些，有问题在更新，或者留言给我你的问题，我看看能不能解决</li>
-</ol>
-<p>注意：SIP功能是Apple在OSX上推出的系统完整性保护功能，对于普通MAC用户来说是一项安全保护功能，如果不了解他的作用请不要随意关闭，对于开发者来说，因为会使用到很多的第三方辅助工具（例如：Cocoapods、Homebrew），而这些工具可能会修改系统目录，在这些工具未推出适应OSX 10.11的版本时，有必要临时关闭SIP以确保开发工具的使用。</p>
-<p>建议：普通用户随意，开发者目前请谨慎升级，如果你已经升级，相信你可能需要恶心一阵了，因为有些工具没有更新不能正常使用或部分功能失效，甚至在关闭SIP后也有点问题，当然你只要耐心等待软件更新和网友的智慧或是自己动手丰衣足食，很多问题还是可以解决的。</p>]]>
-    
-    </summary>
-    
-      <category term="MAC" scheme="http://sunxiang0918.github.io/tags/MAC/"/>
     
   </entry>
   

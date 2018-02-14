@@ -156,6 +156,82 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-JDK新特性思维导图" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/12/06/JDK新特性思维导图/">JDK新特性思维导图</a>
+    </h1>
+  
+
+        
+        <a href="/2014/12/06/JDK新特性思维导图/" class="archive-article-date">
+  	<time datetime="2014-12-06T13:37:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2014-12-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="JDK新特性思维导图">JDK新特性思维导图</h1><p>这篇文章是我重温JDK1.5开始的新特性的时候整理的思维导图,可以当做大纲来查看.有时搞忘的时候可以拿来再看看.</p>
+<p><img src="/img/2014/12/06/1.png" alt=""></p>
+<p><a href="/img/2014/12/06/1.png">查看原图</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2014/12/06/JDK新特性思维导图/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-zookeeper-集群部署" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -966,99 +1042,6 @@
 
 
   
-    <article id="post-影响Lucene对文档打分的四种方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2012/11/14/影响Lucene对文档打分的四种方式/">&lt;转&gt;影响Lucene对文档打分的四种方式</a>
-    </h1>
-  
-
-        
-        <a href="/2012/11/14/影响Lucene对文档打分的四种方式/" class="archive-article-date">
-  	<time datetime="2012-11-14T14:25:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2012-11-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="影响Lucene对文档打分的四种方式">影响Lucene对文档打分的四种方式</h1><h2 id="在索引阶段设置Document_Boost和Field_Boost，存储在(-nrm)文件中。">在索引阶段设置Document Boost和Field Boost，存储在(.nrm)文件中。</h2><p>如果希望某些文档和某些域比其他的域更重要，如果此文档和此域包含所要查询的词则应该得分较高，则可以在索引阶段设定文档的boost和域的boost值。<br>这些值是在索引阶段就写入索引文件的，存储在标准化因子(.nrm)文件中，一旦设定，除非删除此文档，否则无法改变。<br>如果不进行设定，则Document Boost和Field Boost默认为1。<br>Document Boost及FieldBoost的设定方式如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Document doc = <span class="keyword">new</span> Document();</div><div class="line">Field f = <span class="keyword">new</span> Field(<span class="string">"contents"</span>, <span class="string">"hello world"</span>, Field.Store.NO, Field.Index.ANALYZED);</div><div class="line">f.setBoost(<span class="number">100</span>);</div><div class="line">doc.add(f);</div><div class="line">doc.setBoost(<span class="number">100</span>);</div></pre></td></tr></table></figure>
-<p>两者是如何影响Lucene的文档打分的呢？<br>让我们首先来看一下Lucene的文档打分的公式：</p>
-<p><code>score(q,d)   =   coord(q,d)  ·  queryNorm(q)  ·  ∑( tf(t in d)  ·  idf(t)2  ·  t.getBoost() ·  norm(t,d) )</code></p>
-<p>Document Boost和Field Boost影响的是norm(t, d)，其公式如下：</p>
-<blockquote>
-<p>norm(t,d)   =   doc.getBoost()  ·  lengthNorm(field)  ·  ∏f.getBoost()<br>field f in d named as t</p>
-</blockquote>
-<p>它包括三个参数：</p>
-<ul>
-<li>Document boost：此值越大，说明此文档越重要。</li>
-<li>Field boost：此域越大，说明此域越重要。</li>
-<li>lengthNorm(field) = (1.0 / Math.sqrt(numTerms))：一个域中包含的Term总数越多，也即文档越长，此值越小，文档越短，此值越大。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2012/11/14/影响Lucene对文档打分的四种方式/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Lucene</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2012/11/14/影响Lucene对文档打分的四种方式/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
@@ -1153,19 +1136,19 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">GIT</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">JBOSS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1177,11 +1160,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1233,11 +1216,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
+                <a href="javascript:void(0)" class="js-tag color4">MAC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">MAC</a>
+                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1270,6 +1253,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Akka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Kotlin</a>
               </li>
              
               <li class="article-tag-list-item">

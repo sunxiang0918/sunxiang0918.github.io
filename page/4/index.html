@@ -156,6 +156,118 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Hbase分布式部署" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/11/03/Hbase分布式部署/">Hbase分布式部署</a>
+    </h1>
+  
+
+        
+        <a href="/2015/11/03/Hbase分布式部署/" class="archive-article-date">
+  	<time datetime="2015-11-03T15:12:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-11-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Hbase分布式部署">Hbase分布式部署</h1><p>HBase的安装首先是有两个先决条件的,第一个就是需要zookeeper的支持,另外一个就是需要HDFS的支持了.<br>因此,安装Hbase的头两部就是安装<code>zookeeper</code>和<code>hadoop</code></p>
+<p>这两个东西的安装可以参考我以前的博文:<a href="http://sunxiang0918.cn/2015/11/03/Hadoop全分布式部署/" target="_blank" rel="external">Hadoop全分布式部署</a>以及<a href="http://sunxiang0918.cn/2014/09/20/zookeeper-集群部署/" target="_blank" rel="external">zookeeper 集群部署</a>.这里就不再复述了.</p>
+<h2 id="环境">环境</h2><p>环境: centos7 + hadoop2.6.2 + hbase1.1.2</p>
+<p>虚拟机三台:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">hostname</th>
+<th style="text-align:center">ip地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">master</td>
+<td style="text-align:center">10.211.55.15</td>
+</tr>
+<tr>
+<td style="text-align:center">slave01</td>
+<td style="text-align:center">10.211.55.12</td>
+</tr>
+<tr>
+<td style="text-align:center">slave02</td>
+<td style="text-align:center">10.211.55.14</td>
+</tr>
+</tbody>
+</table>
+<h2 id="安装步骤">安装步骤</h2><ol>
+<li>首先还是需要把<code>hbase-1.1.2-bin.tar.gz</code>拷贝到几台机器上.然后使用<code>tar -xvf</code>命令解压,并重命名为hbase.  当前路径也就是 <code>/home/hadoop/hbase</code></li>
+</ol>
+        
+          <a class="article-more-a" href="/2015/11/03/Hbase分布式部署/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">集群</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Hbase</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/11/03/Hbase分布式部署/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Hadoop全分布式部署" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -965,85 +1077,6 @@
 
 
   
-    <article id="post-Swift2-0-beta6-后异常处理的一些补充" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/13/Swift2-0-beta6-后异常处理的一些补充/">Swift2.0 beta5 后异常处理的一些补充</a>
-    </h1>
-  
-
-        
-        <a href="/2015/09/13/Swift2-0-beta6-后异常处理的一些补充/" class="archive-article-date">
-  	<time datetime="2015-09-13T14:10:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-09-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Swift2-0_beta5_后异常处理的一些补充">Swift2.0 beta5 后异常处理的一些补充</h1><p>随着<code>XCode7 GM</code>在9月9号的推出,Swift2.0也要进入了GM了.随后的语法应该会逐渐的稳定下来了.其实在Swfit2.0 beta6后,Swift2对异常的处理又发生了一些变化,比如增加了一个<code>try?</code>关键字.<br>因此,这篇文章就再罗列一下现在Swift2.0异常处理的各种场景与方式.</p>
-<h2 id="首先是定义一个异常-">首先是定义一个异常.</h2><p>Swift2.0中 所有的异常类都是遵循<code>ErrorType</code>这个协议的.因此定义一个异常的最简单的方式就是使用枚举来实现一个这个协议:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">enum</span> <span class="title">AppException</span> : <span class="title">ErrorType</span> </span>&#123;</div><div class="line">    <span class="keyword">case</span> <span class="type">IllegalArgumentException</span></div><div class="line">    <span class="keyword">case</span> <span class="type">IllegalFormatException</span>(coinsNeeded: <span class="type">Int</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>在这个例子中我使用枚举定义了一个<code>AppException</code>的异常类,有两个case,并且借助于swift中强大的枚举类,<code>IllegalFormatException</code>case拥有一个<code>Int</code>类型的变量为<code>coinsNeeded</code>.</p>
-        
-          <a class="article-more-a" href="/2015/09/13/Swift2-0-beta6-后异常处理的一些补充/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Swift</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/09/13/Swift2-0-beta6-后异常处理的一些补充/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1138,19 +1171,19 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">GIT</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">JBOSS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1162,11 +1195,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1218,11 +1251,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
+                <a href="javascript:void(0)" class="js-tag color4">MAC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">MAC</a>
+                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1255,6 +1288,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Akka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Kotlin</a>
               </li>
              
               <li class="article-tag-list-item">

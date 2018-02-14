@@ -239,6 +239,85 @@
 
 
   
+    <article id="post-Kotlin中常见扩展函数和顶层函数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/30/Kotlin中常见扩展函数和顶层函数/">Kotlin中常见扩展函数和顶层函数</a>
+    </h1>
+  
+
+        
+        <a href="/2017/07/30/Kotlin中常见扩展函数和顶层函数/" class="archive-article-date">
+  	<time datetime="2017-07-30T03:39:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Kotlin中常见扩展函数和顶层函数">Kotlin中常见扩展函数和顶层函数</h1><p>为了编程的方便,kotlin中为我们提供了一些常用的扩展函数和顶层函数,掌握好这些函数可以大大的提高我们的编程效率</p>
+<h2 id="let函数">let函数</h2><p>let函数扩展了所有的泛型对象,默认当前这个对象作为闭包的it参数,而返回值是闭包函数的最后一行,或者指定其return.</p>
+<p>函数定义为:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> T.<span class="title">let</span><span class="params">(block: (<span class="type">T</span>)</span></span> -&gt; R): R</div><div class="line">``` </div><div class="line"></div><div class="line">通过这个函数,我们可以用来安全执行可空变量的一些操作.例如:</div><div class="line"></div><div class="line">```kotlin</div><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">letTest</span><span class="params">(a:<span class="type">Int</span>?)</span></span>&#123;</div><div class="line">    <span class="comment">//当a不为空的时候才执行let中的语句, 为空的时候略过</span></div><div class="line">    <span class="keyword">val</span> let = a?.let &#123;</div><div class="line">        println(it)     <span class="comment">//it 即为a</span></div><div class="line">        println(a)  <span class="comment">//上下文智能推断出不为空,因此不需要!!</span></div><div class="line">        <span class="keyword">return</span><span class="symbol">@let</span> <span class="number">2</span>    <span class="comment">//返回值2   也可以直接写一个2 即可</span></div><div class="line">    &#125;</div><div class="line">    println(let)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2017/07/30/Kotlin中常见扩展函数和顶层函数/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Kotlin</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/07/30/Kotlin中常见扩展函数和顶层函数/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-解决mac下的Sourcetree每次拉取提交都需要输入密码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -920,93 +999,6 @@
 
 
   
-    <article id="post-常用UniqueID的生成方法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/24/常用UniqueID的生成方法/">常用UniqueID的生成方法</a>
-    </h1>
-  
-
-        
-        <a href="/2016/01/24/常用UniqueID的生成方法/" class="archive-article-date">
-  	<time datetime="2016-01-24T12:58:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-01-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="常用UniqueID的生成方法">常用UniqueID的生成方法</h1><p>这几天在与其他的系统进行联调的时候,出现了对方的唯一ID使用的是<code>Int32</code>来存储,而我们提供的UniqueID是标准的UUID,从而导致他们无法存储的问题.由于他们是一个历史的老系统,牵扯很深,所以无法进行改造,只能我们来适应它(幸好和它们交互的数据不会太多.应该不会超过Int32的上限).从而引出了对UniqueID生成方法的思考.这里列出了几种常用的UniqueID的生成办法.</p>
-<h2 id="基于数据库的发号器">基于数据库的发号器</h2><p>这个是最常见和最容易想到的生成UniqueID的方法.也就是依赖数据库的自增ID来获取唯一ID,由于在分布式系统中数据库都是做了分布式或同步的,因此能保证数据库的自增键或序列是不会重复的.</p>
-<ul>
-<li>在Oracle中,可以创建一个序列,然后使用序列的<code>nextVal</code>来获取.</li>
-<li>在Mysql中,由于没有序列的概念,只能创建一个表,表的主键设置为自增.要获取UniqueID的时候就不断的往这个表中插入记录,获取<code>last_insert_id()</code>即可.为了避免表的记录数过多,可以考虑采用使用回滚的方式来规避.</li>
-<li>在redis中,可以使用<code>INCR key</code>这个命令来获取一个自增的key,每调用一次,key值增加1.如果没有这个key值,则初始化key值为0.</li>
-</ul>
-<p>使用这种方案的优点就是可以满足像<code>Int32</code>这种短数据的唯一.而缺点就是增加了系统的复杂性.需要在系统中强依赖数据库,并且获取<code>UniqueID</code>是需要与数据库交互的,虽然可以一次批量的获取几个ID,但是总体来说,性能会有损失.</p>
-        
-          <a class="article-more-a" href="/2016/01/24/常用UniqueID的生成方法/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/01/24/常用UniqueID的生成方法/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1101,19 +1093,19 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">GIT</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">JBOSS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1125,11 +1117,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color5">Hibernate</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1181,11 +1173,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
+                <a href="javascript:void(0)" class="js-tag color4">MAC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">MAC</a>
+                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1218,6 +1210,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Akka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Kotlin</a>
               </li>
              
               <li class="article-tag-list-item">
